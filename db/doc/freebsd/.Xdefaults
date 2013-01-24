@@ -1,0 +1,93 @@
+!look and feel
+!xft.rgba: rgb 
+!xft.hinting: true 
+!xft.hintstyle: hintfull 
+!Xcursor*theme: FlatbedCursors.Black.Regular
+Xft.dpi:96
+xft.antialias: true 
+xpdf.title: PDF
+
+xterm*termName:                 xterm-color
+xterm*visualBell:               false
+xterm*marginBell:               false
+xterm*alwaysHighlight:          false
+
+XTerm*selectToClipboard:  1
+
+xterm*locale: true
+xterm.utf8:     true
+xterm*utf8Title: true
+
+xterm*xftAntialias: true
+
+xterm*fontMenu*fontdefault*Label: Default
+xterm*faceName: Bitstream Vera Sans Mono:antialias=True:pixelsize=15
+xterm*faceSize: 12
+xterm*faceSize1: 12
+xterm*faceSize2: 12
+xterm*faceSize3: 12
+xterm*faceSize4: 12
+xterm*faceSize5: 12
+xterm*faceSize6: 12
+xterm.cjkWidth:true
+
+xterm*background: black
+xterm*foreground: green
+
+xterm*scrollBar: false
+xterm*rightScrollBar: false
+xterm*jumpScroll: true
+xterm*scrollKey:          false
+xterm*scrollTtyOutput:    false
+xterm*SaveLines: 1000
+
+!中文字体支持 
+xterm*faceNameDoublesize:wenquanyi bitmap song:pixelsize=16:antialias=True
+xterm*XimFont:-WenQuanYi Bitmap Song-medium-r-normal--16-160-75-75-p-80-iso10646-1
+
+xterm*loginShell:         false
+
+!xterm.geometry:   80x24+0+438
+xterm.borderLess: true
+xterm.cursorBlink: false
+xterm*colorUL: yellow
+xterm*colorBD: white
+
+!print color and bold/underline attributes
+xterm*printAttributes: 2
+xterm*printerCommand: cat > ~/xtermdump
+
+!mouse selecting to copy, ctrl-v to paste
+!Ctrl p to print screen content to file
+!xterm*VT100.Translations: #override \
+!   Ctrl <KeyPress> V: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+!        <BtnUp>: select-end(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+!        Ctrl <KeyPress> P: print() \n
+
+scratchpad*background:   black
+scratchpad*foreground:   white
+scratchpad*scrollBar:    false
+scratchpad*.transparent: true
+scratchpad*.shading:     30
+
+scratchpad*locale: true
+scratchpad.utf8:     true
+scratchpad*utf8Title: true
+
+scratchpad*xftAntialias: true
+
+scratchpad*faceNameDoublesize:wenquanyi bitmap song:pixelsize=16:antialias=True
+scratchpad*XimFont:-WenQuanYi Bitmap Song-medium-r-normal--16-160-75-75-p-80-iso10646-1
+
+scratchpad*fontMenu*fontdefault*Label: Default
+scratchpad*faceName: Bitstream Vera Sans Mono:antialias=True:pixelsize=15
+scratchpad*faceSize: 12
+scratchpad*faceSize1: 12
+scratchpad*faceSize2: 12
+scratchpad*faceSize3: 12
+scratchpad*faceSize4: 12
+scratchpad*faceSize5: 12
+scratchpad*faceSize6: 12
+scratchpad.cjkWidth:true
+
+scratchpad*loginShell:         false

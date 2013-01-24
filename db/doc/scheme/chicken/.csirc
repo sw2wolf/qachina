@@ -1,0 +1,9 @@
+(use readline regex)
+(current-input-port (make-gnu-readline-port))
+(gnu-history-install-file-manager "~/.csi.history")
+
+;To set readline to behave somewhat like vi:
+(gnu-readline-parse-and-bind "set editing-mode vi")
+
+;(use linenoise)
+;(current-input-port (make-linenoise-port))

@@ -1,0 +1,24 @@
+# ~/.cwmrc
+
+sticky yes
+
+# Override built-in term command
+command term "xterm -geometry 159x25+0+438"
+
+# Keybindings: commands
+bind 4-t terminal
+bind 4-r exec
+bind 4-g firefox
+bind 4-e "emacs -geometry 80x40"
+bind 4-comma "mixerctl outputs.master=-5"
+bind 4-period "mixerctl outputs.master=+5"
+
+# Keybindings: windows
+bind 4-f maximize
+bind 4-q delete
+bind 4-j cyclegroup
+bind 4-k rcyclegroup
+bind 4-l label
+bind 4-h hide
+bind 4-v vmaximize
+

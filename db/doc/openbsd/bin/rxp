@@ -1,0 +1,1 @@
+rdesktop -u sw2wolf -p 123 -g 1440x880 -D -K -r sound:remote localhost:3389 

@@ -1,0 +1,143 @@
+;; vim:filetype=lisp
+(setq load-path (cons "~/.sawfish/lisp" load-path))
+(setq workspace-names '("Work"))
+(setq apps-menu-autogen nil)
+(setq decorate-transients t)
+;(setq default-font (get-font "-*-simsun-medium-r-*-*-16-*-*-*-*-*-*-*"))
+
+;; 让临时弹出的窗口也有和常驻窗口一样的标题栏
+;(setq decorate-transients t)
+
+;; 取消sawfish对新建窗口位置的控制
+;(setq place-window-mode 'first-fit)
+
+(require 'sawfish.wm.menus)
+
+;(defun capture-root-window ()  
+;"capture root window"  
+;    (interactive)  
+;    (system "import -window root shot.png; display shot.png&"))
+
+;(defun capture-this-window ()  
+;"capture active window"  
+;    (interactive)  
+;    (let ((w (current-event-window)))  
+;        (when w  
+;            (display-message (concat "import -window " (prin1-to-string (window-id w)) " window.png"))
+;            (system (concat "import -window " (prin1-to-string (window-id w)) " window.png"))
+;            (system "display window.png&"))))
+
+;(defun capture-region ()
+;"capture region"  
+;    (interactive)  
+;    (let ((process (make-process standard-output)  
+;        (start-process process "import" "capture.png")))))
+ 
+(defvar restart-menu nil)
+(defvar logout-menu nil)
+(defvar quit-menu nil)
+(defvar capture-menu nil)
+(defvar main-menu nil)
+
+(setq restart-menu  
+    '(("确定" (system "sudo /sbin/shutdown -r now &")) 
+      ("取消" (no-operation))))
+
+(setq logout-menu  
+    '(("确定" (quit)) ("取消" (no-operation))))
+
+(setq quit-menu  
+    '(("确定" (system "sudo /sbin/shutdown -p now &"))
+      ("取消" (no-operation))))
+
+(setq capture-menu
+    '(("当前窗口"  (capture-this-window))  
+      ("区域"     (capture-region))  
+      ("整个屏幕"  (capture-root-window))))
+
+(setq main-menu  
+    '(("WindowsXP"  (system "VBoxManage startvm winxp &"))
+      ("浏览"       (system "opera &"))
+      ()
+      ("围棋"      (system "wine \"c:/Program Files/eweiqi/LiveBaduk.exe\" &"))
+      ("通达信"     (system "wine \"c:/tdx_level2/TdxW.exe\" &"))
+      ()
+      ("图像"       (system "gqview &"))
+      ("阅读PDF"    (system "evince &"))  
+      ("抓图"     (popup-menu capture-menu))
+      ()
+      ("运行"       (system "gmrun &"))
+      ()
+      ;;("上锁"     (system "xscreensaver-command -lock &"))
+      ("注销"       (popup-menu logout-menu))
+      ("重启"       (popup-menu restart-menu))
+      ("关机"       (popup-menu quit-menu))))
+
+(bind-keys global-keymap "Super-p" '(popup-menu main-menu))  
+(bind-keys global-keymap "Super-F2" '(system "gmrun &"))  
+(bind-keys global-keymap "Super-F3" '(maximize-window-toggle (current-event-window)))  
+(bind-keys global-keymap "Super-F4" '(delete-window (current-event-window)))  
+(bind-keys global-keymap "Super-F11" '(system "sudo /sbin/shutdown -r now &"))  
+(bind-keys global-keymap "Super-F12" '(system "sudo /sbin/shutdown -p now &"))  
+
+(bind-keys root-window-keymap "button2-click" '(popup-root-menu))
+(bind-keys root-window-keymap "Button3-Click" '(popup-menu main-menu))
+
+;;;自动启动程序
+(define startup-programs  '(
+    ("fcitx")
+    ("xterm" "-e" "tmux")))
+
+(mapc (lambda (program)  
+    (apply start-process (make-process standard-output) program)) startup-programs)
+
+(add-hook 'before-exit-hook  
+    (lambda () (mapc stop-process (active-processes))))
+
+;;为经常使用的应用程序设定快捷键
+(require 'sawfish.wm.commands.jump-or-exec)
+
+(bind-keys global-keymap "Super-t" 
+    `(jump-or-exec "xterm"
+        ,(lambda () (system "xterm &"))
+        ,(lambda (wind) (display-window wind))))
+
+(bind-keys global-keymap "Super-g"
+    `(jump-or-exec "eweiqi"
+        ,(lambda () (system "wine \"c:/Program Files/eweiqi/LiveBaduk.exe\" &"))
+        ,(lambda (wind) (display-window wind))))
+
+(bind-keys global-keymap "Super-w" 
+    `(jump-or-exec "Opera"
+        ,(lambda () (system "opera &"))
+        ,(lambda (wind) (display-window wind))))
+
+;(require 'sawfish.wm.ext.auto-raise)
+;(setq focus-mode 'enter-only)
+;(setq raise-windows-on-focus t)
+
+;;;关闭当前窗口
+;(bind-keys window-keymap "Super-x" '(delete-window (current-event-window)))
+;;;;取消窗口操作
+;(bind-keys window-keymap "Super-u" 'undo)
+;;;; 返回当前窗口名字
+;(bind-keys window-keymap "Super-n" '(display-message (window-name (current-event-window))))
+
+(bind-keys global-keymap "Super-1" '(activate-workspace 1))
+(bind-keys global-keymap "Super-2" '(activate-workspace 2))
+(bind-keys global-keymap "Super-3" '(activate-workspace 3))
+
+;(bind-keys global-keymap "Super-1" '(send-to-workspace 1))
+;(bind-keys global-keymap "Super-2" '(send-to-workspace 2))
+;(bind-keys global-keymap "Super-3" '(send-to-workspace 3))
+
+;(add-window-matcher
+;   '((WM_NAME . "^root$")
+;     (WM_CLASS . "^XTerm/xterm$"))
+;   '((ignore-program-position . t)
+;     (maximize . vertical)))
+;(add-window-matcher
+;    '((WM_NAME . "^Terminal$"))
+;    '(keymap-trans . (("C-n" "C-S-t")
+;                      ("C-w" "C-S-w"))))
+

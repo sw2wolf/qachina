@@ -1,0 +1,40 @@
+Note to self, here’s a quick recipe for creating a Virtual Machine using the VirtualBox command line, 
+
+ Create the VM, 
+VBoxManage createvm --name "io" --register
+VBoxManage modifyvm "io" --memory 512 --acpi on --boot1 dvd
+VBoxManage modifyvm "io" --nic1 bridged --bridgeadapter1 eth0
+VBoxManage modifyvm "io" --ostype Debian
+
+ Attach storage, add an IDE controller with a CD/DVD drive attached, and the install ISO inserted into the drive, 
+VBoxManage createhd --filename ./io.vdi --size 10000
+VBoxManage storagectl "io" --name "IDE Controller" --add ide
+
+VBoxManage storageattach "io" --storagectl "IDE Controller"  \
+    --port 0 --device 0 --type hdd --medium ./io.vdi
+
+VBoxManage storageattach "io" --storagectl "IDE Controller" \
+    --port 1 --device 0 --type dvddrive --medium debian-6.0.2.1-i386-CD-1.iso
+
+ Starting the VM for installation, 
+VBoxHeadless --startvm "io" &
+
+ This starts the VM and a remote desktop server. Redirect RDP port if necessary, 
+ssh -L 3389:127.0.0.1:3389 <host>
+
+ Shutting down the VM, 
+VBoxManage controlvm "io" poweroff
+
+ Remove install Media, 
+VBoxManage modifyvm "io" --dvd none
+
+ Alternatively install OS using the GUI, configure it then export is as an appliance upload to the server then import it using, 
+VBoxManage import io.ova
+
+ Starting the VM, 
+VBoxHeadless --startvm "io" --vrde off &
+
+ This starts the VM without remote desktop support. 
+
+ Delete the VM, 
+VBoxManage unregistervm io --delete

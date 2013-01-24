@@ -1,0 +1,11 @@
+me:\
+    :lang=zh_CN.UTF-8:\                     #LANG 语言显示
+    :charset=UTF-8:\                        #
+    :setenv=LC_ALL=zh_CN.UTF-8:\            #指定所有的 Locale
+    :setenv=LC_CTYPE=zh_CN.UTF-8:\          #字元定义 (包含字元分类与转换规则)
+    :setenv=LC_COLLATE=zh_CN.UTF-8:\        #字母順序与特殊字元比较
+    :setenv=LC_TIME=zh_CN.UTF-8:\           #时间格式
+    :setenv=LC_NUMERIC=zh_CN.UTF-8:\        #数字格式
+    :setenv=LC_MONETARY=zh_CN.UTF-8:\       #货币格式
+    :setenv=LC_MESSAGES=zh_CN.UTF-8:\       #信息显示 
+    :xmodifiers="@im=fcitx":                #

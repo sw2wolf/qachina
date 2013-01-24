@@ -1,0 +1,29 @@
+#    yaourtrc  - Configuration for yaourt
+# 
+#   See yaourtrc(5) for more information
+#   
+#
+ABS_REPO=(testing core extra community-testing community gnome-unstable kde-unstable)
+#NOCONFIRM=0
+#FORCE=0
+#AUTOSAVEBACKUPFILE=0
+#FORCEENGLISH=0
+#EDITFILES=1
+#AURCOMMENT=1
+#DEVELBUILDDIR="/var/abs/local/yaourtbuild/"
+#DEVEL=0
+#NOENTER=1
+AURUPGRADE=0
+#AURVOTE=1
+AURSEARCH=0
+#TERMINALTITLE=1
+#EXPORTDIR=""
+#TMPDIR="/tmp"
+#MAXCOMMENTS=5
+#EDITOR="$EDITOR"
+#PACMANBIN="/usr/bin/pacman"
+#COLORMODE="normal"
+#SHOWORPHANS=1
+#DIFFEDITCMD="vimdiff"
+#DETAILUPGRADE=1
+

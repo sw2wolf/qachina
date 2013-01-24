@@ -1,0 +1,37 @@
+[app] (name=fbrun)
+  [Position]	(CENTER)	{0 0}
+  [Layer]	{2}
+[end]
+[app] (name=xterm)
+  [Position]	(LOWERLEFT)	{0 0}
+  [Maximized]	{horz}
+[end]
+[app] (class=Wine)
+  [Workspace]	{1}
+  [Maximized]	{yes}
+  [Jump]	{yes}
+[end]
+[transient] (name=mirage) (class=Mirage)
+  [IconHidden]	{yes}
+[end]
+[app] (name=screen) (class=URxvt)
+  [Deco]	{NONE}
+[end]
+
+[group]  (workspace=[current])
+ [app] (name=xterm) (class=XTerm)
+ [app] (name=opera) (class=XTerm)
+ [Position]    (LOWERLEFT)     {0 200}
+ [Maximized]	{horz}
+[end]
+
+# a group with the gimp dock and toolbox
+# appears on layer 4 (bottom)
+[group]
+  [app] (name=gimp) (role=gimp-dock)
+  [app] (name=gimp) (role=gimp-toolbox)
+  [Layer]       {4}
+[end]
+
+[startup] {xsetroot -solid black}
+[startup] {xterm}

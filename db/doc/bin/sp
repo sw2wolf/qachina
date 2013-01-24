@@ -1,0 +1,1 @@
+strip -p --strip-unneeded --remove-section=.comment -o test $1

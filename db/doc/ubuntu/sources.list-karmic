@@ -1,0 +1,10 @@
+deb http://debian.nctu.edu.tw/ubuntu/ karmic main restricted universe multiverse
+deb http://debian.nctu.edu.tw/ubuntu/ karmic-security main restricted universe multiverse
+deb http://debian.nctu.edu.tw/ubuntu/ karmic-updates main restricted universe multiverse
+deb http://debian.nctu.edu.tw/ubuntu/ karmic-proposed main restricted universe multiverse
+deb http://debian.nctu.edu.tw/ubuntu/ karmic-backports main restricted universe multiverse
+deb-src http://debian.nctu.edu.tw/ubuntu/ karmic main restricted universe multiverse
+deb-src http://debian.nctu.edu.tw/ubuntu/ karmic-security main restricted universe multiverse
+deb-src http://debian.nctu.edu.tw/ubuntu/ karmic-updates main restricted universe multiverse
+deb-src http://debian.nctu.edu.tw/ubuntu/ karmic-proposed main restricted universe multiverse
+deb-src http://debian.nctu.edu.tw/ubuntu/ karmic-backports main restricted universe multiverse

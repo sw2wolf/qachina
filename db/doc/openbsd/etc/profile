@@ -1,0 +1,14 @@
+#PKG_PATH=ftp://ftp.openbsd.org/pub/OpenBSD/5.0/packages/i386/
+PKG_PATH=ftp://ftp.jaist.ac.jp/pub/OpenBSD/5.0/packages/i386/
+CVSROOT=anoncvs@anoncvs3.usa.openbsd.org:/cvs
+OBDOC=/mnt/J/WWW/QACHINA/DB/DOC/OPENBSD/
+
+if [ "$USER" = root ]; then
+PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin
+#PS1="\`hostname -s\`:\`pwd\`# "
+PS1="\t (\j)(\W) :# "
+else
+PATH=/bin:/usr/bin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games:.
+PS1="\t (\j)(\W) :$ "
+fi
+export PATH PS1 CVSROOT PKG_PATH OBDOC

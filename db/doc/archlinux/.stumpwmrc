@@ -1,0 +1,296 @@
+;; vim:filetype=lisp
+(in-package :stumpwm)
+
+(defun cat (&rest strings) ; "Concatenates strings, like the Unix command 'cat'. A shortcut for (concatenate 'string foo bar)."
+    (apply 'concatenate 'string strings))
+
+;(defun show-key-seq (key seq val)
+;    (message (print-key-seq (reverse seq))))
+;(add-hook *key-press-hook* 'show-key-seq)
+
+;; macro for faster startups
+(defmacro replace-hook (hook fn)
+    `(remove-hook ,hook ,fn)
+    `(add-hook ,hook ,fn))
+
+(defcommand display-current-window-info () ()
+  "Shows the properties of the current window. These properties can be
+used for matching windows with run-or-raise or window placement
+rules."
+  (let ((w (current-window))
+        (*suppress-echo-timeout* t)
+        (nl (string #\NewLine)))
+
+    ;; (message-no-timeout "class: ~a~%instance~a~%..." (window-class w) (window-res w) ...)
+    (echo-string (current-screen)
+                 (concat "class:    " (window-class w) nl
+                         "instance: " (window-res w) nl
+                         "type:     :" (string (window-type w)) nl
+                         "role:     " (window-role w) nl
+                         "title:    " (window-title w) nl
+                         "width:    " (format nil "~a" (window-width w)) nl
+                         "height    " (format nil "~a" (window-height w))))))
+
+;;mode line
+(stumpwm:set-fg-color "green")
+(stumpwm:set-bg-color "black")
+
+(set-font "-*-SimSun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
+
+;;set the prefix key to the menu key. This key is easier to type than Ctrl-t:
+;; Change the Stumpwm prefix key: Use the menu key
+(set-prefix-key (kbd "Menu"))
+
+;; suppress the message StumpWM displays when it starts. Set it to NIL
+(setf *startup-message* "Welcome to stumpwm world!"
+      *timeout-wait* 3
+      *mouse-focus-policy* :click ;; :click, :ignore, :sloppy
+      *message-window-gravity* :bottom-left
+      *input-window-gravity* :bottom-left)
+
+;;; Window Appearance
+(setf *normal-border-width* 1
+      *maxsize-border-width* 1
+      *transient-border-width* 1
+      *window-border-style* :thin) ; :thick :thin :tight :none
+
+(setf *time-modeline-string* "%Y-%m-%d %a ^B%l:%M^b" 
+      *window-name-source* :title
+      *window-format* "^B^8*%n%s%m%15t | ^7*"
+      *group-format* "%t")
+
+ ;;;; The Mode Line
+(setf *mode-line-background-color* "black"
+      *mode-line-foreground-color* "lightgreen"
+      *mode-line-border-color* "black"
+      *mode-line-border-width* 0
+      *mode-line-pad-x* 0
+      *mode-line-pad-y* 0
+      *mode-line-timeout* 10
+      *mode-line-screen-position* :top
+      *screen-mode-line-format* (list "[^B%n^b]%W" "^>%d"))
+
+;; turn on/off the mode line for the current screen only.
+(if (not (head-mode-line (current-head)))
+     (toggle-mode-line (current-screen) (current-head)))
+; A head is a physical monitor. A screen is a section of video memory
+; that heads are mapped on to. When using xinerama you generally have
+; 1 screen and many heads. When not using xinerama each screen is a
+; physical monitor so you have many screens with only one head on them.
+
+;;add hook so I get notified when people say my name on IRC or IM me
+(defun echo-urgent-window (target)
+    (message-no-timeout "~a has an message for you." (window-title target)))
+(add-hook *urgent-window-hook* 'echo-urgent-window)
+
+;; shell program used by `run-shell-command' (`sh' by default, which is *not*
+;; 'bash' nor 'zsh')
+(setf *shell-program* (stumpwm::getenv "SHELL"))  ; `getenv' is not exported
+
+;; turn on debugging
+(setf stumpwm::*debug-level* 10)  ; get rid of debug by setting level to 0
+
+(defparameter +browser-name+ "firefox")
+(defparameter +browser-class+ "Firefox")
+
+
+;;Define a bunch of commands to switch to an already started application
+;;or to start it if it is not yet running
+(defcommand browse () ()
+    (run-or-raise +browser-name+ `(:class ,+browser-class+)))
+
+(defcommand thunderbird () ()
+    (run-or-raise "thunderbird" '(:class "Thunderbird")))
+
+(defcommand eweiqi () ()
+    (run-shell-command "wine \"c:/Program Files/eweiqi/LiveBaduk.exe\" &"))
+
+(defcommand reboot () ()
+    (run-shell-command "sudo /sbin/shutdown -r now"))
+
+(defcommand halt () ()
+    (run-shell-command "sudo /sbin/shutdown -h now"))
+
+(defcommand reinit () ()
+    (run-commands "reload" "loadrc"))
+
+
+;;; If you like Meta (most probably alt on your keyboard) more than
+;;; Super (which is the Windows key on mine), change 's-' into 'M-'.
+(defmacro defkey-top (key cmd)
+    `(define-key *top-map* (kbd ,key) ,cmd))
+
+(defmacro defkeys-top (&rest keys)
+    (let ((ks (mapcar #'(lambda (k) (cons 'defkey-top k)) keys)))
+        `(progn ,@ks)))
+
+(defmacro defkey-root (key cmd)
+    `(define-key *root-map* (kbd ,key) ,cmd))
+
+(defmacro defkeys-root (&rest keys)
+    (let ((ks (mapcar #'(lambda (k) (cons 'defkey-root k)) keys)))
+        `(progn ,@ks)))
+
+(defkeys-top
+    ("s-g" "eweiqi")
+    ("s-w" "browse")
+    ("s-m" "thunderbird")
+    ("s-e" "exec evince")
+    ("s-t" "exec xterm")
+    ("s-C" "delete")
+    ("s-s" "vsplit")
+    ("s-S" "hsplit")
+    ("s-b" "mode-line")
+    ("s-Tab" "pull-hidden-next")
+    ("Print" "exec scrot -q 10")
+    ("M-Print" "exec scrot -q 10 -s")
+
+    ("s-R" "reinit")
+    ("s-Q" "quit")
+    ("s-F2" "exec")
+    ("s-F4" "kill")
+    ("s-F11" "reboot")
+    ("s-F12" "halt")
+   
+    ("s-Right" "move-focus right")
+    ("s-Left" "move-focus left" )
+    ("s-Up" "move-focus up" )
+    ("s-Down" "move-focus down" )
+    ("s-C-Right" "move-window right")
+    ("s-C-Left" "move-window left" )
+    ("s-C-Up" "move-window up" )
+    ("s-C-Down" "move-window down" )
+    ("s-S-Right" "gnext")
+    ("s-S-Left" "gprev")
+    ("s-S-Up" "prev-in-frame")
+    ("s-S-Down" "next-in-frame"))
+
+(defkeys-root
+    ("C-w" "windowlist")
+    ("C-i" "display-current-window-info"))
+
+; groups
+(defvar group-names "123")
+
+(dotimes (i 3)
+    (define-key *top-map* (kbd (format nil "s-~a" (char group-names i)))
+        (format nil "gselect ~a" (1+ i)))
+    (define-key *top-map* (kbd (format nil "s-C-~a" (char group-names i)))
+        (format nil "gmove ~a" (1+ i))))
+
+(defmacro make-groups (&rest names)
+    (let ((ns (mapcar #'(lambda (n) (cat "gnew " n)) names)))
+              `(run-commands ,@ns)))
+
+(make-groups "2" "3")
+(run-commands "gselect 1" "grename 1")
+
+(replace-hook *mode-line-click-hook*
+    (lambda (mode-line button x y) (grouplist)))
+
+(clear-window-placement-rules)
+(define-frame-preference "1"
+    (0 t   t :class "Gvim")
+    (1 t   t :class "Firefox"))
+
+#|
+(define-frame-preference "pidgin"
+    (2 t t :create   "pidgin-dump"  :class "Pidgin" :instance "pidgin" :title nil :role nil)
+    (0 t t :create   "pidgin-dump"  :class "Pidgin" :instance "pidgin" :title nil :role "conversation")
+    (1 t t :create   "pidgin-dump"  :class "Pidgin" :instance "pidgin" :title nil :role "buddy_list"))
+
+(define-frame-preference "gimp"
+    (1 t t :create   "gimp-dump"  :class "Gimp" :title nil :role nil)
+    (0 t t :create   "gimp-dump"  :class "Gimp" :title nil :role "gimp-toolbox")
+    (2 t t :create   "gimp-dump"  :class "Gimp" :title nil :role "gimp-dock")
+    (1 t t :create   "gimp-dump"  :class "Gimp" :title nil :role "gimp-image-window"))
+|#
+#|
+;;; mpd
+(load-module "mpd")
+(setf *mpd-modeline-fmt* "%S [%s;%r]: %a - %t (%n/%p)")
+(setf *mpd-map*
+      (let ((m (make-sparse-keymap)))
+        (define-key m (kbd "SPC") "mpd-toggle-pause")
+        (define-key m (kbd "s") "mpd-toggle-random")
+        (define-key m (kbd "r") "mpd-toggle-repeat")
+        (define-key m (kbd "S") "mpd-current-song")
+        (define-key m (kbd "P") "mpd-play")
+        (define-key m (kbd "q") "mpd-browse-playlist")
+        (define-key m (kbd "o") "mpd-stop")
+        (define-key m (kbd "n") "mpd-next")
+        (define-key m (kbd "p") "mpd-prev")
+        (define-key m (kbd "c") "mpd-clear")
+        (define-key m (kbd "x") "mpd-connect")
+        (define-key m (kbd "k") "mpd-kill")
+        (define-key m (kbd "u") "mpd-update")
+        (define-key m (kbd "a") "mpd-search-and-add-artist")
+        (define-key m (kbd "z") "mpd-playlist")
+        (define-key m (kbd "v") "mpd-set-volume")
+        (define-key m (kbd "e") "mpd-volume-up")
+        (define-key m (kbd "d") "mpd-volume-down")
+        (define-key m (kbd "S") '*mpd-search-map*)
+        (define-key m (kbd "b") '*mpd-browse-map*)
+        (define-key m (kbd "A") '*mpd-add-map*)
+        m))
+(define-key *top-map* (kbd "s-m") '*mpd-map*)
+|#
+;; menu
+(defparameter *start-menu*
+    '( ("Internet"
+            ("Web"   "browse")
+            ("Thunderbird" "thunderbird")
+            ("Go"     "eweiqi"))
+
+       ("Graphics"
+            ("gqview"   "gqview")
+            ("PDF"      "evince"))
+       
+       ("System Management"
+            ("reboot"  "reboot")
+            ("halt"    "halt"))))
+
+(defcommand menu () ()
+    "docstring"
+    (labels ((pick (options)
+        (let ((selection (stumpwm::select-from-menu (current-screen) options "")))
+            (cond
+                ((null selection)
+                    (throw 'stumpwm::error "Abort."))
+                ((stringp (second selection))
+                    (second selection))
+            (t
+                (pick (cdr selection)))))))
+        (let ((choice (pick *start-menu*)))
+            (run-shell-command choice))))
+
+(define-key *root-map* (kbd "p") "menu")
+(defun my-start-hook ()
+      ;; Keep the X cursor out of the way.
+      ;; (run-with-timer 5 5 'banish-pointer)
+      ;; Change the background and pointer in X
+      ;(run-shell-command "xsetroot -cursor_name left_ptr -gray -fg white -bg black -name root-window")
+      ;; (run-shell-command "feh --bg-scale /home/tsp/.wmii-3.5/wallpaper/wmii.jpg")
+      ;; (run-shell-command "xsetbg /home/enigma/media/pictures/artwork/vintage_wallpaper_blue.png")
+      ;; Run unclutter so the mouse hangs around no longer than needed.
+      ;(run-shell-command "unclutter -idle 1 -jitter 2 -root")
+      ;; I use Xscreensaver as a screensaver. The first line makes sure any running Xscreensaver is killed.
+      ;; The second run regardless of the success of the first & starts a background Xscreensaver daemon
+      ;; (run-shell-command "xscreensaver-command -exit; killall xscreensaver 2>/dev/null; xscreensaver -no-splash")
+      ;; (run-shell-command "dmenu_path")
+      (run-shell-command "fcitx")
+      (run-shell-command "xterm -e tmux"))
+(replace-hook *start-hook* 'my-start-hook)
+
+;; Load swank.
+;; *prefix-key* ; swank will kick this off
+(load "~/.vim/slime/swank-loader.lisp")
+(swank-loader:init)
+(defcommand swank () ()
+  (setf stumpwm:*top-level-error-action* :break)
+  (swank:create-server :port 4005
+                       :style swank:*communication-style*
+                       :dont-close t)
+  (echo-string (current-screen) 
+	       "Starting swank. M-x slime-connect RET RET, then (in-package stumpwm)."))
+(swank)

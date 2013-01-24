@@ -1,0 +1,17 @@
+;;; The following lines added by ql:add-to-init-file:
+#-quicklisp
+(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"
+                                       (user-homedir-pathname))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
+(pushnew #p"/media/D/www/qachina/" asdf:*central-registry*)
+(pushnew #p"/media/D/www/qachina/db/doc/money/" asdf:*central-registry*)
+(ql:quickload :money)
+
+;(asdf:operate 'asdf:load-op :myapp)
+;(myapp:start-myapp)
+
+; disable dubugger same as '--disable-debugger' commmand line option
+;(defun debug-ignore (c h) (declare (ignore h)) (print c) (abort))
+;(setf *debugger-hook* #'debug-ignore)

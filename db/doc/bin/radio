@@ -1,0 +1,5 @@
+mplayer -nocache mms://livexwb.cri.com.cn/am846.wsx > /dev/null
+#mplayer -cache-min 10 mms://livexwb.cri.com.cn/am846.wsx > /dev/null
+# 文艺之声是：mms://cdnmms.cnr.cn/cnr009
+# 中国之声是：mms://cdnmms.cnr.cn/cnr001
+

@@ -1,0 +1,558 @@
+分辨率的设置，openbsd下也可以用xrandr命令，如下：
+xrandr -s 1440x900  
+$ xrandr -s 1024x768 -r 75.0
+# nano /etc/rc.conf.local
+
+ xdm_flags=NO
+
+ and add gdm to the rc_scripts line :
+
+ rc_scripts="dbus_daemon gdm"
+
+ While we are at it, enable the aucat sound daemon at boot time
+ add the line :
+
+ aucat_flags=""
+
+ Start aucat as daemon
+# aucat -l
+
+Lightweight web browser Midori (uses WebKit like Chromium)
+$ sudo pkg_add midori
+
+Youtube-dl for downloading videos
+$ sudo pkg_add -v youtube-dl
+$ youtube-dl <URL_of_youtube_video>
+
+Then use mplayer to replay the video.
+
+Multimedia apps
+
+ VLC media player (warning, qt4-dependant!)
+ $ sudo pkg_add vlc
+
+ Lightweight audio player : Audacious
+ $ sudo pkg_add audacious-plugins
+
+ To have sound output in Audacious, be sure to select "Sndio output plugin" in preferences/audio.
+
+PDF viewer
+ $ sudo pkg_add -v epdfview-0.1.7p7
+
+OpenBSD optimizations
+
+ Disk optimization : add the softdep and noatime options for your partitions in /etc/fstab
+
+ # nano -w /etc/fstab
+
+ /dev/wd0a / ffs rw,softdep,noatime 1 1
+ /dev/wd0g /home ffs rw,nodev,nosuid,softdep,noatime 1 2
+ /dev/wd0e /tmp ffs rw,nodev,nosuid,softdep,noatime 1 2
+ /dev/wd0d /usr ffs rw,nodev,softdep,noatime 1 2
+ /dev/wd0f /var ffs rw,nodev,nosuid,softdep,noatime 1 2
+ 
+Manually update the files database so we can use the locate command to look for a file
+ # /usr/libexec/locate.updatedb
+ # locate <name>
+
+ List installed packages
+ # pkg_info |more
+
+ Search for packages in repository (provided by PKG_PATH)
+ # pkg_info -Q <search string>
+
+ Update all packages on the system
+ # pkg_add -v -u
+
+
+The following command uses audioctl(1) to display the default processing parameters of an audio device. 
+$ audioctl -f /dev/audio
+
+audioctl(1) is also quite useful for exploring the capabilities of an audio device. For example, to see if the device supports some common sample rates, you could simply try setting the playback rate: 
+$ audioctl play.rate=48000
+play.rate: -> 48000
+$ audioctl play.rate=44100
+play.rate: -> 44100
+$ audioctl play.rate=22050
+audioctl: set failed: Invalid argument
+$ audioctl play.rate=8000
+audioctl: set failed: Invalid argument
+
+Audio hardware is usually capable of at least some minimal mixing. Running mixerctl(1) with no arguments will list the device's mixer controls and current settings. 
+$ mixerctl
+
+As a basic example of common mixerctl usage, to set the volume of the left and right channels to 200, you would issue 
+$ mixerctl outputs.master=200,200
+outputs.master: 255,255 -> 207,207
+
+To unmute the master channel, you would do 
+$ mixerctl outputs.master.mute=off
+outputs.master.mute: on -> off
+
+1) 看音量大小
+ mixerctl | grep master 
+ 结果：
+ outputs.master=120，120 （两个120，表示左右声道大小各是120，最高250）
+2）修改大小
+ mixerctl outputs.master=200,200
+
+ To make the changes take affect on each reboot, edit /etc/mixerctl.conf, for example: 
+$ cat /etc/mixerctl.conf
+outputs.master=200,200
+outputs.master.mute=off
+outputs.headphones=160,160
+outputs.headphones.mute=off
+
+
+Searching the ports tree
+ Once you have the ports tree in place on your system, it becomes very easy to search for software. Just use make search key="searchkey", as shown in the following example. 
+$ cd /usr/ports
+$ make search key=rsnapshot
+
+
+安装中文字体可保证中文网页美观和加速显示
+pkg_add scim-fcitx
+
+export GTK_IM_MODULE="scim"
+export QT_IM_MODULE="scim"
+export XMODIFIERS="@im=SCIM"
+/usr/local/bin/scim -d
+
+这样可以在firefox里面按ctrl+shift切换输入法，ctrl+space打开或关闭输入法，其他操作跟Windows下差不多。
+
+另外，rc.conf.local应该添加以下代码。将来用得着？
+代码:
+pkg_scripts="dbus_daemon cupsd"
+
+pkg_add zh-wqy-zenhei-ttf-0.6.26.0.tgz
+pkg_add zh-wqy-bitmapfont-0.9.9.0.tgz
+
+在xinitrc注释掉了LC_CTYPE，加了 LANG=zh_CN.UTF-8，midori 的界面变成简体中文了。
+
+在firefox的地址栏输入about:config
+ 然后在filter选项里查找：network.dns.disableIPv6
+ 将其值修改为true
+
+先将从互联网上下载的或你的2K8或Vista系统中的windows/fonts目录下的微软雅黑字体(mshy.ttf)拷贝到"/usr/local/lib/X11/fonts/myfonts/“，给X添加一种字体需要同时在fontconfig library和X server里注册这种字体。
+客户端的渲染系统
+为了避免为应用新字体重新启动X，你需要运行：
+ # /usr/X11R6/bin/fc-cache -v 
+服务器端的渲染系统
+ 编辑/etc/X11/xorg.conf这个文件，添加如下内容：
+ Section "Files" 
+ FontPath "/usr/X11R6/lib/X11/fonts/TTF/" 
+ FontPath "/usr/local/lib/X11/fonts/myfonts/" 
+ ... 
+ EndSection 
+
+接下来用mkfontdir 命令建立这个字体的scale:
+# cd /usr/local/lib/X11/fonts/myfonts 
+# /usr/X11R6/bin/mkfontscale 
+# /usr/X11R6/bin/mkfontdir 
+最后为了避免重新启动X，运行下面的命令就可以在当前会话中运用新字体了
+$ xset fp rehash
+
+
+Linux Emulation
+---------------
+We will now enable Linux emulation for use by Open Office.
+
+1. Edit your /etc/sysctl.conf and uncomment the option kern.emul.linux=1
+   as root issue the following command. "sysctl -w kern.emul.linux=1"
+
+2. Type pkg_list and wait for it to pick up a current package listing.
+   Once it's finished look for the Redhat base package as follows.
+   		grep redhat pkglist.txt
+
+   From the output select the most recent rehat_base and install using the
+   following command.
+   		pkg_add -v redhat_base-8.0p4.tgz
+
+3. When the base finishes installing we will finish the linux emulation by
+   running the next to commands.
+
+   echo "/proc /proc procfs rw,linux 00" >> /etc/fstab
+   mkdir /proc
+
+
+This would be a great time to reboot the machine and check for any errors you
+might have before we move on to setting up xorg and your window manager.
+
+qemu
+
+config -ef /bsd
+disable mpbios
+quit
+
+. mount CDROM
+# mkdir /mnt/cdrom
+# echo "/dev/cd0a /mnt/cdrom cd9660 ro,nodev,nosuid,noauto 0 0" >> /etc/fstab
+#mount /mnt/cdrom
+
+. mount iso
+# vnconfig svnd0 /usr/local/share/4.1.iso
+# mount -t cd9660 /dev/svnd0c /mnt/cdrom
+
+. mount usb
+# mkdir /mnt/usb
+# mount_msdos /dev/sd0i /mnt/usb
+
+Q:如何关闭文本控制台的哔哔声
+A:可以直接在命令行输入以下命令：
+# wsconsctl keyboard.bell.pitch=0
+# wsconsctl keyboard.bell.volume=0
+数字0表示音量，你可以设置为某一个整数，以调整音量大小。
+你可以将这两条命令写在 /etc/rc.local 里，让它们在系统启动之后就执行，也可以放在 /etc/wsconsctl.conf 中。
+# ---- File: /etc/rc.local ----
+# Append these two lines:
+/sbin/wsconsctl keyboard.bell.pitch=0
+/sbin/wsconsctl keyboard.bell.volume=0
+# ---- File: /etc/wsconsctl.conf ----
+# Append these lines:
+keyboard.bell.pitch=0
+keyboard.bell.volume=0
+
+Q:使用80x50的终端模式（50行，每行80个字符）
+A:可以把这几行加在/etc/rc.local中，也可以以root身份（或者sudo）在命令行运行以下三行命令：
+# wsfontload -h 8 -e ibm /usr/share/misc/pcvtfonts/vt220l.808
+# wsconscfg -dF 5
+# wsconscfg -t 80x50 5
+其中wsconscfg -dF 5是指第六个终端（ttyC5，也就是按Ctrl+Alt+F6），而第一个终端是ttyC0（如果把5改成0，是不会生效的，会显示一个“Device busy”的信息）如果在当前的ttyCn上运行以下命令，并且把"5"改成了"n-1“，则当前终端会失去响应.
+
+Q:快速删除系统里的packages
+A:# pkg_delete -q /var/db/pkg/*
+
+Q:静态路由
+A:方法是加到/etc/rc.local里面。
+route add -net 204.12.16.0 -netmask 255.255.255.0  172.20.8.252
+这是把204.12.16.0/24的网段都路由到172.20.8.252上面。
+
+Q:锁住终端
+A:# lock -np
+    -n 永不超时
+    -p 使用系统密码作为开启终端的密匙
+
+Q:屏蔽登陆时的系统信息
+A:# > /etc/motd
+# vi /etc/rc
+===================== rc ====================
+注释掉下面的内容：
+# patch /etc/motd
+#if [ ! -f /etc/motd ]; then
+# install -c -o root -g wheel -m 664 /dev/null /etc/motd
+#fi
+#T=`mktemp /tmp/_motd.XXXXXXXXXX`
+#if [ $? -eq 0 ]; then
+# sysctl -n kern.version | sed 1q >; $T
+# echo "" >;>; $T
+# sed '1,/^$/d' ;>; $T
+# cmp -s $T /etc/motd || cp $T /etc/motd
+# rm -f $T
+#fi
+===================== rc ====================
+
+Q:防止cracker利用rootkit工具通过后门进入系统
+A:对/bin,/sbin进行安全保护:
+# chflags schg /bin/*
+# chflags schg /sbin/*
+/bin/ls -lo /bin
+看看文件是不是已经是schg了，想要去掉的话还必须进入单用户模式chflags noschg /bin/*可以把file flag去掉
+
+Q:禁止一般用户查看系统日志
+A:# chmod g-w,o-r /var/log/*
+
+Q:简化mount光驱、软驱操作
+A:# mkdir /mnt/cdrom
+# mkdir /mnt/floppy
+# vi /etc/fstab
+/dev/cd0a /mnt/cdrom cd9660 ro,nodev,nosuid,noauto 0 0
+/dev/fd0a /mnt/floppy msdos rw,nodev,nosuid,noauto 0 0
+这样就可以直接mount /mnt/cdrom; mount /mnt/floppy了
+
+Q:如何跳过OpenBSD启动时在boot等待的5秒钟
+A:系统在启动的时候（使用boot(8)），boot(8)会搜索/etc/boot.conf文件，如果找到了，就执行记录在文件里的命令。
+可以在/etc/boot.conf中使用一些命令。最简单的就是一个'boot'单词。系统启动时，默认会在出现提示符的时候停5秒的时间，如果在/etc/boot.conf中加了一个'boot'命令，系统在启动到提示符处时，会马上执行这个指令，于是就不需要等待5秒的时间了。
+注：记录在该文件中的指令，对pxeboot程序也同样有效。所以，如果该系统同时用做PXE网络启动安装的服务器，要注意这里记录的命令是否会对PXE网络启动安装造成影响。
+
+Q:建议cp命令使用-R参数
+A:虽然cp命令也支持-r参数，但是并不推荐使用该参数。因为它无法正确复制一些特殊文件，比如“符号链接文件（symbolic links）”或者“输入输出（FIFOs）”推荐使用-R参数。[#man cp]
+
+Q:可以象freebsd的"portupgrade -rRf"那样升级ports吗？
+A:可以"make update FORCE_UPDATE=yes"
+
+Q:限制SSH验证重试次数： 
+A: # vi /etc/ssh/sshd_config 
+MaxAuthTries 6
+
+Q:可以把系统的核心的运行层次设置为最安全的层次: 
+A: # sysctl -w kern.securelevel=2 
+
+Q:禁用由inetd启动的程序： 
+A: # vi /etc/sysctl.conf 
+inetd=NO 
+
+Q:如何解决sudo不成功
+A:sudo不能root时要编辑 /etc/group 文件
+#vi /etc/group 
+wheel:*:0:root,xxx,xxx,xxx,...
+在wheel:*:0:root后加逗号和用户名即可。
+sudo后有没权限执行的命令，这时要修改 /etc/sudoers 文件
+root   ALL=(ALL)   ALL   （下一行新建）
+xxxx   ALL=(ALL)   ALL  
+这样这个用户就会有root的所有权限。
+
+Q:网关配制 
+A:直接将IP写入/etc/mygate 
+
+Q:机器名 
+A:直接写入/etc/myname 
+
+Q:网卡配制 
+A:直接将参数写入/etc/hostname.ifname 
+比如，网卡名为fxp0则将配制内容：inet 192.168.0.1写入/etc/hostname.fxp0 
+
+Q:关闭sendmail 
+A:将/etc/rc.conf中的sendmail_flags="xxxx"改为sendmail_falgs=NO 
+关闭rc.conf中的其它服务方法类似。 
+
+Q:重新设置时区： 
+A: # cd /etc 
+# ln -s /usr/share/timezone/US/Eastern localtim 
+
+Q:如何在OpenBSD下一块网卡绑定多个IP地址
+A:编辑/etc/hostname.dc0 (注意，不同的网卡是不同的名称，我这边是dc0) 
+#cat /etc/hostname.dc0 
+inet 192.168.0.2 255.255.255.0 media 100baseTX 
+inet alias 192.168.0.3 255.255.255.255 
+inet alias 192.168.0.4 255.255.255.255 
+现在你知道如何做了吗？ 
+或者通过ifconfig来进行 
+ifconfig dc0 inet alias 192.168.0.3 netmask 255.255.255.255 
+
+Q:查看IP地址的情况！ 
+A: $ ifconfig -A 
+dc0: flags=8863 
+media: Ethernet manual 
+inet 192.168.0.2 netmask 0xffffff00 broadcast 192.168.0.255 
+inet 192.168.0.3 netmask 0xffffffff broadcast 192.168.0.3 
+这个地方一定要使用参数-A 
+你可以man ifconfig可以看到 
+If -A is used, it causes full interface alias information for each inter- 
+face to be displayed. 
+这个参数是用来显示全部接口的alias信息的！ 
+
+Q:如何使你的OpenBSD支持tab键补齐！ 
+A: 到ftp://ftp.openbsd.org/下载一个tcsh-6.12.00-static的package 
+然后使用pkg_add tcsh-6.12.00-static.tgz 
+修改/etc/shells 
+加入 
+/usr/local/bin/tcsh    
+执行命令vipw或者chsh修改root的shell为/usr/local/bin/tcsh 
+注销，重新登陆，你就可以发现你现在的shell可以使用tab键补齐了！ 
+补充：你同样可以使用bash，设置方法同上！ 
+
+Q:完全关闭sendmail不仅需要 
+A: 将/etc/rc.conf中的sendmail_flags="xxxx"改为sendmail_falgs=NO 
+由于系统定时任务还会启动它，所以还需作如下修改 
+修改/etc/daily 
+找到下面代码 
+sh /etc/security 2>&1 > $OUT 
+if [ -s $OUT ]; then 
+mail -s "$host daily insecurity output" root &1 > $OUT.TMP 
+if [ -s $OUT.TMP ]; then 
+echo "$host daily insecurity output" > $OUT 
+cat $OUT.TMP >> $OUT 
+rm $OUT.TMP 
+/usr/libexec/mail.local root > $OUT 
+fi 
+修改crontab 
+#crontab –u root –e 
+将 
+30 1 * * * /bin/sh /etc/daily 2>&1 | tee /var/log/daily.out | mail - s "`/bin/hostname` daily output" root 
+30 3 * * 6 /bin/sh /etc/weekly 2>&1 | tee /var/log/weekly.out | mail -s "`/bin/hostname` weekly output" root 
+30 5 1 * * /bin/sh /etc/monthly 2>&1 | tee /var/log/monthly.out | mail -s "`/bin/hostname` monthly output" root 
+修改为 
+30 1 * * * /bin/sh /etc/daily 2>&1 | tee /var/log/daily.out | /usr/libexec/mail.local root 
+30 3 * * 6 /bin/sh /etc/weekly 2>&1 | tee /var/log/weekly.out | /usr/libexec/mail.local root 
+30 5 1 * * /bin/sh /etc/monthly 2>&1 | tee /var/log/monthly.out | /usr/libexec/mail.local root 
+并注释掉启动Sendmail行 
+#*/30 * * * * /usr/sbin/sendmail –L sm-msp-queue –Ac -q 
+
+Q:如何让OpenBSD同步网络时间 
+A: 使用命令: 
+rdate -n time.cn99.com    
+-n    Use SNTP (RFC 1361) instead of the RFC 868 time protocol. 
+By default, rdate uses the RFC 868 TCP protocol 
+而在FreeBSD则是用ntpdate来进行时间的同步！ 
+
+Q:在OpenBSD下通过ftp这个命令来代替fetch的用法！ 
+A: 命令的使用格式如下！ 
+ftp -m -V http://apache.linuxforum.net/dist/httpd/apache_1.3.29.tar.gz 
+这个命令从linuxforum.net的服务器上取得apache_1.3.29.tar.gz这个文件！ 
+如果是从ftp服务器上取得文件，参数相同！ 
+命令参数解释: 
+-m    Causes ftp to always display the progress meter in cases where it 
+would not do so by default. 
+-V    Disable verbose mode, overriding the default of enabled when in- 
+put is from a terminal. 
+
+Q:如何让OpenBSD关闭并自动关闭电源 
+A:shutdown -ph now 
+
+Q:如何在OpenBSD下面mount .iso文件 
+A: # mkdir /mnt/iso 
+# vnconfig cd0 /home/iso/OpenBSD_3_6.iso 
+# mount -t cd9660 /dev/cd0c /mnt/iso 
+或者: 
+# mount_cd9660 /dev/cd0c /mnt/iso 
+# cd /mnt/iso 
+
+Q:如何在OpenBSD下面快速安装package 
+A: 前提: 网络环境，可以连接到Internet，或者你内部有OpenBSD的package的mirror也可以！ 
+设置: 
+在/root/.cshrc中加入 
+setenv PKG_PATH ftp://OpenBSD:OpenBSD@ftp.cnfug.org/OpenBSD/snapshots/packages/`machine -a`/
+上面是我自己使用的设置，你可以根据具体的环境，具体的服务器进行设置。 
+注销重新登陆使setenv生效,或输入# source .cshrc 
+从3.9开始pkg_add这个命令真的有了很大的改进，添加了上面的设置后，你只要 # pkg_add tcsh 即可安装tcsh这个软件 她会自动搜索服务器安装最新版。
+
+Q:无安装光盘快速重新安装OpenBSD系统！ 
+A:启动的时候使用boot /bsd.rd 
+然后安装选择本地硬盘或者通过ftp或者http或者nfs来进行安装，非常方便快捷！ 
+希望FreeBSD也可以做到这样！ 
+
+1, 为新硬盘分区: 
+fdisk –i wd1 
+disklabel –E wd1 
+2, 格式化各分区 
+newfs /dev/wd1a  
+newfs /dev/wd1d 
+newfs /dev/wd1e 
+newfs /dev/wd1f 
+3, 为新硬盘wd1设置mbr: 
+fdisk –u –f /usr/mdec/mbr wd1
+
+要将本地主机的 /home 目录及其子目录递归地传送到远程的主机www.jiarun.org的 /home 下，这样：
+#scp -r /home/* root@www.jiarun.org:/home/
+
+不能关机，试试将/etc/sysctl.conf里的
+#machdep.apmhalt=1
+前面的注释符去掉。
+
+.编译
+要通过CVS方式下载，在SHELL上打： 
+
+export CVS_RSH=""/usr/bin/ssh"" 
+export CVSROOT=anoncvs@anoncvs1.usa.openbsd.org:/cvs 
+
+cd /usr && cvs checkout -z9 src/sys 
+要用FTP方式下载，请到：ftp://ftp.openbsd.org/pub/OpenBSD/2.7/srcsys.tar.gz 
+
+下载完后就可以把它放到/usr/src目录里，并解开： 
+cp srcsys.tar.gz /usr/src ; tar -xzvf /usr/src/srcsys.tar.gz
+
+cd /usr/src/sys/arch/$ARCH/conf ; config yourkernel 
+cd ../compile/yourkernel ; make depend && make 
+cp /bsd /bsd-old ; cp bsd /bsd
+
+
+# pkg_add -ui
+Which will (u)pgrade your installed packages asking you any questions (i)nteractive when needed.
+
+I boot as normal but stop the process at the boot prompt.
+ Pick up the bsd.rd for the new release at the boot prompt do a set image and boot
+>set image /5.1/amd64/bsd.rd
+>boot
+
+2. 串口终端 
+
+---- 对于本NAT服务器来说，可以不要显卡、显示器和键盘。但是如果配置网络出了问题，远程登录无法连接到服务器就比较麻烦了，因为已经把服务器的显示系统和键盘都去掉了。所以有必要建立一个比较保险的连接途径。可以通过串口终端的方式，把键盘连接到服务器。步骤如下。 
+
+---- (1)输入如下命令： 
+
+---- echo -P > /boot.config 
+
+---- 目的是告诉boot模块，如果发现键盘不存在，就进入"serial console"模式。 
+
+---- (2)修改/etc/ttys，将tty00的Status改为on，后面可以加上Secure（允许root从serial console登录）。这里假设所用的是COM1口。 
+
+---- (3)在COM1上接终端，或者接到另一台电脑，比如运行Windows的PC，安装任一种支持串口终端方式的软件，如Hypertermial、 Netterm或SecureCRT，新建立一个会话（Session）。采用串口协议，参数如下: 速率9600、data 8、parity none、stopbit 1、flow control XON/XOFF；
+
+---- (4)拔掉键盘，重新启动系统。 
+
+---- 如果觉得9600bps的速率太慢，可以在/etc/ttys中设置，并且将终端或者终端仿真软件的速率设置成相同的就可以了。
+
+关于boot菜单 /etc/boot.conf
+boot> set timeout 60      (boot delay, 5 seconds by default)
+boot> boot -s             (To boot into single-user mode)
+#/bin/sh /etc/netstart    (Start the network while in single-user mode) 
+
+boot> boot -s /bsd.old    (To boot an old kernel in single-user mode)
+# man boot
+FILES
+    /usr/mdec/biosboot    first stage bootstrap
+    /usr/mdec/pxeboot     PXE bootstrap
+    /boot                 system bootstrap
+    /etc/boot.conf        system bootstrap's startup file
+    /bsd                  kernel image
+    /bsd.sp               kernel image for single processor machines
+    /bsd.mp               kernel image for multiprocessor machines
+    /bsd.rd               kernel image for installation/recovery
+
+EXAMPLES
+    Boot the default kernel:
+
+        boot> boot
+
+    Remove the 5 second pause at boot-time permanently, causing boot to load
+    the kernel immediately without prompting:
+
+        # echo "boot" > /etc/boot.conf
+
+    Use serial console.  A null modem cable should connect the specified
+    serial port to a terminal.  Useful for debugging.
+
+        boot> set tty com0
+
+    Invoke the serial console at every boot:
+
+        # echo "set tty com0" > /etc/boot.conf
+
+
+# vim /etc/mk.conf
+WRKOBJDIR=/usr/obj/ports
+DISTDIR=/usr/distfiles
+PACKAGE_REPOSITORY=/usr/packages
+FETCH_CMD=/usr/local/bin/axel -a -S4
+MASTER_SITE_OVERRIDE=\
+        ftp://ftp.openbsd.org/pub/OpenBSD/distfiles/${DIST_SUBDIR}/\
+        http://ftp.openbsd.org/pub/OpenBSD/distfiles/${DIST_SUBDIR}/
+
+如果你有4核或者主频高的cpu可以在/etc/rc.conf.local（没有建立一个）加入：
+apmd="-C" ## Or "-A"
+复制代码
+深度节能或者让OpenBSD自己管理。man apmd 讲的已经很好懂了。
+
+
+kern.bufcachepercent=90        # Allow the kernel to use up to 90% of the RAM for cache (default 10%) <-- Suposally not changable via sysctl
+kern.maxclusters=128000        # Cluster allocation limit
+net.bpf.bufsize=1048576        # Internal kernel buffer for storing packet captured packets received from the network
+
+
+# make our new hard disk (wd1) visible
+cd /dev
+chmod 777 MAKEDEV
+./MAKEDEV wd1
+
+# format it and create wd1a partition
+fdisk -i wd1
+disklabel -E wd1
+newfs wd1a
+
+# mount it
+mount /dev/wd1a /mnt
+
+use the (r)aw device instead 
+dd if=/dev/rwd0a of=/dev/rwd1a bs=16b seek=1 skip=1 conv=noerror
+
+sysctl -w machdep.apmhalt=1

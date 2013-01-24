@@ -1,0 +1,62 @@
+timeout   5
+default   0
+color light-blue/black light-cyan/blue
+
+title Arch Linux
+root   (hd0,4)
+kernel /boot/vmlinuz26 root=/dev/disk/by-uuid/752ae3a4-d2ae-487a-8de5-a59a1ed2631f ro
+initrd /boot/kernel26.img
+
+title FreeBSD 8.0
+rootnoverify (hd0,2,a)
+chainloader +1
+
+title Windows XP Professional
+rootnoverify (hd0,0)
+chainloader /ntldr
+boot
+
+title Arch Linux Fallback
+root   (hd0,4)
+kernel /boot/vmlinuz26 root=/dev/disk/by-uuid/752ae3a4-d2ae-487a-8de5-a59a1ed2631f ro
+initrd /boot/kernel26-fallback.img
+
+title Arch Linux(backup)
+root   (hd0,4)
+kernel /boot/vmlinuz26.old root=/dev/disk/by-uuid/752ae3a4-d2ae-487a-8de5-a59a1ed2631f ro
+initrd /boot/kernel26.img.old
+
+#title install FreeBSD 8.0
+#find --set-root /8.0-RELEASE-i386-bootonly.iso
+#map --mem /8.0-RELEASE-i386-bootonly.iso (hd32)
+#map --hook
+#chainloader (hd32)
+#boot
+
+#title Install Ubuntu 9.10 beta
+#find --set-root /ubuntu-9.10-beta-desktop-i386.iso
+#kernel /vmlinuz boot=casper iso-scan/filename=/ubuntu-9.10-beta-desktop-i386.iso ro quiet splash locale=zh_CN.UTF-8
+#initrd /initrd.lz
+
+#title Windows XP ntldr
+#find --set-root /ntldr
+#chainloader /ntldr
+
+#title GreenGhost [Ghost v8.3/v11] (MAP-HOOK)
+#find --set-root /myudisk.txt
+#map --mem /boot/grub/gghost.img (fd0)
+#map --hook
+#chainloader (fd0)+1
+#rootnoverify (fd0)
+
+#title Boot from CDROM 
+#cdrom --init
+#map --hook
+#chainloader (cd0)
+#boot
+
+#title reboot
+#reboot
+
+#title halt
+#halt

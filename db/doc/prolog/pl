@@ -1,0 +1,2 @@
+cd /media/D/www/qachina/db/doc/money/
+swipl -q -f money.pl "$@"

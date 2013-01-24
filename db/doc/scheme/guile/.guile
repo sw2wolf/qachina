@@ -1,0 +1,8 @@
+(use-modules (ice-9 readline))
+(use-modules (ice-9 pretty-print))    ; 引用漂亮输出模块
+(use-syntax (ice-9 syncase))
+
+(activate-readline)
+
+;(load "money.scm")
+;(use-modules (money))

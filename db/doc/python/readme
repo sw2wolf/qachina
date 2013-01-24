@@ -1,0 +1,2 @@
+可以写入 ~/.pythonstartup.py 并在 .bashrc 设 PYTHONSTARTUP=~/.python_ini.py
+

@@ -1,0 +1,16 @@
+(ql:quickload :money)
+(m:his)
+
+(ql:system-apropos "vector")
+升级所有安装了的lisp库
+(ql:update-all-dists)
+
+升级quicklisp本身
+(ql:update-client)
+
+Install and configure SLIME
+(ql:quicklisp "quicklisp-slime-helper")
+
+(ql:update-dist "quicklisp")
+
+(ql-dist:uninstall (ql-dist:release "babel"))

@@ -1,0 +1,18 @@
+(autoload 'mew "mew" nil t) 
+(autoload 'mew-send "mew" nil t) 
+(setq mew-use-cached-passwd t) 
+(setq mew-pop-size 0) 
+(setq mew-pop-delete nil) 
+(setq mew-config-alist 
+'(("default" 
+    ("name" . "多行") 
+    ("user" . "z_axis") 
+    ("mail-domain" . "163.com") 
+    ("pop-server" . "pop3.163.com") 
+    ("pop-port" . "110") 
+    ("pop-user" . "z_axis") 
+    ("pop-auth" . "zmath999") 
+    ("smtp-server" . "smtp.163.com") 
+    ("smtp-port" . "25") 
+    ("smtp-user" . "z_axis") 
+    ("smtp-auth-list" . ("CRAM-MD5" "LOGIN" "PLAIN")))))

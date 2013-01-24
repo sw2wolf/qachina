@@ -1,0 +1,37 @@
+XTerm*locale: true
+
+XTerm*fontMenu*fontdefault*Label: Default
+XTerm*font: -misc-fixed-medium-r-normal-*-18-120-100-100-c-90-iso10646-1
+XTerm*wideFont: -misc-fixed-medium-r-normal-*-18-120-100-100-c-180-iso10646-1
+
+XTerm*font1.Label: efont 12 pixel
+XTerm*font1: -efont-fixed-medium-r-normal-*-12-120-75-75-c-60-iso10646-1
+XTerm*wideFont1: -efont-fixed-medium-r-normal-*-12-120-75-75-c-120-iso10646-1
+XTerm*font2.Label: misc 13 pixel
+XTerm*font2: -misc-fixed-medium-r-semicondensed-*-13-120-75-75-c-60-iso10646-1
+XTerm*wideFont2: -misc-fixed-medium-r-normal-*-13-120-75-75-c-120-iso10646-1
+XTerm*font3.Label: efont 14 pixel
+XTerm*font3: -efont-fixed-medium-r-normal-*-14-140-75-75-c-70-iso10646-1
+XTerm*wideFont3: -efont-fixed-medium-r-normal-*-14-140-75-75-c-140-iso10646-1
+XTerm*font4.Label: efont 16 pixel
+XTerm*font4: -efont-fixed-medium-r-normal-*-16-160-75-75-c-80-iso10646-1
+XTerm*wideFont4: -efont-fixed-medium-r-normal-*-16-160-75-75-c-160-iso10646-1
+XTerm*font5.Label: misc 18 pixel
+XTerm*font5: -misc-fixed-medium-r-normal-*-18-120-100-100-c-90-iso10646-1
+XTerm*wideFont5: -misc-fixed-medium-r-normal-*-18-120-100-100-c-180-iso10646-1
+XTerm*font6.Label: efont 24 pixel
+XTerm*font6: -efont-fixed-medium-r-normal-*-24-240-75-75-c-120-iso10646-1
+XTerm*wideFont6: -efont-fixed-medium-r-normal-*-24-240-75-75-c-240-iso10646-1
+
+XTerm*background: black
+XTerm*foreground: green
+
+XTerm*scrollBar:          false
+!XTerm*rightScrollBar:    true
+XTerm*scrollKey:          false
+XTerm*scrollTtyOutput:    false
+
+XTerm*visualBell:         false
+XTerm*marginBell:         false 
+
+XTerm*loginShell:         true

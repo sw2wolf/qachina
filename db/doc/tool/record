@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#dump radio statition to mp3 file
+#Get file name
+JobName=哈哈可乐派-`date +"%Y%m%d"`
+
+"killall mplayer" to stop mplayer recording and start lame to convert.
+LENGTH="31m" # 哈哈可乐派节目的时长
+mplayer "mms://61.164.128.51/yyt" -ao pcm:file=/opt/download/hahakelepai/wav/${JobName}.wav -vc dummy -vo null &
+#把mplayer的进程号放到临时文件
+echo $! >/tmp/${JobName}.pid
+#sleep 到节目结束并把mplayer kill
+sleep $LENGTH && kill `cat /tmp/${JobName}.pid`
+rm /tmp/${JobName}.pid
+
+lame -m s /opt/download/hahakelepai/wav/${JobName}.wav -o "/opt/download/hahakelepai/mp3/${JobName}.mp3"
+rm -f /opt/download/hahakelepai/wav/${JobName}.wav
+
+# 然后设置个crond就可以了。这个时间稍微自己调整下。我这里7:34开始录，1分钟后节目正式开始。
+# 34 7 * * * /home/user/startrecordingradio.sh > /home/user/cordingradio.log

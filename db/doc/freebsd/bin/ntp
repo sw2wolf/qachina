@@ -1,0 +1,2 @@
+sudo ntpdate time.cn99.com
+#sudo ntpdate 0.pool.ntp.org

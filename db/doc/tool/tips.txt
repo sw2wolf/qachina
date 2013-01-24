@@ -1,0 +1,8 @@
+.
+find / -xdev -depth -regex '/\git\|backup\)' -prune -o -print0 | cpio -o0v | gzip > backup.cpio.gz
+
+The -xdev flag of find restricts other partition mounted on the directory you are giving.
+The -regex will prune directory called git or backup. The v flag of cpio will list each files being backed up.
+
+And here is the command to restore your system:
+gunzip -c backup.cpio.gz | cpio -i

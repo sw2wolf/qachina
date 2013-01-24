@@ -1,0 +1,4 @@
+breakchars="(){}[],^%$#@\"\";:''|\\"
+
+#exec rlwrap --remember -c -b "$breakchars"  -f "$HOME"/.sbcl_completions -S 'λ> ' sbcl --noinform "$@"
+exec rlwrap --remember -c -b "$breakchars"  -f "$HOME"/.sbcl_completions  sbcl --noinform "$@"

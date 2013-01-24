@@ -1,0 +1,4 @@
+(set! *print-length* 103) 
+(set! *warn-on-reflection* true)
+
+(use 'money)

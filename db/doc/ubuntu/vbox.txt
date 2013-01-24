@@ -1,0 +1,71 @@
+VBoxManage list vms
+Name:            xitmdbmr
+Name:            dcsvr08
+
+第一种：使用 VRDP 方式通过命令行启动虚拟机
+$VBoxManage startvm dcsvr08 -type vrdp
+
+VirtualBox Command Line Management Interface Version 2.1.4
+(C) 2005-2009 Sun Microsystems, Inc.
+All rights reserved.
+
+Waiting for the remote session to open...
+Remote session has been successfully opened.
+
+第二种 ：使用 Headless 启动无前端图形界面方式：
+$VBoxHeadless -startvm "dcsvr08"
+
+VirtualBox Headless Interface 2.1.4
+(C) 2008-2009 Sun Microsystems, Inc.
+All rights reserved.
+
+Listening on port 3389
+
+注意：此时如果用ctrl-C 键将导致虚拟机异常退出
+
+
+要确认虚拟机是否在运行，可以使用命令VBoxManage list runningvm来查看。
+$ VBoxManage list runningvms
+
+VirtualBox Command Line Management Interface Version 2.1.4
+(C) 2005-2009 Sun Microsystems, Inc.
+All rights reserved.
+
+3ce3fd01-7e17-46b3-8394-be9c1b17ee66
+cf34078e-29e3-4f4f-9a11-d77bac6efd04
+
+从命令行关闭虚拟机
+通过VBoxManage 命令行工具的VBoxManage controlvm  <uuid>|<name>子命令可以改变虚拟机的运行状态，
+其中常用的几个选项是：
+
+pause resume reset poweroff savestate acpipowerbutton acpisleepbutton
+下面示例使用poweroff 选项关闭虚拟机dcsvr08
+
+QHo@qhoferrari1k:~$ VBoxManage controlvm dcsvr08 poweroff
+VirtualBox Command Line Management Interface Version 2.1.4
+(C) 2005-2009 Sun Microsystems, Inc.
+All rights reserved.
+
+下面是一些配置示例：
+
+(1) 修改虚拟机配置：
+
+$ VBoxManage modifyvm "winxp" -memory "256MB" -acpi on -boot1 dvd -nic1 nat
+
+(2) 创建一个虚拟磁盘：
+
+$ VBoxManage createhd -filename "WinXP.vdi" -size 10000 –register
+
+(3) 将虚拟磁盘和虚拟机关联：
+
+$ VBoxManage modifyvm "winxp" -hda "WinXP.vdi"
+
+(4) 挂载光盘镜像 ISO：
+
+$ VBoxManage openmedium dvd /full/path/to/iso.iso
+
+(5) 将光盘镜像 ISO 和虚拟机关联
+
+VBoxManage modifyvm "winxp" -dvd /full/path/to/iso.iso
+
+6. 如果需要创建另外一个虚拟系统，可以通过 createvm 命令

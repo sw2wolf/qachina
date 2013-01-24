@@ -1,0 +1,1 @@
+sysctl -n kern.osrelease kern.ostype

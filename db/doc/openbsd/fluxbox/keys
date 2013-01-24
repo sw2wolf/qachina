@@ -1,0 +1,46 @@
+# 从当前用户锁定X11显示
+#Mod4 l   :ExecCommand xlock
+
+Mod4 w   :ExecCommand firefox
+Mod4 t   :ExecCommand xterm
+
+# Fluxbox没有音响控制功能，所以我们要自己折腾一个
+# (假定用的是alsa。如果你用oss，那自己看着办吧)
+#Mod4 e   :ExecCommand Eterm -name alsa -e alsamixer
+
+# 这是载入用来启动其他程序的fbrun
+Mod4 r   :ExecCommand fbrun
+
+
+Mod4 Left :PrevWorkspace
+Mod4 Right :NextWorkspace
+Mod4 q :Close
+Mod4 k :KillWindow
+Mod4 z :Minimize
+Mod4 x :MaximizeWindow
+Mod4 d :ShowDesktop
+Mod4 grave :RootMenu
+Mod4 s :ShadeWindow
+
+Control KP_1 :SendToWorkspace 1
+Control KP_2 :SendToWorkspace 2
+Control KP_3 :SendToWorkspace 3
+Control KP_4 :SendToWorkspace 4
+
+Mod4 KP_1 :Workspace 1
+Mod4 KP_2 :Workspace 2
+Mod4 KP_3 :Workspace 3
+Mod4 KP_4 :Workspace 4
+
+Mod4 Shift q :Quit
+Mod4 Shift r :Reconfigure
+Mod4 Shift s :Restart
+
+#系统自带的快捷键
+OnDesktop Mouse1 :HideMenus
+OnDesktop Mouse2 :WorkspaceMenu
+OnDesktop Mouse3 :RootMenu
+OnDesktop Mouse4 :NextWorkspace
+OnDesktop Mouse5 :PrevWorkspace
+Mod4 Tab :NextWindow
+Mod4 Shift Tab :PrevWindow

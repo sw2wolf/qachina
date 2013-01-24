@@ -1,0 +1,301 @@
+>gpart show ada0
+ =>       63  125829018  ada0  MBR  (60G)
+          63   10490382    1  !7  (5.0G)
+              10490445     4209030    2  !7  (2.0G)
+              14699475   111129606       - free -  (53G)
+
+>gpart add -b 14699475 -s 111129606 -t freebsd ada0
+ ada0s3 added
+>gpart create -s BSD ada0s3
+  ada0s3 created
+
+>gpart add -i 1 -b 0 -s 1G -t freebsd-ufs ada0s3
+  ada0s3a added
+>gpart add -i 2 -s 2G -t freebsd-swap ada0s3
+    ada0s3b added
+>gpart add -i 4 -t freebsd-zfs ada0s3
+      ada0s3d added
+
+>gpart bootcode -b /boot/boot0 ada0   #FreeBSD boot loader
+>gpart bootcode -b /boot/boot ada0s3
+
+
+
+#################################################################################################
+
+最小化安装FreeBSD（我用的是7.2－i386的版本）
+
+如果你要安装nvidia的显卡驱动，再安装系统的时候就把linux支持装上。FreeBSD7.2默认安装的是linux_base-fc4如果要安装其他版本的linux支持请另行查阅资料吧）
+升级、配置内核
+
+更新源代码
+csup -L 2 -h cvsup.freebsdchina.org /usr/share/examples/cvsup/standard-supfile
+
+更新ports
+csup -L 2 -h cvsup.freebsdchina.org /usr/share/examples/cvsup/ports-supfile
+
+更新doc
+csup -L 2 -h cvsup.freebsdchina.org /usr/share/examples/cvsup/doc-supfile
+
+配置内核文件
+把i386的原始内核配置文件copy到root目录下修改成自己的内核名字
+
+cp /usr/src/sys/i386/conf/GENERIC /root/zpkernel
+
+修改刚才copy到root目录下的内核配置文件
+加入声卡驱动（我的声卡是alc883的）
+
+device sound
+device snd_hda
+
+关闭FreeBSD的apg驱动（因为我打算用nvidia的agp驱动）
+＃device agp
+
+剩下其他的地方把不需要的都关掉。
+
+把root目录下修改过的内核配置文件在连接回去（以免以后升级的时候不注意把内核配置文件给覆盖了）
+ln -s /root/zpkernel /usr/src/sys/i386/conf/
+
+开始升级、编译、安装内核。。。
+1. cd /usr/src
+2. make buildworld
+3. make buildkernel KERNCONF=YOUR_KERNEL_HERE (default is GENERIC).
+4. make installkernel KERNCONF=YOUR_KERNEL_HERE (default is GENERIC).
+[steps 3. & 4. can be combined by using the "kernel" target]
+
+5. reboot (in single user mode: boot -s from the loader prompt).
+
+6. adjkerntz -i
+7. mount -a -t ufs
+
+8. mergemaster -p
+9. cd /usr/src
+10. make installworld
+11. make delete-old
+12. mergemaster (you may wish to use -U or -ai or -Fi).
+13. reboot
+14. make delete-old-libs (in case no 3rd party program uses them anymore)
+15.
+
+修改/etc/rc.conf加入：
+vi /etc/rc.conf
+sendmail_enable="NONE" #停用sendmail
+fsck_y_enable="YES" #非正常关机后自动启动自检程序
+
+修改make.conf让ports安装或pkg_add -r的时候速度快点（要不能等死人阿）
+
+vi /etc/make.conf
+MASTER_SITE_OVERRIDE?= \
+http://ports.hshh.org/${DIST_SUBDIR}/\ #推荐－这是国内ports镜像站点速度嗷嗷的，为啥我以前都没发现。。。
+ftp://ftp.tw.freebsd.org/pub/ports/distfiles/${DIST_SUBDIR}/\
+ftp://ftp.freebsdchina.org/pub/FreeBSD/ports/distfiles/${DIST_SUBDIR}/
+WITHOUT_X11=yes #不下载X11相关
+
+安装下载工具wget 并使wget为FreeBSD的默认下载工具
+cd /usr/ports/ftp/wget/ && make install clean
+
+修改/etc/make.conf加入:
+FETCH_CMD= wget
+FETCH_BEFORE_ARGS= -c -t 1
+FETCH_AFTER_ARGS=
+DISABLE_SIZE=yes #这行必须有
+
+前面3行也可以换成
+FETCH_CMD=wget -c -t 1
+如果你要wget穿透代理服务器，请加上下面两行
+FETCH_ENV=http_proxy=http://代理地址
+FETCH_ENV=ftp_proxy=http://代理地址
+或者使用其他的穿越代理工具例如proxychains 或者socks5(runsocks)
+则FETCH_CMD=proxychains wget或者runsocks wget
+
+安装xorg
+pkg_add -r xorg
+
+或
+cd /usr/ports/x11/xorg && make install clean
+或用光盘安装,用ports安装xorg需要很常时间建议还是用光盘或者pkg_add -r xorg安装.
+
+配置xorg
+在/etc/rc.conf中加入
+hald_enable="YES"
+dbus_enable="YES"
+
+[从 Xorg 7.4 开始， 可以使用 HAL 自动检测键盘和鼠标。Ports sysutils/hal 和 devel/dbus 将被作为 x11/xorg 所依赖的包安装进系统。 并且需要在 /etc/rc.conf 文件中启用： hald_enable="YES" 和 dbus_enable="YES" －－摘自handbook]
+
+执行： Xorg -configure 生成 xorg.conf.new初始配置文件
+测试: Xorg -config xorg.conf.new -retro
+
+(如果你看到一个黑灰色的格子和一个X形的鼠标指针那么恭喜你成功了。要推出测试，同时按下Ctrl+Alt+Backspace)
+[注意：此组合键(Ctrl+Alt+Backspace)在Xorg7.3或者之前的版本中默认启用。在7.4或以后的版本中开启此选项，你可以在任何的X终端模拟器中键入以下的命令：
+%setxkbmap -option terminate:ctrl_alt_bksp
+或者为hald创建一个叫作x11-input.fdi的键盘配置文件并保存至/usr/local/etc/hal/fdi/policy目录。这个文件需要包含以下这些：
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<deviceinfo version="0.2">
+<device>
+<match key="info.capabilities" contains="input.keyboard">
+<merge key="input.x11_options.XkbOptions" type="string">terminate:ctrl_alt_bksp</merge>
+</match>
+</device>
+</deviceinfo>
+
+你可能需要重启你的机器来使得hald重新读取这个文件 --摘自handbook 我按照handbook的这个方法修改退出桌面没有成功，不知道错在哪里如果有朋友知道麻烦给说下 万分感谢！]
+
+将初始配置文件copy到/etc/X11并更名为xorg.conf
+cp /root/xorg.conf.new /etc/X11/xorg.conf (现在xorg已经作的不错了基本不用怎么配置就可以用)
+
+安装文泉驿字库
+
+cd /usr/ports/x11-fonts/wqy && make install
+
+修改/etc/X11/xorg.conf并在 Section "Files" 小节中加入
+FontPath "/usr/local/lib/X11/fonts/wqy"
+
+安装nvidia驱动，我用的是ports里面的（我的显卡是7600gs）
+cd /usr/ports/x11/nvidia-driver/ && make install clean
+修改/boot/loader.conf
+加入： nvidia_load="YES" (如果要使用nvidia自带的agp驱动要在内核里把FreeBSD自带的agp驱动关掉。前面配置内核的时候提到了)
+
+安装nvidia-xconfig(自动配置nvidia驱动的工具)
+cd /usr/ports/x11/nvidia-xconfig/ && make install clean
+执行:nvidia-xconfig (会自动根据你在/etc/X11下的xorg.conf的文件生成一个新的xorg.conf并把旧的xorg.conf的名字改为 xorg.conf.backup)
+
+安装Gnome2
+pkg_add -r gnome2
+或
+cd /usr/ports/x11/gnome2 && make install clean
+或者用光盘安装，用ports安装gnome2绝对是一件考验人耐心的事！
+安装完成后在./xinitrc文件中加入（没有就新建一个。我如果你用gdm启动gnome的化没有这行也可以。）
+echo "/usr/local/bin/gnome-session" > ~/.xinitrc
+
+在rc.conf 中增加 gdm_enable="YES" (开机自动进入桌面。不加这句也可以，在命令行直接输入 gdm 或 startx 也可以进入桌面)
+
+增加输入法
+pkg_add -r scim
+或
+cd /usr/ports/textproc/scim && make install clean
+
+安装拼音输入法
+cd /usr/ports/chinese/scim-pinyin && make install clean
+
+设置中文环境：
+vi ~/.xinitrc 加入
+export XMODIFIERS="@im=SCIM"
+export GTK_IM_MODULE="scim"
+export QT_IM_MODULE="scim"
+scim -d &
+
+vi /etc/profile (改变所有用户的语言环境 )
+export LANG=zh_CN.UTF-8
+export MM_CHARSET=UTF-8
+export LANGUAGE=zh_CN.UTF-8
+export GDM_LANG=zh_CN.UTF-8
+export LC_TYPE=zh_CN.UTF-8
+export LC_TIME=zh_CN.UTF-8
+export LC_LANG=zh_CN.UTF-8
+export LC_ALL=zh_CN.UTF-8
+
+让FreeBSD像RedHat那样在ls时显示多种颜色的目录
+
+vi /etc/csh.cshrc
+setenv LSCOLORS ExGxFxdxCxegedabagExEx
+setenv CLICOLOR yes
+
+安装firefox35
+cd /usr/ports/www/firefox35 && make install clean
+安装firefox35-i18n(firefox35的语言包)
+cd /usr/ports/www/firefox35-i18n && make install clean
+
+让firefox支持flash9
+安装nspluginwrapper
+cd /usr/ports/www/nspluginwrapper && make install clean
+
+安装flashplugin9
+cd /usr/ports/www/linux-flashplugin9 && make install clean
+
+(7.2我装过flash大部分只是不能全屏看
+8.0装过所有网站看flash都没有问题,全屏也没问题,
+    就是我看flash视频发热量比较大
+
+    安装方法参考手册上
+    装linux兼容的那个flash,已经非常稳定,不要再说不支持flash了
+# cd /usr/ports/www/nspluginwrapper
+# make install clean
+# cd /usr/ports/www/linux-flashplugin9
+# make install clean
+# nspluginwrapper -v -a -i )
+
+
+然后执行
+% nspluginwrapper -v -a -i (必须由每个用户运行)
+再执行
+# mount -t linprocfs linproc /usr/compat/linux/proc
+或者永久性的在/etc/fstab里加入
+linproc /usr/compat/linux/proc linprocfs rw 0 0
+
+
+安装mplayer
+cd /usr/ports/multimedia/mplayer
+make WITH_LANG=zh_CN install clean （这样装出来是中文界面的）
+
+安装mplayer-fonts
+cd /usr/ports/chinese/mplayer-fonts && make install clean
+
+$ mkdir -p $HOME/.mplayer (如果有.mplayer文件夹就省略此步骤)
+$ cat > $HOME/.mplayer/config <<EOF
+unicode=1
+EOF
+$ ln -s /usr/local/share/mplayer/fonts/chinese/gbsn00lp16 $HOME/.mplayer/font
+
+安装xmms（听歌）
+cd /usr/ports/chinese/xmms && make install clean
+
+安装QQ (这是for Linux的,需要用启动器启动，命令是qq。 或者用http://web.qq.com也挺好)
+cd /usr/ports/net-im/qq && make install clean
+
+安装星际译王（类似金山词霸）
+cd /usr/ports/textproc/stardict3 && make install clean
+下载词典地址：http://stardict.sourceforge.net/cn/Dictionaries_zh_CN.php
+下载tarbal包后解压，然后拷贝到 /home/用户名/.stardict/dic 目录。（没有就新建一个）
+
+安装OpenOffice
+pkg_add -r openoffice.org
+或
+cd /usr/ports/editors/openoffice.org-2 && make install clean (最好不要尝试用ports安装，除非你真的觉得你非常的有耐心能等待下去）
+
+安装Compiz-Fusion
+cd /usr/ports/x11-wm/compiz-fusion && make install clean
+然后写个启动脚本名字你随便起了只要你明白就好
+vi start-compiz
+加入：
+#! /bin/sh
+compiz --replace --sm-disable --ignore-desktop-hints ccp &
+emerald --replace &
+再给这个脚本执行权限
+chmod +x start-compiz
+
+进入桌面之后执行这个脚本就启动compiz-fusion了。但是很不好用,自己在 "系统>首选项>CompizConfig设置管理器" 里修改把。
+重要：如果启动compiz-fusion发现没有边框，请在gnome的 系统>首选项>CompizConfig设置管理器里 点击窗口装饰 在弹出的对话框点击启用窗口装饰 然后在命令那一行后面加上 emerald 边框就出现了
+到此一个基本的桌面系统算是告一段落了。如果你想在FreeBSD上运行Windows上的股票交易软件或者游戏那再安装一个wine吧。它的ports 位置在"/usr/ports/emulators/wine". 至于wine怎么配置我还没试，等试完了我在写上来把。
+
+------------------------------------------------------------------------
+#pkg_add -r xorg
+
+# cd /usr/ports/chinese/fcitx
+# make install clean
+# Xorg -configure
+# Xorg -config /root/xorg.conf.new -retro
+# cp /root/xorg.conf.new /etc/xorg.conf
+# startx
+
+把字型复制到/usr/local/lib/X11/fonts/TrueType/(自己建立一个TrueType文件)，属性为只读。
+编辑xorg.conf，加入文字的位置︰
+# ee /etc/xorg.conf
+FontPath “/usr/local/lib/X11/fonts/TrueType/”
+打开终端输入︰
+# mkfontdir /usr/local/lob/X11/fonts/TrueType/
+# fc-cache -f -v
+
+su allows you to define the login class used when called as root. For example, on my test machine I start mysqld by executing the following:
+su -c _mysql root -c '/usr/local/bin/mysqld_safe >/dev/null 2>&1 &'
+Where _mysql is the login class, root is the user to launch it initially and the second -c is passed onto /bin/sh along with it's arguments.

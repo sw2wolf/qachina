@@ -1,0 +1,2 @@
+#!/usr/local/bin/bash
+/usr/local/lib/ccl/fx86cl --eval "(progn (compile-file \"$1\") (ccl:quit))"

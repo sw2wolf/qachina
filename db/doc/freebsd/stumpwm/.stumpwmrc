@@ -1,0 +1,252 @@
+;-*-Lisp-*-
+;; vim:filetype=lisp
+(in-package :stumpwm)
+
+;; turn on debugging 0:disable
+(setf stumpwm::*debug-level* 0)
+;(redirect-all-output (data-dir-file "debug-output" "txt"))
+;(set-contrib-dir "/usr/local/share/stumpwm")
+
+(defun cat (&rest strings)
+    (apply 'concatenate 'string strings))
+
+;(defun show-key-seq (key seq val)
+;    (message (print-key-seq (reverse seq))))
+;(add-hook *key-press-hook* 'show-key-seq)
+
+(defmacro replace-hook (hook fn)
+    `(remove-hook ,hook ,fn)
+    `(add-hook ,hook ,fn))
+
+; If you like Meta (most probably alt on your keyboard) more than
+; Super (which is the Windows key on mine), change 's-' into 'M-'.
+(defmacro defkey-top (key cmd)
+    `(define-key *top-map* (kbd ,key) ,cmd))
+
+(defmacro defkeys-top (&rest keys)
+    (let ((ks (mapcar #'(lambda (k) (cons 'defkey-top k)) keys)))
+        `(progn ,@ks)))
+
+(defmacro defkey-root (key cmd)
+    `(define-key *root-map* (kbd ,key) ,cmd))
+
+(defmacro defkeys-root (&rest keys)
+    (let ((ks (mapcar #'(lambda (k) (cons 'defkey-root k)) keys)))
+        `(progn ,@ks)))
+
+(defcommand display-current-window-info () ()
+  "Shows the properties of the current window. These properties can be
+used for matching windows with run-or-raise or window placement
+-merules."
+  (let ((w (current-window))
+        (*suppress-echo-timeout* t)
+        (nl (string #\NewLine)))
+
+    ;; (message-no-timeout "class: ~a~%instance~a~%..." (window-class w) (window-res w) ...)
+    (echo-string (current-screen)
+                 (concat "class:    " (window-class w) nl
+                         "instance: " (window-res w) nl
+                         "type:     :" (string (window-type w)) nl
+                         "role:     " (window-role w) nl
+                         "title:    " (window-title w) nl
+                         "width:    " (format nil "~a" (window-width w)) nl
+                         "height    " (format nil "~a" (window-height w))))))
+
+(defcommand sdcv (word) ((:rest "Word> "))
+  (with-output-to-string (*standard-output*)
+	 (let ((str (ext:run-shell-command (concatenate 'string "sdcv -n " word) :output :stream :wait nil)))
+	   (loop for line = (read-line str nil)
+          until (null line)
+          do (print line)))))
+
+(defcommand eval-me (cmd) ((:rest "Eval> "))
+    (with-output-to-string (*standard-output*)
+        (handler-case
+            (format t "~{~a~^~%~}"
+                (mapcar 'prin1-to-string
+                    (multiple-value-list (eval (read-from-string cmd)))))
+            (error (c)
+                (format t "~A" c)))))
+
+(set-fg-color "green")
+(set-bg-color "black")
+
+(set-float-focus-color "black")
+(set-float-unfocus-color "black")
+
+(set-font "-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
+;(set-font "-*-WenQuanYi Zen Hei-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
+
+(set-prefix-key (kbd "s-x"))
+
+;; suppress the message StumpWM displays when it starts. Set it to NIL
+(setf *startup-message* nil
+      *suppress-frame-indicator* t
+      *suppress-abort-messages* t
+      *timeout-wait* 3
+      *mouse-focus-policy* :click ;; :click, :ignore, :sloppy
+      *message-window-gravity* :bottom-left
+      *input-window-gravity* :bottom-left)
+
+;;; Window Appearance
+(setf *normal-border-width* 1
+      *maxsize-border-width* 1
+      *transient-border-width* 1
+      +default-frame-outline-width+ 1
+      *float-window-title-height* 0
+      *window-border-style* :thin) ; :thick :thin :tight :none
+
+(setf *time-modeline-string* "%Y-%m-%d %a ^B%l:%M^b" 
+      *window-name-source* :title
+      *window-format* "^B^8*%n%s%m%15t | ^7*"
+      *group-format* "%t")
+
+ ;;;; The Mode Line
+(setf *mode-line-background-color* "black"
+      *mode-line-foreground-color* "lightgreen"
+      *mode-line-border-color* "black"
+      *mode-line-border-width* 0
+      *mode-line-pad-x* 0
+      *mode-line-pad-y* 0
+      *mode-line-timeout* 60
+      *mode-line-screen-position* :top
+	  ;*screen-mode-line-format* (list "[^B%n^b]%W" "^>%m | " "^>%d")
+      *screen-mode-line-format* (list "[^B%n^b]%W"))
+
+;; turn on/off the mode line for the current screen only.
+(if (not (head-mode-line (current-head)))
+     (toggle-mode-line (current-screen) (current-head)))
+; A head is a physical monitor. A screen is a section of video memory
+; that heads are mapped on to. When using xinerama you generally have
+; 1 screen and many heads. When not using xinerama each screen is a
+; physical monitor so you have many screens with only one head on them.
+
+;;add hook so I get notified when people say my name on IRC or IM me
+(defun echo-urgent-window (target)
+    (message-no-timeout "~a has an message for you." (window-title target)))
+(add-hook *urgent-window-hook* 'echo-urgent-window)
+
+;; shell program used by `run-shell-command' (`sh' by default, which is *not* 'bash' nor 'zsh')
+(setf *shell-program* (stumpwm::getenv "SHELL"))
+
+(defparameter +browser-name+ "opera")
+(defparameter +browser-class+ "Opera")
+;(defparameter +stumpish+ (cat "xterm" " -e ~/bin/stumpish"))
+
+;(defcommand stumpish () ()
+;  (run-shell-command +stumpish+))
+
+;(defcommand snapshot () ()
+;    (echo-string (current-screen) "Taking Snapshot")
+;    (run-shell-command "exec scrot '%m.%d.%Y_%I:%M:%S_%P.png' -e 'mv $f ~/download'"))
+
+(defcommand browse () ()
+    (run-or-raise +browser-name+ `(:class ,+browser-class+)))
+
+(defcommand eweiqi () ()
+    ;(run-commands "gselect 3")
+    (run-shell-command "wine \"c:/Program Files/eweiqi/LiveBaduk.exe\" &"))
+
+(defcommand winxp () ()
+    (run-shell-command "VBoxManage startvm winxp &"))
+
+(defcommand emacs () ()
+    (run-shell-command "emacs -geometry 178x38+0+376"))
+
+(defcommand reboot () ()
+    (run-shell-command "sudo /sbin/shutdown -r now"))
+
+(defcommand halt () ()
+    (run-shell-command "sudo /sbin/shutdown -p now"))
+
+(defcommand reinit () ()
+    (run-commands "reload" "loadrc"))
+
+(defparameter *start-menu*
+  '(("Emacs" "emacs")
+	("Go"    "eweiqi")
+    ("WinXP" "winxp")))
+
+(defcommand menu () ()
+    "docstring"
+    (labels ((pick (options)
+        (let ((selection (stumpwm::select-from-menu (current-screen) options "")))
+            (cond
+                ((null selection)
+                    (throw 'stumpwm::error "Abort."))
+                ((stringp (second selection))
+                    (second selection))
+            (t
+                (pick (cdr selection)))))))
+        (let ((choice (pick *start-menu*)))
+            (run-commands choice))))
+
+(defkeys-top
+    ("s-w" "browse")
+    ;("s-p" "exec /home/sw2wolf/bin/dmenu.sh")
+	("s-p" "menu")
+    ("s-t" "exec xterm -g 159x25+0+438")
+    ("s-c" "sdcv")
+    ("s-o" "only")
+    ("s-s" "vsplit")
+    ("s-S" "hsplit")
+    ("s-b" "mode-line")
+    ("s-Tab" "pull-hidden-next")
+    ("Print" "exec scrot -q 10")
+    ("s-Print" "exec scrot -q 10 -s")
+
+    ("s-R" "reinit")
+    ("s-Q" "quit")
+    ("s-F2" "exec")
+    ("s-F4" "kill")
+    ("s-F11" "reboot")
+    ("s-F12" "halt")
+   
+    ("s-Right" "move-focus right")
+    ("s-Left" "move-focus left" )
+    ("s-Up" "move-focus up" )
+    ("s-Down" "move-focus down" )
+    ("s-S-Right" "move-window right")
+    ("s-S-Left" "move-window left" )
+    ("s-S-Up" "move-window up" )
+    ("s-S-Down" "move-window down" ))
+
+
+(defkeys-root
+    ("s-e" "eval-me")
+    ("s-w" "windowlist")
+    ("s-i" "display-current-window-info"))
+
+; groups
+(defvar group-names "123")
+
+(dotimes (i 3)
+    (define-key *top-map* (kbd (format nil "s-~a" (char group-names i)))
+        (format nil "gselect ~a" (1+ i)))
+    (define-key *top-map* (kbd (format nil "s-C-~a" (char group-names i)))
+        (format nil "gmove ~a" (1+ i))))
+
+(gnewbg-float "2")
+(gnewbg-float "3")
+
+(defun my-start-hook ()
+    ;(run-shell-command "xsetroot -solid black")
+    ;(run-shell-command "fcitx")
+    ;(run-shell-command "xterm")
+    (vsplit "2/5") (move-focus :down))
+(replace-hook *start-hook* 'my-start-hook)
+
+(defvar *swank-p* nil)
+(defcommand swank () ()
+    (setf stumpwm:*top-level-error-action* :break)
+    (if *swank-p*
+        (message "Swank server already running")
+        (progn
+            (setf *swank-p* t)
+            (message "Starting swank on port 4005")
+            (ql:quickload :swank)
+			(funcall (intern (string '#:create-server) :swank) :port 4005 :style :spawn :dont-close t) ; :coding-system "utf-8-unix"
+            ;(load "~/.vim/slime/start-swank.lisp")
+            (echo-string (current-screen) "Starting Swank...Done")
+        )))
+(defkey-root "s-l" "swank")

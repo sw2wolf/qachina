@@ -1,0 +1,116 @@
+.debian下安装opera浏览器
+
+debian安装了桌面，官方软件库包含了iceweasel，这个是firefox内核的，不过内存占用有点大。换了chrome，这个内存占用更猛，最后试了opera，相对来说还好点。桌面运行opera的时候内存占用200多m，buyvm 年付15刀的vps也能应付了。
+
+这里记录下opera的安装过程。很简单：
+
+cat >>/etc/apt/sources.list<<END
+deb http://deb.opera.com/opera/ stable non-free #Opera Browser (final releases)
+END
+wget -O - http://deb.opera.com/archive.key | apt-key add -
+apt-get update
+apt-get -y --force-yes install opera
+
+然后在桌面运行：
+opera &
+
+就可以启动opera。
+
+Opera安装flash插件：
+ 1、下载linux版本的flash安装文件：http://fpdownload.macromedia.com/get/flashplayer/current/install_flash_player_9_linux.tar.gz
+  2、解压文件，sudo tar zxvf install_flash_player_9_linux.tar.gz
+   3、复制libflashplayer.so到 /usr/lib/opera/目录下，sudo cp libflashplayer.so /usr/lib/opera/ ，重新启动Opera，可以看flash了。
+
+.Debian 安装 wine 1.2/1.3  
+ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F9CB8DB0
+
+ 编辑sources.list，添加以下两行
+ deb http://ppa.launchpad.net/ubuntu-wine/ppa/ubuntu maverick main 
+ deb-src http://ppa.launchpad.net/ubuntu-wine/ppa/ubuntu maverick main
+
+.
+# aptitude build-dep dwm
+# aptitude install make gcc
+
+.
+运行下面的命令来找出文件 filename 实际是那个软件包： 
+dpkg --info filename
+
+下面的命令可以列出一个软件包中包含那些默认配置文件： 
+dpkg --status package
+
+导出软件包选择列表： 
+dpkg --get-selections \* > selections.txt
+
+接着编辑文件 selections.txt，修改想要恢复的软件所在的行，例如 libc6，则将： 
+libc6                       install
+改为： 
+libc6                       hold
+
+保存文件，将它装入 dpkg 数据库： 
+dpkg --set-selections < selections.txt
+
+或者，如果你知道要恢复的软件包名称，执行： 
+echo libc6 hold | dpkg --set-selections
+
+这个命令将在每个软件包安装过程中保持该软件包不变。
+
+.
+如果你这安装了 dpkg-dev 软件包，运行： 
+$ dpkg-source -x foo_version-revision.dsc
+
+它将软件包解压到一个名为 foo-version 的目录。 
+使用下列命令创建二进制软件包： 
+$ cd foo-version
+$ su -c "apt-get update ; apt-get install fakeroot"
+$ dpkg-buildpackage -rfakeroot -us -uc
+
+然后， 
+# su -c "dpkg -i ../foo_version-revision_arch.deb"
+
+.
+配置ADSL上网(pppoe)：
+ 1、从cd安装pppoeconf
+  sudo apt-get install pppoeconf
+
+  2、配置pppoe
+   sudo pppoeconf
+
+   一路点击yes，中间填入帐号用户名（如电话号码）和帐号密码
+
+   3、启动pppoe连接
+    sudo pon dsl-provider
+
+    关闭pppoe连接
+     sudo poff dsl-provider
+
+     提高ADSL（pppoe）上网速度
+     通过减少浏览器解释域名的时间提高上网速度
+      1、安装dnsmasq
+       sudo apt-get install dnsmasq
+
+       2、编辑dnsmasq的配置文件
+        sudo apt-get gedit /etc/dnsmasq.conf 
+
+        找到下面这一项 
+         #resolv-file=
+
+         用下面的一条语句替换 
+          resolv-file=/etc/resolv.dnsmasq.conf
+
+          3、将原dns配置复制至resolv.dnsmasq.conf
+           确保你没有更改过/etc/resolv.conf文件，如果改过，恢复原状 
+            sudo cp /etc/resolv.conf /etc/resolv.dnsmasq.conf
+
+            4、编辑resolv.conf 
+             sudo gedit /etc/resolv.conf
+
+             将其中的域名服务器全部去掉，加入以下这行 
+              nameserver 127.0.0.1
+
+              保存，退出
+
+              5、编辑adsl链接配置文件，防止pppoe自动连接网络后resolv.conf的设置被覆盖
+               sudo gedit /etc/ppp/peers/dsl-provider 
+                在 usepeerdns 前面增加 # ，也就是把这条语句覆盖掉。
+

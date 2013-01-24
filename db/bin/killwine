@@ -1,0 +1,11 @@
+#!/bin/sh 
+#kill all exe proc
+
+ps -A | grep exe > tmp.txt 
+i=1 
+while read line 
+do 
+echo Killing `echo $line |awk '{printf("%s\n",$4)}'` 
+kill `echo $line |awk '{printf("%s\n",$1)}'` 
+done < tmp.txt 
+rm tmp.txt

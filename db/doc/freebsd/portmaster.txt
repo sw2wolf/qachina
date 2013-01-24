@@ -1,0 +1,86 @@
+* portmaster config
+如果要將上面的設定都記得的話是件很麻煩的事，所以portmaster有提供一個設定檔在/usr/local/etc/portmaster.rc 可以從portmaster.rc.sample cp一份過來，以下是我常用的設定
+
+NO_BACKUP=Bopt (不要保留已移除ports的備份檔)
+ALWAYS_SCRUB_DISTFILES=dopt (不要保留舊有的distfiles)
+PM_NO_MAKE_CONFIG=Gopt (升級或安裝時不要做make config)
+PM_VERBOSE=vopt (每個portmaster顯示行為和過程)
+SAVE_SHARED=wopt (保留已經移除ports的share library避免port version bump)
+
+* portmaster Example
+
+若不直接使用ports tree來安裝新軟體，也可以直接透過portmaster來安裝新的ports
+# portmaster editors/vim (若vim軟體已存在的話會自動重裝蓋過，若有新版本的話會自動升級)
+
+用portmaster來移除ports和不在被相依的ports
+# portmaster -e portupgrade [-n|-y] (-e會自動呼叫-s做清除無用的ports，且會詢問是否執行)
+
+用portmaster來升級所有的ports
+# cd /usr/ports && make update fetchindex (更新ports tree)
+# portmaster -a [-n|-y]
+
+用portmaster來安裝或升級軟體，並同時建立package
+# portmaster -g editors/vim
+
+用portmaster來轉換其它版本的ports
+# portmaster -o www/firefox36 firefox-4.0_1,1
+
+用portmaster來清除無用的distfiles
+# portmaster --clean-distfiles [-n|-y]
+
+用portmaster列出目前所有套件並分類
+# portmaster -l
+
+用portmaster列出目前所有套件並以ports name來顯示
+# portmaster --list-origins
+
+用portmaster來檢查所有ports的相依性問題
+# portmaster --check-depends
+
+用portmaster來檢查並刪除舊有的port config
+# portmaster --check-port-dbdir [-n|-y]
+
+用portmaster來檢查並刪除舊有的packages
+# portmaster --chean-packages [-n|-y]
+
+用portmaster來安裝新ports，但避免時間的浪費，所以將build dependency用packages來裝，且之後這些build dependency的packages要刪除不要佔空間
+# portmaster --packages-build --delete-build-only ports-mgmt/portupgrade
+
+用portmaster來檢查新安裝一個ports還需欠有那些相依性要先裝
+# portmaster --show-work ports-mgmt/portupgrade
+
+用portmaster來安裝新的ports並看看有沒有packages可以用免得自己編譯浪費時間
+# portmaster -P ports-mgmt/portupgrade (注意：這和 PACKAGESITE環境變數有關，不然會抓到的是和光碟版一同釋出的ports版本)
+
+用portmaster全部升級所有ports，但是只有firefox和vim不升級
+# portmaster -x firefox -x vim -a
+
+如果某個ports發生ports version bump的話，需要重編所有相依到此ports的上層ports
+# portmaster -r graphics/png
+
+如果整個系統做跳版次的升級7.3r -> 8.2r 那麼必須將所有的ports全部重編
+# portmaster -fa
+
+--------------------------------------------------------------------------------------
+* install portconf
+# /usr/ports/ports-mgmt/portconf && make install clean
+
+# vim /usr/local/etc/ports.conf (portconf的設定參數)
+*: BATCH=yes | WITHOUT_HAL=yes | WITHOUT_DEBUG=yes | WITHOUT_GNOME=yes | WITHOUT_GCONF=yes | WITHOUT_KDE=yes | WITH_NLS=yes
+editors/vim*: WITH_X11_ONLY=yes
+x11/xterm: WITH_256_COLOR=yes
+editors/openoffice*: WITH_CCACHE|LOCALIZED_LANG=it
+www/firefox-i18n: WITHOUT_SWITCHER | FIREFOX_I18N=fr it
+x11/fakeport: CONFIGURE_ARGS=--with-modules="aaa bbb ccc"
+lang/ruby: WITH_IPV6=true
+
+
+# /usr/local/sbin/portmaster -L > portmaster.out    (列出可更新的软件)
+===>>> linux_base-fc-4_8
+===>>> New version available: linux_base-fc-4_9
+
+# /usr/local/sbin/portmaster linux_base-fc-4_8      (更新 某软件)
+# /usr/local/sbin/portmaster -e openoffice.org-2.2.0    (卸载某软件与其依赖)
+#
+# portmaster -a         (升级所有已安装的 ports)
+# portmaster -af        (always rebuild ports overrides -i)

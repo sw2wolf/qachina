@@ -1,0 +1,248 @@
+#*********************************
+# GENERAL SETTINGS
+#*********************************
+AutoRelativeResize # No cross of window edge needed for resize
+DecorateTransients # Also decorate transient windows
+NoBackingStore # Minimize repainting of menus
+NoCaseSensitive # Case ignoring for icon manager
+NoDefaults # No default title buttons, we will define them
+NoGrabServer # Do not grab the server when not needed
+NoHighLight # Dont change border of windows on mouse over
+NoTitleHighlight # No highlight for titlebar of selected window
+#OpaqueMove # Move window instead of outline
+RandomPlacement # Windows without geometry are placed randomly
+RestartPreviousState # Try to restart defaults from last x session
+UsePPosition "on" # Honor placement
+NoIconManagers # No icon manager is showed
+IconifyByUnMapping # Dont try to map any icons?
+NoDefaults # Don't use WM default icons and bindings
+# DontMoveOff # Windows arent allowed to move outside the screen
+
+#*********************************
+# WINDOW BORDERS ETC
+#*********************************
+BorderWidth 1 # Number of pixels for entire window border
+FramePadding 1 # Number of pixels between titlebar buttons and frame
+MenuBorderWidth 1 # Number of pixels for menu border
+NoMenuShadows # No shadow behind the menu
+TitleButtonBorderWidth 0 # Number of pixels for button border
+ButtonIndent 0 # Larger seems to squash buttons together
+TitlePadding 2 # Number of pixels around title buttons
+
+#*********************************
+# TITLE BAR BUTTONS
+#*********************************
+IconDirectory "/home/sw2wolf/.twm/icons" # Directory for non default icons
+LeftTitleButton "resize.xbm"=f.resize
+RightTitleButton "minimize.xbm"=f.iconify
+RightTitleButton "maximize.xbm"=f.fullzoom
+RightTitleButton "close.xbm"=f.delete
+
+#*********************************
+# COLOR SETTINGS
+#*********************************
+
+Color
+{
+BorderColor         "Black"
+DefaultBackground   "#D6D6D6"
+DefaultForeground   "#000000"
+TitleBackground     "#4E4E4E"
+TitleForeground     "White"#
+MenuTitleBackground "#4E4E4E"
+MenuTitleForeground "White"
+MenuBackground      "#D6D6D6"
+MenuForeground      "#4E4E4E"
+MenuShadowColor     "#4E4E4E"
+MenuBorderColor     "#000000"
+}
+
+
+#*********************************
+# FONT SETTINGS
+#*********************************
+TitleFont "-wenquanyi-wenquanyi bitmap song-medium-r-normal--12-130-75-75-p-80-iso10646-1"
+ResizeFont "-wenquanyi-wenquanyi bitmap song-medium-r-normal--12-130-75-75-p-80-iso10646-1"
+MenuFont "-wenquanyi-wenquanyi bitmap song-medium-r-normal--12-130-75-75-p-80-iso10646-1"
+ResizeFont "-wenquanyi-wenquanyi bitmap song-medium-r-normal--12-130-75-75-p-80-iso10646-1"
+
+#*********************************
+# CURSOR SETTINGS
+#*********************************
+Cursors
+{
+Frame "top_left_arrow"
+Title "top_left_arrow"
+Icon "top_left_arrow"
+IconMgr "top_left_arrow"
+Move "fleur"
+Resize "fleur"
+Menu "top_left_arrow"
+Button "top_left_arrow"
+Wait "trek"
+Select "dot"
+Destroy "pirate"
+}
+#*********************************
+# NO TITLE BAR SETTINGS
+#*********************************
+NoTitle
+{
+"conky"
+"xclock"
+"Eterm"
+}
+
+#*********************************
+# AUTORAISE WINDOWS
+#*********************************
+Autoraise
+{
+# "xterm"
+#"rxvt"
+# "Eterm"
+}
+
+#**************************************************
+#  CURSOR TO WINDOW ON DE-ICONIFY
+#**************************************************
+WarpCursor
+{		
+"xterm"
+}
+
+#*************************************************************
+# MOUSE SETTINGS AND WINDOW BEHAVIOURS
+#*************************************************************
+#  Button1=left, Button2=middle, Button3=right, m=alt, c=ctrl, s=shift
+
+# The root window actions i.e. clicking on the backgound
+Button1 = : root : f.menu "RootMenu"
+Button2 = : root : f.menu "System"
+# Button2 = : window : f.circleup
+Button3 = : root : f.menu "TwmWindows"
+
+# Left click the window title to lower / raise + gain focus or move
+Movedelta 1
+Button1=	:title: f.function "raise-lower-move"
+Function "raise-lower-move" { f.move f.raiselower }
+
+# Middle click the window title for options for individual windows
+Button2 = : title|frame : f.menu "WindowMenu"
+
+# Right click window title to resize the window by mousing beyond frame
+Button3 = : title|frame : f.resize
+
+# Hold alt key and left click to move entire window
+Button1 = m : window : f.move
+
+# Hold shift key and right click / move to resize. Best near edges than window centre.
+Button3 = s : window : f.resize
+
+# Hold Alt and Tab cycles through windows bringing up focus
+Function "winup" { f.circleup }
+"Tab" = m : root|window|frame|title : f.function "winup"
+
+# Hold Alt plus left click window title to maximize window vertically
+Button1 = m : title|frame : f.zoom
+
+# Hold Alt plus right click window title to maximize window vertically
+Button3 = m : title|frame : f.horizoom
+
+DefaultFunction f.nop
+
+#*********************************
+# THE POPUP MENU
+#*********************************
+
+menu "RootMenu"
+{
+"FreeBSD" f.title
+"Editor" !"nedit &"
+"Fileman" !"worker &"
+"Terminal" !"xterm &"
+"Internet" f.menu "Internet"
+"MultiMedia" f.menu "Multimedia"
+"Graphics" f.menu "Graphics"
+"Utilities" f.menu "Utils"
+"Restart"f.restart
+"Quit"f.quit
+}
+
+menu "System"
+{
+"System" f.title
+"To Desktop 1"!"vdesk 1 &"
+"To Desktop 2"!"vdesk 2 &"
+"To Desktop 3"!"vdesk 3 &"
+"To Desktop 4"!"vdesk 4 &"
+"Reread .twmrc " f.twmrc
+"End Task" f.exec "xkill &"
+}
+
+menu "WindowMenu"
+{
+"Window Ops	" f.title
+"Vertical	" f.zoom
+"Horizontal	" f.horizoom
+"Left		" f.leftzoom
+"Right		" f.rightzoom
+"Top		" f.topzoom
+"Bottom		" f.bottomzoom
+"AutoRaise	" f.autoraise
+"Refresh	" f.refresh
+"Kill		" f.destroy
+}
+
+menu "Internet"
+{
+"Internet" f.title
+"Opera Browser" !"opera &"
+"Links Browser" !"links -driver x http://www.google.com &"
+"IMRC Client" !"xterm -e centerim &"
+"FTP Client" !"xterm -fg grey -bg black -geometry 140x40+200+200 -e mc /#ftp:user@ftp.domain.net &"
+"SSH Client" !"xterm -fg grey -bg black -geometry 140x40+200+200 -e mc /#sh:root@192.168.n.n &"
+}
+
+menu "Multimedia"
+{
+"Multimedia" f.title
+"Groove Salad" !"xterm -e mp3blaster http://160.79.128.242:8032 &"
+"Swiss Groove" !"xterm -e mp3blaster http://swiss1.impek.tv:80 &"   
+"PlayDVD" !"/usr/local/bin/mplayer dvd:// &"
+"PlayMP3" !"xterm -fn fixed -e mp3blaster &"
+"PlayCD" !"cdcontrol -f /dev/acd1 play &"
+"StopCD" !"cdcontrol -f /dev/acd1 stop &"
+"Mixer" !"xterm -geometry 80x20+300+300 -e nmixer &"
+}
+
+menu "Utils"
+{
+"Utils" f.title
+"Top Ps "!"xterm -fg black -bg grey -e top &"
+"Post-Its" !"xpostit+ &"
+"PDF Docs" !"xpdf &"
+"Manual        " !"xman &"
+"Calendar "!"xcalendar &"
+"Calculator" !"xcalc &"
+"Clipboard" !"xclipboard &"
+"Eterm" !"Eterm -0 -x -f lightgrey -c lightgrey --scrollbar=false --buttonbar=false --font-fx=none -g 50x4+960+950 &"
+"Twm.ver"  f.version
+"Run"!"fbrun &"
+}
+
+menu "Graphics"
+{
+"Graphics" f.title
+"XvEdit" !"xv &"
+"Xpaint" !"xpaint &"
+"Sshot!" !"xterm -bg black -fg grey -e scrot -d 5 -c -e 'mv $f /usr/home/sw2wolf/' &"
+"Magnify       " !"xmag &"
+"ColorSel "!"xcolorsel &"
+"XBitmap" !"bitmap &"
+"Xcursor" !"xfd -center -fn cursor &"
+"Xfont" !"xfontsel &"
+}
+
+
+

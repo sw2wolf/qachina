@@ -1,0 +1,8 @@
+;; vim:filetype=lisp
+
+(in-package :clfswm)
+
+(with-numlock)
+
+(setf *border-size* 1)
+

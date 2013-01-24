@@ -1,0 +1,17 @@
+xterm -geometry 159x25+0+438
+emacs -geometry 178x38+0+376
+emacs -geometry 176x33+0+376
+-------------------------------------------
+VBoxManage startvm winxp
+VBoxManage controlvm winxp poweroff
+wine "c:/Program Files/eweiqi/LiveBaduk.exe"
+-------------------------------------------
+sudo /usr/local/etc/rc.d/musicpd onestart
+nvidia-settings
+-------------------------------------------
+evince
+/usr/local/bin/opera
+/usr/local/bin/gmrun
+-------------------------------------------
+sudo shutdown -r now
+sudo shutdown -p now

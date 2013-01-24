@@ -1,0 +1,28 @@
+# Install the new file if it differs only by VCS Id (-F)
+FREEBSD_ID=yes
+#
+# Automatically upgrade files that have not been user modified (-U)
+AUTO_UPGRADE=yes
+#
+# Automatically install files not on the system already (-i)
+AUTO_INSTALL=yes
+#
+# Preserve files that you replace
+PRESERVE_FILES=yes
+PRESERVE_FILES_DIR=/var/mergemaster/preserved-files-`date +%y%m%d-%H%M%S` 
+#
+# Delete stale files in /etc/rc.d without prompting
+DELETE_STALE_RC_FILES=yes
+#
+# Compare /etc/rc.conf[.local] to /etc/defaults/rc.conf (-C)
+COMP_CONFS=yes
+#
+######################################################
+# The following options have no command line overrides
+######################################################
+#
+# Files to always avoid comparing
+IGNORE_FILES='/etc/motd /etc/printcap'
+#
+# Additional options for diff.  This will get unset when using -s.
+DIFF_OPTIONS='-Bb'     # Ignore changes in whitespace
