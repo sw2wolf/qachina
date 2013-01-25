@@ -606,7 +606,7 @@ Options: encoding = utf8, version=3
 	NAME=Planet Emacsen
 	URL=http://planet.emacsen.org/
 	CREATED=1352786813
-	VISITED=1358901270
+	VISITED=1358989329
 	UNIQUEID=521C14002D5811E2B5499425CC12C79C
 
 #FOLDER
@@ -718,7 +718,7 @@ Options: encoding = utf8, version=3
 	NAME=Planet Lisp
 	URL=http://planet.lisp.org/
 	CREATED=1327901978
-	VISITED=1358901196
+	VISITED=1358989314
 	UNIQUEID=CCA36C004B0411E1A6E3A60652204041
 
 #FOLDER
@@ -901,7 +901,7 @@ Options: encoding = utf8, version=3
 	NAME=reddit Lisp
 	URL=http://www.reddit.com/r/lisp/
 	CREATED=1326692253
-	VISITED=1358911530
+	VISITED=1358989899
 	DESCRIPTION=reddit: the front page of the internet
 	UNIQUEID=30747190400411E196BC895900168C8B
 
@@ -1011,7 +1011,7 @@ Options: encoding = utf8, version=3
 	NAME=Planet Scheme
 	URL=http://scheme.dk/planet/
 	CREATED=1355636403
-	VISITED=1358901118
+	VISITED=1358989298
 	UNIQUEID=0A22CD10474311E2A0E9FA4CE6A9539D
 
 -
@@ -1073,7 +1073,7 @@ Options: encoding = utf8, version=3
 	NAME=Stack Overflow
 	URL=http://stackoverflow.com/questions/tagged/haskell
 	CREATED=1352008702
-	VISITED=1358840702
+	VISITED=1358988588
 	UNIQUEID=A3B2ECA0264411E2A010F77B5C5B3FCD
 
 #URL
@@ -1081,7 +1081,7 @@ Options: encoding = utf8, version=3
 	NAME=reddit
 	URL=http://www.reddit.com/r/haskell/
 	CREATED=1354846234
-	VISITED=1358901124
+	VISITED=1358989594
 	UNIQUEID=4890ED70401311E2A1199FDDF2E241B6
 
 -
@@ -1131,7 +1131,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=5DFD6F60594211E2A247CE358E3DAC3B
 
 #URL
-	ID=244
+	ID=243
 	NAME=Prolog.info: resources for Artificial Intelligence
 	URL=http://www.prolog.info/
 	CREATED=1357784446
@@ -1139,19 +1139,27 @@ Options: encoding = utf8, version=3
 	UNIQUEID=57CBD2E05ACC11E2A11FCB3138D04400
 
 #URL
-	ID=245
+	ID=244
 	NAME=Prolog: The ISO Standard
 	URL=http://www.deransart.fr//prolog/
 	CREATED=1357804984
 	UNIQUEID=28F96E705AFC11E2A1229FADF4FA3A51
 
 #URL
-	ID=246
+	ID=245
 	NAME=YAP Prolog
 	URL=http://www.dcc.fc.up.pt/~vsc/Yap/
 	CREATED=1358296698
-	VISITED=1358911613
+	VISITED=1358992365
 	UNIQUEID=05C27AA05F7511E2A59CDB0E3A117CF1
+
+#URL
+	ID=246
+	NAME=Amzi
+	URL=http://amzi.com/
+	CREATED=1358927655
+	DESCRIPTION=Amzi! inc. provides software and services for embedding intelligent components that apply busines rules, diagnose problems, recommend configurations, give advice, schedule events, monitor processes and more.
+	UNIQUEID=1582A5B0653211E2A401DAF9632C4165
 
 -
 
@@ -1169,7 +1177,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=AA7171405E1D11E2A7CAEAEB67B07B7B
 
 #URL
-	ID=304
+	ID=249
 	NAME=SWI-Prolog GIT browser - plweb-www.git/summary
 	URL=http://www.swi-prolog.org/git/plweb-www.git
 	CREATED=1358905235
@@ -1178,15 +1186,15 @@ Options: encoding = utf8, version=3
 -
 
 #URL
-	ID=249
+	ID=250
 	NAME=prolog - Stack Overflow
 	URL=http://stackoverflow.com/questions/tagged/prolog
 	CREATED=1357781197
-	VISITED=1358916979
+	VISITED=1358996111
 	UNIQUEID=C732EEF05AC411E2A11E99B0E1B391D8
 
 #URL
-	ID=250
+	ID=251
 	NAME=prolog programming language
 	URL=http://www.reddit.com/r/prolog/
 	CREATED=1357805579
@@ -1420,7 +1428,7 @@ Options: encoding = utf8, version=3
 	NAME=弈城围棋网
 	URL=http://www.eweiqi.com/newindex.asp?code=1007
 	CREATED=1338186779
-	VISITED=1357896115
+	VISITED=1358926792
 	UNIQUEID=F7D8F9C0A88E11E199D5DCD6B79805A2
 
 #URL
@@ -1510,7 +1518,7 @@ Options: encoding = utf8, version=3
 -
 
 #URL
-	ID=291
+	ID=290
 	NAME=My Portfolio - Google 财经
 	URL=http://www.google.com.hk/finance/portfolio?action=view&pid=1&gl=cn
 	CREATED=1281338449
@@ -1518,13 +1526,13 @@ Options: encoding = utf8, version=3
 	UNIQUEID=A28478A0A38611DF90AA83B4C0D460D8
 
 #FOLDER
-	ID=292
+	ID=291
 	NAME=Forum
 	CREATED=1282355134
 	UNIQUEID=CA65ACC0ACC511DF9D93852D273AF8F4
 
 #URL
-	ID=293
+	ID=292
 	NAME=金融界
 	URL=http://bbs.jrj.com.cn/
 	CREATED=1358831951
@@ -1533,7 +1541,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=4175AB70645311E2A249E6CAD9E069F5
 
 #URL
-	ID=294
+	ID=293
 	NAME=散户自己的家
 	URL=http://b.shdjt.com/index.asp?boardid=2
 	CREATED=1358832433
@@ -1543,13 +1551,13 @@ Options: encoding = utf8, version=3
 -
 
 #FOLDER
-	ID=295
+	ID=294
 	NAME=Misc
 	CREATED=1295244246
 	UNIQUEID=97E5C5F021FF11E0AA9986C8B1FF32E2
 
 #URL
-	ID=296
+	ID=295
 	NAME=115，我的网盘，改变分享！
 	URL=http://115.com/
 	CREATED=1337215355
@@ -1558,30 +1566,39 @@ Options: encoding = utf8, version=3
 	UNIQUEID=321971C09FB911E1946A8FC3E7A8141A
 
 #URL
-	ID=297
+	ID=296
 	NAME=招商银行 手机银行网页版
 	URL=https://mobile.cmbchina.com/MobileHtml/Login/LoginA.aspx
 	CREATED=1344395088
 	UNIQUEID=D0531F20E10511E1A438C72AD425A232
 
 #URL
-	ID=298
+	ID=297
 	NAME=中国问答网
 	URL=http://127.0.0.1:8000/
 	CREATED=1350635180
-	VISITED=1358660462
+	VISITED=1359003115
 	UNIQUEID=A8C332C019C611E29D9AFF51FF1A678B
+
+#URL
+	ID=303
+	NAME=sw2wolf/qachina · GitHub
+	URL=https://github.com/sw2wolf/qachina
+	CREATED=1358997610
+	VISITED=1359003170
+	DESCRIPTION=Contribute to qachina development by creating an account on GitHub.
+	UNIQUEID=F59B3D4065D411E2AA329D5A14185F9A
 
 -
 
 #FOLDER
-	ID=299
+	ID=298
 	NAME=Tool
 	CREATED=1355456068
 	UNIQUEID=2A41D410459F11E2A4D0B79DA67EAA9E
 
 #URL
-	ID=300
+	ID=299
 	NAME=Recent Pastes - hpaste
 	URL=http://hpaste.org/
 	CREATED=1281338449
@@ -1589,7 +1606,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=A287ACF0A38611DF90D8ECDEFA7D2AE6
 
 #URL
-	ID=301
+	ID=300
 	NAME=Enter your paste
 	URL=http://paste.lisp.org/new
 	CREATED=1355456154
@@ -1597,7 +1614,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=5D4A1930459F11E2A4D38EB17A5E231A
 
 #URL
-	ID=302
+	ID=301
 	NAME=online text editor - collabedit
 	URL=http://collabedit.com/
 	CREATED=1357875130
@@ -1609,7 +1626,7 @@ Options: encoding = utf8, version=3
 -
 
 #URL
-	ID=303
+	ID=302
 	NAME=搜狗搜索引擎 - 上网从搜狗开始
 	URL=http://www.sogou.com/
 	CREATED=1354505558

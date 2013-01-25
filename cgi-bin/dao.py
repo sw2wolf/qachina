@@ -29,8 +29,8 @@ class AbstractTable:
 
     def __init__(self):
         if self._cursor is None:
-            #self._conn = sqlite.connect('d:/www/qachina/db/qachina.db')
-            self._conn = sqlite.connect('/media/D/www/qachina/db/qachina.db')
+            #self._conn = sqlite.connect('d:/qachina/db/qachina.db')
+            self._conn = sqlite.connect('/media/D/qachina/db/qachina.db')
             self._conn.text_factory = str
             self._cursor = self._conn.cursor()
 
