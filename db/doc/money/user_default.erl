@@ -1,5 +1,5 @@
 -module(user_default).
--author('z_axis@163.com').
+-author('***@163.com').
 
 %--------------------------------------------------
 -opaque u16int() :: 0..(1 bsl 16 - 1). 
