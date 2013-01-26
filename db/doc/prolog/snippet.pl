@@ -134,3 +134,10 @@ partition(=<(0), [1,-2,3,4,-8,0], X, Y).
 .yaprc
 :- multifile(library_directory/1).
 library_directory('~/ftp/Prolog-inedit').
+
+G =.. [H,Item],G.
+% can be converted to:
+functor(Goal,H,1),   % unifies Goal with H(_)
+arg(1,Goal,Item),    % unifies first argument of Goal with Item
+call(Goal).          % use this for portability
+
