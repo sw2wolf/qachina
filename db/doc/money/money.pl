@@ -119,6 +119,9 @@ his :- shell('tail ssqHitNum.txt').
 %%
 %% utilities
 %%
+qachina :-
+	thread_create(shell('cd /media/D/qachina; ./start.bat'),_,[detached(true)]).
+
 fac(N,F) :-
 	N is 0, F is 1;
     N > 0, M is N - 1, fac(M,G), F is N*G.

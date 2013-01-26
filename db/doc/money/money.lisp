@@ -61,7 +61,7 @@ THING is a string or a symbol.")
 
 
 (defun qachina ()
-    (let ((cmd "cd /media/D/www/qachina; ./start.bat"))
+    (let ((cmd "cd /media/D/qachina; ./start.bat"))
         #+ecl (mp:process-run-function 'qachina #'(lambda () (si:system cmd)))
         #+clisp (mt:make-thread #'(lambda () (ext:shell cmd)))
         #+ccl (process-run-function "qachina" #'(lambda () (sh cmd)))

@@ -141,3 +141,13 @@ functor(Goal,H,1),   % unifies Goal with H(_)
 arg(1,Goal,Item),    % unifies first argument of Goal with Item
 call(Goal).          % use this for portability
 
+Suits = [clubs, hearts, spades, diamonds],
+Pips = [2, 3, 4, 5, 6, 7, 8, 9, 10, jack, queen, king, ace],
+setof(card(Pip, Suit), (member(Suit, Suits), member(Pip, Pips)), Deck).
+
+catch(
+    forall(query(Q), (Q ->
+        format('yes: ~w~n',[Q]) ;
+        format('no : ~w~n',[Q]))),
+    error(existence_error(procedure, _), _), format('error occurred.~n', [])).
+
