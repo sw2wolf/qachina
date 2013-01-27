@@ -43,6 +43,11 @@
   ;(set-process-query-on-exit-flag proc nil))
 )
 
+(global-set-key (kbd "M-j")
+    (lambda ()
+	  (interactive)
+      (join-line -1)))
+
 (require 'thingatpt)
 (global-set-key (kbd "<f1>") 'forward-whitespace)
 (global-set-key (kbd "<f2>") 'open-shell-other-buffer)
