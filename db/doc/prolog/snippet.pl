@@ -151,3 +151,18 @@ catch(
         format('no : ~w~n',[Q]))),
     error(existence_error(procedure, _), _), format('error occurred.~n', [])).
 
+
+:- use_module(library(http/http_open)).
+:- use_module(library(xpath)).
+ 
+test5(UniversityName):-
+	http_open('http://en.wikipedia.org/wiki/Eotvos_Lorand_University',
+		  In,
+		  []),
+	set_stream(In, encoding(utf8)),
+	load_structure(In, HTML,
+		       [ dialect(xml),
+			 max_errors(-1)
+		       ]),
+	xpath(HTML, //h1/span(text), UniversityName).
+

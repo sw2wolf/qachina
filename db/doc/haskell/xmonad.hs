@@ -15,7 +15,6 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageHelpers
 --import XMonad.Hooks.UrgencyHook
 -- Java swing fix
-import XMonad.Hooks.ICCCMFocus (takeTopFocus)
 import XMonad.Hooks.SetWMName (setWMName)
 
 import XMonad.Layout.IM
@@ -57,7 +56,7 @@ main = do
       , focusFollowsMouse  = False
       , startupHook = myStartupHook
         --, logHook = myLogHook dzenTopBar
-        --, logHook = takeTopFocus >> myLogHook xmobar
+        --, logHook = myLogHook xmobar
       , logHook = myLogHook
       , layoutHook = showWName myLayout
    } `additionalKeys` myKeys
@@ -95,7 +94,7 @@ myLogHook = return ()
 myLayout = windowNavigation $ avoidStruts $ noBorders --smartBorders
            $ onWorkspace "1-work" simplestFloat
            $ onWorkspace "2-game" simplestFloat
-           $ onWorkspace "3-test"  (Column 0.60)
+           $ onWorkspace "3-test"  (Column 0.65)
            $ simplestFloat  --stdLayouts
      -- where
     --      stdLayouts = Mirror tall ||| tall ||| full      
@@ -190,7 +189,7 @@ myKeys = let modm = mod4Mask in
     --, ((modm .|. shiftMask, xK_Print), spawn "sleep 0.2; scrot -s")
     , ((modm, xK_Print), spawn "scrot '/tmp/%Y-%m-%d_%H:%M:%S_$wx$h_scrot.png' -e 'mv $f ~'")
     , ((modm, xK_k), kill)
-    , ((modm, xK_space), scratchpadSpawnActionCustom "xterm -name scratchpad -e pl")
+    , ((modm, xK_space), scratchpadSpawnActionCustom "xterm -name scratchpad")
 
     -- Window Navigation
     , ((modm, xK_Right), sendMessage $ Go R)
@@ -210,6 +209,5 @@ myKeys = let modm = mod4Mask in
     -- , ((modm .|. shiftMask, xK_Up), spawn "aumix -v+6") -- volume++ 
     -- , ((modm .|. shiftMask, xK_Down ), spawn "aumix -v-6") -- volume-- 
     -- , ((modm .|. shiftMask, xK_Left ), spawn "amixer set Master toggle") -- mute
-
     , ((modm .|. shiftMask, xK_r), spawn "xmonad --recompile && xmonad --restart")
     ]
