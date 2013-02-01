@@ -1,5 +1,18 @@
-with_output_to(atom(Atom), maplist(write, [a+b, b+c])).
 
+
+:- if(statistics(gctime, _)).
+get_performance_stats(GC, T):-
+	statistics(gctime, GC),		% SWI-Prolog
+	statistics(cputime, T).
+:- else.
+get_performance_stats(GC, T):-
+	statistics(garbage_collection, [_,_,TGC]),
+	statistics(cputime, [TT,_]),
+	GC is TGC / 1000,
+	T is TT / 1000.
+:- endif.
+
+with_output_to(atom(Atom), maplist(write, [a+b, b+c])).
 
 person('Alex', 'McBrien', male).
 person('Daniel', 'Gardner', male).
@@ -130,10 +143,6 @@ forall(member(X, ["1","2","3"]), (number_codes(Y,X), writeln(Y))).
 X = 'abc/def'.
 
 partition(=<(0), [1,-2,3,4,-8,0], X, Y).
-
-.yaprc
-:- multifile(library_directory/1).
-library_directory('~/ftp/Prolog-inedit').
 
 G =.. [H,Item],G.
 % can be converted to:

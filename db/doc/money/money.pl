@@ -38,7 +38,10 @@ div618(P1, P2) :-
 	maplist(show618(P1,P2), R).
 
 sd(Word) :-
-	atom(Word), %atom_to_chars(Word,W),
+	(   atom(Word)
+	->  true
+	;   throw(error(type_error(atom, Word), _))
+	),
 	format(string(Cmd),'sdcv -n ~w',[Word]), shell(Cmd).
 
 %%
@@ -76,7 +79,7 @@ hit_sum(HitNo, No) :-
 	append(RedH,[B1],HitNo), !,
 	append(RedN,[B2],No), !,
 	intersection(RedH, RedN, X), length(X,HitR), hit_desc(HitR,HitB,Desc),
-	format('~p   (~p,~p)   ~p~n',[No,HitR,HitB,Desc]).
+	format('~p ~t(~p,~p)~25| ~t~p~38|~n',[No,HitR,HitB,Desc]).
 
 hit_desc(6,1,'1st') :- !.
 hit_desc(6,0,'2nd') :- !.
@@ -129,6 +132,10 @@ fac(N,F) :-
 fib(0, 0) :- !.
 fib(1, 1) :- !.
 fib(N, X) :- N1 is N-1, N2 is N-2, fib(N1, X1), fib(N2, X2), X is X1+X2.
+
+bin(0,'0').
+bin(1,'1').
+bin(N,B) :- N>1,X is N mod 2,Y is N//2,dec_bin(Y,B1),atom_concat(B1, X, B), !.
 
 % list comprehesion
 %% List of Pythagorean triples : 
