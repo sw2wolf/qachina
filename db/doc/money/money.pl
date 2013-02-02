@@ -137,33 +137,3 @@ bin(0,'0').
 bin(1,'1').
 bin(N,B) :- N>1,X is N mod 2,Y is N//2,dec_bin(Y,B1),atom_concat(B1, X, B), !.
 
-% list comprehesion
-%% List of Pythagorean triples : 
-%% ?- V <- {X, Y, Z & X <- 1..20, Y <- X..20, Z <- Y..20 & X*X+Y*Y =:= Z*Z}.
-%% V = [ (3,4,5), (5,12,13), (6,8,10), (8,15,17), (9,12,15), (12,16,20)] ;
-%% false.
-
-%% List of double of x, where x^2 is greater than 50 : 
-%% ?- V <- {Y & X <- 1..20 & X*X > 50, Y is 2 * X}.
-%% V = [16,18,20,22,24,26,28,30,32,34,36,38,40] ;
-%% false.
-
-% We need operators
-:- op(700, xfx, <-).
-:- op(450, xfx, ..).
-:- op(1100, yfx, &).
-
-% we need to define the intervals of numbers
-Vs <- M..N :-
-    integer(M),
-	integer(N),
-	M =< N,
-	between(M, N, Vs).
- 
-% finally we define list comprehension
-% prototype is Vs <- {Var, Dec, Pred} where
-% Var is the list of variables to output
-% Dec is the list of intervals of the variables
-% Pred is the list of predicates
-Vs <- {Var & Dec & Pred} :-
-	findall(Var,  maplist(call, [Dec, Pred]), Vs).
