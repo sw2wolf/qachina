@@ -224,4 +224,4 @@ let hit_ssq no hitNum =
 
 let his () = sh ("tail " ^ hit_num_file) ;;
 
-
+let sd word = sh ("sdcv -n " ^ word) ;;
