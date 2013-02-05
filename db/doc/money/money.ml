@@ -225,3 +225,5 @@ let hit_ssq no hitNum =
 let his () = sh ("tail " ^ hit_num_file) ;;
 
 let sd word = sh ("sdcv -n " ^ word) ;;
+
+let rec fib x = if x <= 1 then 1 else fib (x - 1) + fib (x - 2);;

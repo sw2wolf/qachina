@@ -140,6 +140,7 @@
    ("\\.hs$" . haskell-mode)
    ("\\.ml[iyl]?$" . caml-mode)
    ("\\.pl$" . prolog-mode)
+   ("\\.fs\\'" . forth-mode)
    ("\\.css$" . css-mode)
    ("\\.cfm$" . html-mode)
    ("gnus" . emacs-lisp-mode)

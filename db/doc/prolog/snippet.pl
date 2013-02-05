@@ -1,3 +1,24 @@
+
+The Unix passwd file is a file with records spanning a single line each. The fields are separated by a single `:' character. Here is an example of a line: 
+joe:hgdu3r3bce:53:100:Joe Johnson:/users/joe:/bin/bash
+
+ The following call defines a table for it: 
+?- new_table('/etc/passwd',
+             [ user(atom),
+               passwd(code_list),
+               uid(integer),
+               gid(integer),
+               gecos(code_list),
+               homedir(atom),
+               shell(atom)
+             ],
+             [ field_separator(0':)
+             ],
+             H).
+
+ To find all people of group 100, use: 
+?- findall(User, in_table(H, [user(User), gid(100)], _), Users).
+
 % list comprehesion
 %% List of Pythagorean triples : 
 %% ?- V <- {X, Y, Z & X <- 1..20, Y <- X..20, Z <- Y..20 & X*X+Y*Y =:= Z*Z}.

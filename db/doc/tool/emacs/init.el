@@ -18,6 +18,7 @@
 (load "init-haskell")
 (load "init-clojure")
 (load "init-racket")
+(load "init-forth")
 ;(load "init-slime")
 ;(load "init-emms")
 ;(load "init-radio")
