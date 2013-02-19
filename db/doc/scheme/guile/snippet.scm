@@ -1,3 +1,8 @@
+(case (rc-method rc)
+  ((GET) (uri-query (request-uri (rc-req rc))))
+  ((POST) ((@ (rnrs) utf8->string) (rc-body rc)))
+  (else (throw 'artanis-err 405 "wrong method for query!" (rc-method rc))))
+
 (do ((x 0 (+ x 1)))
     ((= x 11))
   (display (fact x))

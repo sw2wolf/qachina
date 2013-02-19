@@ -137,3 +137,4 @@ bin(0,'0').
 bin(1,'1').
 bin(N,B) :- N>1,X is N mod 2,Y is N//2,dec_bin(Y,B1),atom_concat(B1, X, B), !.
 
+%current_prolog_flag(version_data, swi(Major, Minor, Patch, _)).

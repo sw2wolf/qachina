@@ -95,3 +95,5 @@
 
 (define (qachina)
   (make-thread (system "cd /media/D/qachina; ./start.bat")))
+
+(define (sh cmd) (system cmd))

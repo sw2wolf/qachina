@@ -1,3 +1,29 @@
+(defmacro -> (initial &rest args)
+    (let ((first (first args)))
+      (cond ((null args) initial)
+            ((null (rest args))
+             `(,(car first) ,initial ,@(rest first)))
+            (:else
+             `(-> (-> ,initial ,first) ,@(rest args))))))
+ 
+->
+CL-USER> (-> 10
+               (+ 20)
+               (+ 40)
+               (/ 10))
+ 
+(ql:quickload :infix-dollar-reader)
+(syntax:use-syntax :infix-dollar)
+(= (+ 1 2 $ * 3 4 $ + 5 6) (+ 1 2 (* 3 4 (+ 5 6)))) ; => T
+ 
+Implementation is as below;
+(defun infix-dollar-reader (stream char)
+    (declare (ignore char))
+    (let* ((lp-reader (get-macro-character #\())
+           (entity (funcall lp-reader stream #\()) )
+      (unread-char #\) stream)
+      entity ))
+
 (dolist (x '(1 2 3)) (print x) (if (evenp x) (return)))   ;通过return截断了循环
 
 (defun load-db (filename) 
