@@ -137,4 +137,38 @@ bin(0,'0').
 bin(1,'1').
 bin(N,B) :- N>1,X is N mod 2,Y is N//2,dec_bin(Y,B1),atom_concat(B1, X, B), !.
 
-%current_prolog_flag(version_data, swi(Major, Minor, Patch, _)).
+sys_info :-
+	current_prolog_flag(version_data, swi(Major, Minor, Patch, _)),
+	format('swi-prolog version: ~w.~w.~w~n',[Major,Minor,Patch]).
+
+% ?- d(sin(x^2)+5,x,Y).
+% Y = cos(x ^ 2) * (1 * 2 * x ^ 1) + 0 
+d(U+V,X,DU+DV) :- !, 
+    d(U,X,DU),
+    d(V,X,DV).
+d(U-V,X,DU-DV) :- !,
+    d(U,X,DU),
+    d(V,X,DV).
+d(U*V,X,DU*V+U*DV) :- !,
+    d(U,X,DU),
+    d(V,X,DV).
+d(U/V,X,(DU*V-U*DV)/(^(V,2))) :- !,
+    d(U,X,DU),
+    d(V,X,DV).
+d(^(U,N),X,DU*N*(^(U,N1))) :- !, 
+    integer(N),
+    N1 is N-1,
+    d(U,X,DU).
+d(-U,X,-DU) :- !,
+    d(U,X,DU).
+d(exp(U),X,exp(U)*DU) :- !,
+    d(U,X,DU).
+d(log(U),X,DU/U) :- !,
+    d(U,X,DU).
+d(sin(U),X,cos(U)*DU):-!,
+    d(U,X,DU).
+d(cos(U),X,-sin(U)*DU):-!,
+    d(U,X,DU).
+
+d(X,X,1) :- !.
+d(_,_,0).

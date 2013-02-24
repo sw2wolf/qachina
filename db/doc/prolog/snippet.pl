@@ -1,8 +1,91 @@
 
-The Unix passwd file is a file with records spanning a single line each. The fields are separated by a single `:' character. Here is an example of a line: 
-joe:hgdu3r3bce:53:100:Joe Johnson:/users/joe:/bin/bash
+:- use_module(library(persistency)).
+:- use_module(library(aggregate)).
+:- use_module(library(memfile)).
+pack_query(Request) :-
+	memberchk(content_type(ContentType), Request),
+	sub_atom(ContentType, 0, _, _, 'text/x-prolog'), !,
+	peer(Request, Peer),
+	setup_call_cleanup(
+	    new_memory_file(MemFile),
+	    ( setup_call_cleanup(
+		  open_memory_file(MemFile, write, Stream),
+		  http_read_data(Request, _, [to(stream(Stream))]),
+		  close(Stream)),
+	      setup_call_cleanup(
+		  open_memory_file(MemFile, read, In),
+		  read(In, Query),
+		  close(In))
+	    ),
+	    free_memory_file(MemFile)),
+	(   catch(pack_query(Query, Peer, Reply), E, true)
+	->  format('Content-type: text/x-prolog; charset=UTF8~n~n'),
+	    (   var(E)
+	    ->	format('~q.~n', [true(Reply)])
+	    ;	format('~w.~n', [exception(E)])
+	    )
+	;   format('Content-type: text/x-prolog; charset=UTF8~n~n'),
+	    format('false.~n')
+	).
 
- The following call defines a table for it: 
+write_clf(Out, Options):-
+	open(Out, write, OutS, [encoding(utf8)]),
+	call_cleanup(write_records(OutS, Options), close(OutS)).
+
+text_to_data(Text, Y/M/D) :-
+	atomic_list_concat([YA, MA, DA], /, Text),
+	atom_number(YA, Y),
+	atom_number(MA, M),
+	atom_number(DA, D).
+
+:- meta_predicate
+	limit(+, 0).
+ 
+limit(Max, Goal) :-
+	State = count(0,_),
+	call(Goal),
+	arg(1, State, Count),
+	Count1 is Count+1,
+	(   Count1 =:= Max
+	->  !
+	;   nb_setarg(1, State, Count1)
+	).
+
+process_create(path(git), [pull],
+			 [ stdout(pipe(Out)),
+			   stderr(pipe(Error))
+			 ]),
+read_stream_to_codes(Out, OutCodes),
+read_stream_to_codes(Error, ErrorCodes),
+close(Out),
+close(Error).
+
+findall(C,
+		(   between(1, 1000, X),
+		    C is "a" + X mod 26
+		), S)
+
+:- use_module(library(lambda)).
+
+setify(L, Set) :-
+    foldl(\X^Y^Z^(memberchk(X, Y)->Z=Y; append(Y, [X], Z)), L, [], Set).
+
+:- ['reader.pl'].
+:- ['lexer.pl'].
+:- ['parser.pl'].
+:- ['scheme_runtime.pl']. 
+
+scheme(A) :- 
+    file(A, Content), 
+    getTokens(Content, Tokens), 
+    parser(Tokens, Statements),
+    createSymbolTable(Statements, SymbolTable),
+    calculate(Statements, SymbolTable).
+
+%% The Unix passwd file is a file with records spanning a single line each. The fields are separated by a single `:' character. Here is an example of a line: 
+%% joe:hgdu3r3bce:53:100:Joe Johnson:/users/joe:/bin/bash
+
+%%  The following call defines a table for it: 
 ?- new_table('/etc/passwd',
              [ user(atom),
                passwd(code_list),
@@ -16,7 +99,7 @@ joe:hgdu3r3bce:53:100:Joe Johnson:/users/joe:/bin/bash
              ],
              H).
 
- To find all people of group 100, use: 
+% To find all people of group 100, use: 
 ?- findall(User, in_table(H, [user(User), gid(100)], _), Users).
 
 % list comprehesion
@@ -52,7 +135,7 @@ Vs <- {Var & Dec & Pred} :-
 
 
 format('~`2t~9|~n').
-222222222
+%222222222
 
 :- if(statistics(gctime, _)).
 get_performance_stats(GC, T):-
