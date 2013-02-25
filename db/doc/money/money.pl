@@ -19,6 +19,7 @@ winQ(Qty,Pb,Ps) :-
 	format("You win ~2f", [Qty*Ps*(1-SXF) - 2*GHF - Qty*Pb*(1+SXF)]) .
 
 %止损价
+stopLoss(Qty,Pb) :- stopLoss(Qty,Pb,0.03).
 stopLoss(Qty,Pb,LossRate) :-
 	sxf(SXF),
 	T is Qty * Pb * (1 + SXF),
@@ -143,32 +144,32 @@ sys_info :-
 
 % ?- d(sin(x^2)+5,x,Y).
 % Y = cos(x ^ 2) * (1 * 2 * x ^ 1) + 0 
-d(U+V,X,DU+DV) :- !, 
-    d(U,X,DU),
-    d(V,X,DV).
-d(U-V,X,DU-DV) :- !,
-    d(U,X,DU),
-    d(V,X,DV).
-d(U*V,X,DU*V+U*DV) :- !,
-    d(U,X,DU),
-    d(V,X,DV).
-d(U/V,X,(DU*V-U*DV)/(^(V,2))) :- !,
-    d(U,X,DU),
-    d(V,X,DV).
-d(^(U,N),X,DU*N*(^(U,N1))) :- !, 
-    integer(N),
-    N1 is N-1,
-    d(U,X,DU).
-d(-U,X,-DU) :- !,
-    d(U,X,DU).
-d(exp(U),X,exp(U)*DU) :- !,
-    d(U,X,DU).
-d(log(U),X,DU/U) :- !,
-    d(U,X,DU).
-d(sin(U),X,cos(U)*DU):-!,
-    d(U,X,DU).
-d(cos(U),X,-sin(U)*DU):-!,
-    d(U,X,DU).
+%% d(U+V,X,DU+DV) :- !, 
+%%     d(U,X,DU),
+%%     d(V,X,DV).
+%% d(U-V,X,DU-DV) :- !,
+%%     d(U,X,DU),
+%%     d(V,X,DV).
+%% d(U*V,X,DU*V+U*DV) :- !,
+%%     d(U,X,DU),
+%%     d(V,X,DV).
+%% d(U/V,X,(DU*V-U*DV)/(^(V,2))) :- !,
+%%     d(U,X,DU),
+%%     d(V,X,DV).
+%% d(^(U,N),X,DU*N*(^(U,N1))) :- !, 
+%%     integer(N),
+%%     N1 is N-1,
+%%     d(U,X,DU).
+%% d(-U,X,-DU) :- !,
+%%     d(U,X,DU).
+%% d(exp(U),X,exp(U)*DU) :- !,
+%%     d(U,X,DU).
+%% d(log(U),X,DU/U) :- !,
+%%     d(U,X,DU).
+%% d(sin(U),X,cos(U)*DU):-!,
+%%     d(U,X,DU).
+%% d(cos(U),X,-sin(U)*DU):-!,
+%%     d(U,X,DU).
 
-d(X,X,1) :- !.
-d(_,_,0).
+%% d(X,X,1) :- !.
+%% d(_,_,0).
