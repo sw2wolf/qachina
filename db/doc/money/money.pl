@@ -64,7 +64,8 @@ win_ssq(Count, NoRedStr, NoBlueStr) :-
 	pick_nums(Count,YesB,OkB),
 	pick_red(Count,YesR,OkB,X), length(X,Count), !,
 	maplist(writeln,X),
-    tell('ssqNum.txt'),maplist(format('~d ~d ~d ~d ~d ~d ~d~n'),X),told.
+	ssqNumF(F),
+    tell(F),maplist(format('~d ~d ~d ~d ~d ~d ~d~n'),X),told.
 
 pick_red(0,_,_,_) :- !.
 pick_red(Count,YesR,OkB,[H|T]) :-
@@ -75,9 +76,11 @@ pick_red(Count,YesR,OkB,[H|T]) :-
 %read_file_to_codes('test.txt',X,[]), atom_codes(Y,X).
 hit_ssq(ID, HitNo) :-
 	atomic_list_concat([ID,' ',HitNo], NumStr),
-    append('ssqHitNum.txt'),write(NumStr),nl,told,
+	ssqHitNumF(File),
+    append(File), write(NumStr), nl, told,
 	atom2lst(HitNo,HN),
-	open('ssqNum.txt', read, H), file_ints(H,Ns), close(H), ! ,
+	ssqNumF(F),
+	open(F, read, H), file_ints(H,Ns), close(H), ! ,
 	maplist(hit_sum(HN), Ns) .
 	
 hit_sum(HitNo, No) :-
@@ -125,7 +128,17 @@ atom2lst(Atom,L) :-
     atomic_list_concat(X, ' ', Atom),
 	maplist(atom_number, X, L).
 
-his :- shell('tail ssqHitNum.txt').
+ssqNumF(F) :-
+	absolute_file_name(money('ssqNum.txt'), F, []).
+
+ssqHitNumF(F) :-
+	absolute_file_name(money('ssqHitNum.txt'), F, []).
+
+his :-
+	ssqHitNumF(File),
+	atom_concat('tail ', File, Cmd),
+	shell(Cmd).
+
 %%
 %% utilities
 %%
