@@ -1,4 +1,85 @@
 
+:- meta_predicate
+	monitor(0, +, -).
+ 
+monitor(Goal, MaxTime, Status) :-
+	thread_self(Self),
+	term_variables(Goal, Vars),
+	thread_create(
+	    run(Goal, Vars, Self, Id),
+	    Id,
+	    [ global(50),
+	      local(50)
+	    ]),
+	monitor_thread(Goal, Vars, Id, MaxTime, 0, Status).
+ 
+run(Goal, Vars, Main, Me) :-
+	call_cleanup(Goal, thread_send_message(Main, done(Me, Vars))).
+ 
+ 
+monitor_thread(Goal, Vars, Id, MaxTime, UsedTime, Status) :-
+	thread_self(Self),
+	Left is MaxTime-UsedTime,
+	(   thread_get_message(Self, done(Id, Vars), [timeout(Left)])
+	->  thread_join(Id, Status)
+	;   thread_statistics(Id, cputime, CPU),
+	    (	CPU > MaxTime
+	    ->  thread_signal(Id, abort),
+		thread_join(Id, _),
+		Status = timeout
+	    ;   monitor_thread(Goal, Vars, Id, MaxTime, CPU, Status)
+	    )
+	).
+ 
+There is a lot of room to tweak on this.  Here are some goals:
+ 
+3 ?- monitor(numlist(1, 1000, L), 0.1, Status).
+L = [1, 2, 3, 4, 5, 6, 7, 8, 9|...],
+Status = true.
+ 
+4 ?- monitor((numlist(1, 1000, L),fail), 0.1, Status).
+Status = false.
+ 
+5 ?- monitor((numlist(1, 1000, L),A is 1/0), 0.1, Status).
+Status = exception(error(evaluation_error(zero_divisor), context(prolog_stack([frame(5, call(system: (is)/2), _G2585 is 1/0), frame(3, clause(<clause>(0x2200e00), 5), setup_call_catcher_cleanup(system:true, user: ..., _G2603, user: ...)), frame(0, meta_call, 0)]), _G2566))).
+ 
+[ Note that you get these details by using library(prolog_stack) ].
+ 
+6 ?- monitor(true, 0.1, Status).
+Status = true.
+ 
+7 ?- time(forall(between(1, 1000, _), monitor(true, 0.1, Status))).
+% 9,002 inferences, 0.030 CPU in 0.042 seconds (72% CPU, 297799 Lips)
+true.
+ 
+8 ?- monitor((repeat, fail), 0.1, Status).
+Status = timeout.
+ 
+The only weird thing is that
+ 
+?- time(monitor((repeat, fail), 0.1, Status)).
+ 
+seems to deadlock.  I'll try to find out why.
+Found the deadlock (which was due to a bug in the code below).  I've
+extended it a bit, gave it a (hopefully) reasonable name and uploaded
+it as a pack.
+ 
+?- pack_install(resbound).
+?- [library(resource_bounds)].
+?- resource_bounded_call(numlist(1, 1000000, L), 1, Status, [global(1000)]).
+Status = stack_overflow(global).
+ 
+More examples, see http://www.swi-prolog.org/pack/list?p=resbound
+ 
+Let us finish with the overhead:
+ 
+7 ?- time(forall(between(1, 10000, _),
+                 resource_bounded_call((repeat, fail), 0.001, Status, []))).
+% 290,164 inferences, 0.833 CPU in 11.474 seconds (7% CPU, 348396 Lips)
+true.
+
+%-------
+
 :- use_module(library(persistency)).
 :- use_module(library(aggregate)).
 :- use_module(library(memfile)).

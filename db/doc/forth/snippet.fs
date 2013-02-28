@@ -13,7 +13,7 @@ LOOP increments the index (top of loop stack). If the index is less than the con
 variable rnd
  
 : randoms ( n -- )
-  s" /dev/random" r/o open-file throw
+  s" /dev/urandom" r/o open-file throw
   swap 0 do
     dup rnd 1 cells rot read-file throw drop
     rnd @ .

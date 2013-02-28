@@ -2,6 +2,12 @@
 %:- use_module(library(clpfd)).
 :- use_module(library(dcg/basics)).
 
+%% :- use_module(library(http/thread_httpd)).
+%% :- use_module(library(http/http_dispatch)).
+%% :- use_module(library(http/html_write)).
+%% :- use_module(library(http/http_parameters)).
+%% :- use_module(library(uri)).
+
 :- set_prolog_flag(generate_debug_info, false).
 
 sxf(0.0015).
@@ -134,13 +140,15 @@ fib(0, 0) :- !.
 fib(1, 1) :- !.
 fib(N, X) :- N1 is N-1, N2 is N-2, fib(N1, X1), fib(N2, X2), X is X1+X2.
 
-bin(0,'0').
-bin(1,'1').
-bin(N,B) :- N>1,X is N mod 2,Y is N//2,dec_bin(Y,B1),atom_concat(B1, X, B), !.
+binary(0,'0').
+binary(1,'1').
+binary(N,B) :- N>1,X is N mod 2,Y is N//2,binary(Y,B1),atom_concat(B1, X, B), !.
 
 sys_info :-
 	current_prolog_flag(version_data, swi(Major, Minor, Patch, _)),
 	format('swi-prolog version: ~w.~w.~w~n',[Major,Minor,Patch]).
+
+%module_property(ansi_term, file(Path))
 
 % ?- d(sin(x^2)+5,x,Y).
 % Y = cos(x ^ 2) * (1 * 2 * x ^ 1) + 0 
