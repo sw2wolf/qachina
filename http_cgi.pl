@@ -331,6 +331,6 @@ env('CONTENT_LENGTH', Request, ContentLength) :-
 env('HTTP_ACCEPT', _, _) :- fail.
 env('HTTP_USER_AGENT', Request, Agent) :-
 	memberchk(user_agent(Agent), Request).
+env('HTTP_COOKIE', _, 'userid=midas').
 env(Name, _, Value) :-
 	environment(Name, Value).
-

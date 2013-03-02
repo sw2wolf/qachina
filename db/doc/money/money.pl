@@ -1,14 +1,13 @@
 %:- module(money, [winG/3, stopLoss/3]).
 %:- use_module(library(clpfd)).
-:- use_module(library(dcg/basics)).
-
-%% :- use_module(library(http/thread_httpd)).
-%% :- use_module(library(http/http_dispatch)).
-%% :- use_module(library(http/html_write)).
-%% :- use_module(library(http/http_parameters)).
-%% :- use_module(library(uri)).
+%:- use_module(library(dcg/basics)).
 
 :- set_prolog_flag(generate_debug_info, false).
+
+:- assertz(user:file_search_path(qachina, '/media/D/qachina')).
+:- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
+
+:- load_files([ qachina(test_web) ], [ silent(true) ]).
 
 sxf(0.0015).
 yhs(0.001).
@@ -32,17 +31,26 @@ stopLoss(Qty,Pb,LossRate) :-
 	format("Stop Loss at: ~2f~n", [Pb - (T * LossRate) / Qty]),
 	format("Lost Money: ~2f~n", [T * LossRate]).
 
-my_comp(Comp, N1, N2) :-
-	( N1 =< N2 -> Comp = '>'
-	; N1 > N2 -> Comp = '<').
 show618(P1, P2, R) :-
 	(P1=<P2 -> P is P1+(P2-P1)*R; P is P1-(P1-P2)*R),
 	format("---~3f ~2f---~n",[R,P]).
 div618(P1, P2) :-
 	RATIO = [0.0, 0.191, 0.236, 0.382, 0.5, 0.618, 0.809, 1.0],
 	(P1>P2 -> R = RATIO;
-		predsort(my_comp, RATIO, R)),
+		reverse(RATIO,R)),
 	maplist(show618(P1,P2), R).
+
+%% my_comp(Comp, N1, N2) :-
+%% 	( N1 =< N2 -> Comp = '>'
+%% 	; N1 > N2 -> Comp = '<').
+%% show618(P1, P2, R) :-
+%% 	(P1=<P2 -> P is P1+(P2-P1)*R; P is P1-(P1-P2)*R),
+%% 	format("---~3f ~2f---~n",[R,P]).
+%% div618(P1, P2) :-
+%% 	RATIO = [0.0, 0.191, 0.236, 0.382, 0.5, 0.618, 0.809, 1.0],
+%% 	(P1>P2 -> R = RATIO;
+%% 		predsort(my_comp, RATIO, R)),
+%% 	maplist(show618(P1,P2), R).
 
 sd(Word) :-
 	(   atom(Word)
@@ -143,7 +151,8 @@ his :-
 %% utilities
 %%
 qachina :-
-	thread_create(shell('cd /media/D/qachina; ./start.bat'),_,[detached(true)]).
+	server(8000).
+	%thread_create(shell('cd /media/D/qachina; ./start.bat'),_,[detached(true)]).
 
 fac(N,F) :-
 	N is 0, F is 1;

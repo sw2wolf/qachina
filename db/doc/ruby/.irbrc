@@ -1,6 +1,6 @@
 require 'irb/completion'
 require 'irb/ext/save-history'
-require '/media/G/www/qachina/db/doc/ruby/money.rb'
+require '/media/D/qachina/db/doc/ruby/money.rb'
 
 IRB.conf[:SAVE_HISTORY] = 100
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb-save-history"

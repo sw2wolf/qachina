@@ -5,7 +5,6 @@
 :- load_files([money(money)], [silent(true), if(not_loaded)]).
 
 user:trusted_user(true).
-user:file_search_path(home, '/users/sw2wolf').
 
 :- set_prolog_flag(toplevel_print_anon, false).
 
@@ -15,13 +14,13 @@ user:file_search_path(home, '/users/sw2wolf').
 % [SWIPL] Persistent readline history
 :- if(current_predicate(rl_read_history/1)).
 
-setup_history :-
-			  HF = '.pl-history',
-			  (   exists_file(HF)
-			  ->  rl_read_history(HF)
-			  ;   true
-			  ),
-			  at_halt(rl_write_history(HF)).
+ setup_history :-
+ 			  HF = '.pl-history',
+ 			  (   exists_file(HF)
+ 			  ->  rl_read_history(HF)
+ 			  ;   true
+ 			  ),
+ 			  at_halt(rl_write_history(HF)).
 
 :- setup_history.
 :- endif.

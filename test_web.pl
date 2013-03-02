@@ -16,9 +16,26 @@
  
 user:file_search_path(css, css).
 user:file_search_path(cgi_bin, '/media/D/qachina/cgi-bin/').
+user:file_search_path(document_root, '/media/D/qachina/').
 
 http:location(files, '/f', []).
 http:location(css, '/css', []).
+
+:- multifile
+	http_cgi:environment/2.
+
+%% http_cgi:environment('PROJECT_ROOT', Root) :-		% gitweb
+%% 	git_project_root(Root).
+%% http_cgi:environment('GIT_PROJECT_ROOT', Root) :-	% git-http
+%% 	git_project_root(Root).
+%% http_cgi:environment('GITWEB_CONFIG', Config) :-
+%% 	absolute_file_name(gitweb('gitweb.conf'), Config,
+%% 			   [ access(read)
+%% 			   ]).
+http_cgi:environment('PATH', '/bin:/usr/bin:/usr/local/bin').
+
+:- http_handler(root(.), serve_page(document_root),
+		[prefix, priority(10), spawn(wiki)]).
  
 % this serves files from the directory db under the working directory
 :- http_handler(files(.), http_reply_from_files('db', []), [prefix]).
@@ -26,3 +43,49 @@ http:location(css, '/css', []).
  
 server(Port) :-
 	http_server(http_dispatch, [port(Port)]).
+
+%%	serve_page(+Alias, +Request)
+%
+%	HTTP handler for files below document-root.
+
+serve_page(Alias, Request) :-
+	memberchk(path_info(Relative), Request),
+	Spec =.. [ Alias, Relative ],
+	http_safe_file(Spec, []),
+	find_file(Relative, File), !,
+	http_reply_file(File, [unsafe(true)], Request).
+	%serve_file(File, Request).
+serve_page(Alias, Request) :-
+	\+ memberchk(path_info(_), Request), !,
+	serve_page(Alias, [path_info('index.html')|Request]).
+serve_page(_, Request) :-
+	memberchk(path(Path), Request),
+	existence_error(http_location, Path).
+
+%%	find_file(+Relative, -File) is det.
+%
+%	Translate Relative into a File in the document-root tree. If the
+%	given extension is .html, also look for   .txt files that can be
+%	translated into HTML.
+
+find_file(Relative, File) :-
+	file_name_extension(Base, html, Relative),
+	file_name_extension(Base, txt, WikiFile),
+	absolute_file_name(document_root(WikiFile),
+			   File,
+			   [ access(read),
+			     file_errors(fail)
+			   ]), !.
+find_file(Relative, File) :-
+	absolute_file_name(document_root(Relative),
+			   File,
+			   [ access(read),
+			     file_errors(fail)
+			   ]).
+find_file(Relative, File) :-
+	absolute_file_name(document_root(Relative),
+			   File,
+			   [ access(read),
+			     file_errors(fail),
+			     file_type(directory)
+			   ]).
