@@ -6,6 +6,9 @@
 :- use_module(library(http/http_files)).
 :- use_module(http_cgi).
 
+% flag to ensure we only start server once
+:- dynamic started/0.
+
 %  css location is already defined by the libs as serving files
 %  from the file path alias css
 %  So, we add an additional
@@ -40,9 +43,14 @@ http_cgi:environment('PATH', '/bin:/usr/bin:/usr/local/bin').
 % this serves files from the directory db under the working directory
 :- http_handler(files(.), http_reply_from_files('db', []), [prefix]).
 :- http_handler(css(.), http_reply_from_files('css', []), [prefix]).
- 
+
 server(Port) :-
-	http_server(http_dispatch, [port(Port)]).
+	started,!,
+	format(user_error, 'Already running - browse http://127.0.0.1:~w/\n', [Port]).
+
+server(Port) :-
+	http_server(http_dispatch, [port(Port), timeout(3600)]),
+	assert(started).
 
 %%	serve_page(+Alias, +Request)
 %

@@ -1,4 +1,5 @@
 
+%------
 :- meta_predicate
 	monitor(0, +, -).
  
@@ -31,49 +32,49 @@ monitor_thread(Goal, Vars, Id, MaxTime, UsedTime, Status) :-
 	    )
 	).
  
-There is a lot of room to tweak on this.  Here are some goals:
+%There is a lot of room to tweak on this.  Here are some goals:
  
-3 ?- monitor(numlist(1, 1000, L), 0.1, Status).
+?- monitor(numlist(1, 1000, L), 0.1, Status).
 L = [1, 2, 3, 4, 5, 6, 7, 8, 9|...],
 Status = true.
  
-4 ?- monitor((numlist(1, 1000, L),fail), 0.1, Status).
+?- monitor((numlist(1, 1000, L),fail), 0.1, Status).
 Status = false.
  
-5 ?- monitor((numlist(1, 1000, L),A is 1/0), 0.1, Status).
+?- monitor((numlist(1, 1000, L),A is 1/0), 0.1, Status).
 Status = exception(error(evaluation_error(zero_divisor), context(prolog_stack([frame(5, call(system: (is)/2), _G2585 is 1/0), frame(3, clause(<clause>(0x2200e00), 5), setup_call_catcher_cleanup(system:true, user: ..., _G2603, user: ...)), frame(0, meta_call, 0)]), _G2566))).
  
-[ Note that you get these details by using library(prolog_stack) ].
+%[ Note that you get these details by using library(prolog_stack) ].
  
-6 ?- monitor(true, 0.1, Status).
+?- monitor(true, 0.1, Status).
 Status = true.
  
-7 ?- time(forall(between(1, 1000, _), monitor(true, 0.1, Status))).
+?- time(forall(between(1, 1000, _), monitor(true, 0.1, Status))).
 % 9,002 inferences, 0.030 CPU in 0.042 seconds (72% CPU, 297799 Lips)
 true.
  
-8 ?- monitor((repeat, fail), 0.1, Status).
+?- monitor((repeat, fail), 0.1, Status).
 Status = timeout.
  
-The only weird thing is that
+%The only weird thing is that
  
-?- time(monitor((repeat, fail), 0.1, Status)).
+?-time(monitor((repeat, fail), 0.1, Status)).
  
-seems to deadlock.  I'll try to find out why.
-Found the deadlock (which was due to a bug in the code below).  I've
-extended it a bit, gave it a (hopefully) reasonable name and uploaded
-it as a pack.
+%seems to deadlock.  I'll try to find out why.
+%Found the deadlock (which was due to a bug in the code below).  I've
+%extended it a bit, gave it a (hopefully) reasonable name and uploaded
+%it as a pack.
  
 ?- pack_install(resbound).
 ?- [library(resource_bounds)].
 ?- resource_bounded_call(numlist(1, 1000000, L), 1, Status, [global(1000)]).
 Status = stack_overflow(global).
  
-More examples, see http://www.swi-prolog.org/pack/list?p=resbound
+%More examples, see http://www.swi-prolog.org/pack/list?p=resbound
  
-Let us finish with the overhead:
+%Let us finish with the overhead:
  
-7 ?- time(forall(between(1, 10000, _),
+?- time(forall(between(1, 10000, _),
                  resource_bounded_call((repeat, fail), 0.001, Status, []))).
 % 290,164 inferences, 0.833 CPU in 11.474 seconds (7% CPU, 348396 Lips)
 true.
@@ -183,37 +184,41 @@ scheme(A) :-
 % To find all people of group 100, use: 
 ?- findall(User, in_table(H, [user(User), gid(100)], _), Users).
 
-% list comprehesion
-%% List of Pythagorean triples : 
-%% ?- V <- {X, Y, Z & X <- 1..20, Y <- X..20, Z <- Y..20 & X*X+Y*Y =:= Z*Z}.
-%% V = [ (3,4,5), (5,12,13), (6,8,10), (8,15,17), (9,12,15), (12,16,20)] ;
-%% false.
+%------
 
-%% List of double of x, where x^2 is greater than 50 : 
-%% ?- V <- {Y & X <- 1..20 & X*X > 50, Y is 2 * X}.
-%% V = [16,18,20,22,24,26,28,30,32,34,36,38,40] ;
-%% false.
+?- d(sin(x^2)+5,x,Y).
+Y = cos(x ^ 2) * (1 * 2 * x ^ 1) + 0 
+d(U+V,X,DU+DV) :- !, 
+    d(U,X,DU),
+    d(V,X,DV).
+d(U-V,X,DU-DV) :- !,
+    d(U,X,DU),
+    d(V,X,DV).
+d(U*V,X,DU*V+U*DV) :- !,
+    d(U,X,DU),
+    d(V,X,DV).
+d(U/V,X,(DU*V-U*DV)/(^(V,2))) :- !,
+    d(U,X,DU),
+    d(V,X,DV).
+d(^(U,N),X,DU*N*(^(U,N1))) :- !, 
+    integer(N),
+    N1 is N-1,
+    d(U,X,DU).
+d(-U,X,-DU) :- !,
+    d(U,X,DU).
+d(exp(U),X,exp(U)*DU) :- !,
+    d(U,X,DU).
+d(log(U),X,DU/U) :- !,
+    d(U,X,DU).
+d(sin(U),X,cos(U)*DU):-!,
+    d(U,X,DU).
+d(cos(U),X,-sin(U)*DU):-!,
+    d(U,X,DU).
 
-% We need operators
-:- op(700, xfx, <-).
-:- op(450, xfx, ..).
-:- op(1100, yfx, &).
+d(X,X,1) :- !.
+d(_,_,0).
 
-% we need to define the intervals of numbers
-Vs <- M..N :-
-    integer(M),
-	integer(N),
-	M =< N,
-	between(M, N, Vs).
- 
-% finally we define list comprehension
-% prototype is Vs <- {Var, Dec, Pred} where
-% Var is the list of variables to output
-% Dec is the list of intervals of the variables
-% Pred is the list of predicates
-Vs <- {Var & Dec & Pred} :-
-	findall(Var,  maplist(call, [Dec, Pred]), Vs).
-
+%------
 
 format('~`2t~9|~n').
 %222222222
@@ -232,6 +237,7 @@ get_performance_stats(GC, T):-
 
 with_output_to(atom(Atom), maplist(write, [a+b, b+c])).
 
+%Procedure nameList/1 just calls nameList/2 with an empty accumulator. Then procedure nameList/2 will call every person from the facts database and check whether the person is in the accumulator list. If it finds one such person then it recursively calls itself adding this person to the accumulator. If it does not find any person not in the input list then it unifies this accumulator with the output List of persons.
 person('Alex', 'McBrien', male).
 person('Daniel', 'Gardner', male).
 person('Abbas', 'Phillips', male).
@@ -246,14 +252,12 @@ nameList(IList, List):-
    \+ (member((SName, FName), IList))
   )-> nameList([(SName, FName)|IList], List) ; List=IList.
 
-%Procedure nameList/1 just calls nameList/2 with an empty accumulator. Then procedure nameList/2 will call every person from the facts database and check whether the person is in the accumulator list. If it finds one such person then it recursively calls itself adding this person to the accumulator. If it does not find any person not in the input list then it unifies this accumulator with the output List of persons.
-
 % computation of the position of the bowl.
 calc(Ang, Len, X, Y) :-
 	X is Len * cos(Ang)+ 250,
 	Y is Len * sin(Ang) + 20.
  
- 
+
 % computation of the next angle
 % if we reach 0 or pi, delta change.
 next_Angle(A, D, NA, ND) :-

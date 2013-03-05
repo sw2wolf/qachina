@@ -1,8 +1,14 @@
 %:- module(money, [winG/3, stopLoss/3]).
 %:- use_module(library(clpfd)).
-%:- use_module(library(dcg/basics)).
+:- use_module(library(dcg/basics)).
 
-:- set_prolog_flag(generate_debug_info, false).
+:- set_prolog_flag(toplevel_print_options,
+	[backquoted_string(true), max_depth(9999),
+	 portray(true), spacing(next_argument)]).
+:- set_prolog_flag(debugger_print_options,
+	[backquoted_string(true), max_depth(9999),
+	 portray(true), spacing(next_argument)]).
+:- set_prolog_flag(generate_debug_info, true).
 
 :- assertz(user:file_search_path(qachina, '/media/D/qachina')).
 :- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
@@ -172,34 +178,33 @@ sys_info :-
 
 %module_property(ansi_term, file(Path))
 
-% ?- d(sin(x^2)+5,x,Y).
-% Y = cos(x ^ 2) * (1 * 2 * x ^ 1) + 0 
-%% d(U+V,X,DU+DV) :- !, 
-%%     d(U,X,DU),
-%%     d(V,X,DV).
-%% d(U-V,X,DU-DV) :- !,
-%%     d(U,X,DU),
-%%     d(V,X,DV).
-%% d(U*V,X,DU*V+U*DV) :- !,
-%%     d(U,X,DU),
-%%     d(V,X,DV).
-%% d(U/V,X,(DU*V-U*DV)/(^(V,2))) :- !,
-%%     d(U,X,DU),
-%%     d(V,X,DV).
-%% d(^(U,N),X,DU*N*(^(U,N1))) :- !, 
-%%     integer(N),
-%%     N1 is N-1,
-%%     d(U,X,DU).
-%% d(-U,X,-DU) :- !,
-%%     d(U,X,DU).
-%% d(exp(U),X,exp(U)*DU) :- !,
-%%     d(U,X,DU).
-%% d(log(U),X,DU/U) :- !,
-%%     d(U,X,DU).
-%% d(sin(U),X,cos(U)*DU):-!,
-%%     d(U,X,DU).
-%% d(cos(U),X,-sin(U)*DU):-!,
-%%     d(U,X,DU).
+% list comprehesion
+%% List of Pythagorean triples : 
+%% ?- V <- {X, Y, Z & X <- 1..20, Y <- X..20, Z <- Y..20 & X*X+Y*Y =:= Z*Z}.
+%% V = [ (3,4,5), (5,12,13), (6,8,10), (8,15,17), (9,12,15), (12,16,20)] ;
+%% false.
 
-%% d(X,X,1) :- !.
-%% d(_,_,0).
+%% List of double of x, where x^2 is greater than 50 : 
+%% ?- V <- {Y & X <- 1..20 & X*X > 50, Y is 2 * X}.
+%% V = [16,18,20,22,24,26,28,30,32,34,36,38,40] ;
+%% false.
+
+% We need operators
+:- op(700, xfx, <-).
+:- op(450, xfx, ..).
+:- op(1100, yfx, &).
+
+% we need to define the intervals of numbers
+Vs <- M..N :-
+    integer(M),
+	integer(N),
+	M =< N,
+	between(M, N, Vs).
+ 
+% finally we define list comprehension
+% prototype is Vs <- {Var, Dec, Pred} where
+% Var is the list of variables to output
+% Dec is the list of intervals of the variables
+% Pred is the list of predicates
+Vs <- {Var & Dec & Pred} :-
+	findall(Var,  maplist(call, [Dec, Pred]), Vs).

@@ -75,7 +75,11 @@ THING is a string or a symbol.")
             (nconc res (list (+ (nth (- i 2) res) (nth (- i 1) res)))))
         res))
 
-(defun bits (n) (format t "~b" n))
+(defun hex (value &optional (size 4))
+  (format t "~v,'0X" size value))
+
+(defun bits (value &optional (size 8))
+  (format t "~v,'0B" size value))
 
 (defun perfectp (n)
   (= n (loop for i from 1 below n when (= 0 (mod n i)) sum i)))
