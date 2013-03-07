@@ -75,7 +75,7 @@ used for matching windows with run-or-raise or window placement
 (set-float-unfocus-color "black")
 
 (set-font "-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
-;(set-font "-*-WenQuanYi Zen Hei-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
+;(set-font "-WenQuanYi Bitmap Song-medium-r-normal--16-160-75-75-p-80-iso10646-1")
 
 (set-prefix-key (kbd "s-x"))
 
@@ -151,7 +151,7 @@ used for matching windows with run-or-raise or window placement
     (run-shell-command "VBoxManage startvm winxp &"))
 
 (defcommand emacs () ()
-    (run-shell-command "emacs -geometry 178x38+0+376"))
+    (run-shell-command "emacs -geometry 178x38+0+373"))
 
 (defcommand reboot () ()
     (run-shell-command "sudo /sbin/shutdown -r now"))
@@ -232,7 +232,6 @@ used for matching windows with run-or-raise or window placement
 (defun my-start-hook ()
     ;(run-shell-command "xsetroot -solid black")
     ;(run-shell-command "fcitx")
-    ;(run-shell-command "xterm")
     (vsplit "2/5") (move-focus :down))
 (replace-hook *start-hook* 'my-start-hook)
 

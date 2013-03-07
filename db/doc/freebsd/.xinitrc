@@ -48,10 +48,10 @@ case $1 in
         #xterm -geometry 159x25+0+438 -e ~/bin/tmuxz &
         #exec /usr/local/bin/dwm
         #;;
-	stumpwm)
-   		exec $HOME/bin/stumpwm-clisp
+	xmonad)
+        exec xmonad
         ;;
     *)
-        exec xmonad
+   		exec $HOME/bin/stumpwm-clisp
         ;;
 esac

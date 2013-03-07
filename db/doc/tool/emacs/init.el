@@ -15,7 +15,7 @@
 (load "init-eshell")
 (load "init-erc")
 (load "init-dict")
-(load "init-haskell")
+;(load "init-haskell")
 ;(load "init-ruby")
 ;(load "init-clojure")
 ;(load "init-racket")
@@ -23,13 +23,14 @@
 ;(load "init-slime")
 ;(load "init-emms")
 ;(load "init-radio")
+
+(require 'erlang-start)
+(require 'ocaml)
+
 (setq shell-file-name "/bin/csh")
 
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-
-(require 'erlang-start)
-(require 'ocaml)
 
 ;; ------------------------------------------------------------ [ ispell ]
 (eval-after-load "ispell"
