@@ -16,7 +16,7 @@
 ;(setup-registry #p"/media/E/myapp/")
 ;(setup-registry #p"/media/E/www/qachina/")
 
-(pushnew #p"/media/D/www/qachina/" asdf:*central-registry*)
-(pushnew #p"/media/D/www/qachina/db/doc/money/" asdf:*central-registry*)
+(pushnew #p"/media/D/qachina/" asdf:*central-registry*)
+(pushnew #p"/media/D/qachina/db/doc/money/" asdf:*central-registry*)
 
 (ql:quickload :money)
