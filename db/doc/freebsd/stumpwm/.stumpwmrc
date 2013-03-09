@@ -53,11 +53,14 @@ used for matching windows with run-or-raise or window placement
                          "height    " (format nil "~a" (window-height w))))))
 
 (defcommand sdcv (word) ((:rest "Word> "))
-  (with-output-to-string (*standard-output*)
-	 (let ((str (ext:run-shell-command (concatenate 'string "sdcv -n " word) :output :stream :wait nil)))
+  (let ((cmd (concatenate 'string "sdcv -n " word)))
+    #+clisp(with-output-to-string (*standard-output*)
+	 (let ((str (ext:run-shell-command cmd :output :stream :wait nil)))
 	   (loop for line = (read-line str nil)
           until (null line)
-          do (print line)))))
+          do (print line))))
+	#+ccl(with-output-to-string (*standard-output*) (ccl:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*))))
+       
 
 (defcommand eval-me (cmd) ((:rest "Eval> "))
     (with-output-to-string (*standard-output*)
@@ -75,7 +78,6 @@ used for matching windows with run-or-raise or window placement
 (set-float-unfocus-color "black")
 
 (set-font "-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
-;(set-font "-WenQuanYi Bitmap Song-medium-r-normal--16-160-75-75-p-80-iso10646-1")
 
 (set-prefix-key (kbd "s-x"))
 
@@ -92,9 +94,9 @@ used for matching windows with run-or-raise or window placement
 (setf *normal-border-width* 1
       *maxsize-border-width* 1
       *transient-border-width* 1
-      +default-frame-outline-width+ 1
+      ;+default-frame-outline-width+ 0
       *float-window-title-height* 0
-      *window-border-style* :thin) ; :thick :thin :tight :none
+      *window-border-style* :tight) ; :thick :thin :tight :none
 
 (setf *time-modeline-string* "%Y-%m-%d %a ^B%l:%M^b" 
       *window-name-source* :title
@@ -109,9 +111,9 @@ used for matching windows with run-or-raise or window placement
       *mode-line-pad-x* 0
       *mode-line-pad-y* 0
       *mode-line-timeout* 60
-      *mode-line-screen-position* :top
-	  ;*screen-mode-line-format* (list "[^B%n^b]%W" "^>%m | " "^>%d")
-      *screen-mode-line-format* (list "[^B%n^b]%W"))
+      *mode-line-screen-position* :top)
+#+clisp(setf *screen-mode-line-format* (list "[^B%n^b]%W"))
+#+ccl(setf *screen-mode-line-format* (list "[^B%n^b]%W" "^>%m | " "^>%d"))
 
 ;; turn on/off the mode line for the current screen only.
 (if (not (head-mode-line (current-head)))
@@ -196,7 +198,7 @@ used for matching windows with run-or-raise or window placement
     ("s-Print" "exec scrot -q 10 -s")
 
     ("s-R" "reinit")
-    ("s-Q" "quit")
+    ("s-O" "quit")
     ("s-F2" "exec")
     ("s-F4" "kill")
     ("s-F11" "reboot")
@@ -211,11 +213,40 @@ used for matching windows with run-or-raise or window placement
     ("s-S-Up" "move-window up" )
     ("s-S-Down" "move-window down" ))
 
-
 (defkeys-root
     ("s-e" "eval-me")
     ("s-w" "windowlist")
     ("s-i" "display-current-window-info"))
+
+;;; mpd
+#+ccl(progn
+    (load-module "mpd")
+    (setf *mpd-modeline-fmt* "%S [%d|%e] [%s;%r;%v]: %a - %t (%n/%p)")
+    (setf *mpd-map*
+      (let ((m (make-sparse-keymap)))
+        (define-key m (kbd "SPC") "mpd-toggle-pause")
+        (define-key m (kbd "s") "mpd-toggle-random")
+        (define-key m (kbd "r") "mpd-toggle-repeat")
+        (define-key m (kbd "S") "mpd-current-song")
+        (define-key m (kbd "P") "mpd-play")
+        (define-key m (kbd "L") "mpd-browse-playlist")
+        (define-key m (kbd "o") "mpd-stop")
+        (define-key m (kbd "n") "mpd-next")
+        (define-key m (kbd "p") "mpd-prev")
+        (define-key m (kbd "c") "mpd-clear")
+        (define-key m (kbd "x") "mpd-connect")
+        (define-key m (kbd "k") "mpd-kill")
+        (define-key m (kbd "u") "mpd-update")
+        (define-key m (kbd "a") "mpd-search-and-add-artist")
+        (define-key m (kbd "z") "mpd-playlist")
+        (define-key m (kbd "v") "mpd-set-volume")
+        (define-key m (kbd "e") "mpd-volume-up")
+        (define-key m (kbd "d") "mpd-volume-down")
+        (define-key m (kbd "S") '*mpd-search-map*)
+        (define-key m (kbd "b") '*mpd-browse-map*)
+        (define-key m (kbd "A") '*mpd-add-map*)
+        m))
+    (define-key *top-map* (kbd "s-m") '*mpd-map*))
 
 ; groups
 (defvar group-names "123")
