@@ -29,6 +29,11 @@
   (async-shell-command "clisp -q -modern -ansi" "*clisp*"))
 (global-set-key "\C-c\C-l" 'clisp)
 
+(defun prolog ()
+  (interactive)
+  (async-shell-command "/home/sw2wolf/bin/pl" "*swi-prolog*"))
+(global-set-key "\C-c\C-p" 'prolog)
+
 ;; 按下C-x k立即关闭掉当前的buffer
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
