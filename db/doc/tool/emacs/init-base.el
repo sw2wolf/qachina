@@ -42,7 +42,7 @@
 
 (set-default-font "Bitstream Vera Sans Mono-10")
 ;; 设置中文字体
-     (set-fontset-font "fontset-default"
+(set-fontset-font "fontset-default"
       'gb18030 '("WenQuanYi Bitmap Song" . "unicode-bmp"))
 ;; 设置 sentence-end 可以识别中文标点
 (setq sentence-end
@@ -139,7 +139,7 @@
    ("\\.l$" . c-mode)
    ("\\.hs$" . haskell-mode)
    ("\\.ml[iyl]?$" . caml-mode)
-   ("\\.pl$" . prolog-mode)
+   ;("\\.pl$" . prolog-mode)
    ("\\.fs\\'" . forth-mode)
    ("\\.css$" . css-mode)
    ("\\.cfm$" . html-mode)
@@ -152,3 +152,5 @@
 ;;默认链接网络浏览器打开
 (setq browse-url-generic-program (executable-find "opera")
      browse-url-browser-function 'browse-url-generic)
+
+(grep-apply-setting 'grep-command "grep -nH -R -e  ")

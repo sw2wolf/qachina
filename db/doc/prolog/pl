@@ -1,2 +1,2 @@
-cd /media/D/qachina/db/doc/money
-swipl -q -f money.pl -g qachina "$@"
+#!/bin/sh
+swipl -q -f $MD/money/money.pl -g qachina "$@"

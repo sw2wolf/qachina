@@ -38,7 +38,7 @@ http:location(css, '/css', []).
 http_cgi:environment('PATH', '/bin:/usr/bin:/usr/local/bin').
 
 :- http_handler(root(.), serve_page(document_root),
-		[prefix, priority(10), spawn(wiki)]).
+		[prefix, priority(10), spawn(qachina)]).
  
 % this serves files from the directory db under the working directory
 :- http_handler(files(.), http_reply_from_files('db', []), [prefix]).
