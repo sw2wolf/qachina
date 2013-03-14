@@ -51,6 +51,14 @@ case $1 in
 	xmonad)
         exec xmonad
         ;;
+	ecl)
+	    #/usr/local/etc/rc.d/musicpd onestart
+        exec $HOME/bin/stumpwm-ecl
+        ;;
+    sbcl)
+	    /usr/local/etc/rc.d/musicpd onestart
+        exec $HOME/bin/stumpwm-sbcl
+        ;;
 	ccl)
 	    /usr/local/etc/rc.d/musicpd onestart
         exec $HOME/bin/stumpwm-ccl

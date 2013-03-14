@@ -5,8 +5,8 @@ onintr bye
 
 echo "please choose WM(1/2)"
 echo "----------------------"
-echo "1:stumpwm-clisp*"
-echo "2:stumpwm-ccl"
+echo "1:stumpwm-ccl*"
+echo "2:stumpwm-sbcl"
 echo "3:stumpwm-ecl"
 echo "4:xmonad"
 echo "5:console"
@@ -15,10 +15,10 @@ echo "----------------------"
 set req = $<
 switch ($req)
     case [1]:
-		xinit
+		xinit ccl
 		breaksw
 	case [2]:
-        xinit ccl
+        xinit sbcl
         breaksw
     case [3]:
 		xinit ecl
@@ -26,13 +26,16 @@ switch ($req)
     case [4]:
 		xinit xmonad
 		breaksw
+    case [5]:
+		breaksw    
     default:
+		xinit
 		breaksw
 endsw
 exit 0
 
 bye:
-	xinit
+    xinit
 	exit 1
 
 #set i = 0
