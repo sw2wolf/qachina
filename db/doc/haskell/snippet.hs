@@ -1,3 +1,4 @@
+
 import Data.List
 
 mean xs = tot / len

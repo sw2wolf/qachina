@@ -153,4 +153,5 @@
 (setq browse-url-generic-program (executable-find "opera")
      browse-url-browser-function 'browse-url-generic)
 
+(require 'grep)
 (grep-apply-setting 'grep-command "grep -nH -R -e  ")

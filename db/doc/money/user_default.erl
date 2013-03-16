@@ -12,7 +12,7 @@
 %-spec diskspace(nonempty_string()) -> {'ok', diskinfo()} | {'error', term()}.
 %--------------------------------------------------
 
-%-export([winG/3, winQ/3, date_by_ntday/2, div618_T/2]).
+%-export([winG/3, winQ/3, date_by_ntday/2, div618/2]).
 -compile(export_all).
 
 -import(calendar, [date_to_gregorian_days/3, gregorian_days_to_date/1, day_of_the_week/1]).

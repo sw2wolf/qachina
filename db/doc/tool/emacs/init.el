@@ -1,7 +1,7 @@
 (add-to-list 'load-path "~/.emacs.d/")
 (add-to-list 'load-path "~/.emacs.d/clojure-mode")
 (add-to-list 'load-path "~/.emacs.d/ocaml-mode")
-(add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-2.6.6.5/emacs/")
+(add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-2.6.8/emacs/")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ELPA;;;;;;;;;;;;;;
 ;; (when (equal emacs-major-version 24)
@@ -16,7 +16,7 @@
 (load "init-dict")
 (load "init-slime")
 (load "init-prolog")
-;(load "init-haskell")
+(load "init-haskell")
 ;(load "init-ruby")
 ;(load "init-clojure")
 ;(load "init-racket")

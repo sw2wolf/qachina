@@ -1,7 +1,7 @@
 %Note: You should not change the shell_default module, since this
 %implements the existing shell functions, but instead add your own
 %functions to user_default.erl. 
-code:load_abs("/media/D/www/qachina/db/doc/money/user_default").
+code:load_abs("/media/D/qachina/db/doc/money/user_default").
 
 code:add_patha(".").
 code:add_pathz("/home/sw2wolf/erlang/cean-2.0/ebin").

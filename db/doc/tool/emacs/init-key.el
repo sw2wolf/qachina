@@ -29,6 +29,11 @@
   (async-shell-command "clisp -q -modern -ansi" "*clisp*"))
 (global-set-key "\C-c\C-c\C-l" 'clisp)
 
+(defun erlang ()
+  (interactive)
+  (async-shell-command "~/bin/yw" "*erlang*"))
+(global-set-key "\C-c\C-c\C-e" 'erlang)
+
 (defun prolog ()
   (interactive)
   (async-shell-command "~/bin/pl" "*swi-prolog*"))
