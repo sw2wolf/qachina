@@ -62,15 +62,6 @@ used for matching windows with run-or-raise or window placement
 	 #+sbcl (sb-ext:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*)
 	 #+ccl(ccl:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*))))
   
-(defcommand eval-me (cmd) ((:rest "Eval> "))
-    (with-output-to-string (*standard-output*)
-        (handler-case
-            (format t "~{~a~^~%~}"
-                (mapcar 'prin1-to-string
-                    (multiple-value-list (eval (read-from-string cmd)))))
-            (error (c)
-                (format t "~A" c)))))
-
 (set-fg-color "green")
 (set-bg-color "black")
 
@@ -214,7 +205,7 @@ used for matching windows with run-or-raise or window placement
     ("s-S-Down" "move-window down" ))
 
 (defkeys-root
-    ("s-e" "eval-me")
+    ("s-e" "eval")
     ("s-w" "windowlist")
     ("s-i" "display-current-window-info"))
 
