@@ -61,7 +61,8 @@ used for matching windows with run-or-raise or window placement
           do (print line)))
 	 #+sbcl (sb-ext:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*)
 	 #+ccl(ccl:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*))))
-  
+
+
 (set-fg-color "green")
 (set-bg-color "black")
 
@@ -121,6 +122,9 @@ used for matching windows with run-or-raise or window placement
 
 ;; shell program used by `run-shell-command' (`sh' by default, which is *not* 'bash' nor 'zsh')
 (setf *shell-program* (stumpwm::getenv "SHELL"))
+
+;; (defcommand exec-in-terminal (cmd) ((:string "Command: "))
+;;   (run-shell-command (format nil "xterm -e ~A" cmd)))
 
 (defparameter +browser-name+ "opera")
 (defparameter +browser-class+ "Opera")
@@ -183,6 +187,7 @@ used for matching windows with run-or-raise or window placement
     ("s-o" "only")
     ("s-s" "vsplit")
     ("s-S" "hsplit")
+	;("s-S" "exec-in-terminal")
     ("s-b" "mode-line")
     ("s-Tab" "pull-hidden-next")
     ("Print" "exec scrot -q 10")

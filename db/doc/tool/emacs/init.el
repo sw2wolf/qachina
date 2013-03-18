@@ -21,11 +21,12 @@
 ;(load "init-clojure")
 ;(load "init-racket")
 ;(load "init-forth")
-;(load "init-emms")
-;(load "init-radio")
 (require 'erlang-start)
 (require 'ocaml)
 ;(load "init-eshell")
+
+;(load "init-emms")
+(load "init-radio")
 
 (setq shell-file-name "/bin/csh")
 

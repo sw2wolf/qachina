@@ -24,25 +24,25 @@
 
 ;(global-set-key "\C-x\C-m" 'execute-extended-command)
 
+(defun haskell ()
+  (interactive)
+  (run-caml "~/bin/hs"))
+
 (defun clisp ()
   (interactive)
   (async-shell-command "clisp -q -modern -ansi" "*clisp*"))
-(global-set-key "\C-c\C-c\C-l" 'clisp)
 
 (defun erlang ()
   (interactive)
   (async-shell-command "~/bin/yw" "*erlang*"))
-(global-set-key "\C-c\C-c\C-e" 'erlang)
 
 (defun prolog ()
   (interactive)
   (async-shell-command "~/bin/pl" "*swi-prolog*"))
-(global-set-key "\C-c\C-c\C-p" 'prolog)
 
 (defun ocaml ()
   (interactive)
   (run-caml "~/bin/ml"))
-(global-set-key "\C-c\C-c\C-o" 'ocaml)
 
 ;; 按下C-x k立即关闭掉当前的buffer
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
@@ -69,7 +69,7 @@
 (global-set-key (kbd "<f3>") 'find-file-at-point)
 (global-set-key (kbd "<f4>") 'describe-char)
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert #x3bb)))
-(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert "/msg rudybot ")))
+(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert "/msg lambdabot @hoogle ")))
 (global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "/msg lambdabot > ")))
 (global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "/msg lambdabot @type ")))
 (global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @wn ")))

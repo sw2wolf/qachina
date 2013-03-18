@@ -7,22 +7,19 @@
              `(-> (-> ,initial ,first) ,@(rest args))))))
  
 ->
-CL-USER> (-> 10
-               (+ 20)
-               (+ 40)
-               (/ 10))
+CL-USER> (-> 10 (+ 20) (+ 40) (/ 10))
  
-(ql:quickload :infix-dollar-reader)
-(syntax:use-syntax :infix-dollar)
-(= (+ 1 2 $ * 3 4 $ + 5 6) (+ 1 2 (* 3 4 (+ 5 6)))) ; => T
- 
-Implementation is as below;
+;(ql:quickload :infix-dollar-reader)
+;(syntax:use-syntax :infix-dollar)
+
+(set-macro-character #\$ 'infix-dollar-reader)
 (defun infix-dollar-reader (stream char)
     (declare (ignore char))
     (let* ((lp-reader (get-macro-character #\())
            (entity (funcall lp-reader stream #\()) )
       (unread-char #\) stream)
       entity ))
+(= (+ 1 2 $ * 3 4 $ + 5 6) (+ 1 2 (* 3 4 (+ 5 6)))) ; => T
 
 (dolist (x '(1 2 3)) (print x) (if (evenp x) (return)))   ;通过return截断了循环
 
@@ -44,8 +41,6 @@ Implementation is as below;
        (first (parse-integer string :end space-position))
        (second (parse-integer string :start (1+ space-position)))
        (* first second)))
-
-(parse-integer "123")
 
 (defun infinite-loop () (loop :until *nil*))
 (loop :repeat n :for x :from 0 :collect (* 2 x))
