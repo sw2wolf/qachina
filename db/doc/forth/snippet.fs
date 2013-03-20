@@ -1,11 +1,14 @@
-5 0 DO I . LOOP
+: range ( n -- )
+  0 DO I . LOOP ;
 
 Will print
-0 1 2 3 4
+0 1 2 3 4 ... n-1
 
 The way this works is:
-DO moves the index (0) and the control (5) over to the loop stack.
+
+DO moves the index (0) and the control (n) over to the loop stack.
 I copies the top of the loop stack to the data stack.
+
 LOOP increments the index (top of loop stack). If the index is less than the control (one below the top of loop stack), then it reruns the commands from DO back to LOOP. If the index is >=, then it pops the index and control from the loop stack, and control resumes as normal.
 
 \
@@ -58,9 +61,4 @@ st empty? .  \ -1 (true)
 : factorial  ( n -- n! )  recursive
     dup 1 >  if dup 1- factorial  *  then
 ;
-
-: test 0  begin  dup .  1+  dup 5 =  until ; \ 0 1 2 3 4
-
-: test 7 2  do  9 .  loop ; \ 9 9 9 9 9
-
 

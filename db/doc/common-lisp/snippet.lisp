@@ -228,6 +228,7 @@ CL-USER> (-> 10 (+ 20) (+ 40) (/ 10))
                 ((:four #\v) 'clause4)
                 ((t) 'tslot)
                 (otherwise 'others))))
+
 (defvar *tmp-test-directory*
     #+(or :win32 :mswindows) #p"c:\\hunchentoot-temp\\test\\"
     #-(or :win32 :mswindows) #p"/tmp/hunchentoot/test/")

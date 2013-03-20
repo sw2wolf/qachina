@@ -98,11 +98,13 @@ THING is a string or a symbol.")
 
 (defun winG (qty pb ps)
 "算股票盈利"
-  (- (* qty ps (- 1 SXF YHS)) (* 2 GHF) (* qty pb (+ 1 SXF))))
+  (format t "You win: ~$~%"
+		  (- (* qty ps (- 1 SXF YHS)) (* 2 GHF) (* qty pb (+ 1 SXF)))))
 
 (defun winQ (qty pb ps)
 "算权证盈利"
-  (- (* qty ps (- 1 SXF)) (* 2 GHF) (* qty pb (+ 1 SXF))))
+  (format t "You win: ~$~%"
+		  (- (* qty ps (- 1 SXF)) (* 2 GHF) (* qty pb (+ 1 SXF)))))
 
 (defun stopLoss (qty pb &optional (lossRate 0.02))
 "止损价"
@@ -187,6 +189,16 @@ the process with the next item (~})."
         ((or (and (= red 4) (= blue 0)) (and (= red 3) (= blue 1))) (setf res "Fifth(10)"))
         ((= blue 1) (setf res "Sixth(5)")))
     res))
+
+;; (defun hit-desc-1 (red blue)
+;;   (case `(,red ,blue)
+;; 	((6 1) "First")
+;; 	((6 0) "Second")
+;; 	((5 1) "Third(3000)")
+;; 	((or (5 0) (4 1)) "Fourth(200)")
+;; 	((or (4 0) (3 1)) "Fifth(10)")
+;; 	((_ 1) "Sixth(5)")
+;; 	(otherwise "X")))
 
 (defun his () (sh (concatenate 'string "tail " +ssq-hit-num+)))
 
