@@ -24,6 +24,10 @@
 
 ;(global-set-key "\C-x\C-m" 'execute-extended-command)
 
+(defun qachina ()
+  (interactive)
+  (async-shell-command "cd /media/D/qachina && ./start.bat" "*QA-China*"))
+
 (defun haskell ()
   (interactive)
   (run-caml "~/bin/hs"))
@@ -68,8 +72,10 @@
 (global-set-key (kbd "<f2>") 'open-shell-other-buffer)
 (global-set-key (kbd "<f3>") 'find-file-at-point)
 (global-set-key (kbd "<f4>") 'describe-char)
+
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert #x3bb)))
-(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert "/msg lambdabot @hoogle ")))
+(global-set-key (kbd "<f5>") '(lambda () (interactive) (slime-connect "127.0.01" 4005)))
+
 (global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "/msg lambdabot > ")))
 (global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "/msg lambdabot @type ")))
 (global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @wn ")))

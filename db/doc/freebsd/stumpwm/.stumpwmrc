@@ -260,7 +260,9 @@ used for matching windows with run-or-raise or window placement
 (defun my-start-hook ()
     ;(run-shell-command "xsetroot -solid black")
     ;(run-shell-command "fcitx")
-    (vsplit "2/5") (move-focus :down))
+    (vsplit "2/5") (move-focus :down)
+	(run-commands "gselect 2"))
+
 (replace-hook *start-hook* 'my-start-hook)
 
 (defvar *swank-p* nil)
