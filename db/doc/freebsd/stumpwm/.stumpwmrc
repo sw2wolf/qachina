@@ -145,6 +145,7 @@ used for matching windows with run-or-raise or window placement
     (run-shell-command "wine \"c:/Program Files/eweiqi/LiveBaduk.exe\" &"))
 
 (defcommand winxp () ()
+	(run-commands "gselect 2")
     (run-shell-command "VBoxManage startvm winxp &"))
 
 (defcommand emacs () ()

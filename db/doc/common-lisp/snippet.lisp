@@ -1,3 +1,7 @@
+(let ((y 2)) (compile 'my-operator `(lambda (x) (+ x ,y))))
+>(my-operator 1000)
+1002
+
 (defmacro -> (initial &rest args)
     (let ((first (first args)))
       (cond ((null args) initial)
