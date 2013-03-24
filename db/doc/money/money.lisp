@@ -48,6 +48,11 @@
         (software-type) (software-version)
         (lisp-implementation-type) (lisp-implementation-version )))
 
+(declaim (inline whitespacep))
+(defun whitespacep (c)
+  "Checks whether C is a whitespace character."
+  (find c '(#\Space #\Tab #\Newline #\Linefeed #\Return #\Page)))
+
 ;;; misc
 (defgeneric assoc* (thing alist)
     (:documentation "Similar to CL:ASSOC, but 'does the right thing' if
@@ -58,7 +63,6 @@ THING is a string or a symbol.")
         (assoc thing alist :test #'string-equal))
     (:method (thing alist)
         (assoc thing alist :test #'eql)))
-
 
 (defun qachina ()
     (let ((cmd "cd /media/D/qachina; ./start.bat"))

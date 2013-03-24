@@ -1,3 +1,15 @@
+;require.  it is not very portable. rather, write yourself a trivial asdf system definition or  use ql:quickload
+(load "/home/yuri/quicklisp/setup.lisp")
+(require 'cl-base64)
+(require 'asdf-utils)
+(require 'cxml)
+(require 'xpath)
+
+(defparameter *xml* (cxml:parse #p"minicular.tmx" (cxml-xmls:make-xmls-builder)))
+(let ((xpath:*navigator* (cxml-xmls:make-xpath-navigator)))
+  (print (xpath:evaluate "map" *xml*)))
+;(ql:quickload :cxml-stp)
+
 (let ((y 2)) (compile 'my-operator `(lambda (x) (+ x ,y))))
 >(my-operator 1000)
 1002
@@ -325,11 +337,6 @@ DOUBLE-FLOAT
                (eql char #\.)))
          string)
 
-(declaim (inline whitespacep))
-(defun whitespacep (c)
-  "Checks whether C is a whitespace character."
-  (find c '(#\Space #\Tab #\Newline #\Linefeed #\Return #\Page)))
-
 (defun rfc-1123-date (&optional (time (get-universal-time)))
   "Generates a time string according to RFC 1123.  Default is current time."
   (multiple-value-bind
@@ -347,10 +354,10 @@ DOUBLE-FLOAT
 (reduce #'max index-value-list :key #'car :initial-value -1)
 
 (loop with buf = (make-array +buffer-length+ :element-type 'octet)
-              for pos = (read-sequence buf file)
-              until (zerop pos)
-              do (write-sequence buf out :end pos)
-                 (finish-output out))
+      for pos = (read-sequence buf file)
+      until (zerop pos)
+      do (write-sequence buf out :end pos)
+         (finish-output out))
 
 (map '(vector (unsigned-byte 8) *) 'char-code "abc123")
 =>#(97 98 99 49 50 51)
