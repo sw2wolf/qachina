@@ -51,14 +51,20 @@
 ;; 按下C-x k立即关闭掉当前的buffer
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
-(defun open-shell-other-buffer ()
-  "Open a shell in other buffer"
+(defun jump-open-shell ()
   (interactive)
   (if (get-buffer "*ansi-term*")
 	  (switch-to-buffer "*ansi-term*")
 	  (ansi-term "csh"))
   ;(let ((proc (start-process "cmd" nil "cmd.exe" "/C" "start" "cmd.exe")))
   ;(set-process-query-on-exit-flag proc nil))
+)
+
+(defun jump-open-slime-repl ()
+  (interactive)
+  (if (get-buffer "*slime-repl clisp*")
+	  (switch-to-buffer-other-window "*slime-repl clisp*")
+	  (slime-connect "127.0.01" 4005))
 )
 
 (global-set-key (kbd "M-j")
@@ -68,12 +74,12 @@
 
 (require 'thingatpt)
 (global-set-key (kbd "<f1>") 'forward-whitespace)
-(global-set-key (kbd "<f2>") 'open-shell-other-buffer)
+(global-set-key (kbd "<f2>") 'jump-open-shell)
 (global-set-key (kbd "<f3>") 'find-file-at-point)
 (global-set-key (kbd "<f4>") 'describe-char)
 
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert #x3bb)))
-(global-set-key (kbd "<f5>") '(lambda () (interactive) (slime-connect "127.0.01" 4005)))
+(global-set-key (kbd "<f5>") 'jump-open-slime-repl)
 
 (global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "/msg lambdabot > ")))
 (global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "/msg lambdabot @type ")))

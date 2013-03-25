@@ -71,6 +71,8 @@ THING is a string or a symbol.")
         #+ccl (process-run-function "qachina" #'(lambda () (sh cmd)))
         #-(or ecl ccl clisp) (sh cmd)))
 
+(defun sd (word) (sh (concatenate 'string "sdcv -n " word)))
+
 (defun fac (n) (reduce #'* (loop for i from 1 to n  collect i)))
 
 (defun fab (n) 
@@ -88,7 +90,7 @@ THING is a string or a symbol.")
 (defun perfectp (n)
   (= n (loop for i from 1 below n when (= 0 (mod n i)) sum i)))
 
-(defun perfect-number (s e) 
+(defun perfect-numbers (s e) 
 "Perfect Number"
     (loop for i from s to e 
         when (perfectp i) collect i))

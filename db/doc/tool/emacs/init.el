@@ -2,6 +2,7 @@
 (add-to-list 'load-path "~/.emacs.d/clojure-mode")
 (add-to-list 'load-path "~/.emacs.d/ocaml-mode")
 (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-2.6.8/emacs/")
+(add-to-list 'load-path "~/.emacs.d/git-emacs")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ELPA;;;;;;;;;;;;;;
 ;; (when (equal emacs-major-version 24)
@@ -15,18 +16,21 @@
 (load "init-erc")
 (load "init-dict")
 (load "init-slime")
-(load "init-prolog")
-(load "init-haskell")
+
+;(load "init-prolog")
+;(load "init-haskell")
 ;(load "init-ruby")
 ;(load "init-clojure")
 ;(load "init-racket")
 ;(load "init-forth")
-(require 'erlang-start)
-(require 'ocaml)
-;(load "init-eshell")
 
+;(require 'erlang-start)
+;(require 'ocaml)
+;(require 'git-emacs)
+
+;(load "init-eshell")
 ;(load "init-emms")
-(load "init-radio")
+;(load "init-radio")
 
 (setq shell-file-name "/bin/csh")
 
