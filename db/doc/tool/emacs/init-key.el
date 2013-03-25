@@ -60,12 +60,21 @@
   ;(set-process-query-on-exit-flag proc nil))
 )
 
+(defun find-buffer (buff)
+  (find-if (lambda (buff)
+			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list)))
+
 (defun jump-open-slime-repl ()
   (interactive)
-  (if (get-buffer "*slime-repl clisp*")
-	  (switch-to-buffer-other-window "*slime-repl clisp*")
-	  (slime-connect "127.0.01" 4005))
-)
+  (let ((repl (find-if (lambda (buff)
+			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))))
+  (if repl
+	  (switch-to-buffer-other-window (buffer-name repl))
+	  (slime-connect "127.0.01" 4005))))
+
+;; (remove-if-not (lambda (buff)
+;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
+;; (some (lambda (buff) (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))
 
 (global-set-key (kbd "M-j")
     (lambda ()
