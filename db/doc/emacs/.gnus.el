@@ -1,6 +1,6 @@
 (setq gnus-select-method '(nntp "news.newsfan.net"))
 (setq user-full-name "sw2wolf") 
-(setq user-mail-address "czsq888@163.com")
+(setq user-mail-address "*********")
 
 ;;;;;;;;;;;;;;;;;;;;  
 ;;   语言环境设定  
@@ -29,7 +29,7 @@
 (setq gnus-posting-styles  
       '((".*"  
      (name "sw2wolf")
-     (address "czsq888@163.com")
+     (address "*********")
      (signature "e^pi+1=0")
      )))
 
@@ -39,16 +39,16 @@
 ;; set pop server 
 (setq mail-sources 
 	  '((pop :server "pop.163.com"   ;; 在这里设置 pop3 服务器
-             :user "czsq888@163.com"     ;; 用户名
+             :user "*********"     ;; 用户名
              :port "pop3"
-             :password "zc1023")))        ;; 密码
+             :password "*********")))        ;; 密码
 
 ;; set smtp 
 (setq smtpmail-auth-credentials 
     '(("smtp.163.com"                ;; SMTP 服务器
        25                                   ;; 端口号
-       "czsq888@163.com"                 ;; 用户名
-       "zc1023")))                    ;; 密码
+       "*********"                 ;; 用户名
+       "*********")))                    ;; 密码
 
 (setq smtpmail-default-smtp-server "smtp.163.com") 
 (setq smtpmail-smtp-server "smtp.163.com") 
