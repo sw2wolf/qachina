@@ -431,6 +431,7 @@ STOP  Stops single-stepping.
         ,@(loop for a in '(r z x)
             collect `(incf ,a)))
     (list r z x))
+
 (with-accessors ((r foo-bar) (z foo-baz) (x foo-qux))
     (make-foo :bar 1 :baz 2 :qux 3)
     `(progn
