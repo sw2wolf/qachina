@@ -564,12 +564,10 @@ STOP  Stops single-stepping.
             (let ((client (gethash socket connections)))
                 (awhen (client-read client socket)
                 (send-to-workers server (curry #'client-on-command client it)))))))
-
 (defmacro awhen (cond &body body)
   `(let ((it ,cond))
        (when it
               ,@body)))
-
 (defun curry (fun &rest args1)
   (lambda (&rest args2)
       (apply fun (append args1 args2))))
@@ -656,19 +654,6 @@ chosen, resignal the error."
 (check-type secs (real 0 *))
 (check-type repeat (or null (real 0 *)))
 (check-type function (or function symbol))
-
-(let ((timer (make-timer
-                :repeat repeat
-                :function function
-                :args args)))
-    (schedule-timer timer secs)
-    (setf *timer-list* (sort-timers (cons timer *timer-list*)))
-    timer)
-(defun schedule-timer (timer when)
-  (setf (timer-time timer) (+ (get-internal-real-time)
-                              (* when internal-time-units-per-second))))
-
-(now (/ (get-internal-real-time) internal-time-units-per-second))
 
 (defun grep (regexp filename)
     (with-open-file (stream filename)

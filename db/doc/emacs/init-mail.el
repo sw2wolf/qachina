@@ -6,13 +6,13 @@
 (setq mew-config-alist 
 '(("default" 
     ("name" . "多行") 
-    ("user" . "z_axis") 
+    ("user" . "sw2wolf") 
     ("mail-domain" . "163.com") 
     ("pop-server" . "pop3.163.com") 
     ("pop-port" . "110") 
-    ("pop-user" . "z_axis") 
-    ("pop-auth" . "zmath999") 
+    ("pop-user" . "sw2wolf") 
+    ("pop-auth" . "*********") 
     ("smtp-server" . "smtp.163.com") 
     ("smtp-port" . "25") 
-    ("smtp-user" . "z_axis") 
+    ("smtp-user" . "sw2wolf") 
     ("smtp-auth-list" . ("CRAM-MD5" "LOGIN" "PLAIN")))))
