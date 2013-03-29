@@ -1,9 +1,3 @@
-;require.  it is not very portable. rather, write yourself a trivial asdf system definition or  use ql:quickload
-(load "/home/yuri/quicklisp/setup.lisp")
-(require 'cl-base64)
-(require 'asdf-utils)
-(require 'cxml)
-(require 'xpath)
 
 (defparameter *xml* (cxml:parse #p"minicular.tmx" (cxml-xmls:make-xmls-builder)))
 (let ((xpath:*navigator* (cxml-xmls:make-xpath-navigator)))
@@ -723,11 +717,11 @@ chosen, resignal the error."
 (make-pathname :defaults *contrib-dir*
    		       :name :wild
 			   :type "lisp")
-
 (load (make-pathname :host (pathname-host *base-dir*)
 		     :device (pathname-device *base-dir*)
 		     :directory (append (pathname-directory *base-dir*) (list "contrib"))
 		     :name "asdf" :type "lisp"))
+
 ;It uses the nice 2-complement facts that bit-anding a number and its opposite returns the least significant set bit
 ;and that bit-anding a number and one less than the number zeroes this least significant set bit.
 (defmacro do-bits ((var x) &rest body)
@@ -813,19 +807,20 @@ MY-FOO
         stumpwm-system::*components*))
   :epilogue-code '(unwind-protect (stumpwm:stumpwm) (ext:quit)))
 
-CL-USER> (let* ((string "Hello World!")
-                (c-string (cffi:foreign-funcall "strdup" :string string :pointer)))
-            (unwind-protect (write-line (cffi:foreign-string-to-lisp c-string))
-                (cffi:foreign-funcall "free" :pointer c-string :void))
-            (values))
+(let* ((string "Hello World!")
+       (c-string (cffi:foreign-funcall "strdup" :string string :pointer)))
+  (unwind-protect
+	   (write-line (cffi:foreign-string-to-lisp c-string))
+       (cffi:foreign-funcall "free" :pointer c-string :void))
+  (values))
 Hello World!
 
-CL-USER> (cffi:load-foreign-library "libX11.so")
+(cffi:load-foreign-library "libX11.so")
 #<CFFI::FOREIGN-LIBRARY {1004F4ECC1}>
-CL-USER> (cffi:foreign-funcall "XOpenDisplay"
-            :string #+sbcl (sb-posix:getenv "DISPLAY")
-            #-sbcl ":0.0"
-            :pointer)
+(cffi:foreign-funcall "XOpenDisplay"
+					  :string #+sbcl (sb-posix:getenv "DISPLAY")
+					  #-sbcl ":0.0"
+					  :pointer)
 #.(SB-SYS:INT-SAP #X00650FD0)
 
 (with-open-file (file "/home/simkoc/test.pdf"
@@ -849,7 +844,8 @@ CL-USER> (cffi:foreign-funcall "XOpenDisplay"
              (let ((command-line (read-delimited-list #\] stream t)))
                   (list 'ext:run-program (princ-to-string (car command-line))
                          :arguments `',(mapcar #'princ-to-string (rest command-line))))
-                   (setf (readtable-case *readtable*) :upcase))))
+             (setf (readtable-case *readtable*) :upcase))))
+
 ;clisp -K full -i somefile.fas
 clisp -K full -x "(load \"asdf.lisp\") (load \"stumpwm.asd\") (load \"/usr/share/common-lisp/systems/cl-ppcre.asd\") (asdf:operate 'asdf:load-op :stumpwm) (stumpwm::stumpwm)"
 
@@ -881,9 +877,7 @@ clisp -K full -x "(load \"asdf.lisp\") (load \"stumpwm.asd\") (load \"/usr/share
 				   :address-family :internet
 				   :type :stream
 				   :ipv6 nil)))
-
     (format t "Created socket: ~A[fd=~A]~%" server (socket-os-fd server))
-
     (bind-address server 
 		  (or (acceptor-address acceptor) 
 			     +ipv4-unspecified+) 

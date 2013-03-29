@@ -40,9 +40,11 @@
   (interactive)
   (async-shell-command "~/bin/yw" "*erlang*"))
 
-(defun prolog ()
+(defun jump-open-prolog ()
   (interactive)
-  (async-shell-command "~/bin/pl" "*swi-prolog*"))
+  (if (get-buffer "*swi-prolog*")
+	  (switch-to-buffer-other-window "*swi-prolog*")
+	  (async-shell-command "~/bin/pl" "*swi-prolog*")))
 
 (defun ocaml ()
   (interactive)
@@ -89,10 +91,11 @@
 
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert #x3bb)))
 (global-set-key (kbd "<f5>") 'jump-open-slime-repl)
+(global-set-key (kbd "<f6>") 'jump-open-prolog)
 
-(global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "/msg lambdabot > ")))
-(global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "/msg lambdabot @type ")))
-(global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @wn ")))
+;(global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "/msg lambdabot > ")))
+;(global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "/msg lambdabot @type ")))
+;(global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @wn ")))
 ; > @src @where
 
 (global-set-key [(f9)] 'list-bookmarks)
