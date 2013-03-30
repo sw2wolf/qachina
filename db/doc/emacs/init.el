@@ -17,7 +17,7 @@
 (load "init-dict")
 (load "init-slime")
 
-;(load "init-prolog")
+(load "init-prolog")
 ;(load "init-haskell")
 ;(load "init-ruby")
 ;(load "init-clojure")

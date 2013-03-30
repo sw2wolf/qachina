@@ -1,4 +1,8 @@
 
+phrase(utf8_codes("é"), L),
+   phrase(utf8_codes(L), L2),
+   forall(member(C,L2), format(' ~8r', [C])).
+
 %------
 :- meta_predicate
 	monitor(0, +, -).
