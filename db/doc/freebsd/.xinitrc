@@ -48,12 +48,8 @@ case $1 in
         #xterm -geometry 159x25+0+438 -e ~/bin/tmuxz &
         #exec /usr/local/bin/dwm
         #;;
-	xmonad)
-        exec xmonad
-        ;;
-	ecl)
-	    #/usr/local/etc/rc.d/musicpd onestart
-        exec $HOME/bin/stumpwm-ecl
+	clisp)
+		exec $HOME/bin/stumpwm-clisp
         ;;
     sbcl)
 	    /usr/local/etc/rc.d/musicpd onestart
@@ -64,6 +60,6 @@ case $1 in
         exec $HOME/bin/stumpwm-ccl
         ;;
     *)
-   		exec $HOME/bin/stumpwm-clisp
+		exec xmonad
         ;;
 esac
