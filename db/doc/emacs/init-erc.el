@@ -10,7 +10,7 @@
 		   erc-port "6667"
 
            erc-autojoin-channels-alist 
-		   '(("freenode.net" "#freebsd" "#openbsd" "#lisp" "#emacs" "#haskell")
+		   '(("freenode.net" "#freebsd" "#openbsd" "#lisp" "#xmonad" "#haskell")
 			 ("oftc.net" "#emacs-cn"))
 
            erc-keywords '("lisp" "racket" "haskell")

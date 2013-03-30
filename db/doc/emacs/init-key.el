@@ -94,8 +94,8 @@
 (global-set-key (kbd "<f6>") 'jump-open-prolog)
 
 ;(global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "/msg lambdabot > ")))
-;(global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "/msg lambdabot @type ")))
-;(global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @wn ")))
+(global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "/msg lambdabot @type ")))
+(global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @wn ")))
 ; > @src @where
 
 (global-set-key [(f9)] 'list-bookmarks)

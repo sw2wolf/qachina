@@ -18,7 +18,7 @@
 (load "init-slime")
 
 (load "init-prolog")
-;(load "init-haskell")
+(load "init-haskell")
 ;(load "init-ruby")
 ;(load "init-clojure")
 ;(load "init-racket")
@@ -29,8 +29,8 @@
 ;(require 'git-emacs)
 
 ;(load "init-eshell")
-;(load "init-emms")
-;(load "init-radio")
+(load "init-emms")
+(load "init-radio")
 
 (setq shell-file-name "/bin/csh")
 
