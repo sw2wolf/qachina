@@ -22,25 +22,19 @@
 (global-set-key (kbd "C-<up>")    'windmove-up)
 (global-set-key (kbd "C-<down>")  'windmove-down)
 
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+(global-set-key (kbd "M-j") (lambda () (interactive) (join-line -1)))
 ;(global-set-key "\C-x\C-m" 'execute-extended-command)
 
 (defun qachina ()
   (interactive)
   (async-shell-command "cd /media/D/qachina && ./start.bat" "*QA-China*"))
 
-(defun haskell ()
-  (interactive)
-  (run-caml "~/bin/hs"))
-
-(defun clisp ()
-  (interactive)
-  (async-shell-command "clisp -q -modern -ansi" "*clisp*"))
-
 (defun erlang ()
   (interactive)
   (async-shell-command "~/bin/yw" "*erlang*"))
 
-(defun jump-open-prolog ()
+(defun prolog ()
   (interactive)
   (if (get-buffer "*swi-prolog*")
 	  (switch-to-buffer-other-window "*swi-prolog*")
@@ -50,10 +44,13 @@
   (interactive)
   (run-caml "~/bin/ml"))
 
-;; 按下C-x k立即关闭掉当前的buffer
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
+(defun jump-run-haskell ()
+  (interactive)
+  (if (get-buffer "*ghci*")
+	  (switch-to-buffer-other-window "*ghci*")
+	  (async-shell-command "~/bin/hs" "*ghci*")))
 
-(defun jump-open-shell ()
+(defun jump-run-shell ()
   (interactive)
   (if (get-buffer "*ansi-term*")
 	  (switch-to-buffer "*ansi-term*")
@@ -62,11 +59,17 @@
   ;(set-process-query-on-exit-flag proc nil))
 )
 
+(defun jump-run-clisp ()
+  (interactive)
+  (if (get-buffer "*clisp*")
+	  (switch-to-buffer-other-window "*clisp*")
+	  (async-shell-command "clisp -q -modern -ansi" "*clisp*")))
+
 (defun find-buffer (buff)
   (find-if (lambda (buff)
 			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list)))
 
-(defun jump-open-slime-repl ()
+(defun jump-run-slime-repl ()
   (interactive)
   (let ((repl (find-if (lambda (buff)
 			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))))
@@ -78,20 +81,16 @@
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
 ;; (some (lambda (buff) (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))
 
-(global-set-key (kbd "M-j")
-    (lambda ()
-	  (interactive)
-      (join-line -1)))
 
 (require 'thingatpt)
 (global-set-key (kbd "<f1>") 'forward-whitespace)
-(global-set-key (kbd "<f2>") 'jump-open-shell)
+(global-set-key (kbd "<f2>") 'jump-run-shell)
 (global-set-key (kbd "<f3>") 'find-file-at-point)
 (global-set-key (kbd "<f4>") 'describe-char)
 
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert #x3bb)))
-(global-set-key (kbd "<f5>") 'jump-open-slime-repl)
-(global-set-key (kbd "<f6>") 'jump-open-prolog)
+(global-set-key (kbd "<f5>") 'jump-run-clisp)
+(global-set-key (kbd "<f6>") 'jump-run-haskell)
 
 ;(global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "/msg lambdabot > ")))
 (global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "/msg lambdabot @type ")))
@@ -100,13 +99,13 @@
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)
-;(global-set-key [(f12)] 'desktop-save)
 
 ;; (global-set-key [f11] 'my-maximized) 
 ;; (defun my-maximized () 
 ;;     (interactive) 
 ;;     (x-send-client-message nil 0 nil "_NET_WM_STATE" 32 '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
 ;;     (x-send-client-message nil 0 nil "_NET_WM_STATE" 32 '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0)))
+;(global-set-key [(f12)] 'desktop-save)
 
 (require 'ibuffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
