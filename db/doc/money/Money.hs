@@ -37,8 +37,8 @@ catchAny = Exception.catch
 
 qachina :: IO ()
 qachina = do
-    putStrLn "Running qachina..."
-    runCommand "mighty mighty.conf mighty.route"
+    -- putStrLn "Running qachina..."
+    -- runCommand "mighty mighty.conf mighty.route"
     return ()
     --pid <- runCommand "mighty mighty.conf mighty.route"
     --waitForProcess pid >>= exitWith

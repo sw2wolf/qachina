@@ -15,7 +15,7 @@
 
 :- load_files([ qachina(test_web) ], [ silent(true) ]).
 
-%:- initialization set_random(seed(111)).
+%:- initialization set_random(seed(888)).
 
 sxf(0.0015).
 yhs(0.001).
@@ -76,7 +76,7 @@ win_ssq(Count, NoRedStr, NoBlueStr) :-
 	atom2lst(NoBlueStr, NoBlue),
 	numlist(1,33,R), subtract(R,NoRed,YesR),
 	numlist(1,16,B), subtract(B,NoBlue,YesB),
-%set_random(seed(111)),
+	set_random(seed(888)),
 	pick_nums(Count,YesB,OkB),
 	pick_red(Count,YesR,OkB,X), length(X,Count), !,
 	maplist(writeln,X),

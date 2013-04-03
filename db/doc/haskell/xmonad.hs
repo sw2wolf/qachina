@@ -1,7 +1,7 @@
 import qualified Data.Map as M
 import System.IO
 --import Graphics.X11.Xlib
-import Data.Char (isSpace)
+--import Data.Char (isSpace)
 
 import XMonad
 import qualified XMonad.StackSet as W 
@@ -54,6 +54,7 @@ main = do
       , terminal = "xterm"
       , modMask  = mod4Mask
       , focusFollowsMouse  = False
+      --, clickToFocus = True
       , startupHook = myStartupHook
         --, logHook = myLogHook dzenTopBar
         --, logHook = myLogHook xmobar
@@ -189,7 +190,7 @@ myKeys = let modm = mod4Mask in
     --, ((modm .|. shiftMask, xK_Print), spawn "sleep 0.2; scrot -s")
     , ((modm, xK_Print), spawn "scrot '/tmp/%Y-%m-%d_%H:%M:%S_$wx$h_scrot.png' -e 'mv $f ~'")
     , ((modm, xK_k), kill)
-    , ((modm, xK_space), scratchpadSpawnActionCustom "xterm -name scratchpad")
+    , ((modm, xK_space), scratchpadSpawnActionCustom "xterm -name scratchpad -e pl")
 
     -- Window Navigation
     , ((modm, xK_Right), sendMessage $ Go R)

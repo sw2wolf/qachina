@@ -1,6 +1,20 @@
 
 ---------
 
+import Data.Vector.Unboxed as U
+ 
+sumSqrV :: U.Vector Int -> Int
+sumSqrV = U.sum . U.map (^2) . U.filter odd
+
+---------
+
+fib :: Int -> Int
+fib n = fib' !! n where
+    fib' :: [Int]
+    fib' = 0 : 1 : zipWith (+) fib' (tail fib')
+
+---------
+
 import XMonad
 import XMonad.Actions.Volume
 import XMonad.Util.Dzen
