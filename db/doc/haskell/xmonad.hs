@@ -31,7 +31,7 @@ import XMonad.Prompt
 import XMonad.Prompt.RunOrRaise (runOrRaisePrompt)
 
 import XMonad.Util.Run
-import XMonad.Util.EZConfig(additionalKeys)
+import XMonad.Util.EZConfig
 import XMonad.Util.WindowProperties (getProp32s)
 import XMonad.Util.Scratchpad
 
@@ -61,6 +61,7 @@ main = do
       , logHook = myLogHook
       , layoutHook = showWName myLayout
    } `additionalKeys` myKeys
+     `removeMouseBindings` [(mod4Mask,button1), (mod4Mask,button2), (mod4Mask,button3)]
 
 myStartupHook :: X ()
 myStartupHook = do 
