@@ -7,7 +7,7 @@ echo "please choose WM(1/2)"
 echo "----------------------"
 echo "1:stumpwm-ccl"
 echo "2:stumpwm-clisp"
-echo "3:stumpwm-sbcl"
+echo "3:xmonad"
 echo "9:console"
 echo "----------------------"
 
@@ -20,10 +20,10 @@ switch ($req)
         xinit clisp
         breaksw
     case [3]:
-		xinit sbcl
+		xinit xmonad
 		breaksw
 	case [9]:
-		breaksw
+        breaksw
     default:
 		xinit
 		breaksw
