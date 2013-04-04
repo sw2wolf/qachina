@@ -1,3 +1,9 @@
+---------
+
+---------
+
+@undo [y | x <- xs, y <- f x]
+<lambdabot> concatMap (\ x -> concatMap (\ y -> [y]) f x) xs
 
 ---------
 

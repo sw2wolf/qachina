@@ -181,6 +181,7 @@ used for matching windows with run-or-raise or window placement
 
 (defkeys-top
     ("s-w" "browse")
+	("s-e" "emacs")
     ;("s-p" "exec /home/sw2wolf/bin/dmenu.sh")
 	("s-p" "menu")
     ("s-t" "exec xterm -g 159x25+0+438")

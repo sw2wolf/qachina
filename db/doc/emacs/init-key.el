@@ -34,15 +34,21 @@
   (interactive)
   (async-shell-command "~/bin/yw" "*erlang*"))
 
-(defun prolog ()
+(defun ocaml ()
+  (interactive)
+  (run-caml "~/bin/ml"))
+
+(defun jump-run-guile ()
+  (interactive)
+  (if (get-buffer "*guile*")
+	  (switch-to-buffer-other-window "*guile*")
+	  (async-shell-command "~/bin/g" "*guile*")))
+
+(defun jump-run-prolog ()
   (interactive)
   (if (get-buffer "*swi-prolog*")
 	  (switch-to-buffer-other-window "*swi-prolog*")
 	  (async-shell-command "~/bin/pl" "*swi-prolog*")))
-
-(defun ocaml ()
-  (interactive)
-  (run-caml "~/bin/ml"))
 
 (defun jump-run-haskell ()
   (interactive)
@@ -86,13 +92,14 @@
 (global-set-key (kbd "<f1>") 'forward-whitespace)
 (global-set-key (kbd "<f2>") 'jump-run-shell)
 (global-set-key (kbd "<f3>") 'find-file-at-point)
-(global-set-key (kbd "<f4>") 'describe-char)
 
+;(global-set-key (kbd "<f4>") 'describe-char)
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert #x3bb)))
-(global-set-key (kbd "<f5>") 'jump-run-clisp)
-(global-set-key (kbd "<f6>") 'jump-run-haskell)
 
-;(global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "/msg lambdabot > ")))
+(global-set-key (kbd "<f4>") 'jump-run-guile)
+(global-set-key (kbd "<f5>") 'jump-run-slime-repl)
+(global-set-key (kbd "<f6>") 'jump-run-prolog)
+
 (global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "/msg lambdabot @type ")))
 (global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @wn ")))
 ; > @src @where
