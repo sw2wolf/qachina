@@ -29,6 +29,9 @@ import XMonad.Layout.ShowWName
 
 import XMonad.Prompt
 import XMonad.Prompt.RunOrRaise (runOrRaisePrompt)
+--import XMonad.Prompt.Eval
+
+--import XMonad.Actions.Eval
 
 import XMonad.Util.Run
 import XMonad.Util.EZConfig
@@ -198,6 +201,8 @@ myKeys = let modm = mod4Mask in
     , ((modm, xK_Left ), sendMessage $ Go L)
     , ((modm, xK_Up   ), sendMessage $ Go U)
     , ((modm, xK_Down ), sendMessage $ Go D)
+
+    --, ((modm, xK_x), evalPrompt defaultEvalConfig myXPConfig)
 
     -- swap...
     , ((modm .|. controlMask, xK_Right), sendMessage $ Swap R)
