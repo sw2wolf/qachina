@@ -93,10 +93,9 @@
 (global-set-key (kbd "<f2>") 'jump-run-shell)
 (global-set-key (kbd "<f3>") 'find-file-at-point)
 
-;(global-set-key (kbd "<f4>") 'describe-char)
+(global-set-key (kbd "<f4>") 'describe-char)
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert #x3bb)))
 
-(global-set-key (kbd "<f4>") 'jump-run-guile)
 (global-set-key (kbd "<f5>") 'jump-run-slime-repl)
 (global-set-key (kbd "<f6>") 'jump-run-prolog)
 
