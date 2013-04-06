@@ -4,19 +4,14 @@
 (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-2.6.8/emacs/")
 (add-to-list 'load-path "~/.emacs.d/git-emacs")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ELPA;;;;;;;;;;;;;;
-;; (when (equal emacs-major-version 24)
-;;   (load "package")
-;;   (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-;;   (package-initialize)
-;; )
-
 (load "init-base")
 (load "init-key")
+(load "init-package")
+
 (load "init-erc")
 (load "init-dict")
-(load "init-slime")
 
+(load "init-slime")
 (load "init-prolog")
 (load "init-haskell")
 ;(load "init-ruby")
