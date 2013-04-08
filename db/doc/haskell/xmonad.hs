@@ -174,7 +174,7 @@ largeXPConfig = myXPConfig
                 }
 -- }}}
 
-emacs = "emacs -geometry 176x33+0+376"
+emacs = "emacs -geometry 176x34+0+369"
 xterm="xterm -geometry 159x25+0+438"
 eweiqi="wine \"c:/Program Files/eweiqi/LiveBaduk.exe\""
 winxp="VBoxManage startvm winxp"
