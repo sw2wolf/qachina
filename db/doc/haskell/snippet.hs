@@ -1,6 +1,19 @@
 ---------
 
 ---------
+-- | Launch an external application through the system shell and return a @Handle@ to its standard input.
+spawnPipe :: MonadIO m => String -> m Handle
+spawnPipe x = io $ do
+    (rd, wr) <- createPipe
+    setFdOption wr CloseOnExec True
+    h <- fdToHandle wr
+    hSetBuffering h LineBuffering
+    _ <- xfork $ do
+          _ <- dupTo rd stdInput
+          executeFile "/bin/sh" False ["-c", encodeString x] Nothing
+    closeFd rd
+    return h
+---------
 
 @undo [y | x <- xs, y <- f x]
 <lambdabot> concatMap (\ x -> concatMap (\ y -> [y]) f x) xs

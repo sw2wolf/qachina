@@ -1,3 +1,3 @@
 #!/bin/sh
-ghc -fllvm -o hello xmonad.hs
-strip -p --strip-unneeded --remove-section=.comment -o hello-small hello
+ghc -fllvm xmonad.hs
+strip -p --strip-unneeded --remove-section=.comment -o xmonad-small xmonad

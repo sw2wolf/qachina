@@ -60,7 +60,7 @@
   (interactive)
   (if (get-buffer "*ansi-term*")
 	  (switch-to-buffer "*ansi-term*")
-	  (ansi-term "csh"))
+	  (ansi-term 'csh))
   ;(let ((proc (start-process "cmd" nil "cmd.exe" "/C" "start" "cmd.exe")))
   ;(set-process-query-on-exit-flag proc nil))
 )
@@ -95,6 +95,7 @@
 
 (global-set-key (kbd "<f4>") 'describe-char)
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert #x3bb)))
+;√:#x221a π:#x3c0 λ:#x3bb ∑:#x2211
 
 (global-set-key (kbd "<f5>") 'jump-run-slime-repl)
 (global-set-key (kbd "<f6>") 'jump-run-prolog)
