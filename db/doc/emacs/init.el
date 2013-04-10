@@ -1,3 +1,6 @@
+;default-input-method
+;C-x RET C-\ , then choose an input method.
+;
 (add-to-list 'load-path "~/.emacs.d/")
 (add-to-list 'load-path "~/.emacs.d/clojure-mode")
 (add-to-list 'load-path "~/.emacs.d/ocaml-mode")
