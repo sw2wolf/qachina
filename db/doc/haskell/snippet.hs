@@ -1,6 +1,12 @@
 ---------
 
 ---------
+case () of
+    _ | W.member w s && W.peek s /= Just w -> windows (W.focusWindow w)
+      | Just new <- mnew, w == root && curr /= new
+                                          -> windows (W.view new)
+      | otherwise                         -> return ()
+---------
 -- | Launch an external application through the system shell and return a @Handle@ to its standard input.
 spawnPipe :: MonadIO m => String -> m Handle
 spawnPipe x = io $ do

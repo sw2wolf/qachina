@@ -149,7 +149,7 @@ used for matching windows with run-or-raise or window placement
     (run-shell-command "VBoxManage startvm winxp &"))
 
 (defcommand emacs () ()
-    (run-shell-command "emacs -geometry 178x38+0+373"))
+    (run-shell-command "emacs -geometry 178x38+0+369"))
 
 (defcommand reboot () ()
     (run-shell-command "sudo /sbin/shutdown -r now"))
