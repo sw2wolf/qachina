@@ -22,7 +22,7 @@
 ;(load "init-racket")
 ;(load "init-forth")
 
-;(require 'erlang-start)
+(require 'erlang-start)
 ;(require 'ocaml)
 ;(require 'git-emacs)
 
@@ -43,7 +43,12 @@
      (setq ispell-extra-args '("-C"))))
 
 ;(setq initial-frame-alist '((top . 0) (left . 0) (width . 1024) (height . 768)))
-(add-hook 'after-init-hook 'split-window-horizontally)
+(add-hook 'after-init-hook '(lambda ()
+							  (split-window-horizontally)
+							  (list-bookmarks)
+							  (switch-to-buffer (get-buffer-create "*Bookmark List*"))))
+
+(setq kill-buffer-query-functions (remove 'process-kill-buffer-query-function kill-buffer-query-functions))
 
 ;(require 'dired+)
 ;(put 'dired-find-alternate-file 'disabled nil)  ;enable `a' command
