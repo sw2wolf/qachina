@@ -1,3 +1,15 @@
+$ghc --info | egrep 'split|Host'  [08:42]
+<sw2wolf>  ,("Host platform","i386-unknown-freebsd")
+<sw2wolf>  ,("Object splitting supported","YES")
+
+$cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
+$cabal install mighttpd2 --ghc-options=-fllvm
+---------
+@unmtl StateT [e] Maybe a
+<lambdabot> [e] -> Maybe (a, [e])
+
+@undo [y | x <- xs, y <- f x]
+<lambdabot> concatMap (\ x -> concatMap (\ y -> [y]) f x) xs
 ---------
 
 ---------
@@ -48,12 +60,6 @@ spawnPipe x = io $ do
     closeFd rd
     return h
 ---------
-@unmtl StateT [e] Maybe a
-<lambdabot> [e] -> Maybe (a, [e])
-
-@undo [y | x <- xs, y <- f x]
-<lambdabot> concatMap (\ x -> concatMap (\ y -> [y]) f x) xs
----------
 
 import Data.Vector.Unboxed as U
  
@@ -99,13 +105,6 @@ main = xmonad defaultConfig { keys =
     ]
 }
 
----------
-$ghc --info | egrep 'split|Host'  [08:42]
-<sw2wolf>  ,("Host platform","i386-unknown-freebsd")
-<sw2wolf>  ,("Object splitting supported","YES")
-
-$cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
-$cabal install mighttpd2 --ghc-options=-fllvm
 ---------
 
 import Data.List

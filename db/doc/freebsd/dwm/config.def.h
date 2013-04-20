@@ -48,13 +48,21 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *dmenucmd[] = { "/home/sw2wolf/bin/dmenu.sh", NULL };
-static const char *browsecmd[]  = { "opera", NULL };
+//static const char *dmenu[] = { "/home/sw2wolf/bin/dmenu.sh", NULL };
+static const char *opera[] = { "opera", NULL };
+static const char *emacs[] = { "emacs", "-geometry", "176x34+0+369", NULL };
+static const char *xterm[] = { "xterm", "-geometry", "159x25+0+438", NULL };
+static const char *winxp[] = { "VBoxManage", "startvm", "winxp", NULL };
+static const char *eweiqi[]  = { "wine", "c:/Program Files/eweiqi/LiveBaduk.exe", NULL};
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_w,      spawn,          {.v = browsecmd } },
+//{ MODKEY,                       XK_p,      spawn,          {.v = dmenu } },
+	{ MODKEY,                       XK_w,      spawn,          {.v = opera } },
+	{ MODKEY,                       XK_e,      spawn,          {.v = emacs } },
+	{ MODKEY,                       XK_t,      spawn,          {.v = xterm } },
+	{ MODKEY|ShiftMask,             XK_x,      spawn,          {.v = winxp } },
+	{ MODKEY|ShiftMask,             XK_g,      spawn,          {.v = eweiqi } },
 	{ MODKEY,                       XK_F11,    spawn,          SHCMD("sudo /sbin/shutdown -r now") },
 	{ MODKEY,                       XK_F12,    spawn,          SHCMD("sudo /sbin/shutdown -p now") },
     { MODKEY,                       XK_Print,  spawn,          SHCMD("scrot %Y%m%d-%H.%M.%S.png -t 280x175 -e 'mv $f $m ~'") },
@@ -70,9 +78,9 @@ static Key keys[] = {
 //	{ MODKEY,                       XK_Return, zoom,           {0} },
 //	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[0]} },
+	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY|ShiftMask,             XK_m,      setlayout,      {.v = &layouts[2]} },
 //	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },

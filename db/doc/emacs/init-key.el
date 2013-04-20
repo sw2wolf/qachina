@@ -65,23 +65,20 @@
   ;(set-process-query-on-exit-flag proc nil))
 )
 
-(defun jump-run-clisp ()
+(defun clisp ()
   (interactive)
   (if (get-buffer "*clisp*")
 	  (switch-to-buffer-other-window "*clisp*")
 	  (async-shell-command "clisp -q -modern -ansi" "*clisp*")))
 
-(defun find-buffer (buff)
-  (find-if (lambda (buff)
-			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list)))
-
-(defun jump-run-slime-repl ()
+(defun jump-run-clisp ()
   (interactive)
   (let ((repl (find-if (lambda (buff)
 			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))))
   (if repl
 	  (switch-to-buffer-other-window (buffer-name repl))
-	  (slime-connect "127.0.01" 4005))))
+	  (condition-case e (slime-connect "127.0.0.1" 4005)
+		(file-error (clisp))))))
 
 ;; (remove-if-not (lambda (buff)
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
@@ -97,7 +94,7 @@
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert #x3bb)))
 ;√:#x221a π:#x3c0 λ:#x3bb ∑:#x2211 ⊥:#x22a5 ≅:#x2245
 
-(global-set-key (kbd "<f5>") 'jump-run-slime-repl)
+(global-set-key (kbd "<f5>") 'jump-run-clisp)
 (global-set-key (kbd "<f6>") 'jump-run-prolog)
 
 (global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "/msg lambdabot @type ")))

@@ -77,7 +77,7 @@ used for matching windows with run-or-raise or window placement
 (setf *startup-message* nil
       *suppress-frame-indicator* t
       *suppress-abort-messages* t
-      *timeout-wait* 5
+      *timeout-wait* 9
       *mouse-focus-policy* :click ;; :click, :ignore, :sloppy
       *message-window-gravity* :bottom-left
       *input-window-gravity* :bottom-left)
