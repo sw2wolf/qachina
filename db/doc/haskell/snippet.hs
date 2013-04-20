@@ -1,6 +1,34 @@
 ---------
 
 ---------
+-- > (-->) :: Monoid m => Query Bool -> Query m -> Query m -- a simpler type
+(-->) :: (Monad m, Monoid a) => m Bool -> m a -> m a
+p --> f = p >>= \b -> if b then f else return mempty
+---------
+-- | Ignore SIGPIPE to avoid termination when a pipe is full, and SIGCHLD to
+-- avoid zombie processes, and clean up any extant zombie processes.
+installSignalHandlers :: MonadIO m => m ()
+installSignalHandlers = io $ do
+    installHandler openEndedPipe Ignore Nothing
+    installHandler sigCHLD Ignore Nothing
+    (try :: IO a -> IO (Either SomeException a))
+      $ fix $ \more -> do
+        x <- getAnyProcessStatus False False
+        when (isJust x) more
+    return ()
+---------
+-- | A replacement for 'forkProcess' which resets default signal handlers.
+xfork :: MonadIO m => IO () -> m ProcessID
+xfork x = liftIO . forkProcess . finally nullStdin $ do
+                uninstallSignalHandlers
+                createSession
+                x
+ where
+    nullStdin = do
+        fd <- openFd "/dev/null" ReadOnly Nothing defaultFileFlags
+        dupTo fd stdInput
+        closeFd fd
+---------
 case () of
     _ | W.member w s && W.peek s /= Just w -> windows (W.focusWindow w)
       | Just new <- mnew, w == root && curr /= new
@@ -20,10 +48,11 @@ spawnPipe x = io $ do
     closeFd rd
     return h
 ---------
+@unmtl StateT [e] Maybe a
+<lambdabot> [e] -> Maybe (a, [e])
 
 @undo [y | x <- xs, y <- f x]
 <lambdabot> concatMap (\ x -> concatMap (\ y -> [y]) f x) xs
-
 ---------
 
 import Data.Vector.Unboxed as U
@@ -70,12 +99,13 @@ main = xmonad defaultConfig { keys =
     ]
 }
 
+---------
 $ghc --info | egrep 'split|Host'  [08:42]
 <sw2wolf>  ,("Host platform","i386-unknown-freebsd")
 <sw2wolf>  ,("Object splitting supported","YES")
 
 $cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
-
+$cabal install mighttpd2 --ghc-options=-fllvm
 ---------
 
 import Data.List

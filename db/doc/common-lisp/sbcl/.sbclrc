@@ -8,6 +8,7 @@
 (pushnew #p"/media/D/qachina/" asdf:*central-registry*)
 (pushnew #p"/media/D/qachina/db/doc/money/" asdf:*central-registry*)
 (ql:quickload :money)
+(in-package :money)
 
 ;(asdf:operate 'asdf:load-op :myapp)
 ;(myapp:start-myapp)

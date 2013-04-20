@@ -5,7 +5,7 @@
 (export '(*base-dir*
           pkg-src-dir pkg-ver find-pkg sys-info
           fac fab perfect-number bits
-          sh range now leap-year-p assoc* qachina))
+          sh sd range now leap-year-p assoc* qachina))
 
 #|
    Utility

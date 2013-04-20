@@ -13,6 +13,8 @@
 (set-scroll-bar-mode nil)
 (cua-selection-mode 1)
 
+(delete-selection-mode +1)
+
 (set-language-environment "UTF-8")
 (set-background-color "Black") 
 (set-foreground-color "White")
