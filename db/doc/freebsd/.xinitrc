@@ -36,20 +36,6 @@ xmodmap ~/.Xmodmap
 #fcitx &
 
 case $1 in
-    #clfswm)
-		#cd $HOME/quicklisp/dists/quicklisp/software/clfswm-20121125-git
-        #exec clisp -repl -q -ansi load.lisp
-		#exec $HOME/bin/clfswm
-        #;;
-	#rwin)
-		##cd $HOME/RnD/RWin
-		#X11_RACKET_DEBUG=1 exec ./run-debug.sh
-
-		#;;
-    #dwm)
-        #xterm -geometry 159x25+0+438 -e ~/bin/tmuxz &
-        #exec /usr/local/bin/dwm
-        #;;
 	clisp)
 		exec $HOME/bin/stumpwm-clisp
         ;;
@@ -57,7 +43,11 @@ case $1 in
 	    /usr/local/etc/rc.d/musicpd onestart
         exec $HOME/bin/stumpwm-ccl
         ;;
+    xmonad)
+	   exec xmonad
+       ;;
     *)
-		exec xmonad
-        ;;
+       #xterm -geometry 159x25+0+438 &
+       exec /usr/local/bin/dwm
+       ;;
 esac

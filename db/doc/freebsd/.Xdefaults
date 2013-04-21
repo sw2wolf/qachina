@@ -64,30 +64,30 @@ xterm*printerCommand: cat > ~/xtermdump
 !        <BtnUp>: select-end(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
 !        Ctrl <KeyPress> P: print() \n
 
-scratchpad*background:   black
-scratchpad*foreground:   white
-scratchpad*scrollBar:    false
-scratchpad*.transparent: true
-scratchpad*.shading:     30
+Scratchpad*background:   black
+Scratchpad*foreground:   white
+Scratchpad*scrollBar:    false
+Scratchpad*.transparent: true
+Scratchpad*.shading:     30
 
-scratchpad*locale: true
-scratchpad.utf8:     true
-scratchpad*utf8Title: true
+Scratchpad*locale: true
+Scratchpad.utf8:     true
+Scratchpad*utf8Title: true
 
-scratchpad*xftAntialias: true
+Scratchpad*xftAntialias: true
 
-scratchpad*faceNameDoublesize:wenquanyi bitmap song:pixelsize=16:antialias=True
-scratchpad*XimFont:-WenQuanYi Bitmap Song-medium-r-normal--16-160-75-75-p-80-iso10646-1
+Scratchpad*faceNameDoublesize:wenquanyi bitmap song:pixelsize=16:antialias=True
+Scratchpad*XimFont:-WenQuanYi Bitmap Song-medium-r-normal--16-160-75-75-p-80-iso10646-1
 
-scratchpad*fontMenu*fontdefault*Label: Default
-scratchpad*faceName: Bitstream Vera Sans Mono:antialias=True:pixelsize=15
-scratchpad*faceSize: 12
-scratchpad*faceSize1: 12
-scratchpad*faceSize2: 12
-scratchpad*faceSize3: 12
-scratchpad*faceSize4: 12
-scratchpad*faceSize5: 12
-scratchpad*faceSize6: 12
-scratchpad.cjkWidth:true
+Scratchpad*fontMenu*fontdefault*Label: Default
+Scratchpad*faceName: Bitstream Vera Sans Mono:antialias=True:pixelsize=15
+Scratchpad*faceSize: 12
+Scratchpad*faceSize1: 12
+Scratchpad*faceSize2: 12
+Scratchpad*faceSize3: 12
+Scratchpad*faceSize4: 12
+Scratchpad*faceSize5: 12
+Scratchpad*faceSize6: 12
+Scratchpad.cjkWidth:true
 
-scratchpad*loginShell:         false
+Scratchpad*loginShell:         false

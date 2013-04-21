@@ -92,7 +92,7 @@
 
 (global-set-key (kbd "<f4>") 'describe-char)
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert #x3bb)))
-;√:#x221a π:#x3c0 λ:#x3bb ∑:#x2211 ⊥:#x22a5 ≅:#x2245
+;√:#x221a π:#x3c0 λ:#x3bb ∑:#x2211 ⊥:#x22a5 ≅:#x2245 ≠:#x2260
 
 (global-set-key (kbd "<f5>") 'jump-run-clisp)
 (global-set-key (kbd "<f6>") 'jump-run-prolog)
