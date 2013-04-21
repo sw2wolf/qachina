@@ -27,7 +27,7 @@ static const Rule rules[] = {
 /* layout(s) */
 static const float mfact      = 0.45; /* factor of master area size [0.05..0.95] */
 static const int nmaster      = 1;    /* number of clients in master area */
-static const Bool resizehints = True; /* True means respect size hints in tiled resizals */
+static const Bool resizehints = False; /* True means respect size hints in tiled resizals */
 
 /* first entry is default */
 static const Layout layouts[] = {
@@ -49,39 +49,37 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-//static const char *dmenu[] = { "/home/sw2wolf/bin/dmenu.sh", NULL };
+static const char *dmenu[] = { "/home/sw2wolf/bin/dmenu.sh", NULL };
 static const char *opera[] = { "opera", NULL };
 static const char *emacs[] = { "emacs", "-geometry", "177x38+0+378", NULL };
-static const char *xterm[] = { "xterm", "-geometry", "159x25+0+438", NULL };
-static const char *winxp[] = { "VBoxManage", "startvm", "winxp", NULL };
-static const char *eweiqi[]  = { "wine", "c:/Program Files/eweiqi/LiveBaduk.exe", NULL};
+//static const char *xterm[] = { "xterm", "-geometry", "159x25+0+438", NULL };
+//static const char *winxp[] = { "VBoxManage", "startvm", "winxp", NULL };
+//static const char *eweiqi[]  = { "wine", "c:/Program Files/eweiqi/LiveBaduk.exe", NULL};
 
-static const char *scratchpad[] = { "xterm", "-name", "Scratchpad", "-geometry", "100x30+500+250","-e", "cl", NULL };
+//static const char *scratchpad[] = { "xterm", "-name", "Scratchpad", "-geometry", "100x30+500+250","-e", "cl", NULL };
 
 static Key keys[] = {
-	/* modifier                     key        function        argument */
-//{ MODKEY,                       XK_p,      spawn,          {.v = dmenu } },
-	{ MODKEY,                       XK_w,      spawn,          {.v = opera } },
-	{ MODKEY,                       XK_e,      spawn,          {.v = emacs } },
-	{ MODKEY,                       XK_t,      spawn,          {.v = xterm } },
-	{ MODKEY|ShiftMask,             XK_x,      spawn,          {.v = winxp } },
-	{ MODKEY|ShiftMask,             XK_g,      spawn,          {.v = eweiqi } },
-    { MODKEY|ShiftMask,             XK_space,  spawn,          {.v = scratchpad} },
-    { MODKEY,                       XK_space,  toggleview,     {.ui = 1 << 5} },
+	/* modifier                  key        function        argument */
+    { MODKEY,                    XK_p,      spawn,          {.v = dmenu } },
+	{ MODKEY,                    XK_w,      spawn,          {.v = opera } },
+	{ MODKEY,                    XK_e,      spawn,          {.v = emacs } },
+	//{ MODKEY,                  XK_t,      spawn,          {.v = xterm } },
+	//{ MODKEY|ShiftMask,        XK_x,      spawn,          {.v = winxp } },
+	//{ MODKEY|ShiftMask,        XK_g,      spawn,          {.v = eweiqi } },
+    //{ MODKEY|ShiftMask,        XK_space,  spawn,          {.v = scratchpad} },
+    //{ MODKEY,                  XK_space,  toggleview,     {.ui = 1 << 5} },
 //
-	{ MODKEY,                       XK_F11,    spawn,          SHCMD("sudo /sbin/shutdown -r now") },
-	{ MODKEY,                       XK_F12,    spawn,          SHCMD("sudo /sbin/shutdown -p now") },
-    { MODKEY,                       XK_Print,  spawn,          SHCMD("scrot %Y%m%d-%H.%M.%S.png -t 280x175 -e 'mv $f $m ~'") },
-    { MODKEY|ShiftMask,             XK_Print,  spawn,          SHCMD("scrot %Y%m%d-%H.%M.%S.png -t 280x175 -d 5 -e 'mv $f $m ~'") },
+	{ MODKEY,      XK_F11,    spawn,          SHCMD("sudo /sbin/shutdown -r now") },
+	{ MODKEY,      XK_F12,    spawn,          SHCMD("sudo /sbin/shutdown -p now") },
 //
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_Tab,    focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
+	{ MODKEY,      XK_b,      togglebar,      {0} },
+	{ MODKEY,      XK_Tab,    focusstack,     {.i = +1 } },
+	{ MODKEY,      XK_j,      focusstack,     {.i = +1 } },
+	{ MODKEY,      XK_k,      focusstack,     {.i = -1 } },
+	{ MODKEY,      XK_i,      incnmaster,     {.i = +1 } },
+	{ MODKEY,      XK_d,      incnmaster,     {.i = -1 } },
+	{ MODKEY,      XK_h,      setmfact,       {.f = -0.05} },
+	{ MODKEY,      XK_l,      setmfact,       {.f = +0.05} },
 //	{ MODKEY,                       XK_Return, zoom,           {0} },
 //	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
@@ -105,16 +103,16 @@ static Key keys[] = {
 /* button definitions */
 /* click can be ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
-	/* click                event mask      button          function        argument */
-//{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-//{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-//{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
-	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-//{ ClkTagBar,            0,              Button1,        view,           {0} },
-//{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
-	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+	/* click           event mask      button          function        argument */
+//{ ClkLtSymbol,       0,              Button1,        setlayout,      {0} },
+//{ ClkLtSymbol,       0,              Button3,        setlayout,      {.v = &layouts[2]} },
+//{ ClkWinTitle,       0,              Button2,        zoom,           {0} },
+	{ ClkClientWin,    MODKEY,         Button1,        movemouse,      {0} },
+	{ ClkClientWin,    MODKEY,         Button2,        togglefloating, {0} },
+	{ ClkClientWin,    MODKEY,         Button3,        resizemouse,    {0} },
+//{ ClkTagBar,         0,              Button1,        view,           {0} },
+//{ ClkTagBar,         0,              Button3,        toggleview,     {0} },
+	{ ClkTagBar,       MODKEY,         Button1,        tag,            {0} },
+	{ ClkTagBar,       MODKEY,         Button3,        toggletag,      {0} },
 };
 

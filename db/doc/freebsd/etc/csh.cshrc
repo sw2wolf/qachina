@@ -2,7 +2,8 @@
 #
 # System-wide .cshrc file for csh(1).
 #setenv PACKAGESITE ftp://ftp.freebsd.org/pub/FreeBSD/ports/i386/packages-9-stable/Latest/
-setenv PACKAGESITE ftp://ftp.freebsd.org/pub/FreeBSD/ports/i386/packages-current/Latest/
+#setenv PACKAGESITE ftp://ftp.freebsd.org/pub/FreeBSD/ports/i386/packages-current/Latest/
+setenv PACKAGESITEftp://ftp.freebsd.org/pub/FreeBSD/ports/i386/packages-9-current/Latest/ 
 
 #set prompt="[%Y-%W-%D %P]%n@%~%#"
 set prompt="[%P]%n@%~%#"
