@@ -1,0 +1,14 @@
+* tagging */
+static const char *tags[] = { "1", "2", "3", "4", "5", "6" };
+/* rules */
+static const Rule rules[] = {
+  { "URxvt",           "Scratchpad",   "Scratchpad",   1 << 5,   True,      -1 }, /* scratchpad in its own tag (6th) */
+};
+/* commands */
+static const char *scratchpadcmd[] = { "urxvt", "-name", "Scratchpad", "-geometry", "74x15", NULL };
+/* key bindings */
+static Key keys[] = {
+  { MODKEY|ControlMask,           XK_x,      spawn,          {.v = scratchpadcmd } }, /* Launch scratchpad... */
+  { MODKEY,                       XK_x,      toggleview,     {.ui = 1 << 5} }, /* Toggle scratchpad,, but this doesn't auto focus */
+};
+
