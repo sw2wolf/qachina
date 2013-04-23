@@ -43,11 +43,10 @@ case $1 in
 	    /usr/local/etc/rc.d/musicpd onestart
         exec $HOME/bin/stumpwm-ccl
         ;;
-    xmonad)
-	   exec xmonad
+    dwm)
+       exec /usr/local/bin/dwm
        ;;
     *)
-       #xterm -geometry 159x25+0+438 &
-       exec /usr/local/bin/dwm
+	   exec xmonad
        ;;
 esac

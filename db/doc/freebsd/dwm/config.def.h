@@ -51,7 +51,7 @@ static const Layout layouts[] = {
 /* commands */
 static const char *dmenu[] = { "/home/sw2wolf/bin/dmenu.sh", NULL };
 static const char *opera[] = { "opera", NULL };
-static const char *emacs[] = { "emacs", "-geometry", "177x38+0+378", NULL };
+static const char *emacs[] = { "emacs", "-geometry", "178x38+0+378", NULL };
 //static const char *xterm[] = { "xterm", "-geometry", "159x25+0+438", NULL };
 //static const char *winxp[] = { "VBoxManage", "startvm", "winxp", NULL };
 //static const char *eweiqi[]  = { "wine", "c:/Program Files/eweiqi/LiveBaduk.exe", NULL};

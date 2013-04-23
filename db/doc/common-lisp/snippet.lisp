@@ -1,4 +1,40 @@
 
+;;;
+(defclass on-demand-base ()
+  ())
+ 
+(defun slot-definition->list (slot-definition)
+  (list :name (closer-mop:slot-definition-name slot-definition)
+	:readers (closer-mop:slot-definition-readers slot-definition)
+	:writers (closer-mop:slot-definition-writers slot-definition)
+	:initargs (closer-mop:slot-definition-initargs slot-definition)
+	:initform (closer-mop:slot-definition-initform slot-definition)
+	:allocation (closer-mop:slot-definition-allocation slot-definition)
+	:type (closer-mop:slot-definition-type slot-definition)
+	:documentation (documentation slot-definition t)))
+ 
+(defun add-slot-to-class (class slot-name)
+  (closer-mop:ensure-class 
+   (class-name class)
+   :metaclass (class-of (class-of class))
+   :direct-superclasses (closer-mop:class-direct-superclasses class)
+   :direct-slots (cons `(:name ,slot-name
+			       :initargs (,(intern (symbol-name slot-name) 
+						   (find-package :keyword))))
+		       (mapcar #'slot-definition->list 
+			       (closer-mop:class-direct-slots class)))
+   :direct-default-initargs (closer-mop:class-direct-default-initargs class)))
+ 
+(defmethod slot-missing (class
+			 (object on-demand-base) 
+			 slot-name operation &optional new-value)
+  (add-slot-to-class class slot-name)
+  (ecase operation
+    (setf (setf (slot-value object slot-name) new-value))
+    (slot-boundp (slot-boundp object slot-name))
+    (slot-makunbound (slot-makunbound object slot-name))
+    (slot-value (slot-value object slot-name))))
+;;;
 (defparameter *xml* (cxml:parse #p"minicular.tmx" (cxml-xmls:make-xmls-builder)))
 (let ((xpath:*navigator* (cxml-xmls:make-xpath-navigator)))
   (print (xpath:evaluate "map" *xml*)))

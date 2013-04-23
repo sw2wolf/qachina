@@ -21,5 +21,5 @@ setenv CFLAGS  -I/usr/local/include
 # A righteous umask
 umask 22
 
-set path = (. /sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin  $HOME/bin $HOME/.cabal/bin $HOME/swi-prolog/bin $HOME/ocaml/bin)
+set path = (. /sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin  $HOME/bin $HOME/.cabal/bin $HOME/swi-prolog/bin $HOME/ocaml/bin $HOME/mu/binfid)
 #setenv PYTHONSTARTUP /media/D/www/qachina/db/doc/python/python_ini.py

@@ -191,7 +191,7 @@ myKeys = let modm = mod4Mask in
     --, ((modm .|. shiftMask, xK_Print), spawn "sleep 0.2; scrot -s")
     , ((modm, xK_Print), spawn "scrot '/tmp/%Y-%m-%d_%H:%M:%S_$wx$h_scrot.png' -e 'mv $f ~'")
     , ((modm, xK_k), kill)
-    , ((modm, xK_space), scratchpadSpawnActionCustom "xterm -name Scratchpad -e cl")
+    , ((modm, xK_space), scratchpadSpawnActionCustom "xterm -name scratchpad -e cl")
 
     -- Window Navigation
     , ((modm, xK_Right), sendMessage $ Go R)

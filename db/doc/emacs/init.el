@@ -6,6 +6,7 @@
 (add-to-list 'load-path "~/.emacs.d/ocaml-mode")
 (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-2.6.8/emacs/")
 (add-to-list 'load-path "~/.emacs.d/git-emacs")
+(add-to-list 'load-path "~/.emacs.d/mu4e")
 
 (load "init-base")
 (load "init-key")
@@ -27,6 +28,7 @@
 ;(require 'git-emacs)
 
 ;(load "init-eshell")
+;(load "init-mu4e")
 (load "init-emms")
 (load "init-radio")
 
