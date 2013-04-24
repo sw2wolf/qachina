@@ -14,6 +14,7 @@
 (load "init-key")
 
 (load "init-erc")
+(load "init-mew")
 (load "init-dict")
 
 (load "init-slime")
