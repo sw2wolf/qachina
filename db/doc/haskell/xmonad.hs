@@ -184,7 +184,7 @@ myKeys = let modm = mod4Mask in
     , ((modm, xK_e), spawn emacs)
     , ((modm, xK_g), goToSelected defaultGSConfig)
     , ((modm, xK_p), spawnSelected defaultGSConfig [
-              xterm, "opera", emacs, eweiqi, winxp])
+              xterm, "gmrun", "opera", emacs, eweiqi, winxp])
     , ((modm .|. shiftMask, xK_p),runOrRaisePrompt largeXPConfig)
     , ((modm, xK_F11), spawn "sudo /sbin/shutdown -r now")
     , ((modm, xK_F12), spawn "sudo /sbin/shutdown -p now")
