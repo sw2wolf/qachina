@@ -37,12 +37,12 @@
 ;
 ;;用w3m来读html格式邮件
 ;; 
-;; (setq mew-mime-multipart-alternative-list '("Text/Html" "Text/Plain" "*."))
-;; (condition-case nil
-;;  (require 'mew-w3m)
-;;  (file-error nil)) 
+(setq mew-mime-multipart-alternative-list '("Text/Html" "Text/Plain" "*."))
+(condition-case nil
+  (require 'mew-w3m)
+  (file-error nil)) 
+(setq mew-use-text/html t)
 
-;; (setq mew-use-text/html t)
 (setq mew-config-alist '(
     ("default"
          ("name"         .  "z_axis")

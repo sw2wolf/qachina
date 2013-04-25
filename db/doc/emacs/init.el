@@ -7,6 +7,7 @@
 (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-2.6.8/emacs/")
 (add-to-list 'load-path "~/.emacs.d/git-emacs")
 (add-to-list 'load-path "~/.emacs.d/mu4e")
+(add-to-list 'load-path "~/RnD/w3m")
 
 ;(load "init-package")
 

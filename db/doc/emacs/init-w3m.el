@@ -1,12 +1,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;              w3m mode
 ;;;
-(add-to-list 'load-path (concat path-prefix "w3m"))
+(setq path-prefix "~/RnD/")
 (setq w3m-icon-directory (concat path-prefix "w3m/icons"))
+
 (require 'w3m)
-(add-to-list 'load-path "~/emacs-w3m/")
-(require 'w3m-load)
-(require 'mime-w3m)
+;(require 'w3m-load)
+;(require 'mime-w3m)
 (autoload 'w3m "w3m" "interface for w3m on emacs" t) 
 
 (setq w3m-use-form t)
@@ -46,4 +46,3 @@
 ;        ("^http://\\([^/]*\\.\\)*your_internal_website_name\\(/\\|$\\)" "-no-proxy")
         ;; Use the proxy server to visit any foreign urls.
 ;        ("" "-o" "http_proxy=http://your_proxy:80/")))
-(global-set-key [f4] 'w3m)
