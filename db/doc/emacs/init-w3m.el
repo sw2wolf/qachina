@@ -8,6 +8,15 @@
 
 (setq w3m-icon-directory "~/RnD/w3m/icons")
 
+(setq w3m-coding-system 'utf-8
+	  w3m-default-coding-system 'utf-8
+      w3m-file-coding-system 'utf-8
+      w3m-file-name-coding-system 'utf-8
+      w3m-input-coding-system 'utf-8
+      w3m-output-coding-system 'utf-8
+      w3m-terminal-coding-system 'utf-8
+	  w3m-bookmark-file-coding-system 'utf-8)
+
 (setq w3m-use-form t)
 (setq w3m-tab-width 8)
 (setq w3m-use-cookies t)
@@ -18,8 +27,17 @@
 (setq w3m-default-toggle-inline-images t)
 (setq w3m-home-page "http://www.baidu.com")
 
-;(setq browse-url-browser-function 'w3m-browse-url)      ;;设置为默认浏览器
+(setq browse-url-browser-function 'w3m-browse-url)      ;;设置为默认浏览器
 
+(eval-after-load "mm-decode" 
+'(progn 
+   (add-to-list 'mm-discouraged-alternatives "text/richtext")))
+
+(setq mm-text-html-renderer 'w3m
+      mm-inline-text-html-with-images t
+	  mm-inline-text-html-with-w3m-keymap nil
+      mm-w3m-safe-url-regexp nil)
+ 
 ;;当用 shift+RET 打开新链接时将不自动跳转到新的页面，等提示已经完全打开，才用 C-c C-n ，
 ;;C-c C-p 打开，这个好用
 (setq w3m-view-this-url-new-session-in-background t)
@@ -40,22 +58,3 @@
             (replace-match " "))
         (set-buffer-multibyte t))
     (set-buffer-modified-p nil))
-
-;; Make this comment if you have no a proper proxy
-;(setq w3m-command-arguments-alist
-;    '( ;; Don't use any additional options to visit local web pages.
-;        ("^http://\\([^/]*\\.\\)*your_internal_website_name\\(/\\|$\\)" "-no-proxy")
-        ;; Use the proxy server to visit any foreign urls.
-;        ("" "-o" "http_proxy=http://your_proxy:80/")))
-
-;(setq w3m-arrived-file-coding-system 'euc-cn)
-;(setq w3m-bookmark-file-coding-system 'euc-cn)
-;(setq w3m-default-url-coding-system 'euc-cn)
-;(setq w3m-output-coding-system 'euc-cn)
-;(setq w3m-coding-system 'euc-cn)
-;(setq w3m-input-coding-system 'euc-cn)
-;(setq w3m-find-coding-system 'euc-cn)
-;(setq w3m-default-coding-system 'euc-cn)
-;(setq w3m-coding-system-priority-list '(euc-cn))
-;(setq w3m-file-name-coding-system 'euc-cn)
-;(setq w3m-bookmark-file-coding-system 'euc-cn)

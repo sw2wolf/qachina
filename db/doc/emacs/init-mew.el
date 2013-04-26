@@ -3,6 +3,8 @@
 (autoload 'mew-send "mew" nil t)
 
 (setq mew-icon-directory "/usr/local/share/emacs/site-lisp/mew/etc")
+
+;;设定将密码保存一段时间，默认20分钟 
 (setq mew-use-cached-passwd t)
 ;; mew-pop-size设置成0时，pop邮件大小没有限制
 (setq mew-pop-size 0)  
@@ -23,7 +25,11 @@
         'mew-draft-kill
         'mew-send-hook))
 
+;;smtp服务器认证设定 
+;(setq mew-smtp-auth-list (quote ("CRAM-MD5" "LOGIN" "PLAIN"))) 
+;;smtp服务器不用认证采用下面设定 
 (setq mew-smtp-auth-list nil)
+
 (setq toolbar-mail-reader 'Mew)
 (set-default 'mew-decode-quoted 't)
 
@@ -113,3 +119,25 @@
 ))
 
 (setq mew-ssl-verify-level 0)
+
+
+;;;;;;;;;;;;;;;;;;;;;; 
+;;信件引用设置 
+;;;;;;;;;;;;;;;;;;;;;; 
+(setq mew-cite-fields '("From:" "Subject:" "Date:" "Message-ID:")) 
+(setq mew-cite-format "From: %s\nSubject: %s\nDate: %s\nMessage-ID: %s\n\n") 
+(setq mew-cite-prefix-function 'mew-cite-prefix-username) 
+
+;;gnus可以将密码放在配置文件里，收邮件的时候就不用输入密码了 
+;;我找了一下，发现下面这个变量应该有类似功能，但没有搞掂，高人帮忙！ 
+;(setq mew-passwd-alist '(hvjhvjhvj)
+
+
+;; 默认的邮件保存在~/Mail，里面的文件Addrbook是地址本设置，设置好，在写邮件时可以自动补全，同gnus里使用bbdb一样，也有组群发功能。 
+
+;; 一个地址簿样本： 
+
+;; 代码: 
+;; hvj hvj@hvj.org 
+;; hhh hhh@hvj.org 
+;; h hvj, hhh
