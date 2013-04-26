@@ -86,30 +86,30 @@
     ;;      (smtp-user             "z9axis@gmail.com")
     ;;      (smtp-server           "smtp.gmail.com"))
 	;; news group comp.lang.lisp
-	(usenet
-        (mailbox-type         . mbox)
-        (proto                . -)
-        (nntp-server           "news.aioe.org")
-        (nntp-user             nil) ;; should be nil default
-        (nntp-header-only      nil)
-        (nntp-newsgroup        "-comp.lang.lisp")
-        (nntp-size             0)
-        (nntp-msgid-user       "z9axis")
-        (smtp-auth-list        ("PLAIN" "LOGIN" "CRAM-MD5"))
-        (smtp-user             "z9axis@gmail.com")
-        (smtp-server           "smtp.gmail.com")
+	;; (usenet
+    ;;     (mailbox-type         . mbox)
+    ;;     (proto                . -)
+    ;;     (nntp-server           "news.aioe.org")
+    ;;     (nntp-user             nil) ;; should be nil default
+    ;;     (nntp-header-only      nil)
+    ;;     (nntp-newsgroup        "-comp.lang.lisp")
+    ;;     (nntp-size             0)
+    ;;     (nntp-msgid-user       "z9axis")
+    ;;     (smtp-auth-list        ("PLAIN" "LOGIN" "CRAM-MD5"))
+    ;;     (smtp-user             "z9axis@gmail.com")
+    ;;     (smtp-server           "smtp.gmail.com")
  
-        (mailinglist
-         (mailbox-type          pop)
-         (proto                 +)
-         (pop-server            "pop.gmail.com")
-         (name                  "z9axis")
-         (user                  "z9axis")
-         (mail-domain           "gmail.com")
-         (pop-auth              pass)
-         (pop-user              "z9axis@gmail.com")
-         (smtp-user             "z9axis@gmail.com")
-         (smtp-server           "smtp.gmail.com")))
+    ;;     (mailinglist
+    ;;      (mailbox-type          pop)
+    ;;      (proto                 +)
+    ;;      (pop-server            "pop.gmail.com")
+    ;;      (name                  "z9axis")
+    ;;      (user                  "z9axis")
+    ;;      (mail-domain           "gmail.com")
+    ;;      (pop-auth              pass)
+    ;;      (pop-user              "z9axis@gmail.com")
+    ;;      (smtp-user             "z9axis@gmail.com")
+    ;;      (smtp-server           "smtp.gmail.com")))
 ))
 
 (setq mew-ssl-verify-level 0)
