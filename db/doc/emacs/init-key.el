@@ -89,21 +89,21 @@
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
 ;; (some (lambda (buff) (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))
 
-
 (require 'thingatpt)
 (global-set-key (kbd "<f1>") 'forward-whitespace)
 (global-set-key (kbd "<f2>") 'find-file-at-point)
+
 (global-set-key (kbd "<f3>") 'jump-run-shell)
-(global-set-key (kbd "<f4>") 'jump-run-mew) ;'describe-char
+(global-set-key (kbd "<f4>") 'jump-run-clisp)
+
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert #x3bb)))
 ;√:#x221a π:#x3c0 λ:#x3bb ∑:#x2211 ⊥:#x22a5 ≅:#x2245 ≠:#x2260 ☺:#x263a
-
-(global-set-key (kbd "<f5>") 'jump-run-clisp)
+(global-set-key (kbd "<f5>") 'jump-run-mew)
 (global-set-key (kbd "<f6>") 'w3m)
 
-(global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "/msg lambdabot @type ")))
-(global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @wn ")))
-; > @src @where
+(global-set-key (kbd "<f7>") 'describe-char)
+(global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
+; > @wn @src @where @undo @unmtl @pl @djinn @package
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)
