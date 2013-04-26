@@ -1,13 +1,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;              w3m mode
 ;;;
-(setq path-prefix "~/RnD/")
-(setq w3m-icon-directory (concat path-prefix "w3m/icons"))
-
 (require 'w3m)
 ;(require 'w3m-load)
 ;(require 'mime-w3m)
 (autoload 'w3m "w3m" "interface for w3m on emacs" t) 
+
+(setq w3m-icon-directory "~/RnD/w3m/icons")
 
 (setq w3m-use-form t)
 (setq w3m-tab-width 8)
@@ -19,10 +18,12 @@
 (setq w3m-default-toggle-inline-images t)
 (setq w3m-home-page "http://www.baidu.com")
 
-(setq browse-url-browser-function 'w3m-browse-url)      ;;设置为默认浏览器
+;(setq browse-url-browser-function 'w3m-browse-url)      ;;设置为默认浏览器
 
-;C-c C-p 打开，这个好用                                        
-(setq w3m-view-this-url-new-session-in-background t)  
+;;当用 shift+RET 打开新链接时将不自动跳转到新的页面，等提示已经完全打开，才用 C-c C-n ，
+;;C-c C-p 打开，这个好用
+(setq w3m-view-this-url-new-session-in-background t)
+
 ;;显示图标 
 (setq w3m-show-graphic-icons-in-header-line t) 
 (setq w3m-show-graphic-icons-in-mode-line t)
@@ -46,3 +47,15 @@
 ;        ("^http://\\([^/]*\\.\\)*your_internal_website_name\\(/\\|$\\)" "-no-proxy")
         ;; Use the proxy server to visit any foreign urls.
 ;        ("" "-o" "http_proxy=http://your_proxy:80/")))
+
+;(setq w3m-arrived-file-coding-system 'euc-cn)
+;(setq w3m-bookmark-file-coding-system 'euc-cn)
+;(setq w3m-default-url-coding-system 'euc-cn)
+;(setq w3m-output-coding-system 'euc-cn)
+;(setq w3m-coding-system 'euc-cn)
+;(setq w3m-input-coding-system 'euc-cn)
+;(setq w3m-find-coding-system 'euc-cn)
+;(setq w3m-default-coding-system 'euc-cn)
+;(setq w3m-coding-system-priority-list '(euc-cn))
+;(setq w3m-file-name-coding-system 'euc-cn)
+;(setq w3m-bookmark-file-coding-system 'euc-cn)
