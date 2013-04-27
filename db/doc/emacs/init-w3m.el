@@ -27,7 +27,7 @@
 (setq w3m-default-toggle-inline-images t)
 (setq w3m-home-page "http://www.baidu.com")
 
-(setq browse-url-browser-function 'w3m-browse-url)      ;;设置为默认浏览器
+;(setq browse-url-browser-function 'w3m-browse-url)      ;;设置为默认浏览器
 
 (eval-after-load "mm-decode" 
 '(progn 

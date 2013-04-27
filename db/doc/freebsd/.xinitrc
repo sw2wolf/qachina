@@ -36,17 +36,17 @@ xmodmap ~/.Xmodmap
 #fcitx &
 
 case $1 in
-	clisp)
-		exec $HOME/bin/stumpwm-clisp
+    dwm)
+		exec /usr/local/bin/dwm
+		;;
+	xmonad)
+		exec xmonad
         ;;
 	ccl)
 	    /usr/local/etc/rc.d/musicpd onestart
         exec $HOME/bin/stumpwm-ccl
         ;;
-    dwm)
-       exec /usr/local/bin/dwm
-       ;;
     *)
-	   exec xmonad
-       ;;
+		exec $HOME/bin/stumpwm-clisp	   
+		;;
 esac

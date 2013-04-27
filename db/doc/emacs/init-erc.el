@@ -1,26 +1,26 @@
 (eval-after-load "erc"
-  '(progn
-     ;; Basic erc setup
-     (setq erc-nick "sw2wolf"
-		   erc-away-nickname "sw2wolf{away}"
-	       erc-button-buttonize-nicks nil
-           erc-user-full-name "sw2wolf"
-		   erc-email-userid "czsq888@163.com"
-		   erc-server "irc.freenode.net"
-		   erc-port "6667"
+ '(progn
+    ;; Basic erc setup
+    (setq erc-nick "sw2wolf"
+	   erc-away-nickname "sw2wolf{away}"
+       erc-button-buttonize-nicks nil
+       erc-user-full-name "sw2wolf"
+       erc-email-userid "czsq888@163.com"
+	   erc-server "irc.freenode.net"
+       erc-port "6667"
 
-           erc-autojoin-channels-alist 
-		   '(("freenode.net" "#freebsd" "#emacs" "#lisp" "#erlang" "#xmonad" "#haskell")
-			 ("oftc.net" "#emacs-cn"))
+       erc-autojoin-channels-alist 
+ 	     '(("freenode.net" "#openbsd" "#freebsd" "#emacs" "#erlang" "#lisp" "#haskell")
+		   ("oftc.net" "#emacs-cn"))
 
-           erc-keywords '("lisp" "racket" "haskell")
+       erc-keywords '("lisp" "racket" "haskell")
 ;Hindley is one of the people responsible for Haskell's type system
-		   erc-pals '("rms" "Hindley" "Anniepoo" "ski")
+	   erc-pals '("rms" "Hindley" "Anniepoo" "ski")
 
-           erc-format-nick-function 'erc-format-@nick
-           erc-interpret-mirc-color t
-           erc-button-buttonize-nicks nil
-           erc-track-position-in-mode-line 'after-modes)
+       erc-format-nick-function 'erc-format-@nick
+       erc-interpret-mirc-color t
+       erc-button-buttonize-nicks nil
+       erc-track-position-in-mode-line 'after-modes)
 
 	 (setq erc-default-coding-system '(utf-8 . utf-8))
 	 (setq erc-encoding-coding-alist '(("#linuxfire" . chinese-iso-8bit)))
