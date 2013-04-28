@@ -5,7 +5,7 @@
 (export '(*base-dir*
           pkg-src-dir pkg-ver find-pkg sys-info
           fac fab perfect-number bits
-          sh sd range now leap-year-p assoc* qachina))
+          sh sd range now leap-year-p assoc*))
 
 #|
    Utility
@@ -64,12 +64,12 @@ THING is a string or a symbol.")
     (:method (thing alist)
         (assoc thing alist :test #'eql)))
 
-(defun qachina ()
-    (let ((cmd "cd /media/D/qachina; ./start.bat"))
-        #+ecl (mp:process-run-function 'qachina #'(lambda () (si:system cmd)))
-        #+clisp (mt:make-thread #'(lambda () (ext:shell cmd)))
-        #+ccl (process-run-function "qachina" #'(lambda () (sh cmd)))
-        #-(or ecl ccl clisp) (sh cmd)))
+;(defun qachina ()
+;    (let ((cmd "cd /media/D/qachina; ./start.bat"))
+;        #+ecl (mp:process-run-function 'qachina #'(lambda () (si:system cmd)))
+;        #+clisp (mt:make-thread #'(lambda () (ext:shell cmd)))
+;        #+ccl (process-run-function "qachina" #'(lambda () (sh cmd)))
+;        #-(or ecl ccl clisp) (sh cmd)))
 
 (defun sd (word) (sh (concatenate 'string "sdcv -n " word)))
 

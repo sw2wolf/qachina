@@ -1,10 +1,16 @@
-$ghc --info | egrep 'split|Host'  [08:42]
-<sw2wolf>  ,("Host platform","i386-unknown-freebsd")
-<sw2wolf>  ,("Object splitting supported","YES")
+
+---------
+$ghc -e 'System.Directory.getAppUserDataDirectory "xmonad"'
+
+$ghc --info | egrep 'split|Host'
+,("Host platform","i386-unknown-freebsd")
+,("Object splitting supported","YES")
 
 $cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
 $cabal install mighttpd2 --ghc-options=-fllvm
+
 ---------
+
 @unmtl StateT [e] Maybe a
 <lambdabot> [e] -> Maybe (a, [e])
 

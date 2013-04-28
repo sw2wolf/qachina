@@ -62,12 +62,16 @@ used for matching windows with run-or-raise or window placement
 	 #+sbcl (sb-ext:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*)
 	 #+ccl(ccl:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*))))
 
-
 (set-fg-color "green")
 (set-bg-color "black")
 
-(set-float-focus-color "black")
+;(set-float-focus-color "green")
 (set-float-unfocus-color "black")
+
+(set-border-color "green")
+
+(set-msg-border-width 1)
+(set-normal-gravity :center)
 
 (set-font "-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
 
@@ -104,12 +108,17 @@ used for matching windows with run-or-raise or window placement
       *mode-line-pad-y* 0
       *mode-line-timeout* 60
       *mode-line-screen-position* :top)
-#+clisp(setf *screen-mode-line-format* (list "[^B%n^b]%W"))
-#+(or ccl sbcl)(setf *screen-mode-line-format* (list "[^B%n^b]%W" "^>%m | " "^>%d"))
+#+clisp (setf *screen-mode-line-format* (list "[^B%n^b]%W"))
+#+(or ccl sbcl) (setf *screen-mode-line-format* (list "[^B%n^b]%W" "^>%m | " "^>%d"))
 
 ;; turn on/off the mode line for the current screen only.
-(if (not (head-mode-line (current-head)))
-     (toggle-mode-line (current-screen) (current-head)))
+#+clisp
+    (if (head-mode-line (current-head))
+		(toggle-mode-line (current-screen) (current-head)))
+#+(or ccl sbcl)
+    (if (not (head-mode-line (current-head)))
+		(toggle-mode-line (current-screen) (current-head)))
+
 ; A head is a physical monitor. A screen is a section of video memory
 ; that heads are mapped on to. When using xinerama you generally have
 ; 1 screen and many heads. When not using xinerama each screen is a
@@ -149,7 +158,7 @@ used for matching windows with run-or-raise or window placement
     (run-shell-command "VBoxManage startvm winxp &"))
 
 (defcommand emacs () ()
-    (run-shell-command "emacs -geometry 178x38+0+369"))
+    (run-shell-command "emacs -geometry 178x38+0+368"))
 
 (defcommand reboot () ()
     (run-shell-command "sudo /sbin/shutdown -r now"))
@@ -263,7 +272,7 @@ used for matching windows with run-or-raise or window placement
     ;(run-shell-command "xsetroot -solid black")
     ;(run-shell-command "fcitx")
     (vsplit "2/5") (move-focus :down)
-	(run-commands "gselect 2"))
+	#+clisp(run-commands "gselect 2"))
 
 (replace-hook *start-hook* 'my-start-hook)
 
