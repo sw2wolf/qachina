@@ -138,40 +138,40 @@ checkType = ask >>= \w -> liftX $ do
 
 -- Theme {{{
 -- Color names are easier to remember:
-colorOrange          = "#ff7701"
-colorDarkGray        = "#171717"
-colorPink            = "#e3008d"
-colorGreen           = "#00aa4a"
-colorBlue            = "#008dd5"
-colorYellow          = "#fee100"
-colorWhite           = "#cfbfad"
+-- colorOrange          = "#ff7701"
+-- colorDarkGray        = "#171717"
+-- colorPink            = "#e3008d"
+-- colorGreen           = "#00aa4a"
+-- colorBlue            = "#008dd5"
+-- colorYellow          = "#fee100"
+-- colorWhite           = "#cfbfad"
  
-colorNormalBorder    = "#1c2636"
-colorFocusedBorder   = "#ebac54"
-barFont  = "terminus"
-barXFont = "inconsolata:size=14"
-xftFont = "xft: inconsolata-14"
+-- colorNormalBorder    = "#1c2636"
+-- colorFocusedBorder   = "#ebac54"
+-- barFont  = "terminus"
+-- barXFont = "inconsolata:size=14"
+-- xftFont = "xft: inconsolata-14"
 --}}}
 
 -- Prompt Config {{{
-myXPConfig :: XPConfig
-myXPConfig = defaultXPConfig {
-          font                  = "xft:WenQuanYi Zen Hei:pixelsize=16"
-        , bgColor               = colorDarkGray
-        , fgColor               = colorGreen
-        , bgHLight              = colorGreen
-        , fgHLight              = colorDarkGray
-        , promptBorderWidth     = 0
-        , height                = 14
-        , historyFilter         = deleteConsecutive
-}
+-- myXPConfig :: XPConfig
+-- myXPConfig = defaultXPConfig {
+--           font                  = "xft:WenQuanYi Zen Hei:pixelsize=16"
+--         , bgColor               = colorDarkGray
+--         , fgColor               = colorGreen
+--         , bgHLight              = colorGreen
+--         , fgHLight              = colorDarkGray
+--         , promptBorderWidth     = 0
+--         , height                = 14
+--         , historyFilter         = deleteConsecutive
+-- }
 
 -- Run"" or Raise Menu
-largeXPConfig :: XPConfig
-largeXPConfig = myXPConfig
-                { font = xftFont
-                , height = 20
-                }
+-- largeXPConfig :: XPConfig
+-- largeXPConfig = myXPConfig
+--                 { font = xftFont
+--                 , height = 20
+--                 }
 -- }}}
 
 emacs = "emacs -geometry 176x34+0+369"
@@ -182,10 +182,11 @@ winxp="VBoxManage startvm winxp"
 myKeys = let modm = mod4Mask in
     [ ((modm, xK_w), spawn "opera")
     , ((modm, xK_e), spawn emacs)
+    , ((modm, xK_p), spawn "~/bin/dmenu.sh")
+    --, ((modm, xK_p), spawnSelected defaultGSConfig [
+    --          xterm, "gmrun", "opera", emacs, eweiqi, winxp])
+    --, ((modm .|. shiftMask, xK_p),runOrRaisePrompt largeXPConfig)
     , ((modm, xK_g), goToSelected defaultGSConfig)
-    , ((modm, xK_p), spawnSelected defaultGSConfig [
-              xterm, "gmrun", "opera", emacs, eweiqi, winxp])
-    , ((modm .|. shiftMask, xK_p),runOrRaisePrompt largeXPConfig)
     , ((modm, xK_F11), spawn "sudo /sbin/shutdown -r now")
     , ((modm, xK_F12), spawn "sudo /sbin/shutdown -p now")
     --, ((modm .|. shiftMask, xK_Print), spawn "sleep 0.2; scrot -s")

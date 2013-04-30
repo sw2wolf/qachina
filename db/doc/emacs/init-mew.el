@@ -6,6 +6,9 @@
 
 ;;设定将密码保存一段时间，默认20分钟 
 (setq mew-use-cached-passwd t)
+(setq mew-passwd-timer-unit 999)
+(setq mew-passwd-lifetime 999)
+
 ;; mew-pop-size设置成0时，pop邮件大小没有限制
 (setq mew-pop-size 0)  
 ;; 不删除服务器上的邮件  

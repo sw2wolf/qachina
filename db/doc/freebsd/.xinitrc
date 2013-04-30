@@ -39,14 +39,15 @@ case $1 in
     dwm)
 		exec /usr/local/bin/dwm
 		;;
-	xmonad)
-		exec xmonad
+	clisp)
+	    /usr/local/etc/rc.d/musicpd onestart
+		exec $HOME/bin/stumpwm-clisp
         ;;
 	ccl)
 	    /usr/local/etc/rc.d/musicpd onestart
         exec $HOME/bin/stumpwm-ccl
         ;;
     *)
-		exec $HOME/bin/stumpwm-clisp	   
+		exec xmonad
 		;;
 esac

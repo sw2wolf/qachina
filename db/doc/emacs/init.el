@@ -34,7 +34,7 @@
 
 ;(load "init-eshell")
 ;(load "init-mu4e")
-(load "init-emms")
+;(load "init-emms")
 (load "init-radio")
 
 (setq shell-file-name "/bin/csh")

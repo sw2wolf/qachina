@@ -66,7 +66,7 @@ used for matching windows with run-or-raise or window placement
 (set-bg-color "black")
 
 ;(set-float-focus-color "green")
-(set-float-unfocus-color "black")
+;(set-float-unfocus-color "black")
 
 (set-border-color "green")
 
@@ -108,16 +108,15 @@ used for matching windows with run-or-raise or window placement
       *mode-line-pad-y* 0
       *mode-line-timeout* 60
       *mode-line-screen-position* :top)
-#+clisp (setf *screen-mode-line-format* (list "[^B%n^b]%W"))
-#+(or ccl sbcl) (setf *screen-mode-line-format* (list "[^B%n^b]%W" "^>%m | " "^>%d"))
+;#+clisp (setf *screen-mode-line-format* (list "[^B%n^b]%W"))
+(setf *screen-mode-line-format* (list "[^B%n^b]%W" "^>%m | " "^>%d"))
 
 ;; turn on/off the mode line for the current screen only.
-#+clisp
-    (if (head-mode-line (current-head))
-		(toggle-mode-line (current-screen) (current-head)))
-#+(or ccl sbcl)
-    (if (not (head-mode-line (current-head)))
-		(toggle-mode-line (current-screen) (current-head)))
+;; #+clisp
+;;     (if (head-mode-line (current-head))
+;; 		(toggle-mode-line (current-screen) (current-head)))
+(if (not (head-mode-line (current-head)))
+	(toggle-mode-line (current-screen) (current-head)))
 
 ; A head is a physical monitor. A screen is a section of video memory
 ; that heads are mapped on to. When using xinerama you generally have
@@ -226,7 +225,6 @@ used for matching windows with run-or-raise or window placement
     ("s-i" "display-current-window-info"))
 
 ;;; mpd
-#+(or ccl sbcl)
   (progn
     (load-module "mpd")
     (setf *mpd-modeline-fmt* "%S [%d|%e] [%s;%r;%v]: %a - %t (%n/%p)")
@@ -271,8 +269,8 @@ used for matching windows with run-or-raise or window placement
 (defun my-start-hook ()
     ;(run-shell-command "xsetroot -solid black")
     ;(run-shell-command "fcitx")
-    (vsplit "2/5") (move-focus :down)
-	#+clisp(run-commands "gselect 2"))
+    (vsplit "2/5") (move-focus :down))
+	;#+clisp(run-commands "gselect 2")
 
 (replace-hook *start-hook* 'my-start-hook)
 
