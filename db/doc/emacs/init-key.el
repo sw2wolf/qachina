@@ -103,7 +103,8 @@
 
 (global-set-key (kbd "<f7>") 'describe-char)
 (global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
-; > @wn @src @where @undo @unmtl @pl @djinn @package
+; > @wn @src @where @undo @unmtl @pl @package
+;@djinn turn a type into its corresponding expression
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

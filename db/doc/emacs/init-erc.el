@@ -13,9 +13,10 @@
  	     '(("freenode.net" "#freebsd" "#emacs" "#xmonad" "#clojure" "#lisp" "#haskell")
 		   ("oftc.net" "#emacs-cn"))
 
-       erc-keywords '("lisp" "racket" "haskell")
+       erc-keywords '("lisp" "clojure" "haskell")
 ;Hindley is one of the people responsible for Haskell's type system
-	   erc-pals '("rms" "Hindley" "Anniepoo" "ski")
+;rhickey is creator of Clojure
+	   erc-pals '("Hindley" "rhickey")
 
        erc-format-nick-function 'erc-format-@nick
        erc-interpret-mirc-color t
