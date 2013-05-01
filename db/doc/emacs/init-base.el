@@ -1,6 +1,6 @@
 ;;设置有用的个人信息,这在很多地方有用。
 (setq user-full-name "sw2wolf")
-(setq user-mail-address "z_axis@163.com")
+(setq user-mail-address "***@163.com")
 
 ;;去掉Emacs和gnus启动时的引导界面
 (setq inhibit-startup-message t)
