@@ -26,9 +26,9 @@
 (global-set-key (kbd "M-j") (lambda () (interactive) (join-line -1)))
 ;(global-set-key "\C-x\C-m" 'execute-extended-command)
 
-;; (defun qachina ()
-;;   (interactive)
-;;   (async-shell-command "cd /media/D/qachina && ./start.bat" "*QA-China*"))
+(defun qachina ()
+   (interactive)
+   (async-shell-command "cd /media/D/qachina && ./start.bat" "*QA-China*"))
 
 ;; (defun erlang ()
 ;;   (interactive)
