@@ -1,17 +1,18 @@
 /usr/local/bin/gmrun
 -----------------------------------------------------------
-xterm -geometry 159x25+0+438
-emacs -geometry 178x38+0+378
+wine "c:/Program Files/eweiqi/LiveBaduk.exe"
 -----------------------------------------------------------
 VBoxManage startvm winxp
 VBoxManage controlvm winxp poweroff
-wine "c:/Program Files/eweiqi/LiveBaduk.exe"
+#VBoxManage clonehd --format raw windows.vdi windows.raw
+-----------------------------------------------------------
+xterm -geometry 159x25+0+438
+emacs -geometry 178x38+0+378
+evince
+opera
 -----------------------------------------------------------
 sudo /usr/local/etc/rc.d/musicpd onestart
 nvidia-settings
------------------------------------------------------------
-evince
-/usr/local/bin/opera
 -----------------------------------------------------------
 scrot %Y%m%d-%H.%M.%S.png -t 280x175 -e 'mv $f $m ~'
 scrot %Y%m%d-%H.%M.%S.png -t 280x175 -d 5 -e 'mv $f $m ~'"
