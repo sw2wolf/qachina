@@ -177,3 +177,12 @@ You need to check if user that you are logging in got 'login class' set to 'czec
 
 update the port distinfo file:
 make makesum
+
+给网卡配置IP:
+# ifconfig msk0 inet 192.168.2.33/24
+
+
+添加第二个IP:
+# ifconfig re0 inet 192.168.2.33/24 add
+删除：
+# ifconfig re0 inet 192.168.2.33/24 -alias

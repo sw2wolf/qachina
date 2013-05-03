@@ -157,3 +157,26 @@
 
 (require 'grep)
 (grep-apply-setting 'grep-command "grep -nH -R -e  ")
+
+;
+;
+;
+(defun good-colors ()
+  (progn
+	 (set-background-color "Black")
+	 (set-foreground-color "White")
+	 (set-cursor-color "#ffffff")
+	 (set-border-color "DimGray")
+	 (set-mouse-color "DarkSlateBlue")
+	 
+	 (set-face-background 'default "Black")
+	 (set-face-background 'region "DarkSlateGray")
+	 (set-face-background 'highlight "DarkSlateBlue")
+	 (set-face-background 'modeline "DarkSlateBlue") ;;; CornflowerBlue")
+	 
+	 (set-face-foreground 'default "LightGray")
+	 (set-face-foreground 'region "Ivory")
+	 (set-face-foreground 'highlight "LightGray")  ;;; DimGray")
+	 (set-face-foreground 'modeline "LightGray")
+	 ))
+(good-colors)
