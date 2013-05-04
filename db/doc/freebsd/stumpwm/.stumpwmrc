@@ -71,7 +71,6 @@ used for matching windows with run-or-raise or window placement
 (set-border-color "green")
 
 (set-msg-border-width 1)
-(set-normal-gravity :center)
 
 (set-font "-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
 
@@ -109,7 +108,7 @@ used for matching windows with run-or-raise or window placement
       *mode-line-timeout* 60
       *mode-line-screen-position* :top)
 ;#+clisp (setf *screen-mode-line-format* (list "[^B%n^b]%W"))
-(setf *screen-mode-line-format* (list "[^B%n^b]%W" "^>%m | " "^>%d"))
+(setf *screen-mode-line-format* (list "[^B%n^b]" "^>%m | " "^>%d"))
 
 ;; turn on/off the mode line for the current screen only.
 ;; #+clisp
