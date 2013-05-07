@@ -66,7 +66,7 @@ used for matching windows with run-or-raise or window placement
 (set-bg-color "black")
 
 ;(set-float-focus-color "green")
-;(set-float-unfocus-color "black")
+(set-float-unfocus-color "black")
 
 (set-border-color "green")
 
@@ -111,10 +111,7 @@ used for matching windows with run-or-raise or window placement
 (setf *screen-mode-line-format* (list "[^B%n^b]" "^>%m | " "^>%d"))
 
 ;; turn on/off the mode line for the current screen only.
-;; #+clisp
-;;     (if (head-mode-line (current-head))
-;; 		(toggle-mode-line (current-screen) (current-head)))
-(if (not (head-mode-line (current-head)))
+(if (head-mode-line (current-head))
 	(toggle-mode-line (current-screen) (current-head)))
 
 ; A head is a physical monitor. A screen is a section of video memory
@@ -157,6 +154,37 @@ used for matching windows with run-or-raise or window placement
 
 (defcommand emacs () ()
     (run-shell-command "emacs -geometry 178x38+0+368"))
+
+;;; mpd
+(when (ext:getenv "MPD")
+  (progn
+	(load-module "mpd")
+	(setf *mpd-modeline-fmt* "%S [%d|%e] [%s;%r;%v]: %a - %t (%n/%p)")
+	(setf *mpd-map*
+	  (let ((m (make-sparse-keymap)))
+		(define-key m (kbd "SPC") "mpd-toggle-pause")
+		(define-key m (kbd "s") "mpd-toggle-random")
+		(define-key m (kbd "r") "mpd-toggle-repeat")
+		(define-key m (kbd "S") "mpd-current-song")
+		(define-key m (kbd "P") "mpd-play")
+		(define-key m (kbd "L") "mpd-browse-playlist")
+		(define-key m (kbd "o") "mpd-stop")
+		(define-key m (kbd "n") "mpd-next")
+		(define-key m (kbd "p") "mpd-prev")
+		(define-key m (kbd "c") "mpd-clear")
+		(define-key m (kbd "x") "mpd-connect")
+		(define-key m (kbd "k") "mpd-kill")
+		(define-key m (kbd "u") "mpd-update")
+		(define-key m (kbd "a") "mpd-search-and-add-artist")
+		(define-key m (kbd "z") "mpd-playlist")
+		(define-key m (kbd "v") "mpd-set-volume")
+		(define-key m (kbd "e") "mpd-volume-up")
+		(define-key m (kbd "d") "mpd-volume-down")
+		(define-key m (kbd "S") '*mpd-search-map*)
+		(define-key m (kbd "b") '*mpd-browse-map*)
+		(define-key m (kbd "A") '*mpd-add-map*)
+				m))
+		(define-key *top-map* (kbd "s-m") '*mpd-map*)))
 
 (defcommand reboot () ()
     (run-shell-command "sudo /sbin/shutdown -r now"))
@@ -222,36 +250,6 @@ used for matching windows with run-or-raise or window placement
     ("s-e" "eval")
     ("s-w" "windowlist")
     ("s-i" "display-current-window-info"))
-
-;;; mpd
-  (progn
-    (load-module "mpd")
-    (setf *mpd-modeline-fmt* "%S [%d|%e] [%s;%r;%v]: %a - %t (%n/%p)")
-    (setf *mpd-map*
-      (let ((m (make-sparse-keymap)))
-        (define-key m (kbd "SPC") "mpd-toggle-pause")
-        (define-key m (kbd "s") "mpd-toggle-random")
-        (define-key m (kbd "r") "mpd-toggle-repeat")
-        (define-key m (kbd "S") "mpd-current-song")
-        (define-key m (kbd "P") "mpd-play")
-        (define-key m (kbd "L") "mpd-browse-playlist")
-        (define-key m (kbd "o") "mpd-stop")
-        (define-key m (kbd "n") "mpd-next")
-        (define-key m (kbd "p") "mpd-prev")
-        (define-key m (kbd "c") "mpd-clear")
-        (define-key m (kbd "x") "mpd-connect")
-        (define-key m (kbd "k") "mpd-kill")
-        (define-key m (kbd "u") "mpd-update")
-        (define-key m (kbd "a") "mpd-search-and-add-artist")
-        (define-key m (kbd "z") "mpd-playlist")
-        (define-key m (kbd "v") "mpd-set-volume")
-        (define-key m (kbd "e") "mpd-volume-up")
-        (define-key m (kbd "d") "mpd-volume-down")
-        (define-key m (kbd "S") '*mpd-search-map*)
-        (define-key m (kbd "b") '*mpd-browse-map*)
-        (define-key m (kbd "A") '*mpd-add-map*)
-        m))
-    (define-key *top-map* (kbd "s-m") '*mpd-map*))
 
 ; groups
 (defvar group-names "123")

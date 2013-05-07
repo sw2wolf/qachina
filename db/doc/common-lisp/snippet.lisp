@@ -1,5 +1,9 @@
 
 ;;;
+
+'("Hi" #+#.(cl:if (cl:equal (ext:getenv "HOME") "/home/pjb") '(:and) '(:or)) "Pascal")
+
+;;;
 (defconstant +cube-vertices+
   #(#(0 0 0)
     #(0 1 0)

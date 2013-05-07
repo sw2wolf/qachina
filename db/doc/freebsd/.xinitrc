@@ -39,7 +39,11 @@ case $1 in
     dwm)
 		exec /usr/local/bin/dwm
 		;;
+	xmonad)
+		exec xmonad
+		;;
 	clisp)
+		export MPD=YES
 	    /usr/local/etc/rc.d/musicpd onestart
 		exec $HOME/bin/stumpwm-clisp
         ;;
@@ -52,6 +56,7 @@ case $1 in
 		sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
         ;;
     *)
-		exec xmonad
+		exec $HOME/bin/stumpwm-clisp
+		#exec xmonad
 		;;
 esac

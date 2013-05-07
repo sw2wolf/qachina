@@ -10,6 +10,7 @@ setenv GOROOT /usr/local/go
 #setenv EVILVTE_CONF /home/sw2wolf/evilvte-config.h
 setenv LDFLAGS -L/usr/local/lib
 setenv CFLAGS  -I/usr/local/include
+setenv CPPFLAGS  -I/usr/local/include
 
 # for gnu prolog
 # setenv LOCALSZ 16384 #32768  #control stack (environments and choice-points)
@@ -21,5 +22,5 @@ setenv CFLAGS  -I/usr/local/include
 # A righteous umask
 umask 22
 
-set path = (. /sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin  $HOME/bin $HOME/.cabal/bin $HOME/swi-prolog/bin $HOME/ocaml/bin)
+set path = (. /sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin  $HOME/bin $HOME/.cabal/bin $HOME/racket/bin $HOME/swi-prolog/bin)
 #setenv PYTHONSTARTUP /media/D/www/qachina/db/doc/python/python_ini.py

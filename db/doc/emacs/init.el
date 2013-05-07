@@ -10,22 +10,22 @@
 (add-to-list 'load-path "~/RnD/w3m")
 
 ;(load "init-package")
-
 (load "init-base")
 (load "init-key")
+
+(load "init-dict")
 
 (load "init-erc")
 (load "init-mew")
 ;(load "init-w3m")
 
-(load "init-dict")
-
 (load "init-slime")
 (load "init-haskell")
+(load "init-racket")
+
 ;(load "init-prolog")
 ;(load "init-ruby")
 ;(load "init-clojure")
-;(load "init-racket")
 ;(load "init-forth")
 
 ;(require 'erlang-start)
@@ -34,6 +34,7 @@
 
 ;(load "init-eshell")
 ;(load "init-mu4e")
+
 ;(load "init-emms")
 (load "init-radio")
 

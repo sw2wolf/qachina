@@ -101,7 +101,8 @@
 (global-set-key (kbd "<f5>") 'jump-run-mew)
 (global-set-key (kbd "<f6>") 'w3m)
 
-(global-set-key (kbd "<f7>") 'describe-char)
+;(global-set-key (kbd "<f7>") 'describe-char)
+(global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "/msg rudybot doc ")))
 (global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
 ; > @wn @src @where @undo @unmtl @pl @package
 ;@djinn turn a type into its corresponding expression
