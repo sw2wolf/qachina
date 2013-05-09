@@ -1,5 +1,15 @@
 
 ---------
+(do x <- id; y <- reverse; z <- map toUpper; return (x,y,z)) "hello"
+("hello","olleh","HELLO")
+
+sequence [id, (+2), (*2), (^2), (2^)] 5
+<lambdabot>   [5,7,10,25,32]
+---------
+import Data.Array.Vector
+main = print (sumU (enumFromToU 1 (200000000 :: Int)))
+
+---------
 $ghc -e 'System.Directory.getAppUserDataDirectory "xmonad"'
 
 $ghc --info | egrep 'split|Host'

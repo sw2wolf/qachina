@@ -10,10 +10,6 @@
 (defun cat (&rest strings)
     (apply 'concatenate 'string strings))
 
-;(defun show-key-seq (key seq val)
-;    (message (print-key-seq (reverse seq))))
-;(add-hook *key-press-hook* 'show-key-seq)
-
 (defmacro replace-hook (hook fn)
     `(remove-hook ,hook ,fn)
     `(add-hook ,hook ,fn))
@@ -53,7 +49,7 @@ used for matching windows with run-or-raise or window placement
                          "height    " (format nil "~a" (window-height w))))))
 
 (defcommand sdcv (word) ((:rest "Word> "))
-  (let ((cmd (concatenate 'string "sdcv -n " word)))
+  (let ((cmd (format nil "sdcv -n ~a" word))) ;wn ~a -over
     (with-output-to-string (*standard-output*)
 	 #+clisp(let ((str (ext:run-shell-command cmd :output :stream :wait nil)))
 	   (loop for line = (read-line str nil)
@@ -65,14 +61,18 @@ used for matching windows with run-or-raise or window placement
 (set-fg-color "green")
 (set-bg-color "black")
 
-;(set-float-focus-color "green")
+(set-float-focus-color "black")
 (set-float-unfocus-color "black")
 
 (set-border-color "green")
 
 (set-msg-border-width 1)
 
-(set-font "-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
+(set-font "-*-simsun-medium-r-normal-*-16-*-*-*-*-*-iso10646-1")
+
+;(ql:quickload :clx-truetype)
+;(xft:cache-fonts)
+;(set-font (make-instance 'xft:font :family "Consolas" :subfamily "Regular" :size 16))
 
 (set-prefix-key (kbd "s-x"))
 
@@ -82,14 +82,15 @@ used for matching windows with run-or-raise or window placement
       *suppress-abort-messages* t
       *timeout-wait* 9
       *mouse-focus-policy* :click ;; :click, :ignore, :sloppy
-      *message-window-gravity* :bottom-left
-      *input-window-gravity* :bottom-left)
+      *message-window-gravity* :bottom-right
+      *input-window-gravity* :bottom-right)
 
 ;;; Window Appearance
+(set-frame-outline-width 0)
+
 (setf *normal-border-width* 1
       *maxsize-border-width* 1
       *transient-border-width* 1
-      ;+default-frame-outline-width+ 0
       *float-window-title-height* 0
       *window-border-style* :tight) ; :thick :thin :tight :none
 
@@ -110,19 +111,15 @@ used for matching windows with run-or-raise or window placement
 ;#+clisp (setf *screen-mode-line-format* (list "[^B%n^b]%W"))
 (setf *screen-mode-line-format* (list "[^B%n^b]" "^>%m | " "^>%d"))
 
-;; turn on/off the mode line for the current screen only.
-(if (head-mode-line (current-head))
-	(toggle-mode-line (current-screen) (current-head)))
+;; turn on the mode line for the current screen if has MPD.
+(when (stumpwm::getenv "MPD")
+  (if (not (head-mode-line (current-head)))
+	(toggle-mode-line (current-screen) (current-head))))
 
 ; A head is a physical monitor. A screen is a section of video memory
 ; that heads are mapped on to. When using xinerama you generally have
 ; 1 screen and many heads. When not using xinerama each screen is a
 ; physical monitor so you have many screens with only one head on them.
-
-;;add hook so I get notified when people say my name on IRC or IM me
-(defun echo-urgent-window (target)
-    (message-no-timeout "~a has an message for you." (window-title target)))
-(add-hook *urgent-window-hook* 'echo-urgent-window)
 
 ;; shell program used by `run-shell-command' (`sh' by default, which is *not* 'bash' nor 'zsh')
 (setf *shell-program* (stumpwm::getenv "SHELL"))
@@ -155,8 +152,8 @@ used for matching windows with run-or-raise or window placement
 (defcommand emacs () ()
     (run-shell-command "emacs -geometry 178x38+0+368"))
 
-;;; mpd
-(when (ext:getenv "MPD")
+;;; You need to set environment variable MPD if you want to use mpd
+(when (stumpwm::getenv "MPD")
   (progn
 	(load-module "mpd")
 	(setf *mpd-modeline-fmt* "%S [%d|%e] [%s;%r;%v]: %a - %t (%n/%p)")
@@ -217,13 +214,9 @@ used for matching windows with run-or-raise or window placement
 (defkeys-top
     ("s-w" "browse")
 	("s-e" "emacs")
-    ;("s-p" "exec /home/sw2wolf/bin/dmenu.sh")
 	("s-p" "menu")
     ("s-t" "exec xterm -g 159x25+0+438")
     ("s-c" "sdcv")
-    ("s-o" "only")
-    ("s-s" "vsplit")
-    ("s-S" "hsplit")
 	;("s-S" "exec-in-terminal")
     ("s-b" "mode-line")
     ("s-Tab" "pull-hidden-next")
@@ -263,13 +256,29 @@ used for matching windows with run-or-raise or window placement
 (gnewbg-float "2")
 (gnewbg-float "3")
 
+;(defun show-key-seq (key seq val)
+;    (message (print-key-seq (reverse seq))))
+;(add-hook *key-press-hook* 'show-key-seq)
+
+;;add hook so I get notified when people say my name on IRC or IM me
+;; (defun echo-urgent-window (target)
+;;     (message-no-timeout "~a has an message for you." (window-title target)))
+;; (add-hook *urgent-window-hook* 'echo-urgent-window)
+
+(defun show-group-name (current-group last-group)
+  (let ((*message-window-gravity* :center)
+        (*timeout-wait* 2))
+    (message (group-name current-group))))
+(replace-hook *focus-group-hook* 'show-group-name)
+
 (defun my-start-hook ()
     ;(run-shell-command "xsetroot -solid black")
     ;(run-shell-command "fcitx")
-    (vsplit "2/5") (move-focus :down))
-	;#+clisp(run-commands "gselect 2")
-
+    (vsplit "2/5") (move-focus :down)
+	(when (not (stumpwm::getenv "MPD")) (run-commands "gselect 2"))
+)
 (replace-hook *start-hook* 'my-start-hook)
+
 
 (defvar *swank-p* nil)
 (defcommand swank () ()
