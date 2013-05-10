@@ -186,3 +186,6 @@ make makesum
 # ifconfig re0 inet 192.168.2.33/24 add
 删除：
 # ifconfig re0 inet 192.168.2.33/24 -alias
+
+#sysctl
+sysctl -n kern.osrelease kern.ostype

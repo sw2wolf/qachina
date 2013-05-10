@@ -1,8 +1,0 @@
-/usr/ports/x11/nvidia-driver
-/usr/ports/x11/nvidia-settings
-/usr/ports/x11/nvidia-xconfig
-
-安装nvidia-driver时，从驱动文件下载到make install都正常，没有安装linux兼容部分，发现在安装过程中并没有完成nvidia.ko的配置过程，有些纳闷，权宜之计是手动在/boot/loader.conf中添加：
-
- nvidia_load="YES"
-启动kdm，可以看到nvidia的欢迎画面了，利用nvidia-xconfig完成了xorg.conf的配置，启动kde后运行nvidia- settings，设置了刷新率，这个刷新率的设置是可以保存在xorg.conf中的

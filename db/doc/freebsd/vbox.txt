@@ -7,7 +7,7 @@ FreeBSD 8.0通过VirtualBox 3.1.2安装Windows XP虚拟机
 2, 然后安装VirtualBox的内核模块，这个过程会在/boot/modules/下产生vboxdrv.ko,vboxnetadp.ko,vboxnetflt.ko几个内核模块
 
    $cd /usr/ports/emulators/virtualbox-ose-kmod
-      $sudo make install clean
+   $sudo make install clean
 
 3, 在/boot/loader.conf里添加
    vboxdrv_load="YES"
