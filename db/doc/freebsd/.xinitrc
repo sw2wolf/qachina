@@ -47,6 +47,11 @@ case $1 in
 	    /usr/local/etc/rc.d/musicpd onestart
 		exec $HOME/bin/stumpwm-clisp
         ;;
+    ecl)
+		#export MPD=YES
+	    #/usr/local/etc/rc.d/musicpd onestart
+		exec $HOME/bin/stumpwm-ecl
+        ;;
 	ccl)
 	    /usr/local/etc/rc.d/musicpd onestart
         exec $HOME/bin/stumpwm-ccl

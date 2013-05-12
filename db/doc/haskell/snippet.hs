@@ -1,15 +1,32 @@
 
+
 ---------
+
+import XMonad
+import XMonad.Hooks.FadeInactive
+
+myManageHook = manageDocks <+> composeAll
+    [ title =? "uxterm"             --> (ask >>= \w -> liftX (setOpacity w 0.75) >> idHook)
+    , className =? "Thunar"         --> (ask >>= \w -> liftX (setOpacity w 0.75) >> idHook)
+    , className =? "Conky"          --> doIgnore
+    , resource  =? "desktop_window" --> doIgnore
+    ]
+
+---------
+
 (do x <- id; y <- reverse; z <- map toUpper; return (x,y,z)) "hello"
 ("hello","olleh","HELLO")
 
 sequence [id, (+2), (*2), (^2), (2^)] 5
 <lambdabot>   [5,7,10,25,32]
+
 ---------
+
 import Data.Array.Vector
 main = print (sumU (enumFromToU 1 (200000000 :: Int)))
 
 ---------
+
 $ghc -e 'System.Directory.getAppUserDataDirectory "xmonad"'
 
 $ghc --info | egrep 'split|Host'
@@ -26,13 +43,15 @@ $cabal install mighttpd2 --ghc-options=-fllvm
 
 @undo [y | x <- xs, y <- f x]
 <lambdabot> concatMap (\ x -> concatMap (\ y -> [y]) f x) xs
----------
 
 ---------
+
 -- > (-->) :: Monoid m => Query Bool -> Query m -> Query m -- a simpler type
 (-->) :: (Monad m, Monoid a) => m Bool -> m a -> m a
 p --> f = p >>= \b -> if b then f else return mempty
+
 ---------
+
 -- | Ignore SIGPIPE to avoid termination when a pipe is full, and SIGCHLD to
 -- avoid zombie processes, and clean up any extant zombie processes.
 installSignalHandlers :: MonadIO m => m ()
@@ -44,7 +63,9 @@ installSignalHandlers = io $ do
         x <- getAnyProcessStatus False False
         when (isJust x) more
     return ()
+
 ---------
+
 -- | A replacement for 'forkProcess' which resets default signal handlers.
 xfork :: MonadIO m => IO () -> m ProcessID
 xfork x = liftIO . forkProcess . finally nullStdin $ do
@@ -56,13 +77,17 @@ xfork x = liftIO . forkProcess . finally nullStdin $ do
         fd <- openFd "/dev/null" ReadOnly Nothing defaultFileFlags
         dupTo fd stdInput
         closeFd fd
+
 ---------
+
 case () of
     _ | W.member w s && W.peek s /= Just w -> windows (W.focusWindow w)
       | Just new <- mnew, w == root && curr /= new
                                           -> windows (W.view new)
       | otherwise                         -> return ()
+
 ---------
+
 -- | Launch an external application through the system shell and return a @Handle@ to its standard input.
 spawnPipe :: MonadIO m => String -> m Handle
 spawnPipe x = io $ do
@@ -75,6 +100,7 @@ spawnPipe x = io $ do
           executeFile "/bin/sh" False ["-c", encodeString x] Nothing
     closeFd rd
     return h
+
 ---------
 
 import Data.Vector.Unboxed as U

@@ -1,5 +1,11 @@
 
 ;;;
+#+ecl
+(eval-when (:load-toplevel :compile-toplevel :execute)
+  (setf *load-verbose* nil)
+  (defun use-ecl-byte-compiler-p () (and (member :ecl-bytecmp *features*) t))
+  (unless (use-ecl-byte-compiler-p) (require :cmp)))
+;;;
 
 '("Hi" #+#.(cl:if (cl:equal (ext:getenv "HOME") "/home/pjb") '(:and) '(:or)) "Pascal")
 
