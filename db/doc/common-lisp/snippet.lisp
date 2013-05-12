@@ -1,3 +1,4 @@
+;;;
 
 ;;;
 #+ecl
@@ -5,9 +6,17 @@
   (setf *load-verbose* nil)
   (defun use-ecl-byte-compiler-p () (and (member :ecl-bytecmp *features*) t))
   (unless (use-ecl-byte-compiler-p) (require :cmp)))
-;;;
 
-'("Hi" #+#.(cl:if (cl:equal (ext:getenv "HOME") "/home/pjb") '(:and) '(:or)) "Pascal")
+;;;
+there are three distanct "times" in the life cycle of a big of code like that.
+1) when the forms are read
+2) when they are compiled
+3) when they are executed.
+
+The defun defines the function at #2.  The when fires at #3.  You can use #+ #- to get fine control over what is actually rad during #1
+
+The dispatching reader macro for #+ calls READ (with *package* bound to the keyword package).
+'("Hi" #+#.(cl:if (cl:equal (ext:getenv "HOME") "/home/foo") '(:and) '(:or)) "Pascal")
 
 ;;;
 (defconstant +cube-vertices+

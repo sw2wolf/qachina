@@ -7,6 +7,8 @@
 ;(redirect-all-output (data-dir-file "debug-output" "txt"))
 ;(set-contrib-dir "/usr/local/share/stumpwm")
 
+#.(cl:if (stumpwm:getenv "MPD") (cl:push :MPD *features*) nil)
+
 (defun cat (&rest strings)
     (apply 'concatenate 'string strings))
 
@@ -112,9 +114,8 @@ used for matching windows with run-or-raise or window placement
 (setf *screen-mode-line-format* (list "[^B%n^b]" "^>%m | " "^>%d"))
 
 ;; turn on the mode line for the current screen if has MPD.
-(when (stumpwm::getenv "MPD")
-  (if (not (head-mode-line (current-head)))
-	(toggle-mode-line (current-screen) (current-head))))
+#+MPD (if (not (head-mode-line (current-head)))
+	(toggle-mode-line (current-screen) (current-head)))
 
 ; A head is a physical monitor. A screen is a section of video memory
 ; that heads are mapped on to. When using xinerama you generally have
@@ -153,8 +154,8 @@ used for matching windows with run-or-raise or window placement
     (run-shell-command "emacs -geometry 178x38+0+368"))
 
 ;;; You need to set environment variable MPD if you want to use mpd
-(when (stumpwm::getenv "MPD")
-  (progn
+#+MPD
+(progn
 	(load-module "mpd")
 	(setf *mpd-modeline-fmt* "%S [%d|%e] [%s;%r;%v]: %a - %t (%n/%p)")
 	(setf *mpd-map*
@@ -181,7 +182,7 @@ used for matching windows with run-or-raise or window placement
 		(define-key m (kbd "b") '*mpd-browse-map*)
 		(define-key m (kbd "A") '*mpd-add-map*)
 				m))
-		(define-key *top-map* (kbd "s-m") '*mpd-map*)))
+		(define-key *top-map* (kbd "s-m") '*mpd-map*))
 
 (defcommand reboot () ()
     (run-shell-command "sudo /sbin/shutdown -r now"))
@@ -265,17 +266,20 @@ used for matching windows with run-or-raise or window placement
 ;;     (message-no-timeout "~a has an message for you." (window-title target)))
 ;; (add-hook *urgent-window-hook* 'echo-urgent-window)
 
-(defun show-group-name (current-group last-group)
-  (let ((*message-window-gravity* :center)
-        (*timeout-wait* 2))
-    (message (group-name current-group))))
-(replace-hook *focus-group-hook* 'show-group-name)
+#-MPD
+(progn 
+  (defun show-group-name (current-group last-group)
+	(let ((*message-window-gravity* :center)
+		  (*timeout-wait* 2))
+	  (message (group-name current-group))))
+  (replace-hook *focus-group-hook* 'show-group-name))
 
 (defun my-start-hook ()
     ;(run-shell-command "xsetroot -solid black")
     ;(run-shell-command "fcitx")
     (vsplit "2/5") (move-focus :down)
-	(when (not (stumpwm::getenv "MPD")) (run-commands "gselect 2"))
+	#-MPD (run-commands "gselect 2")
+	;(when (not (stumpwm::getenv "MPD")) (run-commands "gselect 2"))
 )
 (replace-hook *start-hook* 'my-start-hook)
 
