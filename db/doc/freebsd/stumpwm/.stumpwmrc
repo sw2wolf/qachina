@@ -140,18 +140,18 @@ used for matching windows with run-or-raise or window placement
 ;    (run-shell-command "exec scrot '%m.%d.%Y_%I:%M:%S_%P.png' -e 'mv $f ~/download'"))
 
 (defcommand browse () ()
-    (run-or-raise +browser-name+ `(:class ,+browser-class+)))
+  (run-or-raise +browser-name+ `(:class ,+browser-class+)))
 
 (defcommand eweiqi () ()
-    (run-commands "gselect 3")
-    (run-shell-command "wine \"c:/Program Files/eweiqi/LiveBaduk.exe\" &"))
+  (run-commands "gselect 3")
+  (run-or-raise "wine \"c:/Program Files/eweiqi/LiveBaduk.exe\" &" '(:class "Wine")))
 
 (defcommand winxp () ()
-	(run-commands "gselect 2")
-    (run-shell-command "VBoxManage startvm winxp &"))
+  (run-commands "gselect 2")
+  (run-or-raise "VBoxManage startvm winxp &" '(:class "VirtualBox")))
 
 (defcommand emacs () ()
-    (run-shell-command "emacs -geometry 178x38+0+368"))
+  (run-or-raise "emacs -geometry 178x38+0+368" '(:class "Emacs")))
 
 ;;; You need to set environment variable MPD if you want to use mpd
 #+MPD

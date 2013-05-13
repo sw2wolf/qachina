@@ -1,5 +1,9 @@
 ;;;
+(defcommand xterm1 () ()
+  "run an xterm instance"
+  (run-or-raise "xterm  & sleep .3s && transset -a" '(:title "xterm1")))
 
+(stumpwm:define-key stumpwm:*root-map* (stumpwm:kbd "C-z") "xterm1")
 ;;;
 #+ecl
 (eval-when (:load-toplevel :compile-toplevel :execute)
