@@ -1,3 +1,54 @@
+
+;;;
+;For conveniently running external programs (ie, I don't want to have to type (run-program "ls" :arguments '("-lh")) every time, I have set up a read macro.  Put the following in somefile.lisp.
+
+(set-macro-character #\] (get-macro-character #\)))
+
+(set-dispatch-macro-character #\# #\[
+  #'(lambda (stream char1 char2)
+      (setf (readtable-case *readtable*) :preserve)
+      (UNWIND-PROTECT
+       (LET* ((OUTPUT-STREAM (MAKE-STRING-OUTPUT-STREAM 
+                                     :ELEMENT-TYPE 'BASE-CHAR))
+	      (STEP1 (FORMAT OUTPUT-STREAM "(RUN-PROGRAM "))
+	      (COMMAND-LINE (READ-DELIMITED-LIST #\] STREAM T))
+	      (COMMAND (FIRST COMMAND-LINE))
+	      (STEP2 (FORMAT OUTPUT-STREAM "\"~A\" 
+                                     :ARGUMENTS " COMMAND))
+	      (PARAMETERS (REST COMMAND-LINE))
+	      (STEP3 (FORMAT OUTPUT-STREAM "'(")))
+	     (DOLIST (X PARAMETERS
+			(PROGN (FORMAT OUTPUT-STREAM "))")
+			       (LET ((CLEAN 
+                                      (GET-OUTPUT-STREAM-STRING 
+                                               OUTPUT-STREAM)))
+				    (CLOSE OUTPUT-STREAM)
+				    (VALUES 
+                                     (READ-FROM-STRING CLEAN)))))
+		     (FORMAT OUTPUT-STREAM "\"~A\" " X)))
+      (SETF (READTABLE-CASE *READTABLE*) :UPCASE))))
+
+;You will get (harmless) warnings from the compiler about unused variables STEP*, if you compile this file.  You must keep the upper case stuff as is.  (It could also be all upcase).
+
+;; It's also a PITA to have to type "#[" and "]" everytime you want to
+;; run a command, so add the following in your $HOME/.inputrc
+
+;; #for clash: prints the square brackets to run an external command
+;; "\ec": "#[]\C-b"
+
+;; When you type ESC-c (or META-c) readline will print "#[]" to the
+;; console and put the cursor inside the brackets.  If you are running
+;; clisp as your shell, and do this, you will then be able to run
+;; programs (more or less) normally.  You will need to escape the dot
+;; in any filenames with a dot in them: #[cat  \.xinitrc]
+
+;; Now try it out-- *Don't* modify your /etc/passwd yet! --
+
+;; Start up a clisp with "clisp -k full", and load somefile.lisp (the
+;; read-macro) into a CLISP which has readline compiled in.
+
+;; Hit "ESC c", type "ls -l", and see if it works.
+
 ;;;
 (defcommand xterm1 () ()
   "run an xterm instance"

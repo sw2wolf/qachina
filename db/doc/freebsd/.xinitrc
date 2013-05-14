@@ -52,10 +52,6 @@ case $1 in
 	    #/usr/local/etc/rc.d/musicpd onestart
 		exec $HOME/bin/stumpwm-ecl
         ;;
-	ccl)
-	    /usr/local/etc/rc.d/musicpd onestart
-        exec $HOME/bin/stumpwm-ccl
-        ;;
     sbcl)
 	    /usr/local/etc/rc.d/musicpd onestart
 		sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'

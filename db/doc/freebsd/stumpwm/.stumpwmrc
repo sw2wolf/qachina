@@ -151,7 +151,7 @@ used for matching windows with run-or-raise or window placement
   (run-or-raise "VBoxManage startvm winxp &" '(:class "VirtualBox")))
 
 (defcommand emacs () ()
-  (run-or-raise "emacs -geometry 178x38+0+368" '(:class "Emacs")))
+  (run-or-raise "emacs -geometry 178x38+0+364" '(:class "Emacs")))
 
 ;;; You need to set environment variable MPD if you want to use mpd
 #+MPD
@@ -212,6 +212,16 @@ used for matching windows with run-or-raise or window placement
         (let ((choice (pick *start-menu*)))
             (run-commands choice))))
 
+(defcommand switch-window () ()
+    (let ((group (current-group)))
+	  (if (eq (type-of group) 'tile-group)
+		  (pull-hidden-next)
+		  (progn
+			(let* ((cw (group-current-window group))
+				  (nw (remove-if #'(lambda (w) (eq w cw)) (group-windows group))))
+			  (if (not (null nw)) (focus-window (first nw))
+				  (no-focus group nil)))))))
+
 (defkeys-top
     ("s-w" "browse")
 	("s-e" "emacs")
@@ -220,7 +230,7 @@ used for matching windows with run-or-raise or window placement
     ("s-c" "sdcv")
 	;("s-S" "exec-in-terminal")
     ("s-b" "mode-line")
-    ("s-Tab" "pull-hidden-next")
+    ("s-Tab" "switch-window")
     ("Print" "exec scrot -q 10")
     ("s-Print" "exec scrot -q 10 -s")
 
