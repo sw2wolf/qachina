@@ -1,5 +1,9 @@
 
 ;;;
+clisp
+./configure --with-threads=POSIX_THREADS ;--with-jitc=lightning 
+
+;;;
 ;For conveniently running external programs (ie, I don't want to have to type (run-program "ls" :arguments '("-lh")) every time, I have set up a read macro.  Put the following in somefile.lisp.
 
 (set-macro-character #\] (get-macro-character #\)))

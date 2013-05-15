@@ -8,6 +8,7 @@ import qualified XMonad.StackSet as W
 
 import XMonad.Actions.GridSelect
 --import XMonad.Actions.WindowMenu
+import XMonad.Actions.WindowGo
 
 import XMonad.Hooks.ManageDocks
 --import XMonad.Hooks.EwmhDesktops
@@ -174,14 +175,14 @@ checkType = ask >>= \w -> liftX $ do
 --                 }
 -- }}}
 
-emacs = "emacs -geometry 176x34+0+369"
+emacs = "emacs -geometry 176x34+0+368"
 xterm="xterm -geometry 159x25+0+438"
 eweiqi="wine \"c:/Program Files/eweiqi/LiveBaduk.exe\""
 winxp="VBoxManage startvm winxp"
 
 myKeys = let modm = mod4Mask in
-    [ ((modm, xK_w), spawn "opera")
-    , ((modm, xK_e), spawn emacs)
+    [ ((modm, xK_w), runOrRaise "opera" (className =? "Opera"))
+    , ((modm, xK_e), runOrRaise emacs (className =? "Emacs"))
     , ((modm, xK_p), spawn "~/bin/dmenu.sh")
     --, ((modm, xK_p), spawnSelected defaultGSConfig [
     --          xterm, "gmrun", "opera", emacs, eweiqi, winxp])
