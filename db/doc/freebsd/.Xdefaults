@@ -64,8 +64,10 @@ xterm*printerCommand: cat > ~/xtermdump
 !        <BtnUp>: select-end(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
 !        Ctrl <KeyPress> P: print() \n
 
+scratchpad*termName:     xterm-color
+
 scratchpad*background:   black
-scratchpad*foreground:   white
+scratchpad*foreground:   green
 scratchpad*scrollBar:    false
 scratchpad*.transparent: true
 scratchpad*.shading:     30

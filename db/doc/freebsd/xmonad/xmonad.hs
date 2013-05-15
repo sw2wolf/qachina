@@ -116,7 +116,7 @@ myManageHook = (composeAll . concat $
     [[className =? c --> doIgnore | c <- myIgnores]
     ,[className =? c --> doFloat | c <- myCFloats]
     ,[isFullscreen --> doFullFloat]
-    ]) <+> manageTypes <+> manageDocks <+> scratchpadManageHook (W.RationalRect 0.50 0.375 0.50 0.60)
+    ]) <+> manageTypes <+> manageDocks <+> scratchpadManageHook (W.RationalRect 0.50 0.250 0.50 0.722)
   where
     myIgnores = ["trayer", "desktop", "desktop_window"]
     myCFloats = ["GQview", "MPlayer", "Vncviewer","Xmessage"]
@@ -175,14 +175,14 @@ checkType = ask >>= \w -> liftX $ do
 --                 }
 -- }}}
 
-emacs = "emacs -geometry 176x34+0+368"
+emacs = "emacs -geometry 176x34+0+366"
 xterm="xterm -geometry 159x25+0+438"
 eweiqi="wine \"c:/Program Files/eweiqi/LiveBaduk.exe\""
 winxp="VBoxManage startvm winxp"
 
 myKeys = let modm = mod4Mask in
-    [ ((modm, xK_w), runOrRaise "opera" (className =? "Opera"))
-    , ((modm, xK_e), runOrRaise emacs (className =? "Emacs"))
+    [ ((modm, xK_w), raiseMaybe (spawn "opera") (className =? "Opera"))
+    , ((modm, xK_e), raiseMaybe (spawn emacs) (className =? "Emacs"))
     , ((modm, xK_p), spawn "~/bin/dmenu.sh")
     --, ((modm, xK_p), spawnSelected defaultGSConfig [
     --          xterm, "gmrun", "opera", emacs, eweiqi, winxp])
