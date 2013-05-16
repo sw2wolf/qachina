@@ -28,8 +28,8 @@ import XMonad.Layout.SimplestFloat (simplestFloat)
 import XMonad.Layout.Column
 import XMonad.Layout.ShowWName
 
-import XMonad.Prompt
-import XMonad.Prompt.RunOrRaise (runOrRaisePrompt)
+--import XMonad.Prompt
+--import XMonad.Prompt.RunOrRaise (runOrRaisePrompt)
 
 import XMonad.Util.Run
 import XMonad.Util.EZConfig
@@ -98,8 +98,8 @@ myLayout = windowNavigation $ avoidStruts $ noBorders --smartBorders
            $ onWorkspace "1-work" simplestFloat
            $ onWorkspace "2-game" simplestFloat
            $ onWorkspace "3-test"  (Column 0.65)
-           $ simplestFloat  --stdLayouts
-     -- where
+           $ simplestFloat
+    -- where
     --      stdLayouts = Mirror tall ||| tall ||| full      
 
     --      tall 	= Tall nmaster delta ratio
