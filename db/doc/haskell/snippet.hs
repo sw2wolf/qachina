@@ -1,4 +1,13 @@
 
+---------
+confirm :: String -> X () -> X ()
+confirm m f = do
+  result <- dmenu [m]
+  when (init result == m) f
+
+confirm "Restart" $ spawn "xmonad --recompile && xmonad --restart"
+--or
+confirm "Exit" $ io (exitWith ExitSuccess)
 
 ---------
 

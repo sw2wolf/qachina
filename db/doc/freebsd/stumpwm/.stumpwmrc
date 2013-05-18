@@ -7,7 +7,7 @@
 ;(redirect-all-output (data-dir-file "debug-output" "txt"))
 ;(set-contrib-dir "/usr/local/share/stumpwm")
 
-#.(cl:if (stumpwm:getenv "MPD") (cl:push :MPD *features*) nil)
+(cl:if (stumpwm:getenv "MPD") (cl:push :MPD *features*) nil)
 
 (defun cat (&rest strings)
     (apply 'concatenate 'string strings))

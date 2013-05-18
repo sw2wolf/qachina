@@ -116,7 +116,7 @@ myManageHook = (composeAll . concat $
     [[className =? c --> doIgnore | c <- myIgnores]
     ,[className =? c --> doFloat | c <- myCFloats]
     ,[isFullscreen --> doFullFloat]
-    ]) <+> manageTypes <+> manageDocks <+> scratchpadManageHook (W.RationalRect 0.50 0.250 0.50 0.722)
+    ]) <+> manageTypes <+> manageDocks <+> scratchpadManageHook (W.RationalRect 0.50 0.270 0.50 0.722)
   where
     myIgnores = ["trayer", "desktop", "desktop_window"]
     myCFloats = ["GQview", "MPlayer", "Vncviewer","Xmessage"]
