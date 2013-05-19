@@ -28,12 +28,12 @@
   (let ((pop-up-frames nil))
     (w3m-browse-url url t)))
 
-(setq browse-url-browser-function
-      '(("hoogle" . w3m-browse-url-other-window-new-tab)
-        ("ghc" . w3m-browse-url-other-window-new-tab)
-        ("hackage" . w3m-browse-url-other-window-new-tab)
-        ("pylookup" . w3m-browse-url-new-tab)
-        ("." .  browse-url-default-browser)))
+;; (setq browse-url-browser-function
+;;       '(("hoogle" . w3m-browse-url-other-window-new-tab)
+;;         ("ghc" . w3m-browse-url-other-window-new-tab)
+;;         ("hackage" . w3m-browse-url-other-window-new-tab)
+;;         ("pylookup" . w3m-browse-url-new-tab)
+;;         ("." .  browse-url-default-browser)))
 
 (setq w3m-pop-up-windows nil)
 (setq browse-url-browser-function 'w3m-browse-url-other-window-new-tab)
@@ -68,7 +68,7 @@
 
 (setq w3m-command-arguments '("-cookie" "-F"))          ;;使用cookies和框架
 
-(setq w3m-home-page "http://www.baidu.com")
+(setq w3m-home-page "http://www.google.com.hk")
 
 
 (eval-after-load "mm-decode" 
