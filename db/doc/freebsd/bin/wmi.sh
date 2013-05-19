@@ -5,8 +5,8 @@ onintr bye
 
 echo "please choose WM(1/2)"
 echo "----------------------"
-echo "1:stumpwm-clisp"
-echo "2:stumpwm-ecl"
+echo "1:stumpwm-clisp with MPD"
+echo "2:stumpwm-clisp no MPD"
 echo "3:xmonad"
 echo "9:console"
 echo "----------------------"
@@ -17,7 +17,7 @@ switch ($req)
 		xinit clisp
 		breaksw
 	case [2]:
-        xinit ecl
+        xinit
         breaksw
     case [3]:
 		xinit xmonad

@@ -70,7 +70,7 @@ used for matching windows with run-or-raise or window placement
 
 (set-msg-border-width 1)
 
-(set-font "-*-simsun-medium-r-normal-*-16-*-*-*-*-*-iso10646-1")
+(set-font "-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
 
 ;(ql:quickload :clx-truetype)
 ;(xft:cache-fonts)
@@ -90,11 +90,11 @@ used for matching windows with run-or-raise or window placement
 ;;; Window Appearance
 (set-frame-outline-width 0)
 
-(setf *normal-border-width* 1
-      *maxsize-border-width* 1
+(setf *normal-border-width* 0
+      *maxsize-border-width* 0
       *transient-border-width* 1
       *float-window-title-height* 0
-      *window-border-style* :tight) ; :thick :thin :tight :none
+      *window-border-style* :none) ; :thick :thin :tight :none
 
 (setf *time-modeline-string* "%Y-%m-%d %a ^B%l:%M^b" 
       *window-name-source* :title
@@ -128,8 +128,6 @@ used for matching windows with run-or-raise or window placement
 ;; (defcommand exec-in-terminal (cmd) ((:string "Command: "))
 ;;   (run-shell-command (format nil "xterm -e ~A" cmd)))
 
-(defparameter +browser-name+ "opera")
-(defparameter +browser-class+ "Opera")
 ;(defparameter +stumpish+ (cat "xterm" " -e ~/bin/stumpish"))
 
 ;(defcommand stumpish () ()
@@ -140,7 +138,7 @@ used for matching windows with run-or-raise or window placement
 ;    (run-shell-command "exec scrot '%m.%d.%Y_%I:%M:%S_%P.png' -e 'mv $f ~/download'"))
 
 (defcommand browse () ()
-  (run-or-raise +browser-name+ `(:class ,+browser-class+)))
+  (run-or-raise "opera" `(:class "Opera")))
 
 (defcommand eweiqi () ()
   (run-commands "gselect 3")
@@ -151,7 +149,7 @@ used for matching windows with run-or-raise or window placement
   (run-or-raise "VBoxManage startvm winxp &" '(:class "VirtualBox")))
 
 (defcommand emacs () ()
-  (run-or-raise "emacs -geometry 178x38+0+365" '(:class "Emacs")))
+  (run-or-raise "emacs -geometry 178x38+0+367" '(:class "Emacs")))
 
 ;;; You need to set environment variable MPD if you want to use mpd
 #+MPD

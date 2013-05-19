@@ -182,15 +182,6 @@
 	 ))
 (good-colors)
 
-;; (setq default-frame-alist  ;设置启动窗口大小   
-;; 	  `((top . 39)    
-;;         (left . 940)    
-;;         (height . 52)    
-;;         (width . 115)    
-;;         (menu-bar-lines . 20)    
-;;         (tool-bar-lines . 0)      
-;;         ))
-
 ;;------------------------------------------------------------------------------  
 ;; add chinese wubi input   
 ;; url: daiyuwen.freeshell.org/gb/wubi/wubi.html  

@@ -17,11 +17,11 @@
 
 (load "init-erc")
 ;(load "init-w3m")
-;(load "init-mew")
+(load "init-mew")
 
 (load "init-slime")
 (load "init-haskell")
-(load "init-racket")
+;(load "init-racket")
 
 ;(load "init-prolog")
 ;(load "init-ruby")
