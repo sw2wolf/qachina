@@ -28,7 +28,7 @@
 ;(load "init-clojure")
 ;(load "init-forth")
 
-;(require 'erlang-start)
+(require 'erlang-start)
 ;(require 'ocaml)
 ;(require 'git-emacs)
 

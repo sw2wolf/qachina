@@ -1,3 +1,6 @@
+
+export TERM=vt102 or TERM=vt220 in console
+
 # pkgdb -fF
 
 After updating the local copy of the ports tree (I use the portsnap tool on my FreeBSD systems):
