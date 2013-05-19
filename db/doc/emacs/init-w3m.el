@@ -104,8 +104,6 @@
 (define-key w3m-mode-map (kbd "<") 'w3m-previous-buffer)
 (define-key w3m-mode-map (kbd ">") 'w3m-next-buffer)
 
-(global-set-key "\C-c\C-g" 'browse-url-at-point)
-
 (standard-display-ascii ?\225 [?+])
 (standard-display-ascii ?\227 [?-])
 (standard-display-ascii ?\222 [?'])

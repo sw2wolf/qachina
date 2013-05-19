@@ -154,6 +154,7 @@
 ;;默认链接网络浏览器打开
 (setq browse-url-generic-program (executable-find "opera"))
 (setq browse-url-browser-function 'browse-url-generic)
+(global-set-key "\C-c\C-g" 'browse-url-at-point)
 
 ;; (require 'grep)
 ;; (grep-apply-setting 'grep-command "grep -nH -R -e  ")
