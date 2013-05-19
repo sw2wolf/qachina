@@ -152,11 +152,11 @@
    ("\\.idl$" . idl-mode)))
 
 ;;默认链接网络浏览器打开
-(setq browse-url-generic-program (executable-find "opera")
-       browse-url-browser-function 'browse-url-generic)
+(setq browse-url-generic-program (executable-find "opera"))
+;(setq browse-url-browser-function 'browse-url-generic)
 
-(require 'grep)
-(grep-apply-setting 'grep-command "grep -nH -R -e  ")
+;; (require 'grep)
+;; (grep-apply-setting 'grep-command "grep -nH -R -e  ")
 
 ;
 ;
@@ -180,3 +180,26 @@
 	 (set-face-foreground 'modeline "LightGray")
 	 ))
 (good-colors)
+
+;; (setq default-frame-alist  ;设置启动窗口大小   
+;; 	  `((top . 39)    
+;;         (left . 940)    
+;;         (height . 52)    
+;;         (width . 115)    
+;;         (menu-bar-lines . 20)    
+;;         (tool-bar-lines . 0)      
+;;         ))
+
+;;------------------------------------------------------------------------------  
+;; add chinese wubi input   
+;; url: daiyuwen.freeshell.org/gb/wubi/wubi.html  
+;;------------------------------------------------------------------------------  
+;; (add-to-list 'load-path "~/.emacs.d/site-lisp/")  
+;; (require 'wubi)  
+;; (wubi-load-local-phrases) ;add user's wubi phrases  
+;; (register-input-method "chinese-wubi" "Chinese-GB" 'quail-use-package  
+;;                "WuBi" "WuBi"  
+;;                "wubi")   
+  
+;; (setq default-input-method "chinese-wubi")  
+;; (define-key global-map "\C-c\C-j" 'toggle-input-method)  

@@ -16,8 +16,8 @@
 (load "init-dict")
 
 (load "init-erc")
+(load "init-w3m")
 ;(load "init-mew")
-;(load "init-w3m")
 
 (load "init-slime")
 (load "init-haskell")
