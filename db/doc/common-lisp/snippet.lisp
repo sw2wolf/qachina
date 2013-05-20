@@ -1,7 +1,28 @@
 
 ;;;
-clisp
+;clisp
 ./configure --with-threads=POSIX_THREADS ;--with-jitc=lightning 
+(setq custom:*default-file-encoding*
+      (ext:make-encoding :charset 'charset:iso-8859-1
+                         :line-terminator :unix))
+#<ENCODING CHARSET:ISO-8859-1 :UNIX>
+
+(deftype octet () '(unsigned-byte 8))
+ 
+(with-open-file (in #P"~/tmp/misc/wang.dos"
+                     :element-type 'octet)
+  (loop
+    :for byte = (read-byte in nil in)
+    :until (eq byte in)
+    :do (case byte
+          ((13) (princ " CR"))
+          ((10) (princ " LF") (princ #\Newline))
+          (otherwise
+           (if (or (<= 32 byte 126)
+                   (<= 160 byte 255))
+               (princ (ext:convert-string-from-bytes (vector byte) charset:iso-8859-1))
+               (format "<CODE ~D>" byte)))))
+  (values))
 
 ;;;
 ;For conveniently running external programs (ie, I don't want to have to type (run-program "ls" :arguments '("-lh")) every time, I have set up a read macro.  Put the following in somefile.lisp.

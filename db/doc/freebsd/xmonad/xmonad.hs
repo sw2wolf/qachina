@@ -9,6 +9,7 @@ import qualified XMonad.StackSet as W
 import XMonad.Actions.GridSelect
 --import XMonad.Actions.WindowMenu
 import XMonad.Actions.WindowGo
+--import XMonad.Actions.SpawnOn
 
 import XMonad.Hooks.ManageDocks
 --import XMonad.Hooks.EwmhDesktops
@@ -47,7 +48,7 @@ main = do
     --dzenBtmBar <- spawnPipe myBtmStatusBar
     xmonad {- $ withUrgencyHook FocusHook -} $ {- ewmh -} defaultConfig {
         --handleEventHook = handleEventHook defaultConfig <+> fullscreenEventHook
-       borderWidth		= 1
+       borderWidth		= 0
       , focusedBorderColor 	= "#ff6666"
       , normalBorderColor 	= "#2222aa"
       , manageHook = manageHook defaultConfig <+> myManageHook
@@ -120,8 +121,8 @@ myManageHook = (composeAll . concat $
   where
     myIgnores = ["trayer", "desktop", "desktop_window"]
     myCFloats = ["GQview", "MPlayer", "Vncviewer","Xmessage"]
-    role = stringProperty "WM_WINDOW_ROLE"
-    name = stringProperty "WM_NAME"
+    --role = stringProperty "WM_WINDOW_ROLE"
+    --name = stringProperty "WM_NAME"
 
 manageTypes :: ManageHook
 manageTypes = checkType --> doCenterFloat
