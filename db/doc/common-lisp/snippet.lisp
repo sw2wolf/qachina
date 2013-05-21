@@ -1,11 +1,86 @@
 
 ;;;
+(gzip-stream:gunzip-sequence (drakma:http-request
+		 "http://paizo.com/threads/rzs2prcq?Deadlands-Reloaded-Interest-Check"
+		 :connection-timeout nil :additional-headers '((:accept-encoding .
+		 "gzip"))))
+;;;
+;sbcl
+(require :asdf)
+
+(asdf:load-system :sb-daemon)
+(asdf:load-system :swank)
+
+(defvar *swank-server*)
+
+(defun signal-handler (signal)
+  (format t "~A received~%" signal)
+  (sb-ext:quit))
+
+(when (< (length sb-ext:*posix-argv*) 3)
+  (error "Missing command line arguments."))
+
+(destructuring-bind (argv0 name port) sb-ext:*posix-argv*
+  (let* ((name-directory (concatenate 'string name "/"))
+         (log-path (merge-pathnames name-directory #p"/var/log/sbcl-daemon/"))
+         (run-path (merge-pathnames name-directory #p"/var/run/sbcl-daemon/"))
+         (pid-file (concatenate 'string name ".pid")))
+    (sb-daemon:daemonize :exit-parent t
+                         :output (merge-pathnames "stdout.log" log-path)
+                         :error (merge-pathnames "stderr.log" log-path)
+                         :pidfile (merge-pathnames pid-file run-path)
+                         :sigterm 'signal-handler
+                         :sigabrt 'signal-handler
+                         :sigint 'signal-handler))
+  (setf *swank-server*
+        (swank:create-server :port (parse-integer port)
+                             :coding-system "utf-8-unix"
+                             :dont-close t))
+  (loop
+    (sleep 10)))
+
+;; I then use the following shell script to easily create new daemons:
+;; #!/bin/sh -e
+
+;; if [ $# -lt 2 ]; then
+;;     echo "Usage: $0 <name> <port>"
+;;     exit 1
+;; fi
+
+;; name=$1
+;; port=$2
+
+;; logpath="/var/log/sbcl-daemon"
+;; if [ ! -d $logpath ]; then
+;;     echo "$logpath not found"
+;;     exit 1
+;; fi
+;; runpath="/var/run/sbcl-daemon"
+;; if [ ! -d $runpath ]; then
+;;     echo "$runpath not found"
+;;     exit 1
+;; fi
+
+;; logpath=$logpath/$name
+;; if [ ! -d $logpath ]; then
+;;     echo "creating $logpath"
+;;     mkdir $logpath
+;; fi
+;; runpath=$runpath/$name
+;; if [ ! -d $runpath ]; then
+;;     echo "creating $runpath"
+;;     mkdir $runpath
+;; fi
+
+;sbcl --script $HOME/bin/sbcl-daemon.lisp $name $port
+
+;;;
 ;clisp
-./configure --with-threads=POSIX_THREADS ;--with-jitc=lightning 
+;./configure --with-threads=POSIX_THREADS ;--with-jitc=lightning 
 (setq custom:*default-file-encoding*
       (ext:make-encoding :charset 'charset:iso-8859-1
                          :line-terminator :unix))
-#<ENCODING CHARSET:ISO-8859-1 :UNIX>
+;#<ENCODING CHARSET:ISO-8859-1 :UNIX>
 
 (deftype octet () '(unsigned-byte 8))
  

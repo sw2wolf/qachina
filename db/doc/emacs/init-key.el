@@ -102,6 +102,8 @@
 
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (insert #x3bb)))
 ;√:#x221a π:#x3c0 λ:#x3bb ∑:#x2211 ⊥:#x22a5 ≅:#x2245 ≠:#x2260 ☺:#x263a
+;⋆:#x22c6
+
 (global-set-key (kbd "<f5>") 'jump-run-shell)
 (global-set-key (kbd "<f6>") 'jump-run-mew)
 (global-set-key (kbd "<f7>") 'jump-run-clisp)
