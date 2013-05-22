@@ -51,11 +51,12 @@
 ;;   (if (get-buffer "*ghci*")
 ;; 	  (switch-to-buffer-other-window "*ghci*")
 ;; 	  (async-shell-command "~/bin/hs" "*ghci*")))
-(defun jump-run-erlang ()
-  (interactive)
-  (if (get-buffer "*erlang*")
-	  (switch-to-buffer-other-window "*erlang*")
-	  (async-shell-command "~/bin/yw" "*erlang*")))
+
+;; (defun jump-run-erlang ()
+;;   (interactive)
+;;   (if (get-buffer "*erlang*")
+;; 	  (switch-to-buffer-other-window "*erlang*")
+;; 	  (async-shell-command "~/bin/yw" "*erlang*")))
 
 (defun clisp ()
   (interactive)
@@ -107,7 +108,7 @@
 (global-set-key (kbd "<f5>") 'jump-run-shell)
 (global-set-key (kbd "<f6>") 'jump-run-mew)
 (global-set-key (kbd "<f7>") 'jump-run-clisp)
-(global-set-key (kbd "<f8>") 'jump-run-erlang)
+;(global-set-key (kbd "<f8>") 'jump-run-erlang)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)
