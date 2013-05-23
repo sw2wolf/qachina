@@ -107,8 +107,8 @@
 
 (global-set-key (kbd "<f5>") 'jump-run-shell)
 (global-set-key (kbd "<f6>") 'jump-run-mew)
-(global-set-key (kbd "<f7>") 'jump-run-clisp)
-;(global-set-key (kbd "<f8>") 'jump-run-erlang)
+;(global-set-key (kbd "<f7>") 'jump-run-erlang)
+(global-set-key (kbd "<f8>") 'jump-run-clisp)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)
