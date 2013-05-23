@@ -1,5 +1,20 @@
 
 %------
+?- debug_message_context(+time).
+ 
+%Using strace on the threaded program is a bit tricky, but can be done by selecting one of the HTTP threads and getting its thread-id using e.g.,
+ 
+?- thread_signal('httpd@5555_2',
+	   (current_prolog_flag(system_thread_id, P),
+	    writeln(P))).
+ 
+%That writes (in my case): 14776.
+ 
+%Now, use (in another terminal):
+ 
+% strace -e '!futex' -T -p 14776
+
+%------
 phrase(utf8_codes("é"), L),
 phrase(utf8_codes(L), L2),
 forall(member(C,L2), format(' ~8r', [C])).

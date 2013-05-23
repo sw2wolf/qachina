@@ -1,5 +1,5 @@
 
-export TERM=vt102 or TERM=vt220 in console
+export TERM=vt220 in console
 
 # pkgdb -fF
 
