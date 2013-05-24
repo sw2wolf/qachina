@@ -1,5 +1,29 @@
 
 ---------
+{-# LANGUAGE Rank2Types #-} -- "allows forall a"
+
+import Control.Monad
+import Language.Haskell.Interpreter
+
+--type Foo = (forall a. a -> a)
+type Foo = (forall a. [a] -> Int) -> forall b. [b] -> forall c. [c] -> Bool
+
+main :: IO ()
+main = do
+	moduleName <- getLine
+	r <- runInterpreter $ interpretFoo moduleName
+	case r of
+		Left err -> print err
+		Right _ -> putStrLn "success!"
+
+interpretFoo :: ModuleName -> Interpreter Foo
+interpretFoo moduleName = do
+	loadModules [moduleName]
+	setTopLevelModules [moduleName]
+	setImports ["Prelude"]
+	interpret (moduleName ++ ".f") (as :: Foo)
+
+---------
 confirm :: String -> X () -> X ()
 confirm m f = do
   result <- dmenu [m]
