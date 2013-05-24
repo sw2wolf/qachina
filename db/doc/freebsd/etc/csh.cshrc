@@ -1,9 +1,8 @@
 # $FreeBSD: release/9.0.0/etc/csh.cshrc 50472 1999-08-27 23:37:10Z peter $
 #
 # System-wide .cshrc file for csh(1).
-#setenv PACKAGESITE ftp://ftp.freebsd.org/pub/FreeBSD/ports/i386/packages-9-stable/Latest/
-#setenv PACKAGESITE ftp://ftp.freebsd.org/pub/FreeBSD/ports/i386/packages-current/Latest/
-setenv PACKAGESITE  ftp://ftp.freebsd.org/pub/FreeBSD/ports/i386/packages-9-current/Latest/ 
+setenv PACKAGESITE ftp://ftp.freebsd.org/pub/FreeBSD/ports/i386/packages-9-stable/Latest/
+#setenv PACKAGESITE  ftp://ftp.freebsd.org/pub/FreeBSD/ports/i386/packages-9-current/Latest/ 
 
 #set prompt="[%Y-%W-%D %P]%n@%~%#"
 set prompt="[%P]%n@%~%#"
@@ -12,11 +11,9 @@ set autolist
 #set autolist=ambiguous
 
 alias ls ls -GF
-#alias cl clisp -modern -q
 alias update-apps 'portmaster -a --force-config'
 alias show-dep 'portmaster --show-work ./ | sort'
-alias  vi vim
-#alias femacs emacs -Q -nw
+alias vi vim
 
 setenv GREP_OPTIONS --color=auto
 setenv EDITOR	vim
