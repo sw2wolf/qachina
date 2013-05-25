@@ -1,29 +1,5 @@
 
 ---------
-{-# LANGUAGE Rank2Types #-} -- "allows forall a"
-
-import Control.Monad
-import Language.Haskell.Interpreter
-
---type Foo = (forall a. a -> a)
-type Foo = (forall a. [a] -> Int) -> forall b. [b] -> forall c. [c] -> Bool
-
-main :: IO ()
-main = do
-	moduleName <- getLine
-	r <- runInterpreter $ interpretFoo moduleName
-	case r of
-		Left err -> print err
-		Right _ -> putStrLn "success!"
-
-interpretFoo :: ModuleName -> Interpreter Foo
-interpretFoo moduleName = do
-	loadModules [moduleName]
-	setTopLevelModules [moduleName]
-	setImports ["Prelude"]
-	interpret (moduleName ++ ".f") (as :: Foo)
-
----------
 confirm :: String -> X () -> X ()
 confirm m f = do
   result <- dmenu [m]
@@ -68,6 +44,7 @@ $ghc --info | egrep 'split|Host'
 
 $cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
 $cabal install mighttpd2 --ghc-options=-fllvm
+$cabal install hashable --constraint "unix==2.6.0.1" --constraint "bytestring==0.10.0.2" --dry-run
 
 ---------
 

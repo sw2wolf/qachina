@@ -1,4 +1,6 @@
 
+tunefs -n enable -j enable /dev/adXsYa
+
 export TERM=vt220 in console
 
 # pkgdb -fF

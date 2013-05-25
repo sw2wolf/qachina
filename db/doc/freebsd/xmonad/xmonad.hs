@@ -35,7 +35,10 @@ import XMonad.Layout.ShowWName
 import XMonad.Util.Run
 import XMonad.Util.EZConfig
 import XMonad.Util.WindowProperties (getProp32s)
-import XMonad.Util.Scratchpad
+import XMonad.Util.NamedScratchpad
+
+scratchpads = [NS "xterm" "xterm" (resource =? "xterm") 
+    (customFloating $ W.RationalRect 0.50 0.270 0.50 0.722)]
 
 --myStatusBar = "dzen2 -x '0' -y '0' -h '24' -w '1280' -ta 'l' -fg '#FFFFFF' -bg '#161616' -fn '-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1'"
 --myBtmStatusBar = "conky -c /home/serrghi/.conky_bottom_dzen | dzen2 -x '0' -w '1280' -h '24' -ta 'c' -bg '#161616' -fg '#FFFFFF' -fn '-*-bitstream vera sans-medium-r-normal-*-11-*-*-*-*-*-*-*' -y '776'"
@@ -117,7 +120,7 @@ myManageHook = (composeAll . concat $
     [[className =? c --> doIgnore | c <- myIgnores]
     ,[className =? c --> doFloat | c <- myCFloats]
     ,[isFullscreen --> doFullFloat]
-    ]) <+> manageTypes <+> manageDocks <+> scratchpadManageHook (W.RationalRect 0.50 0.270 0.50 0.722)
+    ]) <+> manageTypes <+> manageDocks <+> namedScratchpadManageHook scratchpads
   where
     myIgnores = ["trayer", "desktop", "desktop_window"]
     myCFloats = ["GQview", "MPlayer", "Vncviewer","Xmessage"]
@@ -194,7 +197,7 @@ myKeys = let modm = mod4Mask in
     --, ((modm .|. shiftMask, xK_Print), spawn "sleep 0.2; scrot -s")
     , ((modm, xK_Print), spawn "scrot '/tmp/%Y-%m-%d_%H:%M:%S_$wx$h_scrot.png' -e 'mv $f ~'")
     , ((modm, xK_k), kill)
-    , ((modm, xK_space), scratchpadSpawnActionCustom "xterm -name scratchpad") -- -e cl
+    , ((modm, xK_space), namedScratchpadAction scratchpads "xterm")
 
     -- Window Navigation
     , ((modm, xK_Right), sendMessage $ Go R)
