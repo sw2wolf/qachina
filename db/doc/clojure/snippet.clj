@@ -1,3 +1,4 @@
+
 ;协议是一个功能强大的工具：它们有效地为您提供将新方法插入现有类的能力，而没有名称冲突且无需修改原始代码。
 (defprotocol IVec2D
     (vadd [this v] "produces 2d vector sum of given vectors"))

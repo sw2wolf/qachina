@@ -3,11 +3,11 @@
 # $FreeBSD: ports/lang/clojure/files/clojure-bin.in,v 1.9 2012/06/19 05:38:12 glewis Exp $
 
 breakchars="(){}[],^%$#@\"\";:''|\\"
-MYCP="/media/D/www/qachina/db/doc/clojure/"
+MYCP="/media/D/qachina/db/doc/clojure/"
 
-CP="$HOME/clojure-1.4.0/clojure-1.4.0.jar:$MYCP:$CLASSPATH" 
+CP="$HOME/clojure/clojure-1.5.1.jar:$MYCP:$CLASSPATH"
 
-cd "/media/D/www/qachina/db/doc/clojure"
+cd "/media/D/qachina/db/doc/clojure"
 echo $CP
 rlwrap --remember -c -b "$breakchars" -f "$HOME"/.clj_completions \
-    /usr/local/bin/java -cp $CP clojure.main -i ~/.clojurerc -r "$@"
+    java -cp $CP clojure.main -i ~/.clojurerc -r "$@"
