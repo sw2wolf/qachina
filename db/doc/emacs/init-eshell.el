@@ -8,6 +8,11 @@
   (let ((inhibit-read-only t))
     (erase-buffer)))
 
+(defun eshell/csh ()
+  "clear the eshell buffer."
+  (interactive)
+  (ansi-term "csh"))
+
 ;; (setq eshell-prompt-function
 ;;       (lambda ()
 ;; 	(concat "" (user-login-name) "@" (system-name) " "
@@ -25,6 +30,7 @@
   (define-key eshell-mode-map [(control u)] 'eshell-kill-input) ;删除已输入命令
 
   (define-key eshell-mode-map [(control l)] 'eshell/clear)
+  (define-key eshell-mode-map [(control s)] 'eshell/csh)
 )
 
 (add-hook 'eshell-mode-hook 'm-eshell-hook)
