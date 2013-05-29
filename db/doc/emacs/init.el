@@ -21,19 +21,18 @@
 
 (load "init-slime")
 (load "init-haskell")
-(load "init-prolog")
 
-;(load "init-racket")
-
-;(load "init-ruby")
 ;(load "init-clojure")
+;(load "init-racket")
+;(load "init-prolog")
+;(load "init-ruby")
 ;(load "init-forth")
 
 ;(require 'erlang-start)
 ;(require 'ocaml)
 ;(require 'git-emacs)
 
-;(load "init-eshell")
+(load "init-eshell")
 ;(load "init-mu4e")
 
 ;(load "init-emms")

@@ -90,9 +90,9 @@
 
 (defun jump-run-shell ()
   (interactive)
-  (if (get-buffer "*ansi-term*")
-	  (switch-to-buffer "*ansi-term*")
-	  (ansi-term "csh"))
+  (if (get-buffer "*eshell*")
+	  (switch-to-buffer "*eshell*")
+	  (eshell))
   ;(let ((proc (start-process "cmd" nil "cmd.exe" "/C" "start" "cmd.exe")))
   ;(set-process-query-on-exit-flag proc nil))
 )

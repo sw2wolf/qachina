@@ -1,6 +1,6 @@
-;; 让 shell mode 可以正常显示颜色
-;(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
-;(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+;; echo "hello world" >> #<buffer eshell.txt>
+;; echo hello > /dev/clip    
+;; echo hello > /dev/kill
 
 (defun eshell/clear ()
   "clear the eshell buffer."
@@ -13,7 +13,18 @@
 ;; 	(concat "" (user-login-name) "@" (system-name) " "
 ;; 		(eshell/pwd) "% ")))
 
-;; echo "hello world" >> #<buffer eshell.txt>
-;; echo hello > /dev/clip    
-;; echo hello > /dev/kill
+(defun m-eshell-hook () 
+; define control p, control n and the up/down arrow
+  (define-key eshell-mode-map [(control p)] 'eshell-previous-matching-input-from-input)
+  (define-key eshell-mode-map [(control n)] 'eshell-next-matching-input-from-input)
+ 
+  (define-key eshell-mode-map [up] 'previous-line)
+  (define-key eshell-mode-map [down] 'next-line)
+ 
+  (define-key eshell-mode-map [home] 'eshell-bol)
+  (define-key eshell-mode-map [(control u)] 'eshell-kill-input) ;删除已输入命令
 
+  (define-key eshell-mode-map [(control l)] 'eshell/clear)
+)
+
+(add-hook 'eshell-mode-hook 'm-eshell-hook)

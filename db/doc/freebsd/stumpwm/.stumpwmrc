@@ -39,8 +39,6 @@ used for matching windows with run-or-raise or window placement
   (let ((w (current-window))
         (*suppress-echo-timeout* t)
         (nl (string #\NewLine)))
-
-    ;; (message-no-timeout "class: ~a~%instance~a~%..." (window-class w) (window-res w) ...)
     (echo-string (current-screen)
                  (concat "class:    " (window-class w) nl
                          "instance: " (window-res w) nl
@@ -122,20 +120,7 @@ used for matching windows with run-or-raise or window placement
 ; 1 screen and many heads. When not using xinerama each screen is a
 ; physical monitor so you have many screens with only one head on them.
 
-;; shell program used by `run-shell-command' (`sh' by default, which is *not* 'bash' nor 'zsh')
 (setf *shell-program* (stumpwm::getenv "SHELL"))
-
-;; (defcommand exec-in-terminal (cmd) ((:string "Command: "))
-;;   (run-shell-command (format nil "xterm -e ~A" cmd)))
-
-;(defparameter +stumpish+ (cat "xterm" " -e ~/bin/stumpish"))
-
-;(defcommand stumpish () ()
-;  (run-shell-command +stumpish+))
-
-;(defcommand snapshot () ()
-;    (echo-string (current-screen) "Taking Snapshot")
-;    (run-shell-command "exec scrot '%m.%d.%Y_%I:%M:%S_%P.png' -e 'mv $f ~/download'"))
 
 (defcommand browse () ()
   (run-or-raise "opera" `(:class "Opera")))
@@ -149,7 +134,7 @@ used for matching windows with run-or-raise or window placement
   (run-or-raise "VBoxManage startvm winxp &" '(:class "VirtualBox")))
 
 (defcommand emacs () ()
-  (run-or-raise "emacs -geometry 178x38+0+370" '(:class "Emacs")))
+  (run-or-raise "emacs -geometry 178x38+0+369" '(:class "Emacs")))
 
 ;;; You need to set environment variable MPD if you want to use mpd
 #+MPD
@@ -226,9 +211,11 @@ used for matching windows with run-or-raise or window placement
 	("s-p" "menu")
     ("s-t" "exec xterm -g 159x25+0+438")
     ("s-c" "sdcv")
-	;("s-S" "exec-in-terminal")
     ("s-b" "mode-line")
     ("s-Tab" "switch-window")
+
+;scrot '%m.%d.%Y_%I:%M:%S_%P.png' -e 'mv $f ~/download'"))
+;sleep 0.2; scrot -s -e 'eog $f'	
     ("Print" "exec scrot -q 10")
     ("s-Print" "exec scrot -q 10 -s")
 
@@ -290,7 +277,6 @@ used for matching windows with run-or-raise or window placement
 	;(when (not (stumpwm::getenv "MPD")) (run-commands "gselect 2"))
 )
 (replace-hook *start-hook* 'my-start-hook)
-
 
 (defvar *swank-p* nil)
 (defcommand swank () ()
