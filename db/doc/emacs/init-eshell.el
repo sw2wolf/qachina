@@ -1,6 +1,9 @@
 ;; echo "hello world" >> #<buffer eshell.txt>
 ;; echo hello > /dev/clip    
 ;; echo hello > /dev/kill
+(require 'eshell)
+
+(setenv "EDITOR" "emacsclient")
 
 (defun eshell/clear ()
   "clear the eshell buffer."
@@ -9,7 +12,6 @@
     (erase-buffer)))
 
 (defun eshell/csh ()
-  "clear the eshell buffer."
   (interactive)
   (ansi-term "csh"))
 
@@ -31,6 +33,7 @@
 
   (define-key eshell-mode-map [(control l)] 'eshell/clear)
   (define-key eshell-mode-map [(control s)] 'eshell/csh)
+
 )
 
 (add-hook 'eshell-mode-hook 'm-eshell-hook)
