@@ -1,5 +1,8 @@
-import qualified Data.Map as M
 import System.IO
+import System.Process       (runProcess, waitForProcess)
+import System.Exit          (ExitCode)
+
+import qualified Data.Map as M
 --import Graphics.X11.Xlib
 --import Data.Char (isSpace)
 
@@ -29,7 +32,8 @@ import XMonad.Layout.SimplestFloat (simplestFloat)
 import XMonad.Layout.Column
 import XMonad.Layout.ShowWName
 
---import XMonad.Prompt
+import XMonad.Prompt
+import XMonad.Prompt.Input
 --import XMonad.Prompt.RunOrRaise (runOrRaisePrompt)
 
 import XMonad.Util.Run
@@ -37,18 +41,17 @@ import XMonad.Util.EZConfig
 import XMonad.Util.WindowProperties (getProp32s)
 import XMonad.Util.NamedScratchpad
 
-scratchpads = [NS "xterm" "xterm" (resource =? "xterm") 
-    (customFloating $ W.RationalRect 0.50 0.270 0.50 0.722)]
+scratchpads = [NS "xterm" "xterm" (resource =? "xterm") (customFloating $ W.RationalRect 0.50 0.270 0.50 0.722)]
 
---myStatusBar = "dzen2 -x '0' -y '0' -h '24' -w '1280' -ta 'l' -fg '#FFFFFF' -bg '#161616' -fn '-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1'"
---myBtmStatusBar = "conky -c /home/serrghi/.conky_bottom_dzen | dzen2 -x '0' -w '1280' -h '24' -ta 'c' -bg '#161616' -fg '#FFFFFF' -fn '-*-bitstream vera sans-medium-r-normal-*-11-*-*-*-*-*-*-*' -y '776'"
+--myStatusBar = "dzen2 -x '0' -y '0' -h '24' -w '1440' -ta 'l' -fg '#FFFFFF' -bg '#000000' -fn '-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1'"
+
 --xmobar   = "~/.cabal/bin/xmobar"
 --xmobarrc = "~/.xmonad/xmobarrc"
+--xmobar -o -d -B white -a right -F blue -t '%StdinReader%' -c '[Run StdinReader]'
 
 main = do
     --xmobar <- spawnPipe $ xmobar ++ " " ++ xmobarrc
-    --dzenTopBar <- spawnPipe myStatusBar
-    --dzenBtmBar <- spawnPipe myBtmStatusBar
+    --dzenTopBar <- spawnPipe $ "killall dzen2; " ++ myStatusBar
     xmonad {- $ withUrgencyHook FocusHook -} $ {- ewmh -} defaultConfig {
         --handleEventHook = handleEventHook defaultConfig <+> fullscreenEventHook
        borderWidth		= 0
@@ -61,8 +64,8 @@ main = do
       , focusFollowsMouse  = False
       --, clickToFocus = True
       , startupHook = myStartupHook
-        --, logHook = myLogHook dzenTopBar
-        --, logHook = myLogHook xmobar
+      --, logHook = myLogHook dzenTopBar
+      --, logHook = myLogHook xmobar
       , logHook = myLogHook
       , layoutHook = showWName myLayout
    } `additionalKeys` myKeys
@@ -77,15 +80,22 @@ myStartupHook = do
 myLogHook :: X ()
 myLogHook = return ()
 
---myLogHook :: Handle -> X ()
+-- myLogHook :: Handle -> X ()
 -- myLogHook h = dynamicLogWithPP $ defaultPP
---       {   ppCurrent	= dzenColor "black" "green" . pad
--- 	, ppVisible	= dzenColor "black" "lightgreen" . pad
--- 	, ppHidden	= dzenColor "#cccccc" "" . pad
+--       {   ppCurrent  = dzenColor "black" "green" . pad
+-- 	, ppVisible  = dzenColor "black" "lightgreen" . pad
+-- 	, ppHidden   = dzenColor "#cccccc" "" . pad
 -- 	, ppHiddenNoWindows = dzenColor "#444444"  "" . pad
--- 	, ppUrgent	= dzenColor "" "red"
+-- 	, ppUrgent   = dzenColor "" "red"
 -- 	, ppWsSep    = " "
 -- 	, ppSep      = " | "
+--      , ppLayout   =   dzenColor "#ebac54" "#1B1D1E" .
+--                          (\x -> case x of
+--                             "ResizableTall" -> "^i(" ++ myBitmapsDir ++ "/tall.xbm)"
+--                             "Mirror ResizableTall" -> "^i(" ++ myBitmapsDir ++ "/mtall.xbm)"
+--                             "Full"  ->  "^i(" ++ myBitmapsDir ++ "/full.xbm)"
+--                             "Simple Float"  ->  "~"
+--                             _              ->   x)
 -- 	, ppTitle    = (" " ++) . dzenColor "green" "" . dzenEscape
 -- 	, ppOutput   = hPutStrLn h 
 --       }
@@ -143,33 +153,33 @@ checkType = ask >>= \w -> liftX $ do
 
 -- Theme {{{
 -- Color names are easier to remember:
--- colorOrange          = "#ff7701"
--- colorDarkGray        = "#171717"
--- colorPink            = "#e3008d"
--- colorGreen           = "#00aa4a"
--- colorBlue            = "#008dd5"
--- colorYellow          = "#fee100"
--- colorWhite           = "#cfbfad"
+colorOrange          = "#ff7701"
+colorDarkGray        = "#171717"
+colorPink            = "#e3008d"
+colorGreen           = "#00aa4a"
+colorBlue            = "#008dd5"
+colorYellow          = "#fee100"
+colorWhite           = "#cfbfad"
  
--- colorNormalBorder    = "#1c2636"
--- colorFocusedBorder   = "#ebac54"
--- barFont  = "terminus"
--- barXFont = "inconsolata:size=14"
--- xftFont = "xft: inconsolata-14"
+colorNormalBorder    = "#1c2636"
+colorFocusedBorder   = "#ebac54"
+barFont  = "terminus"
+barXFont = "inconsolata:size=14"
+xftFont = "xft: inconsolata-14"
 --}}}
 
 -- Prompt Config {{{
--- myXPConfig :: XPConfig
--- myXPConfig = defaultXPConfig {
---           font                  = "xft:WenQuanYi Zen Hei:pixelsize=16"
---         , bgColor               = colorDarkGray
---         , fgColor               = colorGreen
---         , bgHLight              = colorGreen
---         , fgHLight              = colorDarkGray
---         , promptBorderWidth     = 0
---         , height                = 14
---         , historyFilter         = deleteConsecutive
--- }
+myXPConfig :: XPConfig
+myXPConfig = defaultXPConfig {
+          font                  = "xft:WenQuanYi Zen Hei:pixelsize=16"
+        , bgColor               = colorDarkGray
+        , fgColor               = colorGreen
+        , bgHLight              = colorGreen
+        , fgHLight              = colorDarkGray
+        , promptBorderWidth     = 0
+        , height                = 14
+        , historyFilter         = deleteConsecutive
+}
 
 -- Run"" or Raise Menu
 -- largeXPConfig :: XPConfig
@@ -179,7 +189,7 @@ checkType = ask >>= \w -> liftX $ do
 --                 }
 -- }}}
 
-emacs = "emacs -geometry 176x34+0+366"
+emacs = "emacs -geometry 176x34+0+368"
 xterm="xterm -geometry 159x25+0+438"
 eweiqi="wine \"c:/Program Files/eweiqi/LiveBaduk.exe\""
 winxp="VBoxManage startvm winxp"
@@ -192,6 +202,10 @@ myKeys = let modm = mod4Mask in
     --          xterm, "gmrun", "opera", emacs, eweiqi, winxp])
     --, ((modm .|. shiftMask, xK_p),runOrRaisePrompt largeXPConfig)
     , ((modm, xK_g), goToSelected defaultGSConfig)
+
+    --, ((modm, xK_c), inputPrompt myXPConfig "Word" >>= flip whenJust (\word-> spawn $ "wn " ++ word ++ " -over" ++ "|dmenu -l 30 -nb '#000000' -nf '#FFFFFF' -fn '-*-simsun-medium-r-normal-*-16-*-*-*-*-*-iso10646-1'"))
+   , ((modm, xK_c), inputPrompt myXPConfig "Word" >>= flip whenJust (\word-> spawn $ "~/bin/sdcv.sh " ++ word))
+
     , ((modm, xK_F11), spawn "sudo /sbin/shutdown -r now")
     , ((modm, xK_F12), spawn "sudo /sbin/shutdown -p now")
     --, ((modm .|. shiftMask, xK_Print), spawn "sleep 0.2; scrot -s")

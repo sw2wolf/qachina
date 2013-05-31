@@ -1,5 +1,90 @@
 
 ---------
+import XMonad.Hooks.DynamicLog (xmobar)
+
+main = do
+    nScreens <- countScreens    -- just in case you are on a laptop like me count the screens so that you can go
+    xmonad =<< xmobar myBaseConfig
+      { modMask = myModMask
+      , workspaces = withScreens nScreens myWorkspaces
+      , layoutHook = myLayoutHook nScreens
+      , manageHook = myManageHook
+      , borderWidth = myBorderWidth
+      , normalBorderColor = myNormalBorderColor
+      , focusedBorderColor = myFocusedBorderColor
+      , keys = myKeys
+      , mouseBindings = myMouseBindings
+      , logHook = myLogHook
+      }
+    where
+        myLogHook = dynamicLogXinerama
+
+myBaseConfig = gnomeConfig
+-- Config { font = "-misc-fixed-*-*-*-*-13-*-*-*-*-*-*-*"
+--        , bgColor = "black"
+--        , fgColor = "grey"
+--        , position = TopW L 85
+--        , commands = [ Run Network "wlan0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+--                     , Run Cpu ["-L","15","-H","50","--normal","green","--high","red"] 10
+--                     , Run Memory ["-t","Mem: %"] 10
+--                     , Run Swap [] 10
+--                     , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+--                     , Run StdinReader
+--                     ]
+--        , sepChar = "%"
+--        , alignSep = "}{"
+--        , template = "%StdinReader% }{ %cpu% | %memory% * %swap% | %wlan0% | %date%"
+--        }
+
+-- Config { font = "xft:Bitstream Vera Sans Mono:size=8:antialias=true"
+--        , bgColor = "black"
+--        , fgColor = "grey"
+--        , position = Top
+--        , lowerOnStart = True
+--        , commands = [ Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+--                     , Run Network "eth1" ["-L","0","-H","32","--normal","green","--high","red"] 10
+--                     , Run Com "uname" ["-s","-r"] "" 36000
+--                     , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+--                     ]
+--        , sepChar = "%"
+--        , alignSep = "}{"
+--        , template = "| %eth0% - %eth1% }{ <fc=#ee9a00>%date%</fc>| %uname%"
+--        }
+
+---------
+import System
+import System.IO
+import System.Process (runProcess, waitForProcess)
+import System.Directory (removeFile)
+
+import Control.Monad (replicateM_)
+import Control.Parallel (pseq)
+
+import qualified Data.ByteString as B
+
+waitForProcess =<< runProcess "sdcv" ["-n", "apple"] (Just dir) Nothing Nothing Nothing (Just h)
+hSetBuffering stdout NoBuffering
+my_system str = do
+  (_,_,_,p) <- createProcess c
+  waitForProcess p
+  where c = CreateProcess { cmdspec = ShellCommand str
+                           ,cwd = Nothing
+                           ,env = Nothing
+                           ,std_in = Inherit
+                           ,std_out = Inherit
+                           ,std_err = Inherit
+                           ,close_fds = True }
+
+run :: FilePath -> IO ()
+run exe = do
+  let tempFile = "mytempfile.txt"
+  h <- openFile tempFile WriteMode
+  exitCode <- waitForProcess =<< runProcess exe [] Nothing Nothing Nothing (Just h) (Just h)
+  hClose h >> (if exitCode /= ExitSuccess then return () else B.readFile tempFile >>= B.putStr) >> removeFile tempFile
+
+main = replicateM_ 100 (putStrLn "Next:" >> run "a.exe")
+
+---------
 confirm :: String -> X () -> X ()
 confirm m f = do
   result <- dmenu [m]
@@ -156,6 +241,16 @@ main = xmonad defaultConfig { keys =
         ((0, xK_F7), raiseVolume 4 >>= alert)
     ]
 }
+
+-- message s = dzenConfig centered s
+-- centered = timeout 5
+--     >=> onCurr (center 150 66)
+--     >=> font "-*-helvetica-*-r-*-*-12-*-*-*-*-*-*-*"
+--     >=> addArgs ["-fg", "#80c0ff"]
+--     >=> addArgs ["-bg", "#000040"]
+--     >=> addArgs ["-l", "20""]
+
+--message s = menuArgs "dmenu" ["-p","result:", "-l","20","-nb","#000000", "-nf", "#FFFFFF"] [s] >> return ()
 
 ---------
 
