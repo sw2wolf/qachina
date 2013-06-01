@@ -133,7 +133,7 @@ myManageHook = (composeAll . concat $
     ]) <+> manageTypes <+> manageDocks <+> namedScratchpadManageHook scratchpads
   where
     myIgnores = ["trayer", "desktop", "desktop_window"]
-    myCFloats = ["GQview", "MPlayer", "Vncviewer","Xmessage"]
+    myCFloats = ["GQview", "MPlayer", "Vncviewer","Xmessage", "Zenity"]
     --role = stringProperty "WM_WINDOW_ROLE"
     --name = stringProperty "WM_NAME"
 
@@ -177,7 +177,7 @@ myXPConfig = defaultXPConfig {
         , bgHLight              = colorGreen
         , fgHLight              = colorDarkGray
         , promptBorderWidth     = 0
-        , height                = 14
+        , height                = 16
         , historyFilter         = deleteConsecutive
 }
 
@@ -189,7 +189,7 @@ myXPConfig = defaultXPConfig {
 --                 }
 -- }}}
 
-emacs = "emacs -geometry 176x34+0+368"
+emacs = "emacs -geometry 176x34+0+369"
 xterm="xterm -geometry 159x25+0+438"
 eweiqi="wine \"c:/Program Files/eweiqi/LiveBaduk.exe\""
 winxp="VBoxManage startvm winxp"
@@ -205,6 +205,7 @@ myKeys = let modm = mod4Mask in
 
     --, ((modm, xK_c), inputPrompt myXPConfig "Word" >>= flip whenJust (\word-> spawn $ "wn " ++ word ++ " -over" ++ "|dmenu -l 30 -nb '#000000' -nf '#FFFFFF' -fn '-*-simsun-medium-r-normal-*-16-*-*-*-*-*-iso10646-1'"))
    , ((modm, xK_c), inputPrompt myXPConfig "Word" >>= flip whenJust (\word-> spawn $ "~/bin/sdcv.sh " ++ word))
+   , ((modm, xK_x), inputPrompt myXPConfig "Eval" >>= flip whenJust (\expr-> spawn $ "~/bin/clisp.sh '" ++ expr ++ "'"))
 
     , ((modm, xK_F11), spawn "sudo /sbin/shutdown -r now")
     , ((modm, xK_F12), spawn "sudo /sbin/shutdown -p now")
