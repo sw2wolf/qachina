@@ -6,7 +6,7 @@ onintr bye
 echo "please choose WM(1/2)"
 echo "----------------------"
 echo "1:stumpwm-clisp with MPD"
-echo "2:stumpwm-clisp no MPD"
+echo "2:dwm"
 echo "3:xmonad"
 echo "9:console"
 echo "----------------------"

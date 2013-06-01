@@ -12,3 +12,59 @@ static Key keys[] = {
   { MODKEY,                       XK_x,      toggleview,     {.ui = 1 << 5} }, /* Toggle scratchpad,, but this doesn't auto focus */
 };
 
+
+有几点要注意：
+1、dwm要放到PATH里，不然restart功能用不了（改改也是可以的但比较麻烦），这个用了一天后才发现（开始以为是bug）。
+2、可以用xsetroot（archlinux的xorg-xsetroot包）来在panel上显示东西，xsetroot -name xxx，可以在.xinitrc里隔几秒刷一回。
+
+附上.xinitrc：
+
+export GTK_IM_MODULE=xim
+export QT_IM_MODULE=xim
+export XMODIFIERS="@im=yong"
+export DESKTOP_ENV="DWM"
+export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
+
+synclient TapButton1=1
+synclient HorizEdgeScroll=1
+synclient RTCornerButton=2
+synclient RBCornerButton=3
+
+/home/osily/software/bin/gp &
+
+yong -d
+habak -ms /home/osily/picture/mine/南门-长白岛森林公园_100711/DSCF4371.JPG &
+while true; do
+    xsetroot -name "`/home/osily/software/bin/show`"
+    sleep 20
+done &
+
+exec dwm
+
+其中habak是一个非常好用的壁纸设置工具，功能专一，比feh什么的要小得多（19k）。
+/home/osily/software/bin/show 是一个显示信息用的脚本：
+
+#!/bin/zsh
+
+eth0=`ifconfig|grep 58.154.195`
+if [ "x" = "x$eth0" ]; then 
+    echo -n "/" 
+else
+    echo -n "="
+fi
+
+bat=`cat /proc/acpi/battery/BAT1/state`
+
+if echo $bat|grep charged &>/dev/null; then
+    echo -n " | "
+else
+    rate=$(echo $bat|grep '[0-9]* mA$'|awk '{print $3}')
+    capacity=$(echo $bat|grep '[0-9]* mAh$'|awk '{print $3}')
+    echo -n " | bat: $(($capacity * 60 / $rate)) min | "
+fi
+
+str=`free -m|grep "cache:.*"|awk '{print $3}'`
+echo -n "$str M | "
+str=`ps -A|wc -l`
+echo -n "$str p | "
+date +%H:%M

@@ -130,6 +130,7 @@ myManageHook = (composeAll . concat $
     [[className =? c --> doIgnore | c <- myIgnores]
     ,[className =? c --> doFloat | c <- myCFloats]
     ,[isFullscreen --> doFullFloat]
+    ,[className =? "Wine" --> doShift "2-game"]  -- <+> doFloat
     ]) <+> manageTypes <+> manageDocks {- <+> namedScratchpadManageHook scratchpads -}
   where
     myIgnores = ["trayer", "desktop", "desktop_window"]
@@ -203,8 +204,9 @@ myKeys = let modm = mod4Mask in
     --, ((modm .|. shiftMask, xK_p),runOrRaisePrompt largeXPConfig)
     , ((modm, xK_g), goToSelected defaultGSConfig)
 
-    --, ((modm, xK_c), inputPrompt myXPConfig "Word" >>= flip whenJust (\word-> spawn $ "wn " ++ word ++ " -over" ++ "|dmenu -l 30 -nb '#000000' -nf '#FFFFFF' -fn '-*-simsun-medium-r-normal-*-16-*-*-*-*-*-iso10646-1'"))
+   --, ((modm, xK_c), inputPrompt myXPConfig "Word" >>= flip whenJust (\word-> spawn $ "sdcv -n " ++ word ++ "|zenity --text-info --width 530 --height 300"))
    , ((modm, xK_c), inputPrompt myXPConfig "Word" >>= flip whenJust (\word-> spawn $ "~/bin/sdcv.sh " ++ word))
+
    , ((modm, xK_x), inputPrompt myXPConfig "Eval" >>= flip whenJust (\expr-> spawn $ "~/bin/clisp.sh '" ++ expr ++ "'"))
 
     , ((modm, xK_F11), spawn "sudo /sbin/shutdown -r now")
