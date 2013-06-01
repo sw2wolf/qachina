@@ -1,6 +1,6 @@
 import System.IO
-import System.Process       (runProcess, waitForProcess)
-import System.Exit          (ExitCode)
+--import System.Process   (runProcess, waitForProcess)
+import System.Exit        (ExitCode)
 
 import qualified Data.Map as M
 --import Graphics.X11.Xlib
@@ -39,9 +39,9 @@ import XMonad.Prompt.Input
 import XMonad.Util.Run
 import XMonad.Util.EZConfig
 import XMonad.Util.WindowProperties (getProp32s)
-import XMonad.Util.NamedScratchpad
+--import XMonad.Util.NamedScratchpad
 
-scratchpads = [NS "xterm" "xterm" (resource =? "xterm") (customFloating $ W.RationalRect 0.50 0.270 0.50 0.722)]
+--scratchpads = [NS "xterm" "xterm" (resource =? "xterm") (customFloating $ W.RationalRect 0.50 0.270 0.50 0.722)]
 
 --myStatusBar = "dzen2 -x '0' -y '0' -h '24' -w '1440' -ta 'l' -fg '#FFFFFF' -bg '#000000' -fn '-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1'"
 
@@ -130,7 +130,7 @@ myManageHook = (composeAll . concat $
     [[className =? c --> doIgnore | c <- myIgnores]
     ,[className =? c --> doFloat | c <- myCFloats]
     ,[isFullscreen --> doFullFloat]
-    ]) <+> manageTypes <+> manageDocks <+> namedScratchpadManageHook scratchpads
+    ]) <+> manageTypes <+> manageDocks {- <+> namedScratchpadManageHook scratchpads -}
   where
     myIgnores = ["trayer", "desktop", "desktop_window"]
     myCFloats = ["GQview", "MPlayer", "Vncviewer","Xmessage", "Zenity"]
@@ -190,9 +190,9 @@ myXPConfig = defaultXPConfig {
 -- }}}
 
 emacs = "emacs -geometry 176x34+0+369"
-xterm="xterm -geometry 159x25+0+438"
-eweiqi="wine \"c:/Program Files/eweiqi/LiveBaduk.exe\""
-winxp="VBoxManage startvm winxp"
+xterm="xterm -geometry 176x29+0+369"
+--eweiqi="wine \"c:/Program Files/eweiqi/LiveBaduk.exe\""
+--winxp="VBoxManage startvm winxp"
 
 myKeys = let modm = mod4Mask in
     [ ((modm, xK_w), raiseMaybe (spawn "opera") (className =? "Opera"))
@@ -212,7 +212,8 @@ myKeys = let modm = mod4Mask in
     --, ((modm .|. shiftMask, xK_Print), spawn "sleep 0.2; scrot -s")
     , ((modm, xK_Print), spawn "scrot '/tmp/%Y-%m-%d_%H:%M:%S_$wx$h_scrot.png' -e 'mv $f ~'")
     , ((modm, xK_k), kill)
-    , ((modm, xK_space), namedScratchpadAction scratchpads "xterm")
+    --, ((modm, xK_space), namedScratchpadAction scratchpads "xterm")
+    , ((modm, xK_space), raiseMaybe (spawn xterm) (className =? "XTerm"))
 
     -- Window Navigation
     , ((modm, xK_Right), sendMessage $ Go R)
