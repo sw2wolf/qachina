@@ -33,9 +33,9 @@ import XMonad.Layout.Column
 import XMonad.Layout.ShowWName
 
 import XMonad.Prompt
-import XMonad.Prompt.Input
+--import XMonad.Prompt.Input
 import XMonad.Prompt.AppendFile
-import XMonad.Prompt.Shell
+--import XMonad.Prompt.Shell
 --import XMonad.Prompt.RunOrRaise (runOrRaisePrompt)
 
 import XMonad.Util.Run
@@ -207,16 +207,16 @@ myKeys = let modm = mod4Mask in
     , ((modm, xK_g), goToSelected defaultGSConfig)
 
    --, ((modm, xK_c), inputPrompt myXPConfig "Word" >>= flip whenJust (\word-> spawn $ "sdcv -n " ++ word ++ "|zenity --text-info --width 530 --height 300"))
-   , ((modm, xK_c), inputPrompt myXPConfig "Word" ?+ (\word-> spawn $ "~/bin/sdcv.sh " ++ word))
-
-   , ((modm, xK_x), inputPrompt myXPConfig "Eval" ?+ (\expr-> spawn $ "~/bin/clisp.sh '" ++ expr ++ "'"))
+   --, ((modm, xK_c), inputPrompt myXPConfig "Word" ?+ (\word-> spawn $ "~/bin/sdcv.sh " ++ word))
+   , ((modm, xK_c), spawn "~/bin/sdcv.sh")
+   , ((modm, xK_x), spawn "~/bin/clisp.sh")
 
    , ((modm .|. controlMask, xK_n), do
             spawn ("date>>" ++ "~/TODO")
             appendFilePrompt myXPConfig "/home/sw2wolf/TODO"
      )
 
-   , ((modm .|. controlMask, xK_x), shellPrompt myXPConfig)
+   --, ((modm .|. controlMask, xK_x), shellPrompt myXPConfig)
    , ((modm, xK_F11), spawn "sudo /sbin/shutdown -r now")
    , ((modm, xK_F12), spawn "sudo /sbin/shutdown -p now")
 

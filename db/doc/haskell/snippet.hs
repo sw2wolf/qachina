@@ -94,6 +94,8 @@ confirm "Restart" $ spawn "xmonad --recompile && xmonad --restart"
 --or
 confirm "Exit" $ io (exitWith ExitSuccess)
 
+message s = menuArgs "dmenu" ["-p","result:", "-l","20","-nb","#000000", "-nf", "#FFFFFF"] [s] >> return ()
+
 ---------
 
 import XMonad
@@ -249,8 +251,6 @@ main = xmonad defaultConfig { keys =
 --     >=> addArgs ["-fg", "#80c0ff"]
 --     >=> addArgs ["-bg", "#000040"]
 --     >=> addArgs ["-l", "20""]
-
---message s = menuArgs "dmenu" ["-p","result:", "-l","20","-nb","#000000", "-nf", "#FFFFFF"] [s] >> return ()
 
 ---------
 

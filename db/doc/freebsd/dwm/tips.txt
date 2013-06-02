@@ -1,17 +1,38 @@
-* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6" };
-/* rules */
-static const Rule rules[] = {
-  { "URxvt",           "Scratchpad",   "Scratchpad",   1 << 5,   True,      -1 }, /* scratchpad in its own tag (6th) */
-};
-/* commands */
-static const char *scratchpadcmd[] = { "urxvt", "-name", "Scratchpad", "-geometry", "74x15", NULL };
-/* key bindings */
-static Key keys[] = {
-  { MODKEY|ControlMask,           XK_x,      spawn,          {.v = scratchpadcmd } }, /* Launch scratchpad... */
-  { MODKEY,                       XK_x,      toggleview,     {.ui = 1 << 5} }, /* Toggle scratchpad,, but this doesn't auto focus */
-};
 
+###
+$cat ~/bin/startdwm
+while true; do
+    # Log stderror to a file 
+    dwm 2> ~/.dwm.log
+    # No error logging
+    #dwm >/dev/null 2>&1
+done
+exec ~/bin/startdwm #in ~/.xinitrc
+
+###
+
+static void runorraise(const Arg *arg);
+void runorraise(const Arg *arg) {
+	const char **app = arg->v;
+	Arg a = { .ui = ~0 };
+	Monitor *mon;
+	Client *c;
+	XClassHint hint = { NULL, NULL };
+	/* Tries to find the client */
+	for (mon = mons; mon; mon = mon->next) {
+		for (c = mon->clients; c; c = c->next) {
+			XGetClassHint(dpy, c->win, &hint);
+			if (hint.res_class && strcmp(app[2], hint.res_class) == 0) {
+				a.ui = c->tags;
+				view(&a);
+				focus(c);
+				return;
+			}
+		}
+	}
+	/* Client not found: spawn it */
+	spawn(arg);
+}
 
 有几点要注意：
 1、dwm要放到PATH里，不然restart功能用不了（改改也是可以的但比较麻烦），这个用了一天后才发现（开始以为是bug）。

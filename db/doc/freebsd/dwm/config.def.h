@@ -18,10 +18,10 @@ static const Bool topbar            = True;     /* False means bottom bar */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6" };
 
 static const Rule rules[] = {
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Opera",    NULL,       NULL,       0,            True,        -1 },
-	{ "Wine",     NULL,       NULL,       1 << 1,       True,        -1 },
-	{ "XTerm",    "Scratchpad", NULL,     1 << 5,       True,        -1 },
+	/* class      instance    title     tags mask     isfloating   monitor */
+	{ "Opera",    NULL,       NULL,     0,            True,        -1 },
+	{ "Wine",     NULL,       NULL,     1 << 1,       True,        -1 },
+	{ "XTerm",    NULL,       NULL,     1 << 5,       True,        -1 },
 };
 
 /* layout(s) */
@@ -50,24 +50,31 @@ static const Layout layouts[] = {
 
 /* commands */
 static const char *dmenu[] = { "/home/sw2wolf/bin/dmenu.sh", NULL };
+static const char *sdcv[] =  { "/home/sw2wolf/bin/sdcv.sh", NULL };
+static const char *clisp[] = { "/home/sw2wolf/bin/clisp.sh", NULL };
+
 static const char *opera[] = { "opera", NULL };
 static const char *emacs[] = { "emacs", "-geometry", "178x38+0+378", NULL };
-//static const char *xterm[] = { "xterm", "-geometry", "159x25+0+438", NULL };
+
 //static const char *winxp[] = { "VBoxManage", "startvm", "winxp", NULL };
 //static const char *eweiqi[]  = { "wine", "c:/Program Files/eweiqi/LiveBaduk.exe", NULL};
 
-//static const char *scratchpad[] = { "xterm", "-name", "Scratchpad", "-geometry", "100x30+500+250","-e", "cl", NULL };
+//static const char *scratchpad[] = { "xterm", "-name", "Scratchpad", "-geometry", "100x30+520+280","-e", "cl", NULL };
+static const char *scratchpad[] = { "xterm", "-name", "xterm", "-geometry", "100x30+500+250", NULL };
 
 static Key keys[] = {
-	/* modifier                  key        function        argument */
-    { MODKEY,                    XK_p,      spawn,          {.v = dmenu } },
-	{ MODKEY,                    XK_w,      spawn,          {.v = opera } },
-	{ MODKEY,                    XK_e,      spawn,          {.v = emacs } },
-	//{ MODKEY,                  XK_t,      spawn,          {.v = xterm } },
-	//{ MODKEY|ShiftMask,        XK_x,      spawn,          {.v = winxp } },
-	//{ MODKEY|ShiftMask,        XK_g,      spawn,          {.v = eweiqi } },
-    //{ MODKEY|ShiftMask,        XK_space,  spawn,          {.v = scratchpad} },
-    //{ MODKEY,                  XK_space,  toggleview,     {.ui = 1 << 5} },
+	/* modifier                key        function        argument */
+	{ MODKEY,                  XK_w,      runorraise,     {.v = opera } },
+	{ MODKEY,                  XK_e,      runorraise,     {.v = emacs } },
+
+    { MODKEY,                  XK_p,      spawn,          {.v = dmenu } },
+    { MODKEY,                  XK_c,      spawn,          {.v = sdcv } },
+    { MODKEY,                  XK_x,      spawn,          {.v = clisp } },
+
+	//{ MODKEY|ShiftMask,      XK_x,      spawn,          {.v = winxp } },
+	//{ MODKEY|ShiftMask,      XK_g,      spawn,          {.v = eweiqi } },
+    { MODKEY|ShiftMask,        XK_space,  spawn,          {.v = scratchpad} },
+    { MODKEY,                  XK_space,  toggleview,     {.ui = 1 << 5} },
 //
 	{ MODKEY,      XK_F11,    spawn,          SHCMD("sudo /sbin/shutdown -r now") },
 	{ MODKEY,      XK_F12,    spawn,          SHCMD("sudo /sbin/shutdown -p now") },
