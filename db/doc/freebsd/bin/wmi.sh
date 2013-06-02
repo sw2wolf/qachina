@@ -17,7 +17,7 @@ switch ($req)
 		xinit clisp
 		breaksw
 	case [2]:
-        xinit
+        xinit dwm
         breaksw
     case [3]:
 		xinit xmonad

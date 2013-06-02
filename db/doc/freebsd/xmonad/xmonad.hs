@@ -34,6 +34,8 @@ import XMonad.Layout.ShowWName
 
 import XMonad.Prompt
 import XMonad.Prompt.Input
+import XMonad.Prompt.AppendFile
+import XMonad.Prompt.Shell
 --import XMonad.Prompt.RunOrRaise (runOrRaisePrompt)
 
 import XMonad.Util.Run
@@ -205,29 +207,37 @@ myKeys = let modm = mod4Mask in
     , ((modm, xK_g), goToSelected defaultGSConfig)
 
    --, ((modm, xK_c), inputPrompt myXPConfig "Word" >>= flip whenJust (\word-> spawn $ "sdcv -n " ++ word ++ "|zenity --text-info --width 530 --height 300"))
-   , ((modm, xK_c), inputPrompt myXPConfig "Word" >>= flip whenJust (\word-> spawn $ "~/bin/sdcv.sh " ++ word))
+   , ((modm, xK_c), inputPrompt myXPConfig "Word" ?+ (\word-> spawn $ "~/bin/sdcv.sh " ++ word))
 
-   , ((modm, xK_x), inputPrompt myXPConfig "Eval" >>= flip whenJust (\expr-> spawn $ "~/bin/clisp.sh '" ++ expr ++ "'"))
+   , ((modm, xK_x), inputPrompt myXPConfig "Eval" ?+ (\expr-> spawn $ "~/bin/clisp.sh '" ++ expr ++ "'"))
 
-    , ((modm, xK_F11), spawn "sudo /sbin/shutdown -r now")
-    , ((modm, xK_F12), spawn "sudo /sbin/shutdown -p now")
-    --, ((modm .|. shiftMask, xK_Print), spawn "sleep 0.2; scrot -s")
-    , ((modm, xK_Print), spawn "scrot '/tmp/%Y-%m-%d_%H:%M:%S_$wx$h_scrot.png' -e 'mv $f ~'")
-    , ((modm, xK_k), kill)
-    --, ((modm, xK_space), namedScratchpadAction scratchpads "xterm")
-    , ((modm, xK_space), raiseMaybe (spawn xterm) (className =? "XTerm"))
+   , ((modm .|. controlMask, xK_n), do
+            spawn ("date>>" ++ "~/TODO")
+            appendFilePrompt myXPConfig "/home/sw2wolf/TODO"
+     )
+
+   , ((modm .|. controlMask, xK_x), shellPrompt myXPConfig)
+   , ((modm, xK_F11), spawn "sudo /sbin/shutdown -r now")
+   , ((modm, xK_F12), spawn "sudo /sbin/shutdown -p now")
+
+   --, ((modm .|. shiftMask, xK_Print), spawn "sleep 0.2; scrot -s")
+   --, ((modm, xK_Print), spawn "scrot '/tmp/%Y-%m-%d_%H:%M:%S_$wx$h_scrot.png' -e 'mv $f ~'")
+   , ((modm, xK_k), kill)
+
+   --, ((modm, xK_space), namedScratchpadAction scratchpads "xterm")
+   , ((modm, xK_space), raiseMaybe (spawn xterm) (className =? "XTerm"))
 
     -- Window Navigation
-    , ((modm, xK_Right), sendMessage $ Go R)
-    , ((modm, xK_Left ), sendMessage $ Go L)
-    , ((modm, xK_Up   ), sendMessage $ Go U)
-    , ((modm, xK_Down ), sendMessage $ Go D)
+   , ((modm, xK_Right), sendMessage $ Go R)
+   , ((modm, xK_Left ), sendMessage $ Go L)
+   , ((modm, xK_Up   ), sendMessage $ Go U)
+   , ((modm, xK_Down ), sendMessage $ Go D)
 
     -- swap...
-    , ((modm .|. controlMask, xK_Right), sendMessage $ Swap R)
-    , ((modm .|. controlMask, xK_Left ), sendMessage $ Swap L)
-    , ((modm .|. controlMask, xK_Up   ), sendMessage $ Swap U)
-    , ((modm .|. controlMask, xK_Down ), sendMessage $ Swap D)
+   , ((modm .|. controlMask, xK_Right), sendMessage $ Swap R)
+   , ((modm .|. controlMask, xK_Left ), sendMessage $ Swap L)
+   , ((modm .|. controlMask, xK_Up   ), sendMessage $ Swap U)
+   , ((modm .|. controlMask, xK_Down ), sendMessage $ Swap D)
     --, ((modm .|. controlMask, xK_Up), windows W.swapUp)
     --, ((modm .|. controlMask, xK_Down), windows W.swapDown)
       
@@ -235,5 +245,5 @@ myKeys = let modm = mod4Mask in
     -- , ((modm .|. shiftMask, xK_Up), spawn "aumix -v+6") -- volume++ 
     -- , ((modm .|. shiftMask, xK_Down ), spawn "aumix -v-6") -- volume-- 
     -- , ((modm .|. shiftMask, xK_Left ), spawn "amixer set Master toggle") -- mute
-    , ((modm .|. shiftMask, xK_r), spawn "xmonad --recompile && xmonad --restart")
+   , ((modm .|. shiftMask, xK_r), spawn "xmonad --recompile && xmonad --restart")
     ]
