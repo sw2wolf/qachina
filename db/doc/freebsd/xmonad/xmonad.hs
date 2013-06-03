@@ -1,13 +1,14 @@
-import System.IO
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+--import System.IO
 --import System.Process   (runProcess, waitForProcess)
-import System.Exit        (ExitCode)
+--import System.Exit        (ExitCode)
 
-import qualified Data.Map as M
+--import qualified Data.Map as M
 --import Graphics.X11.Xlib
 --import Data.Char (isSpace)
 
 import XMonad
-import qualified XMonad.StackSet as W 
+--import qualified XMonad.StackSet as W 
 
 import XMonad.Actions.GridSelect
 --import XMonad.Actions.WindowMenu
@@ -16,18 +17,18 @@ import XMonad.Actions.WindowGo
 
 import XMonad.Hooks.ManageDocks
 --import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.DynamicLog
+--import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageHelpers
 --import XMonad.Hooks.UrgencyHook
 -- Java swing fix
-import XMonad.Hooks.SetWMName (setWMName)
+--import XMonad.Hooks.SetWMName (setWMName)
 
-import XMonad.Layout.IM
+--import XMonad.Layout.IM
 import XMonad.Layout.NoBorders
 import XMonad.Layout.WindowNavigation
-import XMonad.Layout.ResizableTile
+--import XMonad.Layout.ResizableTile
 import XMonad.Layout.PerWorkspace  (onWorkspace)
-import XMonad.Layout.LayoutHints   (layoutHintsWithPlacement)
+--import XMonad.Layout.LayoutHints   (layoutHintsWithPlacement)
 import XMonad.Layout.SimplestFloat (simplestFloat)
 import XMonad.Layout.Column
 import XMonad.Layout.ShowWName
@@ -38,7 +39,7 @@ import XMonad.Prompt.AppendFile
 --import XMonad.Prompt.Shell
 --import XMonad.Prompt.RunOrRaise (runOrRaisePrompt)
 
-import XMonad.Util.Run
+--import XMonad.Util.Run
 import XMonad.Util.EZConfig
 import XMonad.Util.WindowProperties (getProp32s)
 --import XMonad.Util.NamedScratchpad
@@ -51,6 +52,7 @@ import XMonad.Util.WindowProperties (getProp32s)
 --xmobarrc = "~/.xmonad/xmobarrc"
 --xmobar -o -d -B white -a right -F blue -t '%StdinReader%' -c '[Run StdinReader]'
 
+main :: IO ()
 main = do
     --xmobar <- spawnPipe $ xmobar ++ " " ++ xmobarrc
     --dzenTopBar <- spawnPipe $ "killall dzen2; " ++ myStatusBar
@@ -70,8 +72,8 @@ main = do
       --, logHook = myLogHook xmobar
       , logHook = myLogHook
       , layoutHook = showWName myLayout
-   } `additionalKeys` myKeys
-     `removeMouseBindings` [(mod4Mask,button1), (mod4Mask,button2), (mod4Mask,button3)]
+   } `removeMouseBindings` [(mod4Mask,button1), (mod4Mask,button2), (mod4Mask,button3)]
+     `additionalKeysP`  myKeys
 
 myStartupHook :: X ()
 myStartupHook = do 
@@ -156,19 +158,24 @@ checkType = ask >>= \w -> liftX $ do
 
 -- Theme {{{
 -- Color names are easier to remember:
-colorOrange          = "#ff7701"
+--colorOrange          = "#ff7701"
+colorDarkGray :: [Char]
 colorDarkGray        = "#171717"
-colorPink            = "#e3008d"
+
+--colorPink :: [Char]
+--colorPink            = "#e3008d"
+
+colorGreen :: [Char]
 colorGreen           = "#00aa4a"
-colorBlue            = "#008dd5"
-colorYellow          = "#fee100"
-colorWhite           = "#cfbfad"
- 
-colorNormalBorder    = "#1c2636"
-colorFocusedBorder   = "#ebac54"
-barFont  = "terminus"
-barXFont = "inconsolata:size=14"
-xftFont = "xft: inconsolata-14"
+--colorBlue            = "#008dd5"
+--colorYellow          = "#fee100"
+--colorWhite           = "#cfbfad"
+--colorNormalBorder :: [Char] 
+--colorNormalBorder    = "#1c2636"
+--colorFocusedBorder   = "#ebac54"
+--barFont  = "terminus"
+--barXFont = "inconsolata:size=14"
+--xftFont = "xft: inconsolata-14"
 --}}}
 
 -- Prompt Config {{{
@@ -191,59 +198,45 @@ myXPConfig = defaultXPConfig {
 --                 , height = 20
 --                 }
 -- }}}
-
+emacs :: [Char]
 emacs = "emacs -geometry 176x34+0+369"
+
+xterm :: [Char]
 xterm="xterm -geometry 176x29+0+369"
 --eweiqi="wine \"c:/Program Files/eweiqi/LiveBaduk.exe\""
 --winxp="VBoxManage startvm winxp"
 
-myKeys = let modm = mod4Mask in
-    [ ((modm, xK_w), raiseMaybe (spawn "opera") (className =? "Opera"))
-    , ((modm, xK_e), raiseMaybe (spawn emacs) (className =? "Emacs"))
-    , ((modm, xK_p), spawn "~/bin/dmenu.sh")
-    --, ((modm, xK_p), spawnSelected defaultGSConfig [
-    --          xterm, "gmrun", "opera", emacs, eweiqi, winxp])
-    --, ((modm .|. shiftMask, xK_p),runOrRaisePrompt largeXPConfig)
-    , ((modm, xK_g), goToSelected defaultGSConfig)
+-- <Backspace> <Return>
+myKeys :: [([Char], X ())]
+myKeys =
+    [ ("M-w", raiseMaybe (spawn "opera") (className =? "Opera"))
+     ,("M-e", raiseMaybe (spawn emacs) (className =? "Emacs"))
+     ,("M-<Space>", raiseMaybe (spawn xterm) (className =? "XTerm"))
 
-   --, ((modm, xK_c), inputPrompt myXPConfig "Word" >>= flip whenJust (\word-> spawn $ "sdcv -n " ++ word ++ "|zenity --text-info --width 530 --height 300"))
-   --, ((modm, xK_c), inputPrompt myXPConfig "Word" ?+ (\word-> spawn $ "~/bin/sdcv.sh " ++ word))
-   , ((modm, xK_c), spawn "~/bin/sdcv.sh")
-   , ((modm, xK_x), spawn "~/bin/clisp.sh")
+     ,("M-g", goToSelected defaultGSConfig)
+     ,("M-p", spawn "~/bin/dmenu.sh")
+     ,("M-c", spawn "~/bin/sdcv.sh")
+     ,("M-x", spawn "~/bin/clisp.sh")
 
-   , ((modm .|. controlMask, xK_n), do
+     ,("M-C-n", do
             spawn ("date>>" ++ "~/TODO")
             appendFilePrompt myXPConfig "/home/sw2wolf/TODO"
-     )
+      )
 
-   --, ((modm .|. controlMask, xK_x), shellPrompt myXPConfig)
-   , ((modm, xK_F11), spawn "sudo /sbin/shutdown -r now")
-   , ((modm, xK_F12), spawn "sudo /sbin/shutdown -p now")
-
-   --, ((modm .|. shiftMask, xK_Print), spawn "sleep 0.2; scrot -s")
-   --, ((modm, xK_Print), spawn "scrot '/tmp/%Y-%m-%d_%H:%M:%S_$wx$h_scrot.png' -e 'mv $f ~'")
-   , ((modm, xK_k), kill)
-
-   --, ((modm, xK_space), namedScratchpadAction scratchpads "xterm")
-   , ((modm, xK_space), raiseMaybe (spawn xterm) (className =? "XTerm"))
+    ,("M-<F11>", spawn "sudo /sbin/shutdown -r now")
+    ,("M-<F12>", spawn "sudo /sbin/shutdown -p now")
 
     -- Window Navigation
-   , ((modm, xK_Right), sendMessage $ Go R)
-   , ((modm, xK_Left ), sendMessage $ Go L)
-   , ((modm, xK_Up   ), sendMessage $ Go U)
-   , ((modm, xK_Down ), sendMessage $ Go D)
+     ,("M-<Left>", sendMessage $ Go L)
+     ,("M-<Right>", sendMessage $ Go R)
+     ,("M-<Up>", sendMessage $ Go U)
+     ,("M-<Down>", sendMessage $ Go D)
 
     -- swap...
-   , ((modm .|. controlMask, xK_Right), sendMessage $ Swap R)
-   , ((modm .|. controlMask, xK_Left ), sendMessage $ Swap L)
-   , ((modm .|. controlMask, xK_Up   ), sendMessage $ Swap U)
-   , ((modm .|. controlMask, xK_Down ), sendMessage $ Swap D)
-    --, ((modm .|. controlMask, xK_Up), windows W.swapUp)
-    --, ((modm .|. controlMask, xK_Down), windows W.swapDown)
+     ,("M-C-<Left>", sendMessage $ Swap L)
+     ,("M-C-<Rght>", sendMessage $ Swap R)
+     ,("M-C-<Up>", sendMessage $ Swap U)
+     ,("M-C-<Down>", sendMessage $ Swap D)
       
-    -- sound control
-    -- , ((modm .|. shiftMask, xK_Up), spawn "aumix -v+6") -- volume++ 
-    -- , ((modm .|. shiftMask, xK_Down ), spawn "aumix -v-6") -- volume-- 
-    -- , ((modm .|. shiftMask, xK_Left ), spawn "amixer set Master toggle") -- mute
-   , ((modm .|. shiftMask, xK_r), spawn "xmonad --recompile && xmonad --restart")
+     ,("M-S-r", spawn "xmonad --recompile && xmonad --restart")
     ]
