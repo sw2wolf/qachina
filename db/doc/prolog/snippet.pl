@@ -1,5 +1,20 @@
 
 %------
+to create a stand-alone executable that starts by executing main/0 and for which the source is loaded through load.pl, use the command 
+% swipl --goal=main --stand_alone=true -o myprog -c load.pl
+
+ This performs exactly the same as executing 
+% swipl
+<banner>
+
+?- [load].
+?- qsave_program(myprog,
+                 [ goal(main),
+                   stand_alone(true)
+                 ]).
+?- halt.
+
+%------
 ?- debug_message_context(+time).
  
 %Using strace on the threaded program is a bit tricky, but can be done by selecting one of the HTTP threads and getting its thread-id using e.g.,

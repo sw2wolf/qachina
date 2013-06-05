@@ -49,12 +49,6 @@
 ;; 	  (switch-to-buffer-other-window "*guile*")
 ;; 	  (async-shell-command "~/bin/g" "*guile*")))
 
-;; (defun jump-run-prolog ()
-;;   (interactive)
-;;   (if (get-buffer "*swi-prolog*")
-;; 	  (switch-to-buffer-other-window "*swi-prolog*")
-;; 	  (async-shell-command "~/bin/pl" "*swi-prolog*")))
-
 ;; (defun jump-run-haskell ()
 ;;   (interactive)
 ;;   (if (get-buffer "*ghci*")
@@ -66,6 +60,12 @@
 ;;   (if (get-buffer "*erlang*")
 ;; 	  (switch-to-buffer-other-window "*erlang*")
 ;; 	  (async-shell-command "~/bin/yw" "*erlang*")))
+
+(defun jump-run-prolog ()
+  (interactive)
+  (if (get-buffer "*swi-prolog*")
+	  (switch-to-buffer-other-window "*swi-prolog*")
+	  (async-shell-command "~/bin/pl" "*swi-prolog*")))
 
 (defun clisp ()
   (interactive)
@@ -115,7 +115,7 @@
 ;√:#x221a π:#x3c0 λ:#x3bb ∑:#x2211 ⊥:#x22a5 ≅:#x2245 ≠:#x2260 ☺:#x263a
 ;⋆:#x22c6 ≅:#x2245
 
-(global-set-key (kbd "<f5>") 'jump-run-clisp)
+(global-set-key (kbd "<f5>") 'jump-run-prolog)
 (global-set-key (kbd "<f6>") 'jump-run-mew)
 ;(global-set-key (kbd "<f7>") 'jump-run-erlang)
 (global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))

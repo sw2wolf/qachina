@@ -1,5 +1,8 @@
 
 ---------
+[minBound, maxBound] :: String
+"\NUL\1114111"
+---------
 ghci -i"$HOME/.xmonad/lib" ~/.xmonad/xmonad.hs
 ---------
 let fibs = 0:1:zipWith (+) fibs (tail fibs) in fibs !! 70000

@@ -21,10 +21,10 @@
 
 (load "init-slime")
 (load "init-haskell")
+(load "init-prolog")
 
 ;(load "init-clojure")
 ;(load "init-racket")
-;(load "init-prolog")
 ;(load "init-ruby")
 ;(load "init-forth")
 
@@ -52,6 +52,7 @@
 
 ;(setq initial-frame-alist '((top . 0) (left . 0) (width . 1024) (height . 768)))
 (add-hook 'after-init-hook '(lambda ()
+							  ;(server-start)
 							  (split-window-horizontally)
 							  (list-bookmarks)
 							  (switch-to-buffer (get-buffer-create "*Bookmark List*"))))
