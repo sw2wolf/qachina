@@ -51,25 +51,24 @@ static const Layout layouts[] = {
 /* commands */
 static const char *dmenu[] = { "/home/sw2wolf/bin/dmenu.sh", NULL };
 static const char *sdcv[] =  { "/home/sw2wolf/bin/sdcv.sh", NULL };
-static const char *clisp[] = { "/home/sw2wolf/bin/clisp.sh", NULL };
+static const char *swipl[] = { "/home/sw2wolf/bin/pl.sh", NULL };
 
 static const char *opera[] = { "opera", NULL };
-static const char *emacs[] = { "emacs", "-geometry", "178x38+0+378", NULL };
+static const char *emacs[] = { "emacs", "--geometry", "177x38+0+378", NULL };
 
 //static const char *winxp[] = { "VBoxManage", "startvm", "winxp", NULL };
 //static const char *eweiqi[]  = { "wine", "c:/Program Files/eweiqi/LiveBaduk.exe", NULL};
 
-//static const char *scratchpad[] = { "xterm", "-name", "Scratchpad", "-geometry", "100x30+520+280","-e", "cl", NULL };
 static const char *scratchpad[] = { "xterm", "-name", "xterm", "-geometry", "100x30+500+250", NULL };
 
 static Key keys[] = {
 	/* modifier                key        function        argument */
-	{ MODKEY,                  XK_w,      runorraise,     {.v = opera } },
-	{ MODKEY,                  XK_e,      runorraise,     {.v = emacs } },
+	{ MODKEY,                  XK_w,      spawn,          {.v = opera } },
+	{ MODKEY,                  XK_e,      spawn,          {.v = emacs } },
 
     { MODKEY,                  XK_p,      spawn,          {.v = dmenu } },
     { MODKEY,                  XK_c,      spawn,          {.v = sdcv } },
-    { MODKEY,                  XK_x,      spawn,          {.v = clisp } },
+    { MODKEY,                  XK_x,      spawn,          {.v = swipl } },
 
 	//{ MODKEY|ShiftMask,      XK_x,      spawn,          {.v = winxp } },
 	//{ MODKEY|ShiftMask,      XK_g,      spawn,          {.v = eweiqi } },
@@ -104,6 +103,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
+//    { MODKEY|ShiftMask,             XK_r,      restart,        {0} },
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },   // logout
 };
 
@@ -115,11 +115,10 @@ static Button buttons[] = {
 //{ ClkLtSymbol,       0,              Button3,        setlayout,      {.v = &layouts[2]} },
 //{ ClkWinTitle,       0,              Button2,        zoom,           {0} },
 	{ ClkClientWin,    MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,    MODKEY,         Button2,        togglefloating, {0} },
-	{ ClkClientWin,    MODKEY,         Button3,        resizemouse,    {0} },
+//	{ ClkClientWin,    MODKEY,         Button2,        togglefloating, {0} },
+//	{ ClkClientWin,    MODKEY,         Button3,        resizemouse,    {0} },
 //{ ClkTagBar,         0,              Button1,        view,           {0} },
 //{ ClkTagBar,         0,              Button3,        toggleview,     {0} },
-	{ ClkTagBar,       MODKEY,         Button1,        tag,            {0} },
-	{ ClkTagBar,       MODKEY,         Button3,        toggletag,      {0} },
+//	{ ClkTagBar,       MODKEY,         Button1,        tag,            {0} },
+//	{ ClkTagBar,       MODKEY,         Button3,        toggletag,      {0} },
 };
-

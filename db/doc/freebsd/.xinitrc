@@ -36,9 +36,6 @@ xmodmap ~/.Xmodmap
 #fcitx &
 
 case $1 in
-    dwm)
-		exec /usr/local/bin/dwm
-		;;
 	xmonad)
 		exec xmonad
 		;;
@@ -52,7 +49,11 @@ case $1 in
 		sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
         ;;
     *)
-		#exec $HOME/bin/stumpwm-clisp
-		exec xmonad
+       while true; do
+       # Log stderror to a file 
+          #dwm 2> ~/.dwm.log
+       # No error logging
+          exec dwm > /dev/null 2>&1
+       done
 		;;
 esac

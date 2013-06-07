@@ -3,8 +3,8 @@
 BASE=/media/D/qachina/db/doc/money
 
 goal=`zenity --width 350 --entry --text "Please input goal" \
-div618\(\). stopLoss\(\). his. \
-win-ssq\(,"",""\) hit-ssq\("", ""\)`
+div618\(,\). stopLoss\(,\). his. \
+win_ssq\(,\'\',\'\'\). hit_ssq\(\'\',\'\'\).`
 
 if [ $? -eq 0 ]
 then
