@@ -1,6 +1,7 @@
 (use-modules (ice-9 common-list))
 (use-modules (ice-9 rdelim))
 (use-modules (ice-9 threads))
+(use-modules (ice-9 format))
 
 (define SXF 0.0015) ;手续费
 (define YHS 0.001)  ;印花费

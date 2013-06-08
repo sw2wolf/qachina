@@ -1,0 +1,2 @@
+#!/bin/sh
+clisp -q -q -modern -ansi "$@"

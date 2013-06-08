@@ -19,9 +19,10 @@
 ;(load "init-w3m")
 (load "init-mew")
 
-(load "init-slime")
 (load "init-haskell")
 (load "init-prolog")
+
+;(load "init-slime")
 
 ;(load "init-clojure")
 ;(load "init-racket")
