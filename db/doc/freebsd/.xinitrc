@@ -36,6 +36,9 @@ xmodmap ~/.Xmodmap
 #fcitx &
 
 case $1 in
+	dwm)
+		exec dwm
+		;;
 	xmonad)
 		exec xmonad
 		;;
@@ -49,6 +52,7 @@ case $1 in
 		sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
         ;;
     *)
-        exec dwm
+        #exec dwm
+		exec xmonad
 		;;
 esac

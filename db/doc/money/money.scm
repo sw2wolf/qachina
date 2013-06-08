@@ -3,6 +3,9 @@
 (use-modules (ice-9 threads))
 (use-modules (ice-9 format))
 
+;(if #f #f) is the simplest way to get the special "unspecified" value, the same one that is returned by many other functions like 'for-each' that don't have anything to return.
+(define (print x) (if (not (eq? x (if #f #f))) (write x)))
+
 (define SXF 0.0015) ;手续费
 (define YHS 0.001)  ;印花费
 (define GHF 1.0)    ;过户费
@@ -18,8 +21,8 @@
 (define (stopLoss qty pb lossRate)
 ;"止损价"
   (let ((tot (* qty pb (+ 1 SXF))))
-        (format t "Stop Loss at:~$~%" (- pb (/ (* tot lossRate) qty)))
-        (format t "Lost Money:~$(~d%)~%" (* tot lossRate) (* 100 lossRate))))
+        (format #t "Stop Loss at:~$~%" (- pb (/ (* tot lossRate) qty)))
+        (format #t "Lost Money:~$(~d%)~%" (* tot lossRate) (* 100 lossRate))))
 
 (define (div618 p1 p2)
 ;"黄金分割"

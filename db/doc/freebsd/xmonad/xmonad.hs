@@ -199,7 +199,7 @@ myXPConfig = defaultXPConfig {
 --                 }
 -- }}}
 emacs :: [Char]
-emacs = "emacs -geometry 176x34+0+369"
+emacs = "emacs --geometry 176x34+0+369"
 
 xterm :: [Char]
 xterm="xterm -geometry 176x29+0+369"
@@ -216,7 +216,7 @@ myKeys =
      ,("M-g", goToSelected defaultGSConfig)
      ,("M-p", spawn "~/bin/dmenu.sh")
      ,("M-c", spawn "~/bin/sdcv.sh")
-     ,("C-M-x", spawn "~/bin/clisp.sh")
+     ,("M-x", spawn "~/bin/guile.sh")
 
      ,("M-C-n", do
             spawn ("date>>" ++ "~/TODO")

@@ -1,5 +1,8 @@
 
 ---------
+flip runContT return $ callCC $
+                  \exit -> forever $ do x < - getLine; when (x == "end") (exit ())
+---------
 [minBound, maxBound] :: String
 "\NUL\1114111"
 ---------

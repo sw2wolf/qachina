@@ -1,3 +1,73 @@
+
+;---------------------------
+(define-module (guile-wm wm)
+  #:use-module (xlib xlib))
+
+(define-once wm-display #f)
+(define-once wm-display-string (or (getenv "DISPLAY") ":0"))
+(define-once wm-event-hook (make-hook 1))
+
+(define rc-file-location 
+  (string-append (passwd:dir (getpw (getuid))) "/.guilewmrc"))
+
+(define-public (wm-init!)
+  "Connect to a running X server and begin listening for events"
+  (set! wm-display (x-open-display! wm-display-string))
+  (let ((wm-root (x-root-window wm-display)))
+    (x-select-input! wm-root (logior ButtonPressMask ExposureMask KeyPressMask))
+    (wm-event-hook-refresh)
+    (if (file-exists? rc-file-location) (load rc-file-location))
+    (dynamic-wind
+      (lambda () (x-flush! wm-display))
+      (lambda () (x-event-loop! wm-display wm-event-hook))
+      (lambda () (x-close-display! wm-display)))))
+
+(define-public (wm-event-hook-refresh)
+  "Refresh the event hook with the hooks listed in wm-event-hooks"
+  (reset-hook! wm-event-hook)
+  (for-each (lambda (hook) (add-hook! wm-event-hook hook)) wm-event-hooks))
+
+(define-public (wm-shell-command command)
+  "Execute COMMAND in a shell"
+  (if (= (primitive-fork) 0)
+      (let ((env (cons 
+                  (format #f "DISPLAY=~a.~a" wm-display-string 
+                          (x-screen-number-of-screen (x-screen-of-display 
+wm-display))) 
+                  (environ))))
+        (execle "/bin/sh" env "/bin/sh" "-c" command))))
+
+;; guile-xlib doesn't have support for keysyms yet, so I just use raw
+;; keycodes here
+(define default-key-map
+  `((24 . ,(lambda (event) (x-event-loop-quit! (x-event:button event))))
+    (26 ,wm-shell-command "emacs")
+    (28 ,wm-shell-command "xterm")))
+
+(define (mapped-key-handler map)
+  "Return a key handler that maps keycodes to commands"
+  (lambda (event)
+    (if (= (x-event:type event) KeyPress) 
+        (let ((command (assq-ref map (x-event:keycode event))))
+          (if command
+            (if (list? command) 
+                (apply (car command) (cdr command))
+                (command event)))))))
+
+(define-public wm-event-hooks (list (mapped-key-handler default-key-map)))
+;You also need a startup script like this:
+(use-modules (guile-wm wm))
+(wm-init!)
+
+;; The fun part is that you can put a line like
+;; guile --listen=37147 -L /path/to/module/.../ \
+;;   /path/to/startup/script/wm.scm               
+
+;; in your .xinitrc or xsession file, and then you can connect to that
+;; listening process from Geiser or something like that and hack the wm
+;; while it's running.
+
+;---------------------------
 (case (rc-method rc)
   ((GET) (uri-query (request-uri (rc-req rc))))
   ((POST) ((@ (rnrs) utf8->string) (rc-body rc)))
@@ -119,8 +189,6 @@
               lst)
     (vector->list v)))
 
-
-
 (define (main . args)
   (let* ((ll ((@ (srfi srfi-1) iota) (read) 1))
 		 (len (length ll))
@@ -195,7 +263,7 @@
 
 
 (use-modules (oop goops))
- 1. 重载 + 函数, 以使字符串可以相加, 结果为字符串的顺序组合:
+;1. 重载 + 函数, 以使字符串可以相加, 结果为字符串的顺序组合:
 guile> (define-method (+ (x <string>) (y <string>))
 ...        (string-append x y))
 guile> (+ "abc" "def")
@@ -206,10 +274,10 @@ guile> (+ "abc" "123" "def")
 (define-class <2d-vector> ()
         (x #:init-value 0 #:accessor x #:init-keyword #:x)
         (y #:init-value 0 #:accessor y #:init-keyword #:y))
-这样我们就定义了一个数学中二维向量, 其中有两个属性: x 和 y.
+;这样我们就定义了一个数学中二维向量, 其中有两个属性: x 和 y.
 
-3. 对象生成
-可以用 make 来创建一个二维向量:
+;3. 对象生成
+;可以用 make 来创建一个二维向量:
 guile> (define v1 (make <2d-vector>))               ; x, y 被设为默认值 (0, 0)
 guile> (define v2 (make <2d-vector> #:x 1 #:y 2))   ; x, y 被设为 (1, 2)
 guile> v1
@@ -217,8 +285,8 @@ guile> v1
 guile> v2
 #<<2d-vector> b75fde80>
 
-4. 对象属性
- 可以访问和改变对象的 x 和 y 的值:
+;4. 对象属性
+;可以访问和改变对象的 x 和 y 的值:
 guile> (x v1)
 0
 guile> (y v1)
@@ -233,8 +301,9 @@ guile> (x v1)
 3
 guile> (y v1)
 4
-5. 重载函数
- 可以重载 +, 以使向量相加:
+
+;5. 重载函数
+;可以重载 +, 以使向量相加:
 guile> (define-method (+ (v1 <2d-vector>) (v2 <2d-vector>))
 ...        (make <2d-vector>
 ...              #:x (+ (x v1) (x v2))
@@ -245,8 +314,8 @@ guile> (x v3)
 4
 guile> (y v3)
 6
-6. 判断类型
- 可以得到一个对象的类型, 或者判断一个对象是否属于某个类型:
+;6. 判断类型
+;可以得到一个对象的类型, 或者判断一个对象是否属于某个类型:
 guile> (class-of v1)
 #<<class> <2d-vector> b75fdc30>
 guile> (class-of 1)
