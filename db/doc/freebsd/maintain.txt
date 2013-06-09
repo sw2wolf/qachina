@@ -1,7 +1,15 @@
 
+######
+mount -t cd9660 /dev/`mdconfig -f cdimage.iso` /mnt
 tunefs -n enable -j enable /dev/adXsYa
 
 export TERM=vt220 in console
+
+######
+
+sysctl -n kern.osrelease kern.ostype
+
+######
 
 # pkgdb -fF
 
@@ -186,11 +194,7 @@ make makesum
 给网卡配置IP:
 # ifconfig msk0 inet 192.168.2.33/24
 
-
 添加第二个IP:
 # ifconfig re0 inet 192.168.2.33/24 add
 删除：
 # ifconfig re0 inet 192.168.2.33/24 -alias
-
-#sysctl
-sysctl -n kern.osrelease kern.ostype

@@ -1,5 +1,7 @@
 
 ;;;
+(let ((x 0b101010)) (eql (eval x) x))
+;;;
 (gzip-stream:gunzip-sequence (drakma:http-request
 		 "http://paizo.com/threads/rzs2prcq?Deadlands-Reloaded-Interest-Check"
 		 :connection-timeout nil :additional-headers '((:accept-encoding .
@@ -590,7 +592,7 @@ DOUBLE-FLOAT
 (setf x (make-array '(3 5) :initial-element 3))
 =>  #2A((3 3 3 3 3) (3 3 3 3 3) (3 3 3 3 3))
 
-(make-array *max-buffer-size* :element-type '(unsigned-byte 8) :initial-element 0))
+(make-array *max-buffer-size* :element-type '(unsigned-byte 8) :initial-element 0)
 
 (nth-value 0 (read-from-string "qqq"))
 
@@ -600,16 +602,16 @@ DOUBLE-FLOAT
 * (proclaim '(optimize (debug 3)))
 * (defun foo (a b) (* (+ a b) b))
 * (step (foo 1 2))
-START Selects the CONTINUE restart if one exists and starts
-single-stepping. Single stepping affects only code
-compiled with under high DEBUG optimization quality.
-See User Manual for details.
+;; START Selects the CONTINUE restart if one exists and starts
+;; single-stepping. Single stepping affects only code
+;; compiled with under high DEBUG optimization quality.
+;; See User Manual for details.
 
-STEP  Steps into the current form.
-NEXT  Steps over the current form.
-OUT   Stops stepping temporarily, but resumes it when the topmost
-      frame that was stepped into returns.
-STOP  Stops single-stepping.
+;; STEP  Steps into the current form.
+;; NEXT  Steps over the current form.
+;; OUT   Stops stepping temporarily, but resumes it when the topmost
+;;       frame that was stepped into returns.
+;; STOP  Stops single-stepping.
 
 (setf (symbol-function funct-name) (lambda (x) (+ x 1)))
 

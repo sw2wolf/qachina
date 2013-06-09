@@ -18,8 +18,8 @@
       (when (and system (slot-boundp system 'asdf:version))
             (asdf:component-version system))))
 
-(defun find-pkg (name)
-    (ql:system-apropos name))
+;; (defun find-pkg (name)
+;;     (ql:system-apropos name))
 
 ;;; time relative
 (defun leap-year-p (year)

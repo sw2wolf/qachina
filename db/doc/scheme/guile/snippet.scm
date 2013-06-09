@@ -55,6 +55,7 @@ wm-display)))
                 (command event)))))))
 
 (define-public wm-event-hooks (list (mapped-key-handler default-key-map)))
+
 ;You also need a startup script like this:
 (use-modules (guile-wm wm))
 (wm-init!)
