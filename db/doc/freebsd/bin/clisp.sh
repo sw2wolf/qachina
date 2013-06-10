@@ -5,6 +5,6 @@ expr=`zenity --width 350 --entry --text "Please input a CL expression" \
 
 if [ $? -eq 0 ]
 then
-res=$(clisp -norc -q -q -i $MD/money/util.lisp -x "(cd \"$MD/money\") $expr")
+res=$(clisp -norc -q -q -i $MD/money/util.lisp -x "(progn (cd \"$MD/money\") $expr)")
 zenity --info --text="$res"
 fi

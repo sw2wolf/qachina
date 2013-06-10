@@ -278,8 +278,10 @@ used for matching windows with run-or-raise or window placement
 )
 (replace-hook *start-hook* 'my-start-hook)
 
-(defvar *swank-p* nil)
-(defcommand swank () ()
+#+MPD
+(progn
+  (defvar *swank-p* nil)
+  (defcommand swank () ()
     (setf stumpwm:*top-level-error-action* :break)
     (if *swank-p*
         (message "Swank server already running")
@@ -291,4 +293,4 @@ used for matching windows with run-or-raise or window placement
             ;(load "~/.vim/slime/start-swank.lisp")
             (echo-string (current-screen) "Starting Swank...Done")
         )))
-(defkey-root "s-l" "swank")
+  (defkey-root "s-l" "swank"))

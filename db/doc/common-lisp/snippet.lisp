@@ -1,6 +1,62 @@
 
 ;;;
+;Common Lisp has few standards for POSIX operation. Shebangs and command line arguments are hacks. 
+;In CLISP, this code only works for ./scriptedmain.lisp. 
+
+;~/.clisprc.lisp 
+;;; Play nice with shebangs
+(set-dispatch-macro-character #\# #\!
+ (lambda (stream character n)
+  (declare (ignore character n))
+  (read-line stream nil nil t)
+  nil))
+
+;scriptedmain.lisp 
+#!/bin/sh
+#|
+exec clisp -q -q $0 $0 ${1+"$@"}
+exit
+|#
+ 
+;;; Usage: ./scriptedmain.lisp
+ 
+(defun meaning-of-life () 42)
+ 
+(defun main (args)
+ (format t "Main: The meaning of life is ~a~%" (meaning-of-life))
+ (quit))
+ 
+;;; With help from Francois-Rene Rideau
+;;; http://tinyurl.com/cli-args
+(let ((args
+       #+clisp ext:*args*
+       #+sbcl sb-ext:*posix-argv*
+       #+clozure (ccl::command-line-arguments)
+       #+gcl si:*command-args*
+       #+ecl (loop for i from 0 below (si:argc) collect (si:argv i))
+       #+cmu extensions:*command-line-strings*
+       #+allegro (sys:command-line-arguments)
+       #+lispworks sys:*line-arguments-list*
+     ))
+ 
+  (if (member (pathname-name *load-truename*)
+              args
+              :test #'(lambda (x y) (search x y :test #'equalp)))
+    (main args)))
+
+test.lisp 
+#!/bin/sh
+#|
+exec clisp -q -q $0 $0 ${1+"$@"}
+exit
+|#
+ 
+(load "scriptedmain.lisp")
+(format t "Test: The meaning of life is ~a~%" (meaning-of-life))
+
+;;;
 (let ((x 0b101010)) (eql (eval x) x))
+
 ;;;
 (gzip-stream:gunzip-sequence (drakma:http-request
 		 "http://paizo.com/threads/rzs2prcq?Deadlands-Reloaded-Interest-Check"

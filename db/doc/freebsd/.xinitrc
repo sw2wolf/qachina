@@ -47,12 +47,11 @@ case $1 in
 	    /usr/local/etc/rc.d/musicpd onestart
 		exec $HOME/bin/stumpwm-clisp
         ;;
-    sbcl)
-	    /usr/local/etc/rc.d/musicpd onestart
-		sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
-        ;;
+    #sbcl)
+		#sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
+		#;;
     *)
-        #exec dwm
+		#exec $HOME/bin/stumpwm-clisp
 		exec xmonad
 		;;
 esac
