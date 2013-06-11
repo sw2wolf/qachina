@@ -240,7 +240,7 @@ used for matching windows with run-or-raise or window placement
 (defkeys-root
     ("s-e" "eval")
     ("s-w" "windowlist")
-	("s-m" "activate-mpd")
+	#-MPD ("s-m" "activate-mpd")
     ("s-i" "display-current-window-info"))
 
 ; groups
@@ -291,10 +291,11 @@ used for matching windows with run-or-raise or window placement
         (progn
             (setf *swank-p* t)
             (message "Starting swank on port 4005")
-            (ql:quickload :swank)
+            ;(ql:quickload :swank)
+			(push #p"~/quicklisp/dists/quicklisp/software/slime-20130420-cvs/" asdf:*central-registry*)			
+			(asdf:oos 'asdf:load-op :swank)
 			(funcall (intern (string '#:create-server) :swank) :port 4005 :style :spawn :dont-close t) ; :coding-system "utf-8-unix"
             ;(load "~/.vim/slime/start-swank.lisp")
             (echo-string (current-screen) "Starting Swank...Done")
         )))
   (defkey-root "s-l" "swank"))
-

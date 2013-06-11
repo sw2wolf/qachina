@@ -1,6 +1,6 @@
 #!/bin/sh
 #|
-exec clisp -q -q -modern -ansi -norc $0 $0 ${1+"$@"}
+exec clisp -q -q -modern -ansi -norc $0 ${1+"$@"}
 exit
 |#
 
