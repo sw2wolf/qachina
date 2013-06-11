@@ -1,7 +1,6 @@
 
 ;;;
 ;Common Lisp has few standards for POSIX operation. Shebangs and command line arguments are hacks. 
-;In CLISP, this code only works for ./scriptedmain.lisp. 
 
 ;~/.clisprc.lisp 
 ;;; Play nice with shebangs
@@ -17,8 +16,6 @@
 exec clisp -q -q $0 $0 ${1+"$@"}
 exit
 |#
- 
-;;; Usage: ./scriptedmain.lisp
  
 (defun meaning-of-life () 42)
  

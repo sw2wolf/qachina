@@ -1,3 +1,0 @@
-#!/bin/sh
-ghc -Wall -O2 xmonad.hs
-strip -p --strip-unneeded --remove-section=.comment -o xmonad-small xmonad

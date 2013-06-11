@@ -7,7 +7,7 @@
 ;(redirect-all-output (data-dir-file "debug-output" "txt"))
 ;(set-contrib-dir "/usr/local/share/stumpwm")
 
-(cl:if (stumpwm:getenv "MPD") (cl:push :MPD *features*) nil)
+#-MPD (cl:if (stumpwm:getenv "MPD") (cl:push :MPD *features*) nil)
 
 (defun cat (&rest strings)
     (apply 'concatenate 'string strings))
@@ -204,6 +204,8 @@ used for matching windows with run-or-raise or window placement
 				  (nw (remove-if #'(lambda (w) (eq w cw)) (group-windows group))))
 			  (if (not (null nw)) (focus-window (first nw))
 				  (no-focus group nil)))))))
+#-MPD
+(defcommand activate-mpd () () (cl:push :MPD *features*))
 
 (defkeys-top
     ("s-w" "browse")
@@ -216,12 +218,12 @@ used for matching windows with run-or-raise or window placement
 
 ;scrot '%m.%d.%Y_%I:%M:%S_%P.png' -e 'mv $f ~/download'"))
 ;sleep 0.2; scrot -s -e 'eog $f'	
-    ("Print" "exec scrot -q 10")
-    ("s-Print" "exec scrot -q 10 -s")
+    ;("Print" "exec scrot -q 10")
+    ;("s-Print" "exec scrot -q 10 -s")
 
     ("s-R" "reinit")
-    ("s-O" "quit")
-    ("s-F2" "exec")
+    ("s-Q" "quit")
+    ;("s-F2" "exec")
     ("s-F4" "kill")
     ("s-F11" "reboot")
     ("s-F12" "halt")
@@ -238,6 +240,7 @@ used for matching windows with run-or-raise or window placement
 (defkeys-root
     ("s-e" "eval")
     ("s-w" "windowlist")
+	("s-m" "activate-mpd")
     ("s-i" "display-current-window-info"))
 
 ; groups
@@ -294,3 +297,4 @@ used for matching windows with run-or-raise or window placement
             (echo-string (current-screen) "Starting Swank...Done")
         )))
   (defkey-root "s-l" "swank"))
+

@@ -45,13 +45,13 @@ case $1 in
 	clisp)
 		export MPD=YES
 	    /usr/local/etc/rc.d/musicpd onestart
-		exec $HOME/bin/stumpwm-clisp
+		exec $HOME/bin/stumpwm-clisp-norc
         ;;
     #sbcl)
 		#sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
 		#;;
     *)
-		#exec $HOME/bin/stumpwm-clisp
+		#exec $HOME/bin/stumpwm-clisp-norc
 		exec xmonad
 		;;
 esac
