@@ -1,5 +1,7 @@
 
 ;;;
+(asdf:clear-system "cffi")
+;;;
 ;Common Lisp has few standards for POSIX operation. Shebangs and command line arguments are hacks. 
 
 ;~/.clisprc.lisp 

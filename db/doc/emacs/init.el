@@ -22,7 +22,7 @@
 (load "init-haskell")
 (load "init-prolog")
 
-;(load "init-slime")
+(load "init-slime")
 
 ;(load "init-clojure")
 ;(load "init-racket")
