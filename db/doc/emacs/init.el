@@ -30,7 +30,7 @@
 ;(load "init-forth")
 
 ;(require 'erlang-start)
-;(require 'ocaml)
+(require 'ocaml)
 ;(require 'git-emacs)
 
 (load "init-eshell")

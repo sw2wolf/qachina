@@ -1,17 +1,18 @@
 /usr/local/bin/gmrun
 -----------------------------------------------------------
 wine "c:/Program Files/eweiqi/LiveBaduk.exe"
+wine "c:/Program Files/CRadio/CRadio.exe"
 -----------------------------------------------------------
 VBoxManage startvm winxp
 VBoxManage controlvm winxp poweroff
 #VBoxManage clonehd --format raw windows.vdi windows.raw
 -----------------------------------------------------------
 xterm -geometry 159x25+0+438
-emacs -geometry 178x38+0+378
+emacs -geometry 178x38+0+368
 evince
 opera
 -----------------------------------------------------------
-sudo /usr/local/etc/rc.d/musicpd onestart
+#sudo /usr/local/etc/rc.d/musicpd onestart
 nvidia-settings
 -----------------------------------------------------------
 scrot %Y%m%d-%H.%M.%S.png -t 280x175 -e 'mv $f $m ~'

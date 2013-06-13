@@ -136,6 +136,9 @@ used for matching windows with run-or-raise or window placement
 (defcommand emacs () ()
   (run-or-raise "emacs -geometry 178x38+0+369" '(:class "Emacs")))
 
+(defcommand xterm () ()
+  (run-or-raise "xterm -g 159x29+0+369" '(:class "XTerm")))
+
 ;;; You need to set environment variable MPD if you want to use mpd
 #+MPD
 (progn
@@ -179,6 +182,7 @@ used for matching windows with run-or-raise or window placement
 (defparameter *start-menu*
   '(("Emacs" "emacs")
 	("Go"    "eweiqi")
+	("------"   "")
     ("WinXP" "winxp")))
 
 (defcommand menu () ()
@@ -211,7 +215,7 @@ used for matching windows with run-or-raise or window placement
     ("s-w" "browse")
 	("s-e" "emacs")
 	("s-p" "menu")
-    ("s-t" "exec xterm -g 159x25+0+438")
+    ("s-t" "xterm")
     ("s-c" "sdcv")
     ("s-b" "mode-line")
     ("s-Tab" "switch-window")
@@ -281,7 +285,6 @@ used for matching windows with run-or-raise or window placement
 )
 (replace-hook *start-hook* 'my-start-hook)
 
-#+MPD
 (progn
   (defvar *swank-p* nil)
   (defcommand swank () ()

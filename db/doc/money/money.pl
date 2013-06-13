@@ -8,7 +8,9 @@
 :- set_prolog_flag(debugger_print_options,
 	[backquoted_string(true), max_depth(9999),
 	 portray(true), spacing(next_argument)]).
+
 :- set_prolog_flag(generate_debug_info, false).
+%:- set_prolog_flag(verbose_file_search, true).
 
 :- assertz(user:file_search_path(qachina, '/media/D/qachina')).
 :- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
