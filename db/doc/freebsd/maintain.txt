@@ -7,7 +7,8 @@ export TERM=vt220 in console
 
 ######
 
-sysctl -n kern.osrelease kern.ostype
+$ sysctl -n kern.osrelease kern.ostype
+$ objdump -sj .data /boot/kernel/kernel | tail -n 22
 
 ######
 

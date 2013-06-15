@@ -1,0 +1,15 @@
+#!/bin/sh
+mpc clear
+mpc add "$1"
+mpc play
+
+#mpc update [<path>]     Scans music directory for updates
+
+#mpc lsplaylists
+#mpc rm <playlist>
+
+#mpc clear
+#mpc load <playlist_name>
+#mpc play
+
+#mpc stats
