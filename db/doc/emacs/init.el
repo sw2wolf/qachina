@@ -34,7 +34,7 @@
 ;(require 'git-emacs)
 
 (load "init-eshell")
-;(load "init-mu4e")
+;(load "init-sqlite")
 
 ;(load "init-emms")
 (load "init-radio")

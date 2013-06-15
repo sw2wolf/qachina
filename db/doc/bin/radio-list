@@ -1,0 +1,1 @@
+mpg123 $(curl -s http://media.on.net/radio/playlist.list | grep -i BBC)

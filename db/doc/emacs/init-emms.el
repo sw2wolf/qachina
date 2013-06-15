@@ -4,6 +4,8 @@
 (emms-all) ;(emms-standard)
 (emms-default-players)
 
+(setq emms-player-list
+	  '(emms-player-mpd emms-player-mplayer))
 (setq emms-stream-default-action "play")
 
 ;; coding settings

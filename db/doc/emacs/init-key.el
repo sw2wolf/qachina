@@ -61,11 +61,11 @@
 ;; 	  (switch-to-buffer-other-window "*erlang*")
 ;; 	  (async-shell-command "~/bin/yw" "*erlang*")))
 
-;; (defun jump-run-prolog ()
-;;   (interactive)
-;;   (if (get-buffer "*swi-prolog*")
-;; 	  (switch-to-buffer-other-window "*swi-prolog*")
-;; 	  (async-shell-command "~/bin/pl" "*swi-prolog*")))
+(defun jump-run-prolog ()
+  (interactive)
+  (if (get-buffer "*swi-prolog*")
+	  (switch-to-buffer-other-window "*swi-prolog*")
+	  (async-shell-command "~/bin/pl" "*swi-prolog*")))
 
 (defun clisp ()
   (interactive)
@@ -117,7 +117,7 @@
 
 (global-set-key (kbd "<f5>") 'jump-run-clisp)
 (global-set-key (kbd "<f6>") 'jump-run-mew)
-;(global-set-key (kbd "<f7>") 'jump-run-erlang)
+(global-set-key (kbd "<f7>") 'jump-run-prolog)
 (global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
 
 (global-set-key [(f9)] 'list-bookmarks)

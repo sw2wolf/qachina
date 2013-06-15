@@ -4,9 +4,9 @@
 #
 # see also csh(1), environ(7).
 setenv MD /media/D/qachina/db/doc
-setenv GOOS freebsd
-setenv GOARCH 386
-setenv GOROOT /usr/local/go
+#setenv GOOS freebsd
+#setenv GOARCH 386
+#setenv GOROOT $HOME/go
 #setenv EVILVTE_CONF /home/sw2wolf/evilvte-config.h
 setenv LDFLAGS -L/usr/local/lib
 setenv CFLAGS  -I/usr/local/include
@@ -22,5 +22,5 @@ setenv CPPFLAGS  -I/usr/local/include
 # A righteous umask
 umask 22
 
-set path = (. /sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin  $HOME/bin $HOME/.cabal/bin $HOME/clisp/bin)
+set path = (. /sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin  $HOME/bin $HOME/.cabal/bin $HOME/clisp/bin $HOME/gprolog-1.4.4/bin $HOME/swi-prolog/bin $HOME/ocaml/bin $HOME/opam/bin)
 #setenv PYTHONSTARTUP /media/D/www/qachina/db/doc/python/python_ini.py
