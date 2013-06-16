@@ -19,25 +19,24 @@
 ;(load "init-w3m")
 (load "init-mew")
 
-(load "init-haskell")
+(load "init-clojure")
 (load "init-prolog")
+;(load "init-slime")
 
-(load "init-slime")
-
-;(load "init-clojure")
+;(load "init-haskell")
 ;(load "init-racket")
 ;(load "init-ruby")
 ;(load "init-forth")
 
-;(require 'erlang-start)
-(require 'ocaml)
+(require 'erlang-start)
+;(require 'ocaml)
 ;(require 'git-emacs)
 
 (load "init-eshell")
 ;(load "init-sqlite")
 
 ;(load "init-emms")
-(load "init-radio")
+;(load "init-radio")
 
 (setq shell-file-name "/bin/csh")
 

@@ -51,7 +51,8 @@ case $1 in
 		#sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
 		#;;
     *)
-		exec $HOME/bin/stumpwm-clisp-norc
+		#exec $HOME/bin/stumpwm-clisp-norc
 		#exec xmonad
+		exec /usr/local/bin/dwm
 		;;
 esac

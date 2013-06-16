@@ -39,10 +39,6 @@
         (find-file file))
     (message "Current buffer does not have an associated file.")))
 
-;; (defun ocaml ()
-;;   (interactive)
-;;   (run-caml "~/bin/ml"))
-
 ;; (defun jump-run-guile ()
 ;;   (interactive)
 ;;   (if (get-buffer "*guile*")
@@ -55,11 +51,11 @@
 ;; 	  (switch-to-buffer-other-window "*ghci*")
 ;; 	  (async-shell-command "~/bin/hs" "*ghci*")))
 
-;; (defun jump-run-erlang ()
-;;   (interactive)
-;;   (if (get-buffer "*erlang*")
-;; 	  (switch-to-buffer-other-window "*erlang*")
-;; 	  (async-shell-command "~/bin/yw" "*erlang*")))
+(defun jump-run-erlang ()
+  (interactive)
+  (if (get-buffer "*erlang*")
+	  (switch-to-buffer-other-window "*erlang*")
+	  (async-shell-command "~/bin/yw" "*erlang*")))
 
 (defun jump-run-prolog ()
   (interactive)
@@ -104,7 +100,8 @@
 (require 'thingatpt)
 (global-set-key (kbd "<f1>") 'forward-whitespace)
 (global-set-key (kbd "<f2>") 'find-file-at-point)
-(global-set-key (kbd "<f3>") 'edit-current-file-as-root) ;'describe-char
+;(global-set-key (kbd "<f3>") 'edit-current-file-as-root) ;'describe-char
+(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lazybot &(doc )")))
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
 
@@ -118,7 +115,7 @@
 (global-set-key (kbd "<f5>") 'jump-run-clisp)
 (global-set-key (kbd "<f6>") 'jump-run-mew)
 (global-set-key (kbd "<f7>") 'jump-run-prolog)
-(global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
+(global-set-key (kbd "<f8>") 'jump-run-erlang)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

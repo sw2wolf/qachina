@@ -1,11 +1,11 @@
 (add-to-list 'load-path "~/.emacs.d/emms-3.0")
 
 (require 'emms-setup)
+(setq emms-player-list '(emms-player-mpd emms-player-mplayer))
+
 (emms-all) ;(emms-standard)
 (emms-default-players)
 
-(setq emms-player-list
-	  '(emms-player-mpd emms-player-mplayer))
 (setq emms-stream-default-action "play")
 
 ;; coding settings
