@@ -1,13 +1,25 @@
 
 ######
+sysctl -n kern.osrelease kern.ostype
+
+sysctl dev.cpu.0.cx_supported
+dev.cpu.0.cx_supported: C1/0
+
+sysctl dev.cpu.0.freq
+dev.cpu.0.freq: 2100
+
+######
+grep powerd /etc/rc.conf
+powerd_enable="YES"
+powerd_flags="-a maximum -b adaptive -i 50 -r 90 -p 500"
+
+######
 mount -t cd9660 /dev/`mdconfig -f cdimage.iso` /mnt
 tunefs -n enable -j enable /dev/adXsYa
 
 export TERM=vt220 in console
 
 ######
-
-$ sysctl -n kern.osrelease kern.ostype
 $ objdump -sj .data /boot/kernel/kernel | tail -n 22
 
 ######

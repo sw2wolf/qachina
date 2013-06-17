@@ -1,16 +1,102 @@
 .use GDB as C's REPL
-~% gdb ./test
+
+% gdb ./test
 (gdb) break main
 Breakpoint 1 at 0x8048452
+
 (gdb) run
 Starting program: /home/pcl/sandbox/test
 Breakpoint 1, 0x08048452 in main ()
+
 (gdb) set $a = malloc(1234)
 (gdb) call sprintf($a, "Hello %d", 12345*12345*12345)
 $1 = 15
+
 (gdb) print (char*)$a
 $2 = 0x96c6008 "Hello 170287977"
+
 (gdb) print (unsigned int)atoi("-1")
 $3 = 4294967295
+
 (gdb) print (unsigned int)atoi("4294967295")
 $4 = 2147483647
+
+-----------------------------------------------------------
+(gdb) print 1 + 2
+$1 = 3
+
+(gbd) print (int) 2147483648
+$2 = -2147483648
+
+(gdb) print &i
+$5 = (int *) 0x7fff5fbff584
+
+(gdb) print sizeof(int)
+$7 = 4
+(gdb) print sizeof(double)
+$8 = 8
+
+The flags indicate that I want to examine 4 values, formatted as hex numerals, one byte at a time.
+(gdb) x/4xb &i
+0x7fff5fbff584: 0x39    0x05    0x00    0x00
+
+(gdb) set var i = 0x12345678
+(gdb) x/4xb &i
+0x7fff5fbff584: 0x78    0x56    0x34    0x12
+
+-----------------------------------------------------------
+(gdb) ptype i
+type = int
+(gdb) ptype &i
+type = int *
+(gdb) ptype main
+type = int (void)
+
+-----------------------------------------------------------
+int a[] = {1,2,3};
+
+(gdb) print a
+$1 = {1, 2, 3}
+(gdb) ptype a
+type = int [3]
+
+(gdb) x/12xb &a
+0x7fff5fbff56c: 0x01  0x00  0x00  0x00  0x02  0x00  0x00  0x00
+0x7fff5fbff574: 0x03  0x00  0x00  0x00
+
+(gdb) print sizeof(a)
+$2 = 12
+
+(gdb) print a + 1
+$3 = (int *) 0x7fff5fbff570
+
+(gdb) x/4xb a + 1
+0x7fff5fbff570: 0x02  0x00  0x00  0x00
+
+(gdb) print a[0]
+$4 = 1
+(gdb) print *(a + 0)
+$5 = 1
+(gdb) print a[1]
+$6 = 2
+(gdb) print *(a + 1)
+$7 = 2
+(gdb) print a[2]
+$8 = 3
+(gdb) print *(a + 2)
+$9 = 3
+
+(gdb) x/4xb a
+0x7fff5fbff56c: 0x01  0x00  0x00  0x00
+(gdb) x/4xb &a
+0x7fff5fbff56c: 0x01  0x00  0x00  0x00
+
+(gdb) ptype &a
+type = int (*)[3]
+
+(gdb) print a + 1
+$10 = (int *) 0x7fff5fbff570
+(gdb) print &a + 1
+$11 = (int (*)[3]) 0x7fff5fbff578
+
+-----------------------------------------------------------

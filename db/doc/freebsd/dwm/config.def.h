@@ -20,8 +20,8 @@ static const char *tags[] = { "1", "2", "3", "4", "5", "6" };
 
 static const Rule rules[] = {
 	/* class      instance    title     tags mask     isfloating   monitor */
-	{ "Opera",    NULL,       NULL,     0,            True,        -1 },
-    { "Emacs",    NULL,       NULL,     0,            True,        -1 },
+	//{ "Opera",    NULL,       NULL,     0,            True,        -1 },
+    //{ "Emacs",    NULL,       NULL,     0,            True,        -1 },
 	{ "Wine",     NULL,       NULL,     1 << 1,       True,        -1 },
 };
 
@@ -34,17 +34,18 @@ static const Bool resizehints = False; /* True means respect size hints in tiled
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[]=",      tile },
-    { "[M]",      monocle },
+	//	{ "[]=",      tile },
+	//  { "[M]",      monocle },
 };
 
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} },
+
+/* { MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, 
+{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, */
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -55,7 +56,7 @@ static const char *sdcv[] =  { "/home/sw2wolf/bin/sdcv.sh", NULL };
 static const char *clisp[] = { "/home/sw2wolf/bin/clisp.sh", NULL };
 
 static const char *opera[] = { "opera", NULL };
-static const char *emacs[] = { "emacs", "-geometry", "177x38+0+378", NULL };
+static const char *emacs[] = { "emacs", "-geometry", "177x39+0+379", NULL };
 static const char *xterm[] = { "xterm", "-geometry", "159x25+0+435", NULL };
 
 //static const char *winxp[] = { "VBoxManage", "startvm", "winxp", NULL };
@@ -65,7 +66,7 @@ static Key keys[] = {
 	/* modifier                key        function        argument */
 	{ MODKEY,                  XK_w,      spawn,          {.v = opera } },
 	{ MODKEY,                  XK_e,      spawn,          {.v = emacs } },
-    { MODKEY,                  XK_space,  spawn,          {.v = xterm} },
+    { MODKEY,                  XK_t,      spawn,          {.v = xterm} },
 
     { MODKEY,                  XK_p,      spawn,          {.v = dmenu } },
     { MODKEY,                  XK_c,      spawn,          {.v = sdcv } },
@@ -77,28 +78,30 @@ static Key keys[] = {
 	{ MODKEY,      XK_F11,    spawn,          SHCMD("sudo /sbin/shutdown -r now") },
 	{ MODKEY,      XK_F12,    spawn,          SHCMD("sudo /sbin/shutdown -p now") },
 //
-	{ MODKEY,      XK_b,      togglebar,      {0} },
+//	{ MODKEY,      XK_b,      togglebar,      {0} },
+
 	{ MODKEY,      XK_Tab,    focusstack,     {.i = +1 } },
 	{ MODKEY,      XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,      XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,      XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,      XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,      XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,      XK_l,      setmfact,       {.f = +0.05} },
+
+//	{ MODKEY,      XK_i,      incnmaster,     {.i = +1 } },
+//	{ MODKEY,      XK_d,      incnmaster,     {.i = -1 } },
+//	{ MODKEY,      XK_h,      setmfact,       {.f = -0.05} },
+//	{ MODKEY,      XK_l,      setmfact,       {.f = +0.05} },
 //	{ MODKEY,                       XK_Return, zoom,           {0} },
 //	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
-	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY|ShiftMask,             XK_m,      setlayout,      {.v = &layouts[2]} },
+//	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[0]} },
+//	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[1]} },
+//	{ MODKEY|ShiftMask,             XK_m,      setlayout,      {.v = &layouts[2]} },
 //	{ MODKEY,                       XK_space,  setlayout,      {0} },
 //	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
+//	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
+//	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 //	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
 //	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+//	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
+//	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -124,7 +127,7 @@ static Button buttons[] = {
 
 void self_restart(const Arg *arg) {
 	const char *p = "/usr/local/bin/dwm";
-	execv(p, (char *const[]) {p, NULL});
+	execv(p, (char * const []) {p, NULL});
 }
 
 /* static Bool focus_follows_mouse = False; */

@@ -101,7 +101,7 @@
 (global-set-key (kbd "<f1>") 'forward-whitespace)
 (global-set-key (kbd "<f2>") 'find-file-at-point)
 ;(global-set-key (kbd "<f3>") 'edit-current-file-as-root) ;'describe-char
-(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lazybot &(doc )")))
+(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg rudybot doc ")))
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
 
