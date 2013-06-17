@@ -38,7 +38,7 @@ xmodmap ~/.Xmodmap
 case $1 in
 	dwm)
 		/usr/local/etc/rc.d/musicpd onestart
-		exec $HOME/bin/dwm
+		exec $HOME/RnD/dwm/dwm-dbg
 		;;
 	clisp)
 		export MPD=YES
@@ -49,7 +49,6 @@ case $1 in
 		#sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
 		#;;
     *)
-		#exec $HOME/bin/stumpwm-clisp-norc
 		exec $HOME/bin/dwm
 		;;
 esac
