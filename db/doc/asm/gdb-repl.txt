@@ -100,3 +100,82 @@ $10 = (int *) 0x7fff5fbff570
 $11 = (int (*)[3]) 0x7fff5fbff578
 
 -----------------------------------------------------------
+gdb	启动gdb进行调试
+gdb-many-windows	切换单窗格/多窗格模式
+gdb-restore-windows	恢复窗格布局
+
+添加断点	gud-break	C-x C-a C-b 或 C-x <SPC>
+删除断点	gud-remove	C-x C-a C-d
+运行/继续程序	gud-go	无
+单步执行，无视函数	gud-next	C-x C-a C-n
+单步执行，进入函数	gud-step	C-x C-a C-s
+跳出当前函数	gud-finish	C-x C-a C-f
+运行到光标所在语句	gud-until	C-x C-a C-u
+继续运行程序	gud-cont	C-x C-a C-r
+
+(add-hook 'gdb-mode-hook '(lambda ()
+                            (define-key c-mode-base-map [(f5)] 'gud-go)
+                            (define-key c-mode-base-map [(f7)] 'gud-step)
+                            (define-key c-mode-base-map [(f8)] 'gud-next)))
+
+
+(defun quick-compile ()
+ "A quick compile funciton for C++"
+ (interactive)
+ (compile (concat "g++ " (buffer-name (current-buffer)) " -g -pg"))
+ )
+ ;;快捷键F9
+ (global-set-key [(f9)] 'quick-compile)
+
+
+從另一台電腦連上正在跑重要程式的工作站
+用ps和grep找出那個程式的pid
+用gdb attach它: gdb [program] [pid]
+在gdb內輸入: handle SIGHUP nopass 
+把當掉的windows重新開機，在gdb內輸入continue讓程式繼續執行
+你會看到gdb攔截到SIGHUP的訊息，再輸入continue就可以了
+
+
+#!/bin/sh
+export DISPLAY=tivf09:1.0; xterm -e gdb RIM_Oracle_Agent.binary
+如果你的程序在exec的时候还传入了参数，可以改成：
+#!/bin/sh
+export DISPLAY=tivf09:1.0; xterm -e gdb --args RIM_Oracle_Agent.binary $@ 
+
+-----------------------------------------------------------------------------
+echo "cont" > attach.gdb
+gdb attach $1 -x attach.gdb
+
+gdb attach $(pidof process_name) -ex cont
+
+-----------------------------------------------------------------------------
+% gdb httpd -c core
+(gdb) where
+it will (hopefully) print a stack backtrace of where the core dump occurred during processing.
+
+x/x 以十六进制输出
+x/d 以十进制输出
+x/c 以单字符输出
+x/i  反汇编 – 通常，我们会使用 x/10i $ip-20 来查看当前的汇编（$ip是指令寄存器）
+x/s 以字符串输出
+
+-----------------------------------------------------------------------------
+runstack.sh
+#!/bin/sh
+if test $# -ne 2; then
+   echo "Usage: `basename $0 .sh` <process-id> cmd" 1>&2
+   echo "For exampl: `basename $0 .sh` 1000 bt" 1>&2
+   exit 1
+fi
+if test ! -r /proc/$1; then
+   echo "Process $1 not found." 1>&2
+   exit 1
+fi
+result=""
+GDB=${GDB:-/usr/bin/gdb}
+# Run GDB, strip out unwanted noise.
+result=`$GDB --quiet -nx /proc/$1/exe $1 <<EOF 2>&1
+$2
+EOF`
+echo "$result" | egrep -A 1000 -e "^\(gdb\)" | egrep -B 1000 -e "^\(gdb\)"
+-----------------------------------------------------------------------------

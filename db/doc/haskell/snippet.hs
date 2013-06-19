@@ -108,6 +108,7 @@ $ghc --info | egrep 'split|Host'
 $cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
 $cabal install mighttpd2 --ghc-options=-fllvm
 $cabal install hashable --constraint "unix==2.6.0.1" --constraint "bytestring==0.10.0.2" --dry-run
+$cabal install --enable-library-profiling
 
 ---------
 

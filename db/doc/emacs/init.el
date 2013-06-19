@@ -50,7 +50,7 @@
      ;; ConsiderCamelCaseToBeCorrect
      (setq ispell-extra-args '("-C"))))
 
-;(setq initial-frame-alist '((top . 0) (left . 0) (width . 1024) (height . 768)))
+(setq initial-frame-alist '((top . 0) (left . 0) (width . 1024) (height . 768)))
 (add-hook 'after-init-hook '(lambda ()
 							  ;(server-start)
 							  (split-window-horizontally)
@@ -58,6 +58,10 @@
 							  (switch-to-buffer (get-buffer-create "*Bookmark List*"))))
 
 (setq kill-buffer-query-functions (remove 'process-kill-buffer-query-function kill-buffer-query-functions))
+
+;disable logging to *Messages*
+;(fset 'message 'ignore)
+(setq messages-buffer-max-lines nil)
 
 ;(require 'dired+)
 ;(put 'dired-find-alternate-file 'disabled nil)  ;enable `a' command

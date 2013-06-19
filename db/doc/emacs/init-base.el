@@ -6,13 +6,12 @@
 (setq inhibit-startup-message t)
 (setq gnus-inhibit-startup-message t)
 
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode nil)
-(transient-mark-mode t)
-(set-scroll-bar-mode nil)
-(cua-selection-mode 1)
+;(tool-bar-mode -1) ;Emacs*toolBar: off
+;(menu-bar-mode -1) ;Emacs*menuBar: off
+;(scroll-bar-mode nil) ;Emacs*VerticalScrollBar: off
 
+(transient-mark-mode t)
+(cua-selection-mode 1)
 (delete-selection-mode +1)
 
 (set-language-environment "UTF-8")

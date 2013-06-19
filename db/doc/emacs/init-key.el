@@ -26,18 +26,18 @@
 (global-set-key (kbd "M-j") (lambda () (interactive) (join-line -1)))
 ;(global-set-key "\C-x\C-m" 'execute-extended-command)
 
-(defun qachina ()
-   (interactive)
-   (async-shell-command "cd /media/D/qachina && ./start.bat" "*QA-China*"))
+;; (defun qachina ()
+;;    (interactive)
+;;    (async-shell-command "cd /media/D/qachina && ./start.bat" "*QA-China*"))
 
-(defun edit-current-file-as-root ()
-  "Edit the file that is associated with the current buffer as root"
-  (interactive)
-  (if (buffer-file-name)
-      (progn
-        (setq file (concat "/sudo:root@localhost:" (buffer-file-name)))
-        (find-file file))
-    (message "Current buffer does not have an associated file.")))
+;; (defun edit-current-file-as-root ()
+;;   "Edit the file that is associated with the current buffer as root"
+;;   (interactive)
+;;   (if (buffer-file-name)
+;;       (progn
+;;         (setq file (concat "/sudo:root@localhost:" (buffer-file-name)))
+;;         (find-file file))
+;;     (message "Current buffer does not have an associated file.")))
 
 ;; (defun jump-run-guile ()
 ;;   (interactive)
@@ -57,11 +57,11 @@
 	  (switch-to-buffer-other-window "*erlang*")
 	  (async-shell-command "~/bin/yw" "*erlang*")))
 
-(defun jump-run-prolog ()
-  (interactive)
-  (if (get-buffer "*swi-prolog*")
-	  (switch-to-buffer-other-window "*swi-prolog*")
-	  (async-shell-command "~/bin/pl" "*swi-prolog*")))
+;; (defun jump-run-prolog ()
+;;   (interactive)
+;;   (if (get-buffer "*swi-prolog*")
+;; 	  (switch-to-buffer-other-window "*swi-prolog*")
+;; 	  (async-shell-command "~/bin/pl" "*swi-prolog*")))
 
 (defun clisp ()
   (interactive)
@@ -101,7 +101,7 @@
 (global-set-key (kbd "<f1>") 'forward-whitespace)
 (global-set-key (kbd "<f2>") 'find-file-at-point)
 ;(global-set-key (kbd "<f3>") 'edit-current-file-as-root) ;'describe-char
-(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg rudybot doc ")))
+(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
 
@@ -114,7 +114,7 @@
 
 (global-set-key (kbd "<f5>") 'jump-run-clisp)
 (global-set-key (kbd "<f6>") 'jump-run-mew)
-(global-set-key (kbd "<f7>") 'jump-run-prolog)
+;(global-set-key (kbd "<f7>") 'jump-run-prolog)
 (global-set-key (kbd "<f8>") 'jump-run-erlang)
 
 (global-set-key [(f9)] 'list-bookmarks)

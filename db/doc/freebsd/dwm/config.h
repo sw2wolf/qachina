@@ -1,8 +1,5 @@
-/* See LICENSE file for copyright and license details. */
-static void self_restart(const Arg *arg);
-
 /* appearance */
-static const char font[]            = "-wenquanyi-wenquanyi bitmap song-medium-r-normal--12-130-75-75-p-80-iso10646-1";
+static const char font[] = "-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1";
 
 static const char normbordercolor[] = "#444444";
 static const char normbgcolor[]     = "#222222";
@@ -12,16 +9,16 @@ static const char selbgcolor[]      = "#005577";
 static const char selfgcolor[]      = "#eeeeee";
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
-static const Bool showbar           = False;     /* False means no bar */
-static const Bool topbar            = True;     /* False means bottom bar */
+//static const Bool showbar           = False;     /* False means no bar */
+//static const Bool topbar            = True;     /* False means bottom bar */
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6" };
 
 static const Rule rules[] = {
 	/* class      instance    title     tags mask     isfloating   monitor */
-	//{ "Opera",    NULL,       NULL,     0,            True,        -1 },
-    //{ "Emacs",    NULL,       NULL,     0,            True,        -1 },
+	/* { "Opera",    NULL,       NULL,     0,            True,        -1 }, */
+    /* { "Emacs",    NULL,       NULL,     0,            True,        -1 }, */
 	{ "Wine",     NULL,       NULL,     1 << 1,       True,        -1 },
 };
 
@@ -34,18 +31,17 @@ static const Bool resizehints = False; /* True means respect size hints in tiled
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
-	//	{ "[]=",      tile },
-	//  { "[M]",      monocle },
+	/* { "[]=",      tile }, */
+	/* { "[M]",      monocle }, */
 };
 
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} },
-
-/* { MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, 
-{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, */
+    { MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} },
+/* { MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, */
+/* { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, */
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -56,8 +52,8 @@ static const char *sdcv[] =  { "/home/sw2wolf/bin/sdcv.sh", NULL };
 static const char *clisp[] = { "/home/sw2wolf/bin/clisp.sh", NULL };
 
 static const char *opera[] = { "opera", NULL };
-static const char *emacs[] = { "emacs", "-geometry", "177x39+0+379", NULL };
-static const char *xterm[] = { "xterm", "-geometry", "159x25+0+435", NULL };
+static const char *emacs[] = { "emacs", "-geometry", "176x39+0+379", NULL };
+static const char *xterm[] = { "xterm", "-geometry", "159x28+0+400", NULL };
 
 //static const char *winxp[] = { "VBoxManage", "startvm", "winxp", NULL };
 //static const char *eweiqi[] = { "wine", "c:/Program Files/eweiqi/LiveBaduk.exe", NULL};
@@ -105,7 +101,6 @@ static Key keys[] = {
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
-    { MODKEY|ShiftMask,             XK_r,      self_restart,   {0} },
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },   // logout
 };
 
@@ -125,10 +120,10 @@ static Button buttons[] = {
 //	{ ClkTagBar,       MODKEY,         Button3,        toggletag,      {0} },
 };
 
-void self_restart(const Arg *arg) {
-	const char *p = "/usr/local/bin/dwm";
-	execv(p, (char * const []) {p, NULL});
-}
+/* void self_restart(const Arg *arg) { */
+/* 	const char *p = "/usr/local/bin/dwm"; */
+/* 	execv(p, (char * const []) {p, NULL}); */
+/* } */
 
 /* static Bool focus_follows_mouse = False; */
 

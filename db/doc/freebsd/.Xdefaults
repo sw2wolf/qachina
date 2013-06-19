@@ -63,3 +63,7 @@ xterm*printerCommand: cat > ~/xtermdump
 !   Ctrl <KeyPress> V: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
 !        <BtnUp>: select-end(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
 !        Ctrl <KeyPress> P: print() \n
+
+Emacs*toolBar: off
+Emacs*menuBar: off
+!Emacs*scrollBar: off
