@@ -1,5 +1,7 @@
 
 ######
+xwininfo -root | grep geometry =>  -geometry 1440x900+0+0
+######
 sysctl -n kern.osrelease kern.ostype
 
 sysctl dev.cpu.0.cx_supported

@@ -7,8 +7,8 @@ VBoxManage startvm winxp
 VBoxManage controlvm winxp poweroff
 #VBoxManage clonehd --format raw windows.vdi windows.raw
 -----------------------------------------------------------
-xterm -geometry 159x25+0+438
-emacs -geometry 176x39+0+379
+xterm -geometry 159x28+0+390
+emacs -geometry 176x36+0+363
 evince
 opera
 -----------------------------------------------------------

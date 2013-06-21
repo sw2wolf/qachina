@@ -4,6 +4,7 @@
 %--------------------------------------------------
 -opaque u16int() :: 0..(1 bsl 16 - 1). 
 -export_type([u16int/0]). 
+
 -record(headerrec, {message_id :: u16int()}). 
 -opaque headerrec() :: #headerrec{}. 
 -export_type([headerrec/0]).
@@ -12,6 +13,7 @@
 %-spec diskspace(nonempty_string()) -> {'ok', diskinfo()} | {'error', term()}.
 %--------------------------------------------------
 
+-include("records.hrl").
 %-export([winG/3, winQ/3, date_by_ntday/2, div618/2]).
 -compile(export_all).
 
@@ -22,6 +24,9 @@
 -else.
 -define(DEBUG(Fmt, Args), no_debug).  
 -endif.
+
+get_meta() -> 
+	user_default:module_info().
 
 %---------------------------------------------------------------------
 %       stock

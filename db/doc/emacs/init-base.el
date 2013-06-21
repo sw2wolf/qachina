@@ -8,7 +8,7 @@
 
 ;(tool-bar-mode -1) ;Emacs*toolBar: off
 ;(menu-bar-mode -1) ;Emacs*menuBar: off
-;(scroll-bar-mode nil) ;Emacs*VerticalScrollBar: off
+(scroll-bar-mode nil)
 
 (transient-mark-mode t)
 (cua-selection-mode 1)

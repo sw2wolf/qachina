@@ -9,6 +9,10 @@
 (add-to-list 'load-path "~/.emacs.d/mu4e")
 (add-to-list 'load-path "~/RnD/w3m")
 
+;disable logging to *Messages*
+;(fset 'message 'ignore)
+(setq messages-buffer-max-lines nil)
+
 ;(load "init-package")
 (load "init-base")
 (load "init-key")
@@ -21,7 +25,7 @@
 
 (load "init-clojure")
 (load "init-prolog")
-;(load "init-slime")
+(load "init-slime")
 
 ;(load "init-haskell")
 ;(load "init-racket")
@@ -58,10 +62,6 @@
 							  (switch-to-buffer (get-buffer-create "*Bookmark List*"))))
 
 (setq kill-buffer-query-functions (remove 'process-kill-buffer-query-function kill-buffer-query-functions))
-
-;disable logging to *Messages*
-;(fset 'message 'ignore)
-(setq messages-buffer-max-lines nil)
 
 ;(require 'dired+)
 ;(put 'dired-find-alternate-file 'disabled nil)  ;enable `a' command

@@ -52,8 +52,7 @@ static const char *sdcv[] =  { "/home/sw2wolf/bin/sdcv.sh", NULL };
 static const char *clisp[] = { "/home/sw2wolf/bin/clisp.sh", NULL };
 
 static const char *opera[] = { "opera", NULL };
-static const char *emacs[] = { "emacs", "-geometry", "176x39+0+379", NULL };
-static const char *xterm[] = { "xterm", "-geometry", "159x28+0+400", NULL };
+static const char *emacs[] = { "emacs", NULL }; //"-geometry", "176x39+0+379", NULL };
 
 //static const char *winxp[] = { "VBoxManage", "startvm", "winxp", NULL };
 //static const char *eweiqi[] = { "wine", "c:/Program Files/eweiqi/LiveBaduk.exe", NULL};
@@ -62,7 +61,6 @@ static Key keys[] = {
 	/* modifier                key        function        argument */
 	{ MODKEY,                  XK_w,      spawn,          {.v = opera } },
 	{ MODKEY,                  XK_e,      spawn,          {.v = emacs } },
-    { MODKEY,                  XK_t,      spawn,          {.v = xterm} },
 
     { MODKEY,                  XK_p,      spawn,          {.v = dmenu } },
     { MODKEY,                  XK_c,      spawn,          {.v = sdcv } },
