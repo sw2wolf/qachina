@@ -1,11 +1,17 @@
+-----------------------------------------------------------------------------
 
-######
+-----------------------------------------------------------------------------
+portmaster --force-config <pkg name>
+-----------------------------------------------------------------------------
 `nextboot -o '-v' -k kernel` to enable verbose booting during the next boot. 
-######
+
 svn co svn://svn.freebsd.org/base/releng/9.1/ /usr/src/
-######
+
 xwininfo -root | grep geometry =>  -geometry 1440x900+0+0
-######
+
+objdump -sj .data /boot/kernel/kernel | tail -n 22
+
+-----------------------------------------------------------------------------
 sysctl -n kern.osrelease kern.ostype
 
 sysctl dev.cpu.0.cx_supported
@@ -14,21 +20,18 @@ dev.cpu.0.cx_supported: C1/0
 sysctl dev.cpu.0.freq
 dev.cpu.0.freq: 2100
 
-######
+-----------------------------------------------------------------------------
 grep powerd /etc/rc.conf
 powerd_enable="YES"
 powerd_flags="-a maximum -b adaptive -i 50 -r 90 -p 500"
 
-######
+-----------------------------------------------------------------------------
 mount -t cd9660 /dev/`mdconfig -f cdimage.iso` /mnt
 tunefs -n enable -j enable /dev/adXsYa
 
 export TERM=vt220 in console
 
-######
-$ objdump -sj .data /boot/kernel/kernel | tail -n 22
-
-######
+-----------------------------------------------------------------------------
 
 # pkgdb -fF
 
@@ -82,7 +85,7 @@ portsclean
 
 安装更新Ports Collection
 #portsnap fetch extract
- （以后更新执行portsnap fetch update就可以了。
+（以后更新执行portsnap fetch update就可以了。
 
 给bsd打补丁(自动打补丁只能用于默认内核)
 #freebsd-update fetch

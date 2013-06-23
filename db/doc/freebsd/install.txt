@@ -1,3 +1,5 @@
+
+------------------------------------------------------------------------
 >gpart show ada0
  =>       63  125829018  ada0  MBR  (60G)
           63   10490382    1  !7  (5.0G)
@@ -7,22 +9,20 @@
 >gpart add -b 14699475 -s 111129606 -t freebsd ada0
  ada0s3 added
 >gpart create -s BSD ada0s3
-  ada0s3 created
+ ada0s3 created
 
 >gpart add -i 1 -b 0 -s 1G -t freebsd-ufs ada0s3
-  ada0s3a added
+ ada0s3a added
 >gpart add -i 2 -s 2G -t freebsd-swap ada0s3
-    ada0s3b added
+ ada0s3b added
 >gpart add -i 4 -t freebsd-zfs ada0s3
-      ada0s3d added
+ ada0s3d added
 
 >gpart bootcode -b /boot/boot0 ada0   #FreeBSD boot loader
 >gpart bootcode -b /boot/boot ada0s3
 
 
-
-#################################################################################################
-
+------------------------------------------------------------------------
 最小化安装FreeBSD（我用的是7.2－i386的版本）
 
 如果你要安装nvidia的显卡驱动，再安装系统的时候就把linux支持装上。FreeBSD7.2默认安装的是linux_base-fc4如果要安装其他版本的linux支持请另行查阅资料吧）

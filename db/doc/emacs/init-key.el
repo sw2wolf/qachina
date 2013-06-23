@@ -51,11 +51,11 @@
 ;; 	  (switch-to-buffer-other-window "*ghci*")
 ;; 	  (async-shell-command "~/bin/hs" "*ghci*")))
 
-(defun jump-run-erlang ()
-  (interactive)
-  (if (get-buffer "*erlang*")
-	  (switch-to-buffer-other-window "*erlang*")
-	  (async-shell-command "~/bin/yw" "*erlang*")))
+;; (defun jump-run-erlang ()
+;;   (interactive)
+;;   (if (get-buffer "*erlang*")
+;; 	  (switch-to-buffer-other-window "*erlang*")
+;; 	  (async-shell-command "~/bin/yw" "*erlang*")))
 
 ;; (defun jump-run-prolog ()
 ;;   (interactive)
@@ -107,10 +107,10 @@
 ;⋆:#x22c6 ≅:#x2245
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
-(global-set-key (kbd "<f5>") 'jump-run-clisp)
+(global-set-key (kbd "<f5>") 'jump-run-shell)
 (global-set-key (kbd "<f6>") 'jump-run-mew)
-(global-set-key (kbd "<f7>") 'jump-run-erlang)
 
+(global-set-key (kbd "<f7>") 'jump-run-clisp)
 (global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
 ; > @wn @src @where @undo @unmtl @pl @package
 ;@djinn turn a type into its corresponding expression

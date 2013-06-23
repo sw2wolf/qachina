@@ -1,3 +1,6 @@
+-------------------------------------------------
+
+-------------------------------------------------
 .debian下安装opera浏览器
 
 debian安装了桌面，官方软件库包含了iceweasel，这个是firefox内核的，不过内存占用有点大。换了chrome，这个内存占用更猛，最后试了opera，相对来说还好点。桌面运行opera的时候内存占用200多m，buyvm 年付15刀的vps也能应付了。
@@ -60,6 +63,7 @@ echo libc6 hold | dpkg --set-selections
 $ dpkg-source -x foo_version-revision.dsc
 
 它将软件包解压到一个名为 foo-version 的目录。 
+
 使用下列命令创建二进制软件包： 
 $ cd foo-version
 $ su -c "apt-get update ; apt-get install fakeroot"
@@ -70,47 +74,47 @@ $ dpkg-buildpackage -rfakeroot -us -uc
 
 .
 配置ADSL上网(pppoe)：
- 1、从cd安装pppoeconf
+1、从cd安装pppoeconf
   sudo apt-get install pppoeconf
 
-  2、配置pppoe
+2、配置pppoe
    sudo pppoeconf
 
    一路点击yes，中间填入帐号用户名（如电话号码）和帐号密码
 
-   3、启动pppoe连接
+3、启动pppoe连接
     sudo pon dsl-provider
 
-    关闭pppoe连接
-     sudo poff dsl-provider
+关闭pppoe连接
+sudo poff dsl-provider
 
-     提高ADSL（pppoe）上网速度
-     通过减少浏览器解释域名的时间提高上网速度
-      1、安装dnsmasq
-       sudo apt-get install dnsmasq
+提高ADSL（pppoe）上网速度
+通过减少浏览器解释域名的时间提高上网速度
+1、安装dnsmasq
+   sudo apt-get install dnsmasq
 
-       2、编辑dnsmasq的配置文件
-        sudo apt-get gedit /etc/dnsmasq.conf 
+2、编辑dnsmasq的配置文件
+   sudo apt-get gedit /etc/dnsmasq.conf 
 
-        找到下面这一项 
-         #resolv-file=
+   找到下面这一项 
+   #resolv-file=
 
-         用下面的一条语句替换 
-          resolv-file=/etc/resolv.dnsmasq.conf
+   用下面的一条语句替换 
+   resolv-file=/etc/resolv.dnsmasq.conf
 
-          3、将原dns配置复制至resolv.dnsmasq.conf
-           确保你没有更改过/etc/resolv.conf文件，如果改过，恢复原状 
-            sudo cp /etc/resolv.conf /etc/resolv.dnsmasq.conf
+3、将原dns配置复制至resolv.dnsmasq.conf
+   确保你没有更改过/etc/resolv.conf文件，如果改过，恢复原状 
+   sudo cp /etc/resolv.conf /etc/resolv.dnsmasq.conf
 
-            4、编辑resolv.conf 
-             sudo gedit /etc/resolv.conf
+4、编辑resolv.conf 
+   sudo gedit /etc/resolv.conf
 
-             将其中的域名服务器全部去掉，加入以下这行 
-              nameserver 127.0.0.1
+   将其中的域名服务器全部去掉，加入以下这行 
+   nameserver 127.0.0.1
 
-              保存，退出
+   保存，退出
 
-              5、编辑adsl链接配置文件，防止pppoe自动连接网络后resolv.conf的设置被覆盖
-               sudo gedit /etc/ppp/peers/dsl-provider 
-                在 usepeerdns 前面增加 # ，也就是把这条语句覆盖掉。
+5、编辑adsl链接配置文件，防止pppoe自动连接网络后resolv.conf的设置被覆盖
+   sudo gedit /etc/ppp/peers/dsl-provider 
+   在 usepeerdns 前面增加 # ，也就是把这条语句覆盖掉。
 

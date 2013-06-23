@@ -133,7 +133,7 @@ win_ssq(Count, NoRed, NoBlue) ->
         str2ints(NoRed),
         pick_num(Count, lists:seq(1,16)--str2ints(NoBlue), [])
     ),
-    file:write_file("ssqNum.txt", get(result)).
+    file:write_file(ssqNum(), get(result)).
 
 pick_ssq_nums(0, _, _) -> ok;
 pick_ssq_nums(Count, NoRed, OkBlue) ->
@@ -151,7 +151,7 @@ pick_ssq_nums(Count, NoRed, OkBlue) ->
     pick_ssq_nums(Count-1, NoRed, OkBlue).
 
 good_red() ->
-    {ok,Bin} = file:read_file("ssqHitNum.txt"),
+    {ok,Bin} = file:read_file(ssqHitNum()),
     NumLst = string:tokens(binary_to_list(Bin), "\n"),
     T = ets:new(tmp, [public,ordered_set]),
     lists:foreach(fun(I)-> ets:insert(T, {I,0}) end, lists:seq(1,33)),
@@ -170,11 +170,11 @@ good_red() ->
 %检查是否中奖
 %    HitNo:  中奖号
 hit_ssq(NoStr, HitNo) ->
-    {ok,HitBin} = file:read_file("ssqHitNum.txt"),
+    {ok,HitBin} = file:read_file(ssqHitNum()),
     HasNoStr = string:str(binary_to_list(HitBin),NoStr),
     if HasNoStr == 0 ->
         HitNoStr = NoStr ++ "\s" ++ HitNo ++ "\n",
-        {ok,H} = file:open("ssqHitNum.txt",[append]),
+        {ok,H} = file:open(ssqHitNum(),[append]),
         file:write(H,HitNoStr),
         file:close(H);
     true -> ok
@@ -186,7 +186,7 @@ hit_ssq(NoStr, HitNo) ->
     {GoodHit,_} = hit_check({good_red(), HitRed}, {[], HitBlue}),
     io:format("Good Red Hit:~w~n",[GoodHit]),
 
-    {ok,Bin} = file:read_file("ssqNum.txt"),
+    {ok,Bin} = file:read_file(ssqNum()),
     NumLst = string:tokens(binary_to_list(Bin), "\n"),
     io:format("No\tFirst\tSecond\tResult~n"),
     io:format("--------------------------------------------------------------~n"),
@@ -212,6 +212,12 @@ get_ssq_result(RedNum, BlueNum) ->
         {_,1} -> "6th(5)";
         _ -> "X"
     end.
+
+ssqNum() ->
+	filename:dirname(code:which('user_default')) ++ "/ssqNum.txt".
+
+ssqHitNum() ->
+	filename:dirname(code:which('user_default')) ++ "/ssqHitNum.txt".
 
 %convert a "1 2 3 4 5 " similar string to integer list
 str2ints(Str) ->
@@ -253,7 +259,7 @@ hit_check({NumFst, HitFst}, {NumSnd, HitSnd}) ->
                             end, 0, NumSnd),
     {HitFstNum, HitSndNum}.
 
-his() -> sh("tail ssqHitNum.txt").
+his() -> sh("tail " ++ ssqHitNum()).
 
 sd(Word) -> sh("sdcv -n " ++ Word).
 	

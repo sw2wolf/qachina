@@ -1,5 +1,23 @@
-:- initialization(assertz(file_search_path(money, '/media/D/qachina/db/doc/money/'))).
-:- initialization(randomize). %set_seed(+integer)
+%:- module(money, [winG/3, stopLoss/3]).
+%:- use_module(library(clpfd)).
+:- use_module(library(dcg/basics)).
+
+:- set_prolog_flag(toplevel_print_options,
+	[backquoted_string(true), max_depth(9999),
+	 portray(true), spacing(next_argument)]).
+:- set_prolog_flag(debugger_print_options,
+	[backquoted_string(true), max_depth(9999),
+	 portray(true), spacing(next_argument)]).
+
+:- set_prolog_flag(generate_debug_info, false).
+%:- set_prolog_flag(verbose_file_search, true).
+
+:- assertz(user:file_search_path(qachina, '/media/D/qachina')).
+:- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
+
+:- load_files([ qachina(test_web) ], [ silent(true) ]).
+
+%:- initialization set_random(seed(888)).
 
 sxf(0.0015).
 yhs(0.001).
@@ -24,13 +42,28 @@ stopLoss(Qty,Pb,LossRate) :-
 	format("Lost Money: ~2f~n", [T * LossRate]).
 
 show618(P1, P2, R) :-
-	(P1=<P2 -> P is P1+(P2-P1)*R; P is P1-(P1-P2)*R),
+	RP1 is rationalize(P1),
+	RP2 is rationalize(P2),
+	RR is rationalize(R),
+	(P1=<P2 -> P is RP1+(RP2-RP1)*RR; P is RP1-(RP1-RP2)*RR),
 	format("---~3f ~2f---~n",[R,P]).
 div618(P1, P2) :-
 	RATIO = [0.0, 0.191, 0.236, 0.382, 0.5, 0.618, 0.809, 1.0],
 	(P1>P2 -> R = RATIO;
 		reverse(RATIO,R)),
 	maplist(show618(P1,P2), R).
+
+%% my_comp(Comp, N1, N2) :-
+%% 	( N1 =< N2 -> Comp = '>'
+%% 	; N1 > N2 -> Comp = '<').
+%% show618(P1, P2, R) :-
+%% 	(P1=<P2 -> P is P1+(P2-P1)*R; P is P1-(P1-P2)*R),
+%% 	format("---~3f ~2f---~n",[R,P]).
+%% div618(P1, P2) :-
+%% 	RATIO = [0.0, 0.191, 0.236, 0.382, 0.5, 0.618, 0.809, 1.0],
+%% 	(P1>P2 -> R = RATIO;
+%% 		predsort(my_comp, RATIO, R)),
+%% 	maplist(show618(P1,P2), R).
 
 sd(Word) :-
 	(   atom(Word)
@@ -117,13 +150,10 @@ atom2lst(Atom,L) :-
 	maplist(atom_number, X, L).
 
 ssqNumF(F) :-
-	file_search_path(money,WD),
-	atom_concat(WD,'ssqNum.txt',F).
+	absolute_file_name(money('ssqNum.txt'), F, []).
 
 ssqHitNumF(F) :-
-	file_search_path(money,WD),
-	atom_concat(WD,'ssqHitNum.txt',F).
-	%absolute_file_name(money('ssqHitNum.txt'), F, []).
+	absolute_file_name(money('ssqHitNum.txt'), F, []).
 
 his :-
 	ssqHitNumF(File),
@@ -133,6 +163,10 @@ his :-
 %%
 %% utilities
 %%
+qachina :-
+	server(8000).
+	%thread_create(shell('cd /media/D/qachina; ./start.bat'),_,[detached(true)]).
+
 fac(N,F) :-
 	N is 0, F is 1;
     N > 0, M is N - 1, fac(M,G), F is N*G.
@@ -145,6 +179,11 @@ binary(0,'0').
 binary(1,'1').
 binary(N,B) :- N>1,X is N mod 2,Y is N//2,binary(Y,B1),atom_concat(B1, X, B), !.
 
+sys_info :-
+	current_prolog_flag(version_data, swi(Major, Minor, Patch, _)),
+	format('swi-prolog version: ~w.~w.~w~n',[Major,Minor,Patch]).
+
+%module_property(ansi_term, file(Path))
 
 % list comprehesion
 %% List of Pythagorean triples : 
