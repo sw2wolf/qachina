@@ -1,5 +1,7 @@
 %%%%%%%%%%%%%%%%%%
-
+code:which('user_default').
+%%%%%%%%%%%%%%%%%%
+erl -pa $MD/money -noshell -eval 'user_default:div618(1,2)' -s init stop
 %%%%%%%%%%%%%%%%%%
 -record(client, {
 	state = wait :: wait | request | response | response_body,

@@ -64,7 +64,6 @@ xterm*printerCommand: cat > ~/xtermdump
 !        <BtnUp>: select-end(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
 !
         Ctrl <KeyPress> P: print() \n
-Emacs.geometry: 176x36+0+363
+Emacs.geometry: 178x36+0+363
 Emacs*toolBar: off
 Emacs*menuBar: off
-Emacs*VerticalScrollBar: off
