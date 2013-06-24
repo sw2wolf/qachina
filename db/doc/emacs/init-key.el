@@ -101,16 +101,16 @@
 (global-set-key (kbd "<f1>") 'forward-whitespace)
 (global-set-key (kbd "<f2>") 'find-file-at-point)
 
-;(global-set-key (kbd "<f3>") 'edit-current-file-as-root) ;'describe-char
-(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert #x3bb)))
+(global-set-key (kbd "<f3>") 'describe-char)
+;(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert #x3bb)))
 ;√:#x221a π:#x3c0 λ:#x3bb ∑:#x2211 ⊥:#x22a5 ≅:#x2245 ≠:#x2260 ☺:#x263a
 ;⋆:#x22c6 ≅:#x2245
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
-(global-set-key (kbd "<f5>") 'jump-run-shell)
+(global-set-key (kbd "<f5>") 'jump-run-clisp)
 (global-set-key (kbd "<f6>") 'jump-run-mew)
 
-(global-set-key (kbd "<f7>") 'jump-run-clisp)
+(global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 (global-set-key (kbd "<f8>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
 ; > @wn @src @where @undo @unmtl @pl @package
 ;@djinn turn a type into its corresponding expression

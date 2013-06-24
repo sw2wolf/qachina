@@ -268,3 +268,7 @@ sh(Cmd) ->
     lists:foreach(
         fun(X)->io:format("~ts~n", [unicode:characters_to_list(erlang:iolist_to_binary(X))]) end,
         Res).
+
+qachina() ->
+	ok = application:start(yaws).
+
