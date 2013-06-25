@@ -17,22 +17,39 @@
 ;; 	(concat "" (user-login-name) "@" (system-name) " "
 ;; 		(eshell/pwd) "% ")))
 
-(defun m-eshell-hook () 
-; define control p, control n and the up/down arrow
+(add-hook 'eshell-mode-hook (lambda () 
+    ;(outline-minor-mode 1)
+    ;; (color-theme-my-eshell)
+    ;; (setq outline-regexp "^[^#$\n]* [#>]+ "
+    ;;       scroll-margin 0
+    ;;       eshell-scroll-to-bottom-on-output t
+    ;;       eshell-scroll-show-maximum-output t)
+
+    ;; (add-to-list 'eshell-output-filter-functions 
+    ;;              'eshell-postoutput-scroll-to-bottom)
+
   (define-key eshell-mode-map [(control p)] 'eshell-previous-matching-input-from-input)
   (define-key eshell-mode-map [(control n)] 'eshell-next-matching-input-from-input)
  
   (define-key eshell-mode-map [up] 'previous-line)
   (define-key eshell-mode-map [down] 'next-line)
  
+  (define-key eshell-mode-map [tab] 'user-tab)
   (define-key eshell-mode-map [home] 'eshell-bol)
   (define-key eshell-mode-map [(control u)] 'eshell-kill-input) ;删除已输入命令
 
   (define-key eshell-mode-map [(control l)] 'eshell/clear)
   (define-key eshell-mode-map [(control s)] 'eshell/csh)
-)
+))
 
-(add-hook 'eshell-mode-hook 'm-eshell-hook)
+;; (add-hook 'eshell-mode-hook (lambda()
+;;     (def-key-s eshell-mode-map 
+;;         "<up>"     'eshell-previous-matching-input-from-input
+;;         "<down>"   'eshell-next-matching-input-from-input
+;;         "<tab>"    'user-tab
+;;         "<return>" 'user-ret
+;;         "SPC"      'user-spc)
+;; ))
 
 ;alias ff 'find-file $1'
 ;alias d 'dired $1'
@@ -50,3 +67,5 @@
 ;; echo "hello world" >> #<buffer eshell.txt>
 ;; echo hello > /dev/clip    
 ;; echo hello > /dev/kill
+
+;; setq foobar ${date}

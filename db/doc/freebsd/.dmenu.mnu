@@ -1,14 +1,13 @@
+xterm -geometry 159x28+0+390
 /usr/local/bin/gmrun
 -----------------------------------------------------------
 wine "c:/Program Files/eweiqi/LiveBaduk.exe"
-wine "c:/Program Files/CRadio/CRadio.exe"
 -----------------------------------------------------------
 VBoxManage startvm winxp
 VBoxManage controlvm winxp poweroff
 #VBoxManage clonehd --format raw windows.vdi windows.raw
 -----------------------------------------------------------
-xterm -geometry 159x28+0+390
-emacs -geometry 176x36+0+363
+emacs -geometry 178x36+0+363
 evince
 opera
 -----------------------------------------------------------
