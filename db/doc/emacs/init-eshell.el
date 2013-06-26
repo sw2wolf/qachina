@@ -34,7 +34,6 @@
   (define-key eshell-mode-map [up] 'previous-line)
   (define-key eshell-mode-map [down] 'next-line)
  
-  (define-key eshell-mode-map [tab] 'user-tab)
   (define-key eshell-mode-map [home] 'eshell-bol)
   (define-key eshell-mode-map [(control u)] 'eshell-kill-input) ;删除已输入命令
 
