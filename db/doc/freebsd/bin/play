@@ -1,0 +1,33 @@
+#!/bin/sh
+if test $# -ne 1; then
+	echo "Usage: `basename $0` cmd" 1>&2
+    echo "`basename $0` [S]tart"
+	echo "`basename $0` [V]olume"
+	exit 1
+fi
+
+cmd=$1
+case $cmd in
+	-s|-S)
+		sudo /usr/local/etc/rc.d/musicpd onestart 2>&1 > /dev/null ;;
+	-v|-V)
+		mpc volume 100;;
+	*)
+		echo "invalid command"
+esac
+
+
+#mpc clear
+#mpc add "$1"
+#mpc play
+
+#mpc update [<path>]     Scans music directory for updates
+
+#mpc lsplaylists
+#mpc rm <playlist>
+
+#mpc clear
+#mpc load <playlist_name>
+#mpc play
+
+#mpc stats

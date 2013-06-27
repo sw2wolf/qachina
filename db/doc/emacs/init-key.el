@@ -97,6 +97,13 @@
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
 ;; (some (lambda (buff) (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))
 
+;; emacs -batch -f batch-byte-compile ~/.emacs.d/**/*.el
+
+;; (defun byte-compile-init-dir ()
+;;   "Byte-compile all your dotfiles."
+;;   (interactive)
+;;   (byte-recompile-directory user-emacs-directory 0))
+
 (require 'thingatpt)
 (global-set-key (kbd "<f1>") 'forward-whitespace)
 (global-set-key (kbd "<f2>") 'find-file-at-point)

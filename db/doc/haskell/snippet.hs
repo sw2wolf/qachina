@@ -1,5 +1,7 @@
 
 ---------
+foreign import ccall "sin" c_sin :: CDouble -> CDouble
+---------
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module Main where

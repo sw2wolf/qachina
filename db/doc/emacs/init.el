@@ -27,7 +27,7 @@
 (load "init-prolog")
 (load "init-slime")
 
-;(load "init-haskell")
+(load "init-haskell")
 ;(load "init-racket")
 ;(load "init-ruby")
 ;(load "init-forth")
