@@ -1,0 +1,14 @@
+可以在脚本文件头部中加入下面代码，通过 tmux 启动 CL程序 并将其转入后台执行。
+#!/bin/sh
+#|
+tmux new-session -d -s session-name || exit 1
+tmux send-keys -t session-name "ccl -l $0" C-m
+exit
+|#
+
+这一方式通过 tmux 所提供的 send-keys 命令直接向终端模拟输入按键，从而可以向 CL程序 的 REPL 传递任意接口函数。示例如下，C-m 表示回车。
+tmux send-keys -t session-name "(foo)" C-m
+
+相对来说，这一方式更为灵活。同时如果需要调回交互终端，可以使用下面的命令：
+tmux attach -t session-name
+

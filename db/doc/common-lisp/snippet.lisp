@@ -1,5 +1,19 @@
 
 ;;;
+(defun main ()
+  (with-open-socket (socket :address-family :file
+                            :type :stream
+                            :local-filename "/tmp/sock-file-name.sock"
+                            :connect :passive)
+    (loop
+       (with-open-stream (conn (accept-connection socket))
+         (case (intern (read-line conn))
+           (op1 (action-1))
+           (op2 (action-2)))))))
+
+;; netcat 的命令如下：
+;; echo 'op1' | nc.openbsd -U /tmp/sock-file-name.sock
+;;;
 (loop for x in list collect x collect '\|)
 ;;;
 (asdf:clear-system "cffi")
