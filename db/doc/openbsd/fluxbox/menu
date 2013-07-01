@@ -1,9 +1,0 @@
-# 自定义fluxbox菜单
-[begin] (Fluxbox)
-    [exec] (Terminal) {xterm}
-    [exec] (Browser)  {firefox}
-    [submenu] (System)
-        [reconfig] (Reload config)
-        [exit] (Exit)
-    [end]
-[end]

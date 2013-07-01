@@ -1,2 +1,0 @@
-#-no-acpi -no-fd-bootchk -monitor stdio
-qemu -hda winxp.img -m 192 -boot c -nographic -daemonize -redir tcp:3389::3389 
