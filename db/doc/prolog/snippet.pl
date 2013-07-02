@@ -1,12 +1,10 @@
 
 %------
-to create a stand-alone executable that starts by executing main/0 and for which the source is loaded through load.pl, use the command 
-% swipl --goal=main --stand_alone=true -o myprog -c load.pl
+%to create a stand-alone executable that starts by executing main/0 and for which the source is loaded through load.pl, use the command 
+swipl --goal=main --stand_alone=true -o myprog -c load.pl
 
- This performs exactly the same as executing 
-% swipl
-<banner>
-
+% This performs exactly the same as executing 
+swipl
 ?- [load].
 ?- qsave_program(myprog,
                  [ goal(main),

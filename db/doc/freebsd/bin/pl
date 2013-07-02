@@ -1,2 +1,2 @@
 cd /media/D/qachina/db/doc/money/
-swipl -q -f money.pl "$@"
+~/swi-prolog/bin/swipl -q -f money.pl "$@"

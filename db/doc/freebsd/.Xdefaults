@@ -65,5 +65,8 @@ xterm*printerCommand: cat > ~/xtermdump
 !
         Ctrl <KeyPress> P: print() \n
 Emacs.geometry: 178x36+0+363
+
 Emacs*toolBar: off
 Emacs*menuBar: off
+
+!Emacs*useXIM: false

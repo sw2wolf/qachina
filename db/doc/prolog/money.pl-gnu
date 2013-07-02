@@ -1,23 +1,4 @@
-%:- module(money, [winG/3, stopLoss/3]).
-%:- use_module(library(clpfd)).
-:- use_module(library(dcg/basics)).
-
-:- set_prolog_flag(toplevel_print_options,
-	[backquoted_string(true), max_depth(9999),
-	 portray(true), spacing(next_argument)]).
-:- set_prolog_flag(debugger_print_options,
-	[backquoted_string(true), max_depth(9999),
-	 portray(true), spacing(next_argument)]).
-
-:- set_prolog_flag(generate_debug_info, false).
-%:- set_prolog_flag(verbose_file_search, true).
-
-:- assertz(user:file_search_path(qachina, '/media/D/qachina')).
-:- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
-
-:- load_files([ qachina(test_web) ], [ silent(true) ]).
-
-%:- initialization set_random(seed(888)).
+:- initialization(assertz(file_search_path(money, '/media/D/qachina/db/doc/money/'))).
 
 sxf(0.0015).
 yhs(0.001).
@@ -42,10 +23,7 @@ stopLoss(Qty,Pb,LossRate) :-
 	format("Lost Money: ~2f~n", [T * LossRate]).
 
 show618(P1, P2, R) :-
-	RP1 is rationalize(P1),
-	RP2 is rationalize(P2),
-	RR is rationalize(R),
-	(P1=<P2 -> P is RP1+(RP2-RP1)*RR; P is RP1-(RP1-RP2)*RR),
+	(P1=<P2 -> P is P1+(P2-P1)*R; P is P1-(P1-P2)*R),
 	format("---~3f ~2f---~n",[R,P]).
 div618(P1, P2) :-
 	RATIO = [0.0, 0.191, 0.236, 0.382, 0.5, 0.618, 0.809, 1.0],
@@ -53,24 +31,12 @@ div618(P1, P2) :-
 		reverse(RATIO,R)),
 	maplist(show618(P1,P2), R).
 
-%% my_comp(Comp, N1, N2) :-
-%% 	( N1 =< N2 -> Comp = '>'
-%% 	; N1 > N2 -> Comp = '<').
-%% show618(P1, P2, R) :-
-%% 	(P1=<P2 -> P is P1+(P2-P1)*R; P is P1-(P1-P2)*R),
-%% 	format("---~3f ~2f---~n",[R,P]).
-%% div618(P1, P2) :-
-%% 	RATIO = [0.0, 0.191, 0.236, 0.382, 0.5, 0.618, 0.809, 1.0],
-%% 	(P1>P2 -> R = RATIO;
-%% 		predsort(my_comp, RATIO, R)),
-%% 	maplist(show618(P1,P2), R).
-
 sd(Word) :-
 	(   atom(Word)
 	->  true
 	;   throw(error(type_error(atom, Word), _))
 	),
-	format(string(Cmd),'sdcv -n ~w',[Word]), shell(Cmd).
+	format_to_atom(Cmd, 'sdcv -n ~w',[Word]), shell(Cmd).
 
 %%
 %% lottery
@@ -81,7 +47,10 @@ win_ssq(Count, NoRedStr, NoBlueStr) :-
 	atom2lst(NoBlueStr, NoBlue),
 	numlist(1,33,R), subtract(R,NoRed,YesR),
 	numlist(1,16,B), subtract(B,NoBlue,YesB),
-	set_random(seed(888)),
+	
+	%set_random(seed(888)),
+	randomize, %set_seed(+integer)
+
 	pick_nums(Count,YesB,OkB),
 	pick_red(Count,YesR,OkB,X), length(X,Count), !,
 	maplist(writeln,X),
@@ -96,7 +65,7 @@ pick_red(Count,YesR,OkB,[H|T]) :-
 
 %read_file_to_codes('test.txt',X,[]), atom_codes(Y,X).
 hit_ssq(ID, HitNo) :-
-	atomic_list_concat([ID,' ',HitNo], NumStr),
+	concat([ID,' ',HitNo], NumStr),
 	ssqHitNumF(File),
     append(File), write(NumStr), nl, told,
 	atom2lst(HitNo,HN),
@@ -138,52 +107,75 @@ file_ints(S, L) :-
         L = [Is|R]
     ).
 
-pick_nums(0, _, []).
+pick_nums(0, _, []) :- !.
 pick_nums(Count, From, [X|SelectedFromRemaining]) :-
-  random_member(X, From),
-  select(X, From, Remaining),
+  length(From,Len), random(0,Len,Idx), nth0(Idx,From,X),
+  select(X, From, Remaining),!,
   C1 is Count - 1,
   pick_nums(C1, Remaining, SelectedFromRemaining).
 
-atom2lst(Atom,L) :-
-    atomic_list_concat(X, ' ', Atom),
-	maplist(atom_number, X, L).
+atom2lst('', []) :-
+    !.
 
+atom2lst(A, L) :-
+    sub_atom(A, Bef, _, Aft, ' '), !,
+    (   Bef > 0 ->
+        L = [X|L1],
+        sub_atom(A, 0, Bef, _, A0),
+        conv_elem(A0, X)
+    ;
+        L = L1
+    ),
+    Bef1 is Bef + 1,
+    sub_atom(A, Bef1, Aft, 0, A1),
+    atom2lst(A1, L1).
+ 
+atom2lst(A, [X]) :-
+    conv_elem(A, X).
+ 
+conv_elem(A, X) :-
+    number_atom(X, A).
+ 
 ssqNumF(F) :-
-	absolute_file_name(money('ssqNum.txt'), F, []).
+	file_search_path(money,WD),
+	atom_concat(WD,'ssqNum.txt',F), !.
 
 ssqHitNumF(F) :-
-	absolute_file_name(money('ssqHitNum.txt'), F, []).
+	file_search_path(money,WD),
+	atom_concat(WD,'ssqHitNum.txt',F), !.
 
 his :-
 	ssqHitNumF(File),
 	atom_concat('tail ', File, Cmd),
-	shell(Cmd).
+	shell(Cmd), !.
+
+cat([], _).
+cat([H|T], Stream):-
+	write(Stream, H),
+	cat(T, Stream).
+
+concat(atomLst, Result) :- 
+	open_output_atom_stream(Stream),
+	cat(atomLst, Stream),
+	close_output_atom_stream(Stream, Result).
 
 %%
 %% utilities
 %%
-qachina :-
-	server(8000).
-	%thread_create(shell('cd /media/D/qachina; ./start.bat'),_,[detached(true)]).
-
 fac(N,F) :-
-	N is 0, F is 1;
+	N is 0, F is 1, !;
     N > 0, M is N - 1, fac(M,G), F is N*G.
 
 fib(0, 0) :- !.
 fib(1, 1) :- !.
 fib(N, X) :- N1 is N-1, N2 is N-2, fib(N1, X1), fib(N2, X2), X is X1+X2.
 
-binary(0,'0').
-binary(1,'1').
-binary(N,B) :- N>1,X is N mod 2,Y is N//2,binary(Y,B1),atom_concat(B1, X, B), !.
-
-sys_info :-
-	current_prolog_flag(version_data, swi(Major, Minor, Patch, _)),
-	format('swi-prolog version: ~w.~w.~w~n',[Major,Minor,Patch]).
-
-%module_property(ansi_term, file(Path))
+binary(0, '0') :- !.
+binary(1, '1') :- !.
+binary(N, B) :-
+	N>1, X is N mod 2, binary(X, B1),
+	Y is N//2, binary(Y,B2),
+	atom_concat(B2, B1, B), !.
 
 % list comprehesion
 %% List of Pythagorean triples : 
