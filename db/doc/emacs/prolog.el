@@ -8,7 +8,7 @@
 ;;          * See below for more details
 ;; Keywords: prolog major mode sicstus swi mercury
 
-(defvar prolog-mode-version "1.24"
+(defvar prolog-mode-version "1.25"
   "Prolog mode version number")
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -111,6 +111,13 @@
 
 ;; Changelog:
 
+;; Version 1.25:
+;;  o  ANSI escape sequences are now taken into account (requires
+;;     "ansi-color"), in the sense that they are either translated
+;;     into text properties or ignored.  The default, non-nil value of
+;;     the customizable variables `prolog-inferior-ansi-color' causes
+;;     the translation of ANSI escape sequences; set the variable to
+;;     nil to ignore them instead.
 ;; Version 1.24:
 ;;  o  GNU Prolog and YAP can now be chosen in the customization menu
 ;;     (previously only SWI and SICSTUS could be chosen).  Patch by
@@ -287,7 +294,6 @@
   (require 'font-lock)
   ;; We need imenu everywhere because of the predicate index!
   (require 'imenu)
-  ;)
   (require 'info)
   (require 'shell)
   )
@@ -295,7 +301,7 @@
 (require 'comint)
 (require 'easymenu)
 (require 'align)
-
+(require 'ansi-color)
 
 (defgroup prolog nil
   "Major modes for editing and running Prolog and Mercury files."
@@ -585,6 +591,16 @@ the first column (i.e., DCG heads) inserts ` -->' and newline."
   '((sicstus ("-i"))
     (t nil))
   "*Alist of switches given to inferior Prolog run with `run-prolog'."
+  :group 'prolog-inferior
+  :type 'sexp)
+
+(defcustom prolog-inferior-ansi-color
+  t
+  "*Whether to translate ANSI escape sequences of filter them out.
+If non-nil (default) then the ANSI escape sequneces are translated
+into text properties, otherwise the escape sequences are filtered out.
+Obviously this option has no effect if the inferior Prolog interpreter
+does not use ANSI escape sequences."
   :group 'prolog-inferior
   :type 'sexp)
 
@@ -1158,6 +1174,9 @@ To find out what version of Prolog mode you are running, enter
          (setq comint-prompt-regexp prolog-prompt-regexp-i)
          ;(make-variable-buffer-local 'shell-dirstack-query)
          (make-local-variable 'shell-dirstack-query)
+         (if prolog-inferior-ansi-color
+             (ansi-color-for-comint-mode-on)
+           (ansi-color-for-comint-mode-filter))
          (setq shell-dirstack-query "pwd.")
          (run-hooks 'prolog-inferior-mode-hook))))
 

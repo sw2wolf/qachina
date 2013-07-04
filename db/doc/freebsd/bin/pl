@@ -1,2 +1,8 @@
-cd /media/D/qachina/db/doc/money/
-~/swi-prolog/bin/swipl -q -f money.pl "$@"
+#!/bin/sh
+if test $# -ne 1; then
+    cd /media/D/qachina/db/doc/money/
+    ~/swi-prolog/bin/swipl -q -f money.pl "$@"
+else
+    ~/swi-prolog/bin/swipl -q -f $MD/money/money.pl -g "$1" -t halt
+fi
+
