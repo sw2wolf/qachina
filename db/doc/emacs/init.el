@@ -2,12 +2,7 @@
 ;C-x RET C-\ , then choose an input method.
 ;
 (add-to-list 'load-path "~/.emacs.d/")
-(add-to-list 'load-path "~/.emacs.d/clojure-mode")
-(add-to-list 'load-path "~/.emacs.d/ocaml-mode")
-(add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-2.6.8/emacs/")
-(add-to-list 'load-path "~/.emacs.d/git-emacs")
-(add-to-list 'load-path "~/.emacs.d/mu4e")
-(add-to-list 'load-path "~/RnD/w3m")
+;(add-to-list 'load-path "~/.emacs.d/mu4e")
 
 ;disable logging to *Messages*
 ;(fset 'message 'ignore)
@@ -21,26 +16,27 @@
 
 (load "init-erc")
 ;(load "init-w3m")
-(load "init-mew")
+;(load "init-mew")
 
-(load "init-clojure")
-(load "init-prolog")
-(load "init-slime")
-
-(load "init-haskell")
+;(load "init-clojure")
+;(load "init-slime")
 ;(load "init-racket")
+
+(load "init-prolog")
+(load "init-erlang")
+
+;(load "init-haskell")
 ;(load "init-ruby")
 ;(load "init-forth")
 
-(require 'erlang-start)
-;(require 'ocaml)
-;(require 'git-emacs)
+;(load "init-ocaml")
+;(load "init-git")
 
-(load "init-eshell")
 ;(load "init-sqlite")
 
 ;(load "init-emms")
 ;(load "init-radio")
+(load "init-eshell")
 
 (setq shell-file-name "/bin/csh")
 
