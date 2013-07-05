@@ -2,9 +2,8 @@
 
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
 
-;(setq inferior-lisp-program "/usr/local/bin/clisp")
-;(setq inferior-lisp-program "/usr/local/bin/sbcl")
-;(setq inferior-lisp-program "D:/ccl/wx86cl -K utf-8")
+(setq inferior-lisp-program "~/clisp/bin/clisp -q -q -modern -ansi")
+;(setq inferior-lisp-program "~/ccl/fx86cl -K utf-8")
 
 (setq slime-multiprocessing t)
 (setq slime-net-coding-system 'utf-8-unix)
@@ -12,12 +11,12 @@
 ;(setq slime-lisp-implementations
 ;    '((sbcl ("/usr/local/bin/sbcl") :coding-system utf-8-unix)
 ;      (cmucl ("/usr/local/bin/cmucl") :coding-system iso-latin-1-unix)))
-;(setq common-lisp-hyperspec-root "media/E/RnD/clisp/HyperSpec")
-;(setq browse-url-browser-function
-;      '(("/media/E/RnD/clisp/HyperSpec" . w3m-browse-url)
-;        ("." . browse-url-default-browser)))
 
-;(add-to-list 'load-path "/usr/share/emacs24/site-lisp/slime")
+(setq browse-url-browser-function
+    '(("/home/sw2wolf/HyperSpec" . w3m-browse-url)
+      ("." . browse-url-default-browser)))
+
+;(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/slime")
 ;(require 'slime)
 ;(slime-setup)
 ;(slime-setup '(slime-fancy))

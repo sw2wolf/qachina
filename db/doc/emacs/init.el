@@ -8,6 +8,8 @@
 ;(fset 'message 'ignore)
 (setq messages-buffer-max-lines nil)
 
+(require 'cl)
+
 ;(load "init-package")
 (load "init-base")
 (load "init-key")
@@ -15,11 +17,13 @@
 (load "init-dict")
 
 (load "init-erc")
-;(load "init-w3m")
-;(load "init-mew")
+(load "init-w3m")
+(load "init-mew")
 
+;(load "init-ac")
+
+(load "init-slime")
 ;(load "init-clojure")
-;(load "init-slime")
 ;(load "init-racket")
 
 (load "init-prolog")

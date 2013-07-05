@@ -63,20 +63,14 @@
 ;; 	  (switch-to-buffer-other-window "*prolog*")
 ;; 	  (run-prolog 'swi)))
 
-(defun clisp ()
-  (interactive)
-  (if (get-buffer "*clisp*")
-	  (switch-to-buffer-other-window "*clisp*")
-	  (async-shell-command "clisp -q -q -modern -ansi" "*clisp*")))
-
-(defun jump-run-clisp ()
+(defun jump-run-lisp ()
   (interactive)
   (let ((repl (find-if (lambda (buff)
 			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))))
   (if repl
 	  (switch-to-buffer-other-window (buffer-name repl))
 	  (condition-case e (slime-connect "127.0.0.1" 4005)
-		(file-error (clisp))))))
+		(file-error (call-interactively 'run-lisp))))))
 
 (defun jump-run-mew ()
   (interactive)
@@ -114,7 +108,7 @@
 ;⋆:#x22c6 ≅:#x2245
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
-(global-set-key (kbd "<f5>") 'jump-run-clisp)
+(global-set-key (kbd "<f5>") 'jump-run-lisp)
 (global-set-key (kbd "<f6>") 'jump-run-mew)
 
 (global-set-key (kbd "<f7>") 'jump-run-erlang)

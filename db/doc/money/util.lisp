@@ -29,18 +29,18 @@
     #+sbcl (sb-ext:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*)
     #+clozure (ccl:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*))
 
-(defun my-getenv (name &optional default)
-#+CMU
-    (let ((x (assoc name ext:*environment-list* :test #'string=)))
-        (if x (cdr x) default))
-#-CMU
-    (or
-        #+Allegro (sys:getenv name)
-        #+CLISP (ext:getenv name)
-        #+ECL (si:getenv name)
-        #+SBCL (sb-unix::posix-getenv name)
-        #+LISPWORKS (lispworks:environment-variable name)
-        default))
+;; (defun my-getenv (name &optional default)
+;; #+CMU
+;;     (let ((x (assoc name ext:*environment-list* :test #'string=)))
+;;         (if x (cdr x) default))
+;; #-CMU
+;;     (or
+;;         #+Allegro (sys:getenv name)
+;;         #+CLISP (ext:getenv name)
+;;         #+ECL (si:getenv name)
+;;         #+SBCL (sb-unix::posix-getenv name)
+;;         #+LISPWORKS (lispworks:environment-variable name)
+;;         default))
 
 (defun sys-info ()
     (format t "Machine: ~S ~S ~S~%OS: ~S ~S~%Lisp: ~S ~S~%"
@@ -48,10 +48,10 @@
         (software-type) (software-version)
         (lisp-implementation-type) (lisp-implementation-version )))
 
-(declaim (inline whitespacep))
-(defun whitespacep (c)
-  "Checks whether C is a whitespace character."
-  (find c '(#\Space #\Tab #\Newline #\Linefeed #\Return #\Page)))
+;; (declaim (inline whitespacep))
+;; (defun whitespacep (c)
+;;   "Checks whether C is a whitespace character."
+;;   (find c '(#\Space #\Tab #\Newline #\Linefeed #\Return #\Page)))
 
 ;;; misc
 (defgeneric assoc* (thing alist)
@@ -147,8 +147,8 @@ the process with the next item (~})."
             (push n res))
     res))
 
-(defparameter +ssq-hit-num+ "ssqHitNum.txt")
-(defparameter +ssq-num+ "ssqNum.txt")
+(defparameter +ssq-hit-num+ "/media/D/qachina/db/doc/money/ssqHitNum.txt")
+(defparameter +ssq-num+ "/media/D/qachina/db/doc/money/ssqNum.txt")
 
 (defun good-red ()
     (let ((tab (make-hash-table)) (res '()) (nums) (sort-res))
