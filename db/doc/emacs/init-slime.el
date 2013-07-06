@@ -12,9 +12,9 @@
 ;    '((sbcl ("/usr/local/bin/sbcl") :coding-system utf-8-unix)
 ;      (cmucl ("/usr/local/bin/cmucl") :coding-system iso-latin-1-unix)))
 
-(setq browse-url-browser-function
-    '(("/home/sw2wolf/HyperSpec" . w3m-browse-url)
-      ("." . browse-url-default-browser)))
+;; (setq browse-url-browser-function
+;;     '(("/home/sw2wolf/HyperSpec" . w3m-browse-url)
+;;       ("." . browse-url-default-browser)))
 
 ;(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/slime")
 ;(require 'slime)

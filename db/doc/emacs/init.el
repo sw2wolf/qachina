@@ -26,16 +26,15 @@
 ;(load "init-clojure")
 ;(load "init-racket")
 
+(load "init-haskell")
 (load "init-prolog")
 (load "init-erlang")
 
-;(load "init-haskell")
+;(load "init-ocaml")
 ;(load "init-ruby")
 ;(load "init-forth")
 
-;(load "init-ocaml")
 ;(load "init-git")
-
 ;(load "init-sqlite")
 
 ;(load "init-emms")

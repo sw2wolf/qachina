@@ -140,7 +140,7 @@ winSSQ count noRed noBlue = do
     goodBlue <- pickNums ([1..16] \\ noBlueLst) count []
     result <- pickSSQ count ([1..33] \\ noRedLst) goodBlue []
     forM_ result (\x -> print x)
-    writeFile "ssqNum.txt" $ ints2str result
+    writeFile ssqNum $ ints2str result
 
 ints2str :: [[Int]] -> String
 ints2str ints = concat $ intersperse "\n" strLst
@@ -155,7 +155,7 @@ pickSSQ count goodRed goodBlue acc = do
 
 goodRed:: IO [Int]
 goodRed = do {
-    samp <- fmap (concat . str_ints_hit) $ readFile "ssqHitNum.txt";
+    samp <- fmap (concat . str_ints_hit) $ readFile ssqHitNum;
     return $ sort $ take 18 $ map (\(a,_) -> a) $ statis samp;
 }
 
@@ -181,9 +181,9 @@ hitSSQ no hitNum = do
     let hitLst =  map (\x -> read x::Int) $ words hitNum
     let hitRed redNo = foldl (\acc x -> if(x `elem` (init hitLst)) then acc+1 else acc) 0 redNo
 
-    dats <- readFile "ssqHitNum.txt"
+    dats <- readFile ssqHitNum
     if (any (\x -> no `elem` (words x)) (lines dats) == False)
-        then catchAny (appendFile "ssqHitNum.txt" $ unwords $ [no] ++ map (\n -> show n) hitLst ++ ["\n"]) (\e -> fail $ "Unable save hit numbers" ++ show e)
+        then catchAny (appendFile ssqHitNum $ unwords $ [no] ++ map (\n -> show n) hitLst ++ ["\n"]) (\e -> fail $ "Unable save hit numbers" ++ show e)
         else return ()
 
     gr <- goodRed
@@ -193,7 +193,7 @@ hitSSQ no hitNum = do
     printf "Good Red Hit:%d of %d\n" (hitRed gr :: Int) (length gr)
 
     printf "------ result ------\n"
-    nums <- fmap str_ints_pick $ readFile "ssqNum.txt"
+    nums <- fmap str_ints_pick $ readFile ssqNum
     forM_ nums (\n -> do
         let hitR = hitRed $ init n
             hitB = if (n!!6 == hitLst!!6) then 1 else 0 
@@ -210,8 +210,11 @@ hit_desc red blue
 
 his :: IO ()
 his = do
-  runCommand "tail ssqHitNum.txt"
+  runCommand $ "tail " ++ ssqHitNum
   return ()
+
+ssqNum = "/media/D/qachina/db/doc/money/" ++ "ssqNum.txt"
+ssqHitNum = "/media/D/qachina/db/doc/money/" ++ "ssqHitNum.txt"
 
 ------------------------------------------------------------------------
   
