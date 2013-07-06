@@ -70,7 +70,8 @@
   (if repl
 	  (switch-to-buffer-other-window (buffer-name repl))
 	  (condition-case e (slime-connect "127.0.0.1" 4005)
-		(file-error (call-interactively 'run-lisp))))))
+		(file-error (slime))))))
+		;(file-error (call-interactively 'run-lisp))))))
 
 (defun jump-run-mew ()
   (interactive)
