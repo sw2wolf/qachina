@@ -1,3 +1,15 @@
+$ghci -i "$HOME/.xmonad/lib" ~/.xmonad/xmonad.hs
+
+$ghc -e 'System.Directory.getAppUserDataDirectory "xmonad"'
+
+$ghc --info | egrep 'split|Host'
+,("Host platform","i386-unknown-freebsd")
+,("Object splitting supported","YES")
+
+$cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
+$cabal install mighttpd2 --ghc-options=-fllvm
+$cabal install hashable --constraint "unix==2.6.0.1" --constraint "bytestring==0.10.0.2" --dry-run
+$cabal install --enable-library-profiling
 
 ---------
 foreign import ccall "sin" c_sin :: CDouble -> CDouble
@@ -25,8 +37,7 @@ flip runContT return $ callCC $
 ---------
 [minBound, maxBound] :: String
 "\NUL\1114111"
----------
-ghci -i"$HOME/.xmonad/lib" ~/.xmonad/xmonad.hs
+
 ---------
 let fibs = 0:1:zipWith (+) fibs (tail fibs) in fibs !! 70000
 ---------
@@ -98,19 +109,6 @@ sequence [id, (+2), (*2), (^2), (2^)] 5
 
 import Data.Array.Vector
 main = print (sumU (enumFromToU 1 (200000000 :: Int)))
-
----------
-
-$ghc -e 'System.Directory.getAppUserDataDirectory "xmonad"'
-
-$ghc --info | egrep 'split|Host'
-,("Host platform","i386-unknown-freebsd")
-,("Object splitting supported","YES")
-
-$cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
-$cabal install mighttpd2 --ghc-options=-fllvm
-$cabal install hashable --constraint "unix==2.6.0.1" --constraint "bytestring==0.10.0.2" --dry-run
-$cabal install --enable-library-profiling
 
 ---------
 
@@ -240,3 +238,6 @@ mean xs = tot / len
     (tot, len) = foldl' fun (0, 0) xs
     fun (!tot, !len) x = (tot+x, len+1)
 
+---------
+
+---------
