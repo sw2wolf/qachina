@@ -3,6 +3,6 @@
             ;This is done as if by :depends-on. so money will depends on package
   ;:depends-on (#:cl)
   ;:depends-on (#:optima)
-  :components ((:file "package")
+  :components (;(:file "package")
                (:file "money")))
 

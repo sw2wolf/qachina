@@ -1,3 +1,9 @@
+(defpackage #:money
+    (:nicknames #:m)
+    (:use :cl)
+    (:export :win-ssq :hit-ssq :his :sh
+             :winG :stopLoss :div618))
+
 (in-package :money)
 
 (defparameter *base-dir* (directory-namestring *load-truename*))
@@ -10,17 +16,6 @@
 #|
    Utility
 |#
-(defun pkg-src-dir (name) 
-    (asdf:system-source-directory name))
-
-(defun pkg-ver (system-designator)
-  (let ((system (asdf:find-system system-designator nil)))
-      (when (and system (slot-boundp system 'asdf:version))
-            (asdf:component-version system))))
-
-;; (defun find-pkg (name)
-;;     (ql:system-apropos name))
-
 ;;; time relative
 (defun leap-year-p (year)
     (destructuring-bind (fh h f)
@@ -42,18 +37,18 @@
     #+sbcl (sb-ext:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*)
     #+clozure (ccl:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*))
 
-(defun my-getenv (name &optional default)
-#+CMU
-    (let ((x (assoc name ext:*environment-list* :test #'string=)))
-        (if x (cdr x) default))
-#-CMU
-    (or
-        #+Allegro (sys:getenv name)
-        #+CLISP (ext:getenv name)
-        #+ECL (si:getenv name)
-        #+SBCL (sb-unix::posix-getenv name)
-        #+LISPWORKS (lispworks:environment-variable name)
-        default))
+;; (defun my-getenv (name &optional default)
+;; #+CMU
+;;     (let ((x (assoc name ext:*environment-list* :test #'string=)))
+;;         (if x (cdr x) default))
+;; #-CMU
+;;     (or
+;;         #+Allegro (sys:getenv name)
+;;         #+CLISP (ext:getenv name)
+;;         #+ECL (si:getenv name)
+;;         #+SBCL (sb-unix::posix-getenv name)
+;;         #+LISPWORKS (lispworks:environment-variable name)
+;;         default))
 
 (defun sys-info ()
     (format t "Machine: ~S ~S ~S~%OS: ~S ~S~%Lisp: ~S ~S~%"
@@ -61,10 +56,21 @@
         (software-type) (software-version)
         (lisp-implementation-type) (lisp-implementation-version )))
 
-(declaim (inline whitespacep))
-(defun whitespacep (c)
-  "Checks whether C is a whitespace character."
-  (find c '(#\Space #\Tab #\Newline #\Linefeed #\Return #\Page)))
+;; (defun pkg-src-dir (name) 
+;;      (asdf:system-source-directory name))
+ 
+;; (defun pkg-ver (system-designator)
+;;    (let ((system (asdf:find-system system-designator nil)))
+;;        (when (and system (slot-boundp system 'asdf:version))
+;;              (asdf:component-version system))))
+ 
+;; (defun find-pkg (name)
+;;    (ql:system-apropos name))
+
+;; (declaim (inline whitespacep))
+;; (defun whitespacep (c)
+;;   "Checks whether C is a whitespace character."
+;;   (find c '(#\Space #\Tab #\Newline #\Linefeed #\Return #\Page)))
 
 ;;; misc
 (defgeneric assoc* (thing alist)
@@ -160,9 +166,10 @@ the process with the next item (~})."
             (push n res))
     res))
 
-
-(defparameter +ssq-hit-num+ (namestring (asdf:system-relative-pathname 'money "ssqHitNum.txt")))
-(defparameter +ssq-num+ (namestring (asdf:system-relative-pathname 'money "ssqNum.txt")))
+;; (defparameter +ssq-hit-num+ (namestring (asdf:system-relative-pathname 'money "ssqHitNum.txt")))
+;; (defparameter +ssq-num+ (namestring (asdf:system-relative-pathname 'money "ssqNum.txt")))
+(defparameter +ssq-hit-num+ "/media/D/qachina/db/doc/money/ssqHitNum.txt")
+(defparameter +ssq-num+ "/media/D/qachina/db/doc/money/ssqNum.txt")
 
 (defun good-red ()
     (let ((tab (make-hash-table)) (res '()) (nums) (sort-res))
@@ -181,9 +188,9 @@ the process with the next item (~})."
 
 (defun win-ssq (nums no-red no-blue)
     (let* ((res) (resRed) (no-red-lst (str2lst no-red))
-            ;(gr (good-red))			
-            ;(okRed-1 (set-difference gr no-red-lst))
-            ;(okRed-2 (set-difference (set-difference (range 33) gr) no-red-lst))
+           (gr (good-red))
+           (okRed-1 (set-difference gr no-red-lst))
+           (okRed-2 (set-difference (set-difference (range 33) gr) no-red-lst))
 		   (okRed (set-difference (range 33) no-red-lst))
            (okBlue (pick-num (set-difference (range 16) (str2lst no-blue)) nums)))
         (assert (>= nums 1) (nums) "注数必须>=1")
@@ -191,10 +198,10 @@ the process with the next item (~})."
         (with-open-file (out +ssq-num+ :direction :output :if-exists :supersede)
             (dotimes (i nums)
                 (setf resRed (sort
-							  ;(append (pick-num okRed-1 5) (pick-num okRed-2 1))
-							  ;(pick-num okRed-1 6)
-							  (pick-num okRed 6)
-							  #'>))
+				    (if (= i (1- nums))
+				        (append (pick-num okRed-1 5) (pick-num okRed-2 1))
+						(pick-num okRed 6))
+			        #'>))
                 (setf res (lst2str (reverse (cons (nth i okBlue) resRed))))
                 (write-line res out)
                 (format t "~A~%" res)))))

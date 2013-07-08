@@ -1,15 +1,15 @@
 #!/bin/sh
 if test $# -eq 1; then
-    clisp -norc -q -q -i $MD/money/util.lisp -x "$1"
+    clisp -norc -q -q -i $MD/money/money.lisp -x "$1"
 	exit 0
 fi
 
 #expr=`echo ""| dmenu -p Eval: -b -nb '#000000' -nf '#FFFFFF' -fn '-*-simsun-medium-r-normal-*-16-*-*-*-*-*-iso10646-1'`
 expr=`zenity --width 350 --entry --text "Please input a CL expression" \
-\(stopLoss\) \(div618\) \(winG\) \(his\) \(win-ssq\) \(hit-ssq\)`
+\(m:stopLoss\) \(m:div618\) \(m:winG\) \(m:his\) \(m:win-ssq\) \(m:hit-ssq\)`
 
 if [ $? -eq 0 ]
 then
-    res=$(clisp -norc -q -q -i $MD/money/util.lisp -x "$expr")
+    res=$(clisp -norc -q -q -i $MD/money/money.lisp -x "$expr")
     zenity --info --text="$res"
 fi
