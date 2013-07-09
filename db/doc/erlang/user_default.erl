@@ -14,7 +14,7 @@
 %--------------------------------------------------
 
 -include("records.hrl").
-%-export([winG/3, winQ/3, date_by_ntday/2, div618/2]).
+%-export([winG/3, winQ/3, div618/2, stopLoss/3, sd/1, sh/1, qachina/0]).
 -compile(export_all).
 
 -import(calendar, [date_to_gregorian_days/3, gregorian_days_to_date/1, day_of_the_week/1]).
@@ -130,14 +130,24 @@ win_ssq(Count, NoRed, NoBlue) ->
     put(random_seed, seed()),
     pick_ssq_nums(
         Count,
+	    good_red(),
         str2ints(NoRed),
         pick_num(Count, lists:seq(1,16)--str2ints(NoBlue), [])
     ),
     file:write_file(ssqNum(), get(result)).
 
-pick_ssq_nums(0, _, _) -> ok;
-pick_ssq_nums(Count, NoRed, OkBlue) ->
-    Red6 = lists:sort( pick_num(6,(lists:seq(1,33)--NoRed),[]) ),
+pick_ssq_nums(0, _, _, _) -> ok;
+pick_ssq_nums(Count, GRed, NoRed, OkBlue) ->
+	if
+		Count == 1 ->
+			Red6 = lists:sort( lists:append(
+								 pick_num(5,GRed--NoRed,[]),
+								 pick_num(1,(lists:seq(1,33)--GRed)--NoRed,[])
+								));
+	    true ->
+			Red6 = lists:sort( pick_num(6,lists:seq(1,33)--NoRed,[]) )
+	end,
+
     Result = lists:append(Red6, [lists:nth(Count,OkBlue)]),
     ResStr = lists:append(string:strip(
                 lists:foldl(fun(X,Acc) -> Acc ++ integer_to_list(X) ++ " " end, "", Result)), "\n"),
@@ -148,7 +158,7 @@ pick_ssq_nums(Count, NoRed, OkBlue) ->
         _ ->
             put(result, get(result) ++ ResStr)
     end,
-    pick_ssq_nums(Count-1, NoRed, OkBlue).
+    pick_ssq_nums(Count-1, GRed, NoRed, OkBlue).
 
 good_red() ->
     {ok,Bin} = file:read_file(ssqHitNum()),
@@ -213,11 +223,11 @@ get_ssq_result(RedNum, BlueNum) ->
         _ -> "X"
     end.
 
-ssqNum() ->
-	filename:dirname(code:which('user_default')) ++ "/ssqNum.txt".
+ssqNum() -> "/media/D/qachina/db/doc/money/ssqNum.txt".
+	%filename:dirname(code:which('user_default')) ++ "/ssqNum.txt".
 
-ssqHitNum() ->
-	filename:dirname(code:which('user_default')) ++ "/ssqHitNum.txt".
+ssqHitNum() -> "/media/D/qachina/db/doc/money/ssqHitNum.txt".
+	%filename:dirname(code:which('user_default')) ++ "/ssqHitNum.txt".
 
 %convert a "1 2 3 4 5 " similar string to integer list
 str2ints(Str) ->
@@ -261,6 +271,7 @@ hit_check({NumFst, HitFst}, {NumSnd, HitSnd}) ->
 
 his() -> sh("tail " ++ ssqHitNum()).
 
+%-----------------------------------------------------------------
 sd(Word) -> sh("sdcv -n " ++ Word).
 	
 sh(Cmd) -> 
