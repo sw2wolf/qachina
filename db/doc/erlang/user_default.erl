@@ -141,7 +141,7 @@ pick_ssq_nums(Count, GRed, NoRed, OkBlue) ->
 	if
 		Count == 1 ->
 			Red6 = lists:sort( lists:append(
-								 pick_num(5,GRed--NoRed,[]),
+								 pick_num(5,GRed,[]),
 								 pick_num(1,(lists:seq(1,33)--GRed)--NoRed,[])
 								));
 	    true ->

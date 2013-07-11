@@ -1,4 +1,4 @@
-(setq common-lisp-hyperspec-root "~/HyperSpec")
+(setq common-lisp-hyperspec-root "~/HyperSpec/")
 
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
 
@@ -8,6 +8,7 @@
 (setq slime-multiprocessing t)
 (setq slime-net-coding-system 'utf-8-unix)
 
+;用另一种方法来指定多个Lisp实现, 然后就可以使用M-- M-x slime命令(M键+减号、M键+x)然后选择我们定义的任意一个Lisp实现了，只需要指定上述定义的NAME即可。
 ;(setq slime-lisp-implementations
 ;    '((sbcl ("/usr/local/bin/sbcl") :coding-system utf-8-unix)
 ;      (cmucl ("/usr/local/bin/cmucl") :coding-system iso-latin-1-unix)))
