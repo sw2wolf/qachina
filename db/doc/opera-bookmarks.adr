@@ -12,7 +12,6 @@ Options: encoding = utf8, version=3
 	ID=132
 	NAME=回收站
 	CREATED=1333872021
-	ACTIVE=YES
 	TRASH FOLDER=YES
 	DELETABLE=NO
 	UNIQUEID=A0BE96B086994829B5D4E9C5351C6587
@@ -70,7 +69,7 @@ Options: encoding = utf8, version=3
 	NAME=中彩网|双色球
 	URL=http://www.zhcw.com/ssq/
 	CREATED=1287619082
-	VISITED=1372982328
+	VISITED=1373592481
 	DESCRIPTION=中彩网福彩双色球频道提供双色球开奖结果，走势图，玩法规则等双色球彩票信息，是中国福彩双色球信息发布中心。
 	UNIQUEID=DFB7E650DCA511DF9EF09FB74867D78E
 
@@ -294,7 +293,6 @@ Options: encoding = utf8, version=3
 	ID=166
 	NAME=程序人生
 	CREATED=1281338449
-	EXPANDED=YES
 	UNIQUEID=A285B120A38611DF90BDEAC4D56E22A6
 
 #FOLDER
@@ -399,7 +397,7 @@ Options: encoding = utf8, version=3
 	NAME=The FreeBSD Forums
 	URL=http://forums.freebsd.org/forumdisplay.php?f=3
 	CREATED=1333960652
-	VISITED=1372935074
+	VISITED=1373155611
 	DESCRIPTION=General questions about the FreeBSD operating system. Ask here if your question does not fit elsewhere.
 	UNIQUEID=3FFFC7B0821F11E188B6996011CAEFCA
 
@@ -488,7 +486,7 @@ Options: encoding = utf8, version=3
 	NAME=Planet Emacsen
 	URL=http://planet.emacsen.org/
 	CREATED=1352786813
-	VISITED=1372994122
+	VISITED=1373589338
 	UNIQUEID=521C14002D5811E2B5499425CC12C79C
 
 #FOLDER
@@ -549,7 +547,7 @@ Options: encoding = utf8, version=3
 	NAME=The official page of Mew
 	URL=http://www.mew.org/en/
 	CREATED=1366346549
-	VISITED=1366782436
+	VISITED=1373160487
 	UNIQUEID=8B07E2C0A8AB11E2A3689331C6329342
 
 #URL
@@ -560,7 +558,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=1637A550B43811E2A0B4816FE04D524B
 
 #URL
-	ID=204
+	ID=201
 	NAME=auto-complete/auto-complete · GitHub
 	URL=https://github.com/auto-complete/auto-complete
 	CREATED=1371973891
@@ -569,7 +567,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=B7CAE5D0DBD911E29F0DB666F7DFD918
 
 #URL
-	ID=205
+	ID=202
 	NAME=Bruda.CA - Emacs - Prolog Mode for Emacs
 	URL=http://bruda.ca/emacs/prolog_mode_for_emacs
 	CREATED=1372898308
@@ -580,7 +578,7 @@ Options: encoding = utf8, version=3
 -
 
 #URL
-	ID=206
+	ID=203
 	NAME=GRUB4DOS专区
 	URL=http://bbs.znpc.net/forumdisplay.php?fid=4
 	CREATED=1333737427
@@ -588,13 +586,13 @@ Options: encoding = utf8, version=3
 	UNIQUEID=DD26A819D200164DBCBC4014021EE095
 
 #FOLDER
-	ID=207
+	ID=204
 	NAME=WM
 	CREATED=1339286019
 	UNIQUEID=563DDAE0B28E11E19311EBFDAEA8F81C
 
 #URL
-	ID=208
+	ID=205
 	NAME=The Stump Window Manager
 	URL=http://stumpwm.org/
 	CREATED=1329268540
@@ -602,7 +600,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=932D18C0577211E1A91088C47D78E50A
 
 #URL
-	ID=209
+	ID=206
 	NAME=suckless.org dwm - dynamic window manager
 	URL=http://dwm.suckless.org/
 	CREATED=1339653400
@@ -610,7 +608,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=B5CD89B0B5E511E1A66BFA3E6D66A950
 
 #URL
-	ID=210
+	ID=207
 	NAME=WMFS - Window Manager From Scratch
 	URL=http://wmfs.info/
 	CREATED=1372246515
@@ -619,7 +617,7 @@ Options: encoding = utf8, version=3
 -
 
 #URL
-	ID=211
+	ID=208
 	NAME=NetSurf Web Browser
 	URL=http://www.netsurf-browser.org/
 	CREATED=1371711659
@@ -627,7 +625,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=2987FDD0D97711E2977ACBA0CEB70E92
 
 #URL
-	ID=212
+	ID=209
 	NAME=portix / dwb — Bitbucket
 	URL=https://bitbucket.org/portix/dwb
 	CREATED=1372902070
@@ -638,33 +636,33 @@ Options: encoding = utf8, version=3
 -
 
 #FOLDER
-	ID=213
+	ID=210
 	NAME=Language
 	CREATED=1281338449
 	UNIQUEID=A287D400A38611DF90D98BA24B051CA0
 
 #FOLDER
-	ID=214
-	NAME=Lisp
+	ID=211
+	NAME=Clojure/Lisp
 	CREATED=1314144292
 	UNIQUEID=B10DE3F0CDE411E095A0A9EF55E0282B
 
 #URL
-	ID=215
+	ID=212
 	NAME=Planet Lisp
 	URL=http://planet.lisp.org/
 	CREATED=1327901978
-	VISITED=1372994121
+	VISITED=1373589341
 	UNIQUEID=CCA36C004B0411E1A6E3A60652204041
 
 #FOLDER
-	ID=216
+	ID=213
 	NAME=app
 	CREATED=1314144303
 	UNIQUEID=B7BBCA50CDE411E095A19874C90288C7
 
 #URL
-	ID=217
+	ID=214
 	NAME=Maxima, a Computer Algebra System
 	URL=http://maxima.sourceforge.net/
 	CREATED=1325641690
@@ -673,7 +671,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=2837EC60367611E19B30ACC14268DEDA
 
 #URL
-	ID=218
+	ID=215
 	NAME=Quicklisp - get started with Common Lisp libraries, quickly
 	URL=http://www.quicklisp.org/
 	CREATED=1315895789
@@ -681,7 +679,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=B62F51E0DDD211E09368F0BB3FD006E1
 
 #URL
-	ID=219
+	ID=216
 	NAME=HUNCHENTOOT - The Common Lisp web server formerly known as TBNL
 	URL=http://weitz.de/hunchentoot/
 	CREATED=1323758564
@@ -690,7 +688,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=A9D6A590255511E19729A3F67A5E56FE
 
 #URL
-	ID=220
+	ID=217
 	NAME=slimv
 	URL=https://bitbucket.org/kovisoft/slimv/
 	CREATED=1329792282
@@ -698,7 +696,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=01C962305C3611E19D57AB6F1737962D
 
 #URL
-	ID=221
+	ID=218
 	NAME=sbcl/sbcl · GitHub
 	URL=https://github.com/sbcl/sbcl
 	CREATED=1362832088
@@ -707,22 +705,68 @@ Options: encoding = utf8, version=3
 	UNIQUEID=CCD41C8088B411E29B4FC9984A150FD1
 
 #URL
-	ID=222
+	ID=219
 	NAME=clojure (Clojure)
 	URL=https://github.com/clojure
 	CREATED=1372656646
 	UNIQUEID=6196DD40E20F11E2A7B7EB19220EDD32
 
+#URL
+	ID=220
+	NAME=Buildapp - Create executables with SBCL
+	URL=http://www.xach.com/lisp/buildapp/
+	CREATED=1373262104
+	UNIQUEID=1302F010E79111E2822DDABC2DFF3B09
+
+#URL
+	ID=299
+	NAME=clojure/clojure
+	URL=https://github.com/clojure/clojure
+	CREATED=1373594113
+	DESCRIPTION=clojure - The Clojure programming language
+	UNIQUEID=17734340EA9611E2A42B855901941E70
+
+#URL
+	ID=300
+	NAME=weavejester/compojure
+	URL=https://github.com/weavejester/compojure
+	CREATED=1373594148
+	DESCRIPTION=compojure - A concise routing library for Ring/Clojure
+	UNIQUEID=2C3C27B0EA9611E2A42CAC3E20CB4CEA
+
+#URL
+	ID=301
+	NAME=ring-clojure/ring
+	URL=https://github.com/ring-clojure/ring
+	CREATED=1373594410
+	DESCRIPTION=ring - Clojure web application library: abstracts HTTP to allow modular and concise webapps
+	UNIQUEID=C8A9EE70EA9611E2A42DA8FB5F8A78D8
+
+#URL
+	ID=302
+	NAME=Leiningen
+	URL=http://leiningen.org/
+	CREATED=1373595890
+	DESCRIPTION=Leiningen: automating Clojure projects
+	UNIQUEID=3AAB6370EA9A11E2A42E85D26A6392A4
+
+#URL
+	ID=304
+	NAME=http-kit (HTTP Client/Server for Clojure)
+	URL=https://github.com/http-kit
+	CREATED=1373597303
+	UNIQUEID=84C4A0E0EA9D11E2A430C7F0A71EFA03
+
 -
 
 #FOLDER
-	ID=223
+	ID=221
 	NAME=doc
 	CREATED=1314144311
 	UNIQUEID=BBFC0C10CDE411E095A2F0DF41867195
 
 #URL
-	ID=224
+	ID=222
 	NAME=Common Lisp HyperSpec (TM)
 	URL=http://www.lispworks.com/documentation/HyperSpec/Front/index.htm
 	CREATED=1316388593
@@ -730,7 +774,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=1C7E2370E24E11E08C5AD1EE58A12627
 
 #URL
-	ID=225
+	ID=223
 	NAME=The Common Lisp Cookbook
 	URL=http://cl-cookbook.sourceforge.net/
 	CREATED=1323740532
@@ -738,7 +782,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=AD76EFE0252B11E19716E239F2E45A09
 
 #URL
-	ID=226
+	ID=224
 	NAME=Clozure CL Documentation
 	URL=http://ccl.clozure.com/manual/index.html
 	CREATED=1349572318
@@ -746,7 +790,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=FDF96E80101B11E29B21BBE6245B18AB
 
 #URL
-	ID=227
+	ID=225
 	NAME=Category:Common Lisp - Rosetta Code
 	URL=http://rosettacode.org/wiki/Category:Common_Lisp
 	CREATED=1347325389
@@ -754,7 +798,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=7397A410FBAC11E19BCCEDC8FDC74E47
 
 #URL
-	ID=228
+	ID=226
 	NAME=ECL - a Common-Lisp implementation
 	URL=http://ecls.sourceforge.net/
 	CREATED=1355897672
@@ -764,7 +808,7 @@ Options: encoding = utf8, version=3
 -
 
 #URL
-	ID=229
+	ID=227
 	NAME=reddit Lisp
 	URL=http://www.reddit.com/r/lisp/
 	CREATED=1326692253
@@ -772,22 +816,29 @@ Options: encoding = utf8, version=3
 	DESCRIPTION=reddit: the front page of the internet
 	UNIQUEID=30747190400411E196BC895900168C8B
 
+#URL
+	ID=303
+	NAME=Planet Clojure
+	URL=http://clojure.in/
+	CREATED=1373596135
+	UNIQUEID=CC759FA0EA9A11E2A42F9DCCD5C406FA
+
 -
 
 #FOLDER
-	ID=230
+	ID=228
 	NAME=Erlang/Prolog
 	CREATED=1356745373
 	UNIQUEID=0FA3D2F0515911E29FD2A8A1EC0423EE
 
 #FOLDER
-	ID=231
+	ID=229
 	NAME=doc
 	CREATED=1356745379
 	UNIQUEID=1332C610515911E29FD3BCDCA7591855
 
 #URL
-	ID=232
+	ID=230
 	NAME=Learn You Some Erlang for Great Good!
 	URL=http://learnyousomeerlang.com/
 	CREATED=1356760654
@@ -795,7 +846,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=A3F84E90517C11E2A028A15C50D0E591
 
 #URL
-	ID=233
+	ID=231
 	NAME=Elixir
 	URL=http://elixir-lang.org/
 	CREATED=1365660646
@@ -803,7 +854,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=8C8E1440A26E11E29FC3C26B6CF84A75
 
 #URL
-	ID=234
+	ID=232
 	NAME=SICStus Prolog Homepage
 	URL=http://sicstus.sics.se/
 	CREATED=1372914556
@@ -813,13 +864,13 @@ Options: encoding = utf8, version=3
 -
 
 #FOLDER
-	ID=235
+	ID=233
 	NAME=app
 	CREATED=1356745387
 	UNIQUEID=1879C970515911E29FD4D12845C3B1ED
 
 #URL
-	ID=236
+	ID=234
 	NAME=mochi/mochiweb · GitHub
 	URL=https://github.com/mochi/mochiweb
 	CREATED=1356930944
@@ -828,7 +879,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=21112900530911E2A342ED9BD25FB3A0
 
 #URL
-	ID=237
+	ID=235
 	NAME=Yaws
 	URL=http://yaws.hyber.org/
 	CREATED=1356932758
@@ -836,21 +887,21 @@ Options: encoding = utf8, version=3
 	UNIQUEID=59DEA560530D11E2A343E4B054AE8494
 
 #URL
-	ID=238
+	ID=236
 	NAME=Nitrogen - Nitrogen Web Framework for Erlang
 	URL=http://nitrogenproject.com/
 	CREATED=1357460868
 	UNIQUEID=F4045D7057DA11E2A11C95730C834C9F
 
 #URL
-	ID=239
+	ID=237
 	NAME=Chicago Boss - Erlang for everybody
 	URL=http://www.chicagoboss.org/
 	CREATED=1358234569
 	UNIQUEID=5DE8ABA05EE411E2A45EB3A79CD0F806
 
 #URL
-	ID=240
+	ID=238
 	NAME=extend/cowboy · GitHub
 	URL=https://github.com/extend/cowboy
 	CREATED=1359853625
@@ -859,7 +910,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=0661F6C06D9E11E2A24ED4C0F9482688
 
 #URL
-	ID=241
+	ID=239
 	NAME=rvirding/erlog · GitHub
 	URL=https://github.com/rvirding/erlog
 	CREATED=1371347550
@@ -867,7 +918,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=678FEB90D62711E29E8CF377260D29F3
 
 #URL
-	ID=242
+	ID=240
 	NAME=rebar/rebar · GitHub
 	URL=https://github.com/rebar/rebar
 	CREATED=1371470948
@@ -875,14 +926,14 @@ Options: encoding = utf8, version=3
 	UNIQUEID=B67AF450D74611E29E60B4FE137D3FF6
 
 #URL
-	ID=243
+	ID=241
 	NAME=Erlang on Xen - at the heart of super-elastic clouds
 	URL=http://erlangonxen.org/
 	CREATED=1371773955
 	UNIQUEID=348F5B60DA0811E2A17B9B82C35C4027
 
 #URL
-	ID=244
+	ID=242
 	NAME=erl-chess - a distributed chinese chess game by erlang - Google Project Hosting
 	URL=http://code.google.com/p/erl-chess/
 	CREATED=1371796596
@@ -891,7 +942,7 @@ Options: encoding = utf8, version=3
 -
 
 #URL
-	ID=245
+	ID=243
 	NAME=Erlang Central
 	URL=http://erlangcentral.org/
 	CREATED=1369895628
@@ -901,7 +952,7 @@ Options: encoding = utf8, version=3
 -
 
 #URL
-	ID=246
+	ID=244
 	NAME=Lambda the Ultimate
 	URL=http://lambda-the-ultimate.org/
 	CREATED=1358636649
@@ -909,19 +960,19 @@ Options: encoding = utf8, version=3
 	UNIQUEID=886C0420628C11E2A146E783BDC7D9D9
 
 #FOLDER
-	ID=247
+	ID=245
 	NAME=Haskell/C
 	CREATED=1371297618
 	UNIQUEID=25DAE160D5B311E29704A42643D02B2B
 
 #FOLDER
-	ID=248
+	ID=246
 	NAME=app
 	CREATED=1371297626
 	UNIQUEID=2AD5C090D5B311E29705BBE8DB16BC30
 
 #URL
-	ID=249
+	ID=247
 	NAME=Yesod Web Framework for Haskell
 	URL=http://www.yesodweb.com/
 	CREATED=1372294832
@@ -929,23 +980,32 @@ Options: encoding = utf8, version=3
 	UNIQUEID=F78C4EA0DEC411E2B805E43141DCFD5F
 
 #URL
-	ID=250
+	ID=248
 	NAME=Snap: A Haskell Web Framework: Home
 	URL=http://snapframework.com/
 	CREATED=1372294993
 	DESCRIPTION=Snap Framework: a web framework for Haskell
 	UNIQUEID=576AD940DEC511E2B806F07AE133E790
 
+#URL
+	ID=249
+	NAME=cabal/cabal-install at master · haskell/cabal
+	URL=https://github.com/haskell/cabal/tree/master/cabal-install
+	CREATED=1373088096
+	VISITED=1373088379
+	DESCRIPTION=Official upstream development repository for Cabal and cabal-install
+	UNIQUEID=EE16A670E5FB11E2A5FFA2278CDEDDA1
+
 -
 
 #FOLDER
-	ID=251
+	ID=250
 	NAME=doc
 	CREATED=1371297667
 	UNIQUEID=43351230D5B311E297069D4F0EAE4F31
 
 #URL
-	ID=252
+	ID=251
 	NAME=The LLVM Compiler Infrastructure Project
 	URL=http://llvm.org/
 	CREATED=1372331639
@@ -955,7 +1015,7 @@ Options: encoding = utf8, version=3
 -
 
 #URL
-	ID=253
+	ID=252
 	NAME=Haskell :: Reddit
 	URL=http://www.reddit.com/r/haskell/
 	CREATED=1372310589
@@ -963,21 +1023,28 @@ Options: encoding = utf8, version=3
 	UNIQUEID=A7C55590DEE911E2A6639164BD17B7A9
 
 #URL
-	ID=254
+	ID=253
 	NAME=Planet Haskell
 	URL=http://planet.haskell.org/
 	CREATED=1372311633
-	VISITED=1372827204
+	VISITED=1373176986
 	UNIQUEID=16023DF0DEEC11E2A664A94AD10DA0EF
 
 #URL
-	ID=255
+	ID=254
 	NAME=Haskell News
 	URL=http://haskellnews.org/
 	CREATED=1372311736
-	VISITED=1372887846
+	VISITED=1373500071
 	DESCRIPTION=An aggregation of all online content related to Haskell, including Google+, Reddit, Twitter, GitHub, HaskellWiki, Stack Overflow, Planet Haskell, Hackage, ...
 	UNIQUEID=532C3370DEEC11E2A665BA7B4A1343A9
+
+#URL
+	ID=255
+	NAME=Happy Haskell Programming
+	URL=http://www.mew.org/~kazu/proj/ghc-mod/en/
+	CREATED=1373160385
+	UNIQUEID=3D2FBD20E6A411E29F96B65D053CAEA0
 
 -
 
@@ -988,6 +1055,7 @@ Options: encoding = utf8, version=3
 	NAME=Hacker News
 	URL=https://news.ycombinator.com/newest
 	CREATED=1372118837
+	VISITED=1373524770
 	UNIQUEID=32984B70DD2B11E29782BC925CDDBE43
 
 #URL
@@ -995,18 +1063,28 @@ Options: encoding = utf8, version=3
 	NAME=Slashdot
 	URL=http://slashdot.org/
 	CREATED=1372118939
+	VISITED=1373524778
 	UNIQUEID=6F3B0F90DD2B11E29783E95FC5D21EF1
+
+#URL
+	ID=258
+	NAME=51CTO.COM - 技术成就梦想 - 中国领先的IT技术网站
+	URL=http://www.51cto.com/
+	CREATED=1373427240
+	VISITED=1373524959
+	DESCRIPTION=中国领先的IT技术网站51CTO(www.51cto.com)是一个为CTO、IT技术经理、系统工程师、网络工程师、安全工程师、数据库工程师、网络管理员、开发工程师、项目管理人员等IT技术人员搭建的互动媒体平台，主要为IT技术人员提供新闻资讯、技术文档、BBS、博客、技术圈、培训课程、人才交流等专业服务。
+	UNIQUEID=8F91A960E91111E2A85D8BBC9EDD6721
 
 -
 
 #FOLDER
-	ID=258
+	ID=259
 	NAME=数学
 	CREATED=1281338449
 	UNIQUEID=A2858A10A38611DF90BAB9DEFFB43995
 
 #URL
-	ID=259
+	ID=260
 	NAME=数学研发论坛
 	URL=http://bbs.emath.ac.cn/
 	CREATED=1305874601
@@ -1015,7 +1093,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=50E59B2082AE11E092D4888A78B541B6
 
 #URL
-	ID=260
+	ID=261
 	NAME=Math is Fun - Maths Resources
 	URL=http://www.mathsisfun.com/
 	CREATED=1358745485
@@ -1026,20 +1104,20 @@ Options: encoding = utf8, version=3
 -
 
 #FOLDER
-	ID=261
+	ID=262
 	NAME=家乡
 	CREATED=1281338449
 	UNIQUEID=A28514E0A38611DF90B5DF7EF9396A7F
 
 #URL
-	ID=262
+	ID=263
 	NAME=百度贴吧_温江吧
 	URL=http://tieba.baidu.com/%E6%B8%A9%E6%B1%9F
 	CREATED=1281338449
 	UNIQUEID=A2856300A38611DF90B8DD4711501967
 
 #URL
-	ID=263
+	ID=264
 	NAME=西昌吧_百度贴吧
 	URL=http://tieba.baidu.com/f?ie=utf-8&kw=%E8%A5%BF%E6%98%8C
 	CREATED=1366088198
@@ -1050,37 +1128,37 @@ Options: encoding = utf8, version=3
 -
 
 #FOLDER
-	ID=264
+	ID=265
 	NAME=健康快乐
 	CREATED=1281338449
 	UNIQUEID=A2849FB0A38611DF90AC9C7A673394F5
 
 #URL
-	ID=265
+	ID=266
 	NAME=别有病 Byb.cn - 纯自然疗法，攻克亚健康
 	URL=http://www.byb.cn/
 	CREATED=1294722543
-	VISITED=1372912647
+	VISITED=1373523009
 	DESCRIPTION=据统计，亚健康人群占劳动力人口的70%。民众的观念认为有病上医院，但上医院解决的是你的疾病，而非健康。人们更多的关心的是疾病，而我们更多关注的是健康。 健康的获得，是需要有一套完整的养生理论和方法的，我们办此网站的目的，正是教授客户这一套方法。《老子》：“授人以鱼，不如授人以鱼。”给你一条鱼，能解决的是你一时的温饱，但解决不了你一世的温饱，因此，我们教授你的是一种捕鱼术，最终解决人的生存和发展的问题，让你自己和家人受益终生。
 	UNIQUEID=E81BBFC01D4011E0910EC7BE2CFB3A73
 
 #URL
-	ID=266
+	ID=267
 	NAME=养生保健 - 华夏中医论坛
 	URL=http://bbs.hx317.com/forumdisplay.php?fid=53
 	CREATED=1299802148
-	VISITED=1372912625
+	VISITED=1373522974
 	DESCRIPTION=中医养生保健论坛，中医治未病，普及养生保健知识、关爱大众健康。 华夏中医论坛 原岐黄中医论坛,包含养生保健、中医学术、中医中药、医案、医书下载等内容，是中国第一中医中药论坛。 - Discuz! Board
 	UNIQUEID=C8D10A604B7311E0B7C79F1BA8A9F612
 
 #FOLDER
-	ID=267
+	ID=268
 	NAME=博弈
 	CREATED=1313023120
 	UNIQUEID=423D1810C3B211E08EA1E265E6E12D3A
 
 #URL
-	ID=268
+	ID=269
 	NAME=弈城围棋网
 	URL=http://www.eweiqi.com/newindex.asp?code=1007
 	CREATED=1338186779
@@ -1088,7 +1166,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=F7D8F9C0A88E11E199D5DCD6B79805A2
 
 #URL
-	ID=269
+	ID=270
 	NAME=FICS Games Database
 	URL=http://www.ficsgames.org/
 	CREATED=1346289462
@@ -1096,7 +1174,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=7F809EF0F24011E1AF11D81D8D4D6D56
 
 #URL
-	ID=270
+	ID=271
 	NAME=Free Internet Chess Server (FICS)
 	URL=http://www.freechess.org/
 	CREATED=1346289571
@@ -1109,14 +1187,14 @@ Options: encoding = utf8, version=3
 -
 
 #FOLDER
-	ID=271
+	ID=272
 	NAME=TODO
 	CREATED=1281338449
 	EXPANDED=YES
 	UNIQUEID=A282CAF0A38611DF908BE7D6100644C7
 
 #URL
-	ID=272
+	ID=273
 	NAME=My Portfolio - Google 财经
 	URL=http://www.google.com.hk/finance/portfolio?action=view&pid=1&gl=cn
 	CREATED=1281338449
@@ -1124,13 +1202,13 @@ Options: encoding = utf8, version=3
 	UNIQUEID=A28478A0A38611DF90AA83B4C0D460D8
 
 #FOLDER
-	ID=273
+	ID=274
 	NAME=Misc
 	CREATED=1295244246
 	UNIQUEID=97E5C5F021FF11E0AA9986C8B1FF32E2
 
 #URL
-	ID=274
+	ID=275
 	NAME=115，我的网盘，改变分享！
 	URL=http://115.com/
 	CREATED=1337215355
@@ -1139,7 +1217,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=321971C09FB911E1946A8FC3E7A8141A
 
 #URL
-	ID=275
+	ID=276
 	NAME=中国问答网
 	URL=http://127.0.0.1:8000/
 	CREATED=1350635180
@@ -1147,7 +1225,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=A8C332C019C611E29D9AFF51FF1A678B
 
 #URL
-	ID=276
+	ID=277
 	NAME=sw2wolf/qachina · GitHub
 	URL=https://github.com/sw2wolf/qachina
 	CREATED=1358997610
@@ -1156,7 +1234,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=F59B3D4065D411E2AA329D5A14185F9A
 
 #URL
-	ID=277
+	ID=278
 	NAME=hao123_上网从这里开始
 	URL=http://www.hao123.com/?tn=29065018_20_hao_pg
 	CREATED=1361156054
@@ -1165,7 +1243,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=7A6C5CC0797611E2A25ED9BC7A966D6A
 
 #URL
-	ID=278
+	ID=279
 	NAME=赤焰书苑
 	URL=http://shop.kongfz.com/book/19317/
 	CREATED=1361238390
@@ -1174,7 +1252,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=2EDA09407A3611E2A1BF896504313B26
 
 #URL
-	ID=279
+	ID=280
 	NAME=sw2wolf/stumpwm · GitHub
 	URL=https://github.com/sw2wolf/stumpwm
 	CREATED=1362881663
@@ -1183,7 +1261,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=39EF08C0892811E2955CA0C640C279C0
 
 #URL
-	ID=280
+	ID=281
 	NAME=EMACS下的五笔字型输入法
 	URL=http://daiyuwen.freeshell.org/gb/wubi/wubi.html
 	CREATED=1365573952
@@ -1191,14 +1269,14 @@ Options: encoding = utf8, version=3
 	UNIQUEID=B2F9A5B0A1A411E2A56C9056BD226259
 
 #URL
-	ID=281
+	ID=282
 	NAME=pkgng
 	URL=http://pkgbeta.freebsd.org/
 	CREATED=1367817162
 	UNIQUEID=949E3D30B60B11E2A509DDFA4886107F
 
 #URL
-	ID=282
+	ID=283
 	NAME=sw2wolf/dwm · GitHub
 	URL=https://github.com/sw2wolf/dwm
 	CREATED=1370587698
@@ -1207,7 +1285,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=3C73CC00CF3E11E29BF98E612EF5460B
 
 #URL
-	ID=283
+	ID=284
 	NAME=pknng-pcbsd
 	URL=http://pkg.cdn.pcbsd.org/
 	CREATED=1372889812
@@ -1216,13 +1294,13 @@ Options: encoding = utf8, version=3
 -
 
 #FOLDER
-	ID=284
+	ID=285
 	NAME=Tool
 	CREATED=1355456068
 	UNIQUEID=2A41D410459F11E2A4D0B79DA67EAA9E
 
 #URL
-	ID=285
+	ID=286
 	NAME=Recent Pastes - hpaste
 	URL=http://hpaste.org/
 	CREATED=1281338449
@@ -1230,7 +1308,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=A287ACF0A38611DF90D8ECDEFA7D2AE6
 
 #URL
-	ID=286
+	ID=287
 	NAME=Enter your paste
 	URL=http://paste.lisp.org/new
 	CREATED=1355456154
@@ -1238,7 +1316,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=5D4A1930459F11E2A4D38EB17A5E231A
 
 #URL
-	ID=287
+	ID=288
 	NAME=Gists
 	URL=https://gist.github.com/
 	CREATED=1369441192
@@ -1246,7 +1324,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=D185E170C4D011E29EB0B625335B6CF4
 
 #URL
-	ID=288
+	ID=289
 	NAME=mathURL
 	URL=http://mathurl.com/
 	CREATED=1372888412
@@ -1255,50 +1333,51 @@ Options: encoding = utf8, version=3
 -
 
 #URL
-	ID=289
+	ID=290
 	NAME=龙岗区教育局基础教育科 > 主页
 	URL=http://lgjjk.sz.edu.cn/
 	CREATED=1363322895
 	VISITED=1369204154
+	ACTIVE=YES
 	UNIQUEID=8C6E86A08D2B11E2A2CBFBBD28F6614A
 
 #FOLDER
-	ID=290
+	ID=291
 	NAME=zRoom
 	CREATED=1366254120
 	UNIQUEID=56EC0570A7D411E2A23EBF45A15B5C51
 
 #URL
-	ID=291
+	ID=292
 	NAME=金强大学城二手房出售,两室两厅一卫,大学城，精装小套二，送家具家电，卖家急售，可按揭！！！_成都二手房_搜房网
 	URL=http://esf.cd.soufun.com/chushou/3_26912877.htm
 	CREATED=1366088568
-	VISITED=1372890668
+	VISITED=1373598354
 	DESCRIPTION=成都二手房-搜房网提供成都金强大学城二手房出售信息，成都温江南熏大道南熏大道三段855号，金强大学城二手房出售，两室两厅一卫一厨。找更多成都金强大学城二手房信息就到成都二手房-搜房网。
 	UNIQUEID=E1EB4EC0A65211E2A4DBECECCEEBD80D
 
 #URL
-	ID=292
+	ID=293
 	NAME=【金强大学城二手房】南熏大道三段855号
 	URL=http://esf.cd.soufun.com/house-xm3210347742/g22-j250-k270/
 	CREATED=1366077813
-	VISITED=1372890888
+	VISITED=1373501261
 	DESCRIPTION=搜房成都二手房网为您提供最新、最真实的金强大学城二手房信息，每天更新大量优质金强大学城二手房房源，100%审核。查找成都金强大学城二手房出售信息，就到搜房成都二手房网！
 	UNIQUEID=D74FBCD0A63911E2A4D1CE61D7751EA9
 
 #URL
-	ID=293
+	ID=294
 	NAME=金强大学城二手房出售,两室一厅一卫,稀缺优质小户型，拎包入住！！_成都二手房_搜房网
 	URL=http://esf.cd.soufun.com/chushou/3_29817083.htm
 	CREATED=1372834183
-	VISITED=1372890946
+	VISITED=1373598346
 	DESCRIPTION=成都二手房-搜房网提供成都金强大学城二手房出售信息，成都温江南熏大道南熏大道三段855号，金强大学城二手房出售，两室一厅一卫一厨。找更多成都金强大学城二手房信息就到成都二手房-搜房网。
 	UNIQUEID=BDE2BE90E3AC11E2A4A28336DAE4BCFB
 
 -
 
 #URL
-	ID=294
+	ID=295
 	NAME=家长网上报名
 	URL=http://bm.sz.edu.cn:8008/LGJZC/jsp/login/LoginLG.jsp
 	CREATED=1366601514
@@ -1306,7 +1385,7 @@ Options: encoding = utf8, version=3
 	UNIQUEID=2DC291B0AAFD11E2A162BC56D003E74A
 
 #URL
-	ID=295
+	ID=296
 	NAME=成都中铁物流快运公司电话028-83325661上门接货
 	URL=http://www.scztwl.com/
 	CREATED=1372899141
@@ -1317,15 +1396,15 @@ Options: encoding = utf8, version=3
 -
 
 #URL
-	ID=296
+	ID=297
 	NAME=搜狗搜索引擎 - 上网从搜狗开始
 	URL=http://www.sogou.com/
 	CREATED=1354505558
-	VISITED=1372988941
+	VISITED=1373525161
 	UNIQUEID=15F849603CFA11E2A1818A948863CD17
 
 #URL
-	ID=297
+	ID=298
 	NAME=atom
 	URL=http://pauillac.inria.fr/~haemmerl/gprolog-rh/doc/manual023.html
 	CREATED=1372208014

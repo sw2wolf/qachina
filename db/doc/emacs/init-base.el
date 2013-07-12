@@ -181,6 +181,10 @@
 	 ))
 (good-colors)
 
+(defun qachina ()
+   (interactive)
+   (async-shell-command "cd /media/D/qachina && ./start.bat" "*QA-China*"))
+
 ;;------------------------------------------------------------------------------  
 ;; add chinese wubi input   
 ;; url: daiyuwen.freeshell.org/gb/wubi/wubi.html  

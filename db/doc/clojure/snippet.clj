@@ -31,6 +31,7 @@
                                          
 (extend Vec2D IVec2D IVec2D-impl)
 (extend VerletParticle2D IVec2D IVec2D-impl)
+;;;;;;
 
 (reduce conj #{} (for [i (range 10) j (range 10)] [i j]))
 
@@ -63,6 +64,7 @@
 (let [output (StringWriter.)]
     (base64/encode (input-stream md5sum) output base64/*base64-alphabet* nil)
     (.toString output))
+;;;;;;
 
 1: how to read an entire file into memory.
 
@@ -89,7 +91,7 @@ Not recommended when it is a really big file.
 (with-open [wrtr (writer "/tmp/test.txt" :append true)]
   (.write wrtr "Line to be appended"))
 
------------------------------------------------------------------------------
+;;;;;;
 If the file fits into memory you can read and write it with slurp and spit:
 (def s (slurp "filename.txt"))
 (s now contains the content of a file as a string)
@@ -149,6 +151,7 @@ To read or write a file linewise you would use Java's reader and writer. They ar
 ;or
 (get-sql-metadata db .getColumns nil nil nil nil)
 
+;;;;;;
 (into {} (java.util.HashMap. {"foo" "bar" "baz" "quux"}))
 
 (into {}
@@ -159,6 +162,7 @@ To read or write a file linewise you would use Java's reader and writer. They ar
 
 =>{:baz "quux", :foo "bar"}
 
+;;;;;;
 (defn timed-agent [limit f]
   (let [a (agent 0)
         t (java.util.Timer.)
