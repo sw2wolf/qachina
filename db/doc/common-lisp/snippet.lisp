@@ -702,6 +702,9 @@ DOUBLE-FLOAT
               :initial-contents (mapcar 'char-code '(#\Return #\Linefeed)))
   "A 2-element array consisting of the character codes for a CRLF sequence.")
 
+;;;;;;
+(defstruct (mystruct (:type list)) f1 f2 f3)
+
 (defstruct node 
     (board            (empty-board))  
     (tomove           'white)         
@@ -727,6 +730,11 @@ DOUBLE-FLOAT
             collect `(incf ,a)))
     (list r z x))
 
+;trick to enforce provision of required slot values for structures and classes:
+(defstruct foo
+  (slot1 (error "Must provide value for slot1")))
+
+;;;;;;
 (map nil
     (lambda (function argument)
         (funcall function argument object))
@@ -1158,9 +1166,6 @@ clisp -K full -x "(load \"asdf.lisp\") (load \"stumpwm.asd\") (load \"/usr/share
     (make-array 100 :element-type 'fixnum :adjustable t :fill-pointer 0)
     #'identity '(2 3)))
 
-;trick to enforce provision of required slot values for structures and classes:
-(defstruct foo
-  (slot1 (error "Must provide value for slot1")))
 
 (time (reduce #'+ (make-list 100000 :initial-element 1)))
 

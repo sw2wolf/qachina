@@ -134,24 +134,27 @@ winSSQ count noRed noBlue = do
     --writeFile "noRedBlue.txt" $ concat $ intersperse " " noStr
     let noRedLst =  map (\x -> read x::Int) $ words noRed
         noBlueLst = map (\x -> read x::Int) $ words noBlue
-    --goodR <- goodRed
-    --let restR = ([1..33] \\ goodR) \\ noRedLst
 
-    goodBlue <- pickNums ([1..16] \\ noBlueLst) count []
-    result <- pickSSQ count ([1..33] \\ noRedLst) goodBlue []
+    okBlue <- pickNums ([1..16] \\ noBlueLst) count []
+    result <- pickSSQ count ([1..33] \\ noRedLst) okBlue []
     forM_ result (\x -> print x)
     writeFile ssqNum $ ints2str result
+
+pickSSQ 0 _ _ acc= return acc
+pickSSQ count okRed okBlue acc = do
+    if  count == 1 
+      then 
+          gr < goodRed
+          red <- sort <$> (pickNums gr 5 []) ++ (pickNums ([1..33] \\ gr] 1 [])
+      else
+          red <- sort <$> pickNums okRed 6 []
+    pickSSQ (count-1) okRed okBlue $ (red ++ [okBlue!!(count-1)]) : acc
 
 ints2str :: [[Int]] -> String
 ints2str ints = concat $ intersperse "\n" strLst
     where
         strLst = map (\x -> to_str x) ints
         to_str a = unwords $ map (\x -> show x) a 
-
-pickSSQ 0 _ _ acc= return acc
-pickSSQ count goodRed goodBlue acc = do
-    red <- sort <$> pickNums goodRed 6 []
-    pickSSQ (count-1) goodRed goodBlue $ (red ++ [goodBlue!!(count-1)]) : acc
 
 goodRed:: IO [Int]
 goodRed = do {
