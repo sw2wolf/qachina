@@ -141,14 +141,16 @@ winSSQ count noRed noBlue = do
     writeFile ssqNum $ ints2str result
 
 pickSSQ 0 _ _ acc = return acc
-pickSSQ 1 _ okBlue acc = do
+pickSSQ 1 okRed okBlue acc = do
+    red <- sort <$> pickNums okRed 6 []
+    return $ (red ++ [okBlue!!0]) : acc
+pickSSQ count okRed okBlue acc = do
     gr <- goodRed
     red1 <- pickNums gr 5 []
     red2 <- pickNums ([1..33] \\ gr) 1 []
-    return $ ((sort (red1 ++ red2)) ++ [okBlue!!0]) : acc
-pickSSQ count okRed okBlue acc = do
-    red <- sort <$> pickNums okRed 6 []
-    pickSSQ (count-1) okRed okBlue $ (red ++ [okBlue!!(count-1)]) : acc
+
+    pickSSQ (count-1) okRed okBlue $ 
+        ((sort (red1 ++ red2)) ++ [okBlue!!(count-1)]) : acc
 
 ints2str :: [[Int]] -> String
 ints2str ints = concat $ intersperse "\n" strLst

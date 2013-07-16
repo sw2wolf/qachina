@@ -198,11 +198,11 @@ myXPConfig = defaultXPConfig {
 --                 , height = 20
 --                 }
 -- }}}
-emacs :: [Char]
-emacs = "emacs --geometry 176x34+0+369"
+-- emacs :: [Char]
+-- emacs = "emacs --geometry 176x34+0+369"
 
 xterm :: [Char]
-xterm="xterm -geometry 176x29+0+369"
+xterm="xterm -geometry 176x29+0+365"
 --eweiqi="wine \"c:/Program Files/eweiqi/LiveBaduk.exe\""
 --winxp="VBoxManage startvm winxp"
 
@@ -210,13 +210,13 @@ xterm="xterm -geometry 176x29+0+369"
 myKeys :: [([Char], X ())]
 myKeys =
     [ ("M-w", raiseMaybe (spawn "opera") (className =? "Opera"))
-     ,("M-e", raiseMaybe (spawn emacs) (className =? "Emacs"))
+     ,("M-e", raiseMaybe (spawn "emacs") (className =? "Emacs"))
      ,("M-<Space>", raiseMaybe (spawn xterm) (className =? "XTerm"))
 
      ,("M-g", goToSelected defaultGSConfig)
      ,("M-p", spawn "~/bin/dmenu.sh")
-     ,("M-c", spawn "~/bin/sdcv.sh")
-     ,("M-C-x", spawn "~/bin/clisp.sh")
+     ,("M-C-c", spawn "~/bin/sdcv.sh")
+     ,("M-C-x", spawn "~/bin/cl")
 
      ,("M-C-n", do
             spawn ("date>>" ++ "~/TODO")

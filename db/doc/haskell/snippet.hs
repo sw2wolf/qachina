@@ -221,5 +221,41 @@ mean xs = tot / len
     fun (!tot, !len) x = (tot+x, len+1)
 
 ---------
-
+There are 3 major parallel and concurrent programming models in Haskell.
+.implicit parallelism via par
+.explicit concurrency and parallelism via forkIO / MVars and software transactional memory
+.data parallelism via the DPH libraries
 ---------
+{-# LANGUAGE DeriveDataTypeable #-}
+
+import qualified XMonad.Util.ExtensibleState as XS
+import XMonad.Util.Timer
+
+...
+
+-- wrapper for the Timer id, so it can be stored as custom mutable state
+data TidState = TID TimerId deriving Typeable
+
+instance ExtensionClass TidState where
+  initialValue = TID 0
+
+...
+
+-- put this in your startupHook
+-- start the initial timer, store its id
+clockStartupHook = startTimer 1 >>= XS.put . TID
+
+-- put this in your handleEventHook
+clockEventHook e = do               -- e is the event we've hooked
+  (TID t) <- XS.get                 -- get the recent Timer id
+  handleTimer t e $ do              -- run the following if e matches the id
+    startTimer 1 >>= XS.put . TID   -- restart the timer, store the new id
+    ask >>= logHook.config          -- get the loghook and run it
+    return Nothing                  -- return required type
+  return $ All True                 -- return required type
+------
+Functor < Applicative < Monad.
+where, "x < y" means x is a superclass of y.
+All monads are conceptually applicative as well.
+So if you can define a function to work on applicatives instead of monads, it's more flexible in that it should still work on all monads but also works on non-monadic applicatives.
+------
