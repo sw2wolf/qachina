@@ -259,3 +259,8 @@ where, "x < y" means x is a superclass of y.
 All monads are conceptually applicative as well.
 So if you can define a function to work on applicatives instead of monads, it's more flexible in that it should still work on all monads but also works on non-monadic applicatives.
 ------
+fix can make recursive lambdas
+(a -> a) -> a
+@src fix
+<lambdabot> fix f = let x = f x in x
+------

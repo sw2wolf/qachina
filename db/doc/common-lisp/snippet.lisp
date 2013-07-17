@@ -1,5 +1,68 @@
 
 ;;;
+(loop 
+  (with-simple-restart (try-again "Try again")
+    (return 
+     (progn 
+       (setf *config* (load-config-file))))))
+
+;If any error occurs during load-config-file, I can either fix up the file and choose the try-again restart, or give up and use an abort restart.
+;;;;
+(deftype octet-vector (length)
+  `(simple-array (unsigned-byte 8) (,length)))
+;optional arguments to defmacro with no initialization form default to nil, the default value in deftype is the symbol *.
+(deftype octet-vector (&optional length)
+  `(simple-array (unsigned-byte 8) (,length)))
+
+;Now, in a type context, a plain octet-vector expands into (simple-array (unsigned-byte 8) (*)), or a one-dimensional octet array of indeterminate length, and (octet-vector 32) expands into (simple-array (unsigned-byte 8) (32)).
+;;;
+;convert an integer to a list of bits
+(defun list-of-bits (integer)
+  (let ((bits '()))
+    (dotimes (index (integer-length integer) bits)
+      (push (if (logbitp index integer) 1 0) bits))))
+
+(defun list-of-bits (integer)
+  (let ((i integer)
+        (bits '()))
+    (dotimes (j (integer-length integer) bits)
+      (push (logand i 1) bits)
+      (setf i (ash i -1)))))
+
+(defun list-of-bits (integer)
+  (let ((mask 1)
+        (bits '()))
+    (dotimes (i (integer-length integer) bits)
+      (push (if (logtest mask integer) 1 0) bits)
+      (setf mask (ash mask 1)))))
+
+(defun list-of-bits (integer)
+  (let ((bits '()))
+    (dotimes (position (integer-length integer) bits)
+      (push (ldb (byte 1 position) integer) bits))))
+;;;
+(let ((store (persistent-store/open pathname))
+       id
+       vid
+       (object1 '(this is a list))
+       (object2 #(this is a vector))
+       (object3 (list 1.0d0 -1.0d0 0.125d0 -0.125d0 1024.0d0 -1024.0d0 .3d0 -.3d0))
+       (object4 (list #x87654321 #x12345678 1 -1 2147483647 -2147483648
+                      #*101010101010101010101010101
+                      #*100000000000000000000000000
+                      #*000000000000000000000000001))))
+
+#2r11010101  ;Another way of writing 213 decimal  
+#b11010101   ;Ditto                               
+#b+11010101  ;Ditto                               
+#o325        ;Ditto, in octal radix               
+#xD5         ;Ditto, in hexadecimal radix         
+#16r+D5      ;Ditto                               
+#o-300       ;Decimal -192, written in base 8     
+#3r-21010    ;Same thing in base 3                
+#25R-7H      ;Same thing in base 25               
+#xACCEDED    ;181202413, in hexadecimal radix
+;;;
 (defun main ()
   (with-open-socket (socket :address-family :file
                             :type :stream

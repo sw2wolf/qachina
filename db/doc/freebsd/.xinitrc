@@ -36,8 +36,8 @@ xmodmap ~/.Xmodmap
 #fcitx &
 
 case $1 in
-	dwm)
-        exec $HOME/bin/dwm
+	xmonad)
+        exec xmonad
 		;;
 	clisp)
 		export MPD=YES
@@ -47,11 +47,11 @@ case $1 in
     #sbcl)
 		#sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
 		#;;
-    test)
+    dwm)
         #xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex cont
-		exec $HOME/bin/stumpwm-clisp-norc
+		exec $HOME/bin/dwm
 		;;
     *)
-   		exec xmonad
+		exec $HOME/bin/stumpwm-clisp-norc
 		;;
 esac
