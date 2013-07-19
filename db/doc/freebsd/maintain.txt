@@ -1,3 +1,8 @@
+
+-----------------------------------------------------------------------------
+#!/bin/bash
+xrandr --auto --output HDMI1 --mode 1920x1200 --right-of VGA1 --primary
+xrandr --auto --output VGA1 --mode 1600x1200 --left-of HDMI1 --pos 3520x0
 -----------------------------------------------------------------------------
 xterm-256color  [06:20]
 xterm-color

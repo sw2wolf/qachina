@@ -1,4 +1,55 @@
 
+;;;;;;
+(defclass foo ()
+    ((#.(gensym (random 42)) :reader foo-slot :initarg :slot)))
+;;;
+;; (defun read-char-with-timeout (stream timeout)
+;;     (loop with beg = (get-universal-time)
+;;           until (or (listen stream) (< timeout (- (get-universal-time) beg)))
+;;           do (sleep 0.01)
+;;           finally (if (listen stream)
+;;                       (read-char stream)
+;;                       (error "Time out"))))
+
+(defun read-char-with-timeout (stream timeout)
+    (loop with beg = (get-universal-time)
+       until (or (listen stream) (< timeout (- (get-universal-time) beg)))
+       do (sleep 0.01)
+       finally (if (listen stream)
+                   (return-from read-char-with-timeout (read-char stream))
+                   nil)))
+
+(defun read-with-timeout ()
+  (let ((rcwt (read-char-with-timeout nil 15)))
+    (cond ((null rcwt)  " timed out")
+          ((string-equal rcwt #\Newline) (string #\ ))
+          (t (concatenate 'string (string rcwt) (read-with-timeout))))))
+;That said, on clisp you can use EXT:WITH-KEYBOARD-INPUT and *KEYBOARD-INPUT* to get raw tty input.
+
+(define-condition stream-read-timeout (error) ())
+
+(defun read-char-with-timeout (stream timeout)
+   (let* ((process mp:*current-process*)
+          (timer (mp:make-timer (lambda ()
+                                  (mp:process-interrupt process (lambda () (error 
+'stream-read-timeout)))))))
+     (unwind-protect
+         (progn
+           (mp:schedule-timer-relative timer timeout)
+           (read-char stream))
+       (ignore-errors (mp:unschedule-timer timer)))))
+
+CL-USER 1 > (read-char-with-timeout *standard-input* 2.0)
+
+Error: The condition #<STREAM-READ-TIMEOUT 2067574C> occurred
+   1 (abort) Return to level 0.
+   2 Return to top loop level 0.
+;;;
+(defun test-it ()
+   (unread-char (read-char))
+   (list (read-char-no-hang) 
+         (read-char-no-hang) 
+         (read-char-no-hang)))
 ;;;
 (loop 
   (with-simple-restart (try-again "Try again")

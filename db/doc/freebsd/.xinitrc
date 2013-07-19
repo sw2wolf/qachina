@@ -37,6 +37,7 @@ xmodmap ~/.Xmodmap
 
 case $1 in
 	xmonad)
+		#trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand false --width 360 --widthtype pixel --transparent true --tint 0x222222 --alpha 0 --height 20 & # 
         exec xmonad
 		;;
 	clisp)

@@ -227,3 +227,9 @@ let his () = sh ("tail " ^ hit_num_file) ;;
 let sd word = sh ("sdcv -n " ^ word) ;;
 
 let rec fib x = if x <= 1 then 1 else fib (x - 1) + fib (x - 2);;
+(*
+ * Take a string of bytes and convert them to hex string
+ * representation
+ *)
+(* let hex_of_string = *)
+(*   String.concat_map ~f:(fun c -> sprintf "%X" (Char.to_int c)) *)
