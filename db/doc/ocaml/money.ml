@@ -105,7 +105,8 @@ let div618 p1 p2 =
 (**
     SSQ lottery
 *)
-let hit_num_file = "ssqHitNum.txt";;
+let hit_num_file = "/media/D/qachina/db/doc/money/ssqHitNum.txt";;
+let num_file = "/media/D/qachina/db/doc/money/ssqNum.txt";;
 
 let writeFile ~filename:fn s =
     let oc = open_out fn in
@@ -159,24 +160,28 @@ let pick_num from count =
 ;;
 
 let win_ssq count noRed noBlue =
-   (* let gr = good_red() in *)
+    let gr = good_red() in
+	let nogr = set_diff (1--33) gr in
     let noRedLst = str2lst noRed in
     let noBlueLst = str2lst noBlue in
-    (* let yes_red = set_diff gr noRedLst in *)
     let yes_red = set_diff (1--33) noRedLst in
-    (* let no_red = set_diff (set_diff (1--33) gr) noRedLst in *)
     let ok_blue = pick_num (set_diff (1--16) noBlueLst) count in
+	let oneRed = ref [] in
     let result = ref "" in
     assert (count >= 1) ;
     Random.self_init ();
     for i = 1 to count do
+	    if i = count - 1
+		then
+		  oneRed := pick_num yes_red 6
+		else
+		  oneRed := pick_num gr 5 @ pick_num nogr 1;
+
         result := !result ^ lst2str (sortLst 
-           (* (pick_num yes_red 5 @ pick_num no_red 1) *)
-           (pick_num yes_red 6)
-          @ [List.nth ok_blue (i-1)]) ^ "\n";
+           !oneRed @ [List.nth ok_blue (i-1)]) ^ "\n";
     done;
     print_endline !result;
-    writeFile "ssqNum.txt" !result
+    writeFile num_file !result
 ;;
 (*
 let hit_desc red blue = 
@@ -213,7 +218,7 @@ let hit_ssq no hitNum =
     if not !hasNo then appendFile hit_num_file (no ^ " " ^ hitNum ^ "\n");
     printf "Good Red Hit:%d of %d\n" (hitRed gr) (List.length gr);
     printf "------ result ------\n";
-    withFile "ssqNum.txt" (fun line ->
+    withFile num_file (fun line ->
         let numLst = str2lst line in
         assert (List.length numLst = 7);
         let hitR = hitRed (init numLst) in
