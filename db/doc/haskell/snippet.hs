@@ -264,3 +264,6 @@ fix can make recursive lambdas
 @src fix
 <lambdabot> fix f = let x = f x in x
 ------
+showFFloat (Just 2) 9.575 ""  => "9.58"
+------
+

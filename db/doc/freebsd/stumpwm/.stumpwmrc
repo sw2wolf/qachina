@@ -50,13 +50,7 @@ used for matching windows with run-or-raise or window placement
 
 (defcommand sdcv (word) ((:rest "Word> "))
   (let ((cmd (format nil "sdcv -n ~a" word))) ;wn ~a -over
-    (with-output-to-string (*standard-output*)
-	 #+clisp(let ((str (ext:run-shell-command cmd :output :stream :wait nil)))
-	   (loop for line = (read-line str nil)
-          until (null line)
-          do (print line)))
-	 #+sbcl (sb-ext:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*)
-	 #+ccl(ccl:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*))))
+    (run-shell-command cmd t)))
 
 (set-fg-color "green")
 (set-bg-color "black")
@@ -68,8 +62,8 @@ used for matching windows with run-or-raise or window placement
 
 (set-msg-border-width 1)
 
-(set-font "-*-simsun-medium-r-normal-*-16-*-*-*-*-*-iso10646-1")
-;(set-font "-misc-wenquanyi micro hei-medium-r-normal--0-0-0-0-p-0-iso10646-1")
+;(set-font "-*-simsun-medium-r-normal-*-16-*-*-*-*-*-iso10646-1")
+(set-font "-misc-wenquanyi micro hei-medium-r-normal--0-0-0-0-p-0-iso10646-1")
 
 ;(ql:quickload :clx-truetype)
 ;(xft:cache-fonts)
@@ -121,7 +115,10 @@ used for matching windows with run-or-raise or window placement
 ; 1 screen and many heads. When not using xinerama each screen is a
 ; physical monitor so you have many screens with only one head on them.
 
-(setf *shell-program* (stumpwm::getenv "SHELL"))
+;
+; never change default *shell-program*
+;(setf *shell-program* (stumpwm::getenv "SHELL"))
+;
 
 (defcommand browse () ()
   (run-or-raise "opera" `(:class "Opera")))

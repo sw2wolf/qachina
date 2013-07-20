@@ -35,23 +35,17 @@
 ;;         (find-file file))
 ;;     (message "Current buffer does not have an associated file.")))
 
-;; (defun jump-run-haskell ()
+;; (defun jump-run-prolog ()
 ;;   (interactive)
-;;   (if (get-buffer "*ghci*")
-;; 	  (switch-to-buffer-other-window "*ghci*")
-;; 	  (async-shell-command "~/bin/hs" "*ghci*")))
+;;   (if (get-buffer "*prolog*")
+;; 	  (switch-to-buffer-other-window "*prolog*")
+;; 	  (run-prolog 'swi)))
 
 (defun jump-run-erlang ()
   (interactive)
   (if (get-buffer "*erlang*")
 	  (switch-to-buffer-other-window "*erlang*")
 	  (run-erlang)))
-
-;; (defun jump-run-prolog ()
-;;   (interactive)
-;;   (if (get-buffer "*prolog*")
-;; 	  (switch-to-buffer-other-window "*prolog*")
-;; 	  (run-prolog 'swi)))
 
 (defun jump-run-lisp ()
   (interactive)
@@ -106,9 +100,9 @@
 (global-set-key (kbd "<f4>") 'jump-run-shell)
 (global-set-key (kbd "<f5>") 'jump-run-mew)
 
-(global-set-key (kbd "<f6>") 'run-haskell)
+(global-set-key (kbd "<f6>") 'jump-run-lisp)
 (global-set-key (kbd "<f7>") 'jump-run-erlang)
-(global-set-key (kbd "<f8>") 'jump-run-lisp)
+(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

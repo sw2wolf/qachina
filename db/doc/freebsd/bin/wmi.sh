@@ -14,24 +14,24 @@ echo "----------------------"
 set req = $<
 switch ($req)
     case [1]:
-		xinit clisp
+		exec xinit clisp
 		breaksw
 	case [2]:
-        xinit xmonad
+        exec xinit xmonad
         breaksw
 	case [3]:
-        xinit dwm
+        exec xinit dwm
         breaksw
 	case [9]:
         breaksw
     default:
-		xinit
+		exec xinit
 		breaksw
 endsw
 exit 0
 
 bye:
-    xinit
+    exec xinit
 	exit 1
 
 #set i = 0

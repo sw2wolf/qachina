@@ -1,5 +1,15 @@
 
 ;;;;;;
+(with-output-to-string (*standard-output*)
+  #+clisp
+  (let ((str (ext:run-shell-command cmd :output :stream :wait nil)))
+     (loop for line = (read-line str nil)
+        until (null line)
+        do (print line)))
+ #+sbcl (sb-ext:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*)
+ #+ccl(ccl:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*))
+
+;;;;;;
 (defclass foo ()
     ((#.(gensym (random 42)) :reader foo-slot :initarg :slot)))
 ;;;
