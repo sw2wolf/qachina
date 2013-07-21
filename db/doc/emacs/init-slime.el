@@ -45,6 +45,7 @@
 ;;    do (when (slime-eval `(cl:if (cl:find-package ,package) t))
 ;;          (slime-repl-set-package package)
 ;;          (return))))
-(defun slime-repl-setup-initial-packages ()
-  (slime-repl-set-package :money))
-(add-hook 'slime-connected-hook 'slime-repl-setup-initial-packages t)
+
+;; (defun slime-repl-setup-initial-packages ()
+;;   (slime-repl-set-package :money))
+;; (add-hook 'slime-connected-hook 'slime-repl-setup-initial-packages t)
