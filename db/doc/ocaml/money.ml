@@ -1,5 +1,4 @@
 open Printf
-open Unix
 
 (**
     Helper Functions
@@ -26,6 +25,21 @@ let lines str = Str.split (Str.regexp "\n") str ;;
 
 let init l = l |> List.rev |> List.tl |> List.rev ;;
 let md5 str = Digest.to_hex(Digest.string str) ;;
+
+(*
+    Ocaml并没有提供四舍五入的函数，
+    所以利用OCaml提供的
+    ceil float -> float函数
+    floor float -> float函数
+    构造四舍五入函数
+    round float -> int
+*)
+let round x =                                     
+    let decimals = x -. (float_of_int (Pervasives.truncate x)) in
+    match decimals with
+    | 0. -> int_of_float x
+    | d when d >= 0.5 -> int_of_float (ceil x)
+    | d -> int_of_float (floor x);; 
 
 (**
     let db = Sqlite3.db_open "/media/D/www/qachina/db/qachina.db";;
@@ -94,7 +108,14 @@ let stopLoss qty pb lossRate =
 let div618 p1 p2 = 
 (* 黄金分割 *)
     let ratio = [0.; 0.191; 0.236; 0.382; 0.5; 0.618; 0.809; 1.] in
-    let price r = if p1 <= p2 then (p1 +. (p2 -. p1) *. r) else (p1 -. (p1 -. p2) *. r) in
+    let price r = 
+	  let res = ref 0.0 in
+	    if p1 <= p2 then
+		  res := (p1 +. (p2 -. p1) *. r)
+		else
+		  res := (p1 -. (p1 -. p2) *. r);
+	  !res
+	in
     if p1 <= p2 then
         List.map (fun r -> printf "---%.3f   %.2f---\n" r (price r)) (List.rev ratio)
     else

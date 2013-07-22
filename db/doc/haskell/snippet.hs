@@ -266,4 +266,56 @@ fix can make recursive lambdas
 ------
 showFFloat (Just 2) 9.575 ""  => "9.58"
 ------
+{-# LANGUAGE ScopedTypeVariables #-}
+
+import System.Environment
+import Data.Char
+import System.IO
+import System.Process
+import System.Exit
+import Control.Concurrent (forkIO, newEmptyMVar, putMVar, takeMVar)
+import qualified Control.Exception as C
+
+main = do
+   script <- getArgs >>= \(file:blather) -> readFile file
+   ty     <- run "ghci" ("-v0" : "-cpp" : "-w" : args) script
+   putStr ("evaluating Hello.haskellscript\n\n" ++ ty)
+   
+  where args = ["-XPostfixOperators"]
+
+run :: FilePath -> [String] -> String -> IO String
+run file args input = C.handle (\(e :: C.IOException) -> return (show e)) $ do
+
+   (inp,out,err,pid) <- runInteractiveProcess file args Nothing Nothing
+   hPutStr inp input >> hClose inp
+
+   output <- hGetContents out
+   errput <- hGetContents err
+
+   outMVar <- newEmptyMVar
+   errMVar <- newEmptyMVar
+
+   forkIO (C.evaluate (length output) >> putMVar outMVar ())
+   forkIO (C.evaluate (length errput) >> putMVar errMVar ())
+
+   takeMVar outMVar
+   takeMVar errMVar
+
+   e <- C.catch
+           (waitForProcess pid)
+           (\(_ :: C.IOException) -> return ExitSuccess)
+
+   return (output ++ errors ++ better errput)
+   
+errors = "\n\n**********************************"
+better  = unlines . map linemanager . lines
+  where linemanager l  = 
+         case (take 13 l, drop 13 l) of
+            ("<interactive>", xs) -> "YOUR SCRIPT DOESNT MAKE SENSE!\n" ++ tail xs
+            _                     -> l
+------
+let inf ~(x:xs) = x : inf xs in length . take 5 $ inf [] => 5
+inf ~(x:xs) = ...  says you only actually look at the LHS  if anyone ever asks for the value of "x" or "xs".  But nobody does. try to read it as:  inf ? = ? : inf ? note that if nobody asks the question marks what they are, it's basically like a repeat
+
+------
 
