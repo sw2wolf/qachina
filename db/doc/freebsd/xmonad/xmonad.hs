@@ -216,7 +216,7 @@ myKeys =
      ,("M-g", goToSelected defaultGSConfig)
      ,("M-p", spawn "~/bin/dmenu.sh")
      ,("M-C-c", spawn "~/bin/sdcv.sh")
-     ,("M-C-x", spawn "~/bin/cl")
+     ,("M-C-x", spawn "~/bin/ml")
 
      ,("M-C-n", do
             spawn ("date>>" ++ "~/TODO")

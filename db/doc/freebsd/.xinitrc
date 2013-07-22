@@ -53,6 +53,6 @@ case $1 in
 		exec $HOME/bin/dwm
 		;;
     *)
-		exec xmonad 
+		exec $HOME/bin/dwm
 		;;
 esac

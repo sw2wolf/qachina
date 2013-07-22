@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if test $# -eq 1; then
+    echo "$1 ;;" | ocaml -noprompt
+	exit 0
+fi
+
+expr=`zenity --width 350 --entry --text "Please input a CL expression" \
+stopLoss div618 winG his win-ssq hit-ssq`
+
+if [ $? -eq 0 ]
+then
+    res=$(echo "$expr ;;" | ocaml -noprompt)
+    zenity --info --text="$res"
+fi
