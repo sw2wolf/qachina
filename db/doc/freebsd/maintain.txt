@@ -1,21 +1,24 @@
-
------------------------------------------------------------------------------
+------
+telnet irc.freenode.net 6667
+Trying 218.100.43.174...
+Trying 86.65.39.15...
+------
 #!/bin/bash
 xrandr --auto --output HDMI1 --mode 1920x1200 --right-of VGA1 --primary
 xrandr --auto --output VGA1 --mode 1600x1200 --left-of HDMI1 --pos 3520x0
------------------------------------------------------------------------------
+-----
 xterm-256color  [06:20]
 xterm-color
------------------------------------------------------------------------------
+-----
 On Linux, it’s quite easy to set up virtual network interface:
 for i in `seq 200 230`; do sudo ifconfig eth0:$i 192.168.1.$i up ; done
------------------------------------------------------------------------------
+-----
 pwd_mkdb /etc/master.passwd fixed password DB.
------------------------------------------------------------------------------
+-----
 gpart destroy -F /dev/da0
------------------------------------------------------------------------------
+-----
 portmaster --force-config <pkg name>
------------------------------------------------------------------------------
+-----
 `nextboot -o '-v' -k kernel` to enable verbose booting during the next boot. 
 
 svn co svn://svn.freebsd.org/base/releng/9.1/ /usr/src/
@@ -24,7 +27,7 @@ xwininfo -root | grep geometry =>  -geometry 1440x900+0+0
 
 objdump -sj .data /boot/kernel/kernel | tail -n 22
 
------------------------------------------------------------------------------
+-----
 sysctl -n kern.osrelease kern.ostype
 
 sysctl dev.cpu.0.cx_supported
@@ -33,18 +36,18 @@ dev.cpu.0.cx_supported: C1/0
 sysctl dev.cpu.0.freq
 dev.cpu.0.freq: 2100
 
------------------------------------------------------------------------------
+-----
 grep powerd /etc/rc.conf
 powerd_enable="YES"
 powerd_flags="-a maximum -b adaptive -i 50 -r 90 -p 500"
 
------------------------------------------------------------------------------
+-----
 mount -t cd9660 /dev/`mdconfig -f cdimage.iso` /mnt
 tunefs -n enable -j enable /dev/adXsYa
 
 export TERM=vt220 in console
 
------------------------------------------------------------------------------
+-----
 
 # pkgdb -fF
 

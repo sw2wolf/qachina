@@ -92,3 +92,221 @@ val s2 : IntSet.t = <abstr>
 # IntSet.elements (IntSet.remove 3 s1);; (* Create a new set by deleting *)
 - : IntSet.elt list = [1; 2; 4]
 (**)
+(* default values *)
+let somebool = ref false
+let somestr = ref ""
+let someint = ref 0
+ 
+let usage = "usage: " ^ Sys.argv.(0) ^ " [-b] [-s string] [-d int]"
+ 
+let speclist = [
+    ("-b", Arg.Unit   (fun () -> somebool := true), ": set somebool to true");
+    ("-s", Arg.String (fun s -> somestr := s),      ": what follows -s sets some string");
+    ("-d", Arg.Int    (fun d -> someint := d),      ": some int parameter");
+  ]
+ 
+let () =
+  (* Read the arguments *)
+  Arg.parse
+    speclist
+    (fun x -> raise (Arg.Bad ("Bad argument : " ^ x)))
+    usage;
+ 
+  Printf.printf " %b %d '%s'\n" !somebool !someint !somestr;
+(**)
+(*appop.ml*)
+open Camlp4.PreCast.Syntax
+EXTEND Gram
+    expr: BEFORE "apply"
+        [ "applOp" RIGHTA [ f = expr; "$"; x = expr -> <:expr<$f$ $x$>> ]];
+END
+
+(* The above code extends the default OCaml grammar Gram by adding a new rule under the expr entry. This rule extends the expr (expression) entry by inserting the rule at the supplied precedence level – before application; *)
+(* is named applOp (an arbitrarily chosen name); *)
+(* is right-associative (RIGHTA); *)
+(* rewrites f $ x as f x for all expressions (exprs) f, x. *)
+
+(* To make use of this extension it must first be compiled – here with the help of ocamlfind, *)
+(* $ ocamlfind ocamlc -linkpkg -syntax camlp4o \ *)
+(*     -package camlp4.extend -package camlp4.quotations -c appop.ml *)
+
+(* and passed to the -pp switch of ocamlc during batch compilation of dollar.ml, *)
+(* $ ocamlc -pp "camlp4o ./appop.cmo" dollar.ml -o dollar *)
+(* $ ./dollar *)
+
+(* To see what’s going on under the hood, we can pre-process dollar.ml and output the (source) result to stdout, *)
+(* $ camlp4o ./appop.cmo dollar.ml *)
+
+let sum = List.fold_left ( + ) 0
+let res xs = string_of_int (succ (sum xs))
+let () = print_endline (res [ 1; 2; 3 ])
+
+(* Finally, the extension can also be used interactively from the toplevel, *)
+# #use "topfind";;
+# #camlp4o;;
+/opt/godi/lib/ocaml/std-lib/dynlink.cma: loaded
+/opt/godi/lib/ocaml/std-lib/camlp4: added to search path
+/opt/godi/lib/ocaml/std-lib/camlp4/camlp4o.cma: loaded
+    Camlp4 Parsing version 3.12.1
+# #load "appop.cmo";;
+# let sum = List.fold_left (+) 0;;
+val sum : int list -> int = <fun>
+# string_of_int $ succ $ sum [1; 2; 3];;
+- : string = "7"
+(**)
+* Simple OCaml Web Server *) 
+
+open Unix 
+
+(* Port to listen on *) 
+let port = 9090 
+
+let listen_sock = socket PF_INET SOCK_STREAM 0 
+
+(* Sends the gives string to the given socket *) 
+(* Unix.file_descr -> string -> unit *) 
+let send_string sock str = 
+  let len = String.length str in 
+  let _ = send sock str 0 len [] in 
+  ()
+
+(* Main loop *) 
+let rec do_listen () = 
+  let (client_sock, _) = accept listen_sock in 
+  send_string client_sock "HTTP/1.1 200/OK\nContent-type: text/html\n\n"; 
+  send_string client_sock "<h1>Hello World</h1>"; 
+  close client_sock; 
+  do_listen () 
+
+(* Listen on port *) 
+let _ = 
+  bind listen_sock (ADDR_INET (inet_addr_of_string "0.0.0.0", port)); 
+  listen listen_sock 8; 
+  do_listen ()
+(**)
+type expr =
+  | EAdd of expr * expr
+  | EApply of expr * expr
+  | EEqual of expr * expr
+  | EIf of expr * expr * expr
+  | EInt of int
+  | ELetRec of string * string * expr * expr
+  | EMul of expr * expr
+  | EVar of string
+
+type value =
+  | VInt of int
+  | VBool of bool
+  | VClosure of string * (string * value) list * expr;;
+
+(* We use the Genlex module to create a lexer: *)
+#load "camlp4o.cma";;
+        Camlp4 Parsing version 3.09.2
+
+open Genlex;;
+let keywords =
+   ["("; ")"; "+"; "-"; "=";
+    "if"; "then"; "else";
+    "let"; "rec"; "in"];;
+
+(* val lex : char Stream.t -> Genlex.token Stream.t = <fun> *)
+let lex stream =
+   let rec aux = parser
+      | [< 'Int n when n<0; t=aux >] -> [< 'Kwd "-"; 'Int(-n); t >]
+      | [< 'h; t=aux >] -> [< 'h; t >]
+      | [< >] -> [< >] in
+    aux(make_lexer keywords stream);;
+
+(* Note that we use a function to map negative integer tokens back into a minus sign followed by a positive integer. *)
+
+(* Parser *)
+
+(* Expressions are parsed using four mutually recursive functions for each of the four precedences: *)
+let rec parse_atom = parser
+  | [< 'Int n >] -> EInt n
+  | [< 'Ident v >] -> EVar v
+  | [< 'Kwd "("; e=parse_expr; 'Kwd ")" >] -> e
+
+and parse_apply = parser
+  | [< e1=parse_atom; stream >] ->
+      (parser
+         | [< e2=parse_atom >] -> EApply(e1, e2)
+         | [< e2=parse_apply >] -> begin match e2 with
+             | EApply(e2, e3) -> EApply(EApply(e1, e2), e3)
+             | e2 -> EApply(e1, e2)
+             end
+         | [< >] -> e1) stream
+
+and parse_arith = parser
+  | [< e1=parse_apply; stream >] ->
+      (parser
+         | [< 'Kwd "+"; e2=parse_arith >] -> EAdd(e1, e2)
+         | [< 'Kwd "-"; e2=parse_arith >] -> EAdd(e1, EMul(EInt(-1), e2))
+         | [< >] -> e1) stream
+
+and parse_expr : 'a Stream.t -> expr = parser
+  | [< e1=parse_arith; stream >] ->
+      (parser
+         | [< 'Kwd "="; e2=parse_expr >] -> EEqual(e1, e2)
+         | [< >] -> e1) stream
+  | [< 'Kwd "if"; p=parse_expr; 'Kwd "then"; t=parse_expr;
+         'Kwd "else"; f=parse_expr >] ->
+        EIf(p, t, f)
+  | [< 'Kwd "let"; 'Kwd "rec"; 'Ident f; 'Ident x; 'Kwd "="; body=parse_expr;
+         'Kwd "in"; rest=parse_expr >] ->
+        ELetRec(f, x, body, rest);;
+(* val parse_atom : Genlex.token Stream.t -> expr = <fun> *)
+(* val parse_apply : Genlex.token Stream.t -> expr = <fun> *)
+(* val parse_arith : Genlex.token Stream.t -> expr = <fun> *)
+(* val parse_expr : Genlex.token Stream.t -> expr = <fun> *)
+
+(* Parsed expressions can then be given to the evaluator. *)
+(* Evaluator *)
+
+(* The evaluator translates expressions into values in the context of variable bindings (a string -> value association list called vars in this case): *)
+let int = function VInt n -> n | _ -> invalid_arg "int";;
+let bool = function VBool b -> b | _ -> invalid_arg "bool";;
+let rec eval vars = function
+  | EApply(func, arg) -> begin match eval vars func, eval vars arg with
+  | VClosure(var, vars, body), arg -> eval ((var, arg) :: vars) body
+  | _ -> invalid_arg "Attempt to apply a non-function value"
+    end
+  | EAdd(e1, e2) -> VInt (int(eval vars e1) + int(eval vars e2))
+  | EMul(e1, e2) -> VInt (int(eval vars e1) * int(eval vars e2))
+  | EEqual(e1, e2) -> VBool (eval vars e1 = eval vars e2)
+  | EIf(p, t, f) -> eval vars (if bool (eval vars p) then t else f)
+  | EInt i -> VInt i
+  | ELetRec(var, arg, body, rest) ->
+        let rec vars = (var, VClosure(arg, vars, body)) :: vars in
+        eval vars rest
+  | EVar s -> List.assoc s vars;;
+(* val eval : (string * value) list -> expr -> value = <fun> *)
+
+(* The treatment of closures in the target languages is interesting. Function applications cause the body of the applied closure to be evaluated in the context of the environment which it captured and its argument. Function definitions bind a variable to a new closure that captures the current environment (the current variable bindings). *)
+(* Example *)
+
+(* We can see the interpreter in action by feeding it an example program. The following program computes the 30th Fibonacci number using only the constructs provided by our language: *)
+let program = "let rec fib n = if n=0 then 0 else if n=1 then 1 else fib(n - 1) + fib(n - 2) in fib 30";;
+
+(* Applying the lexer and parser gives the program represented as an abstract syntax tree: *)
+let ast = parse_expr(lex(Stream.of_string program));;
+val ast : expr =
+  ELetRec ("fib", "n",
+   EIf (EEqual (EVar "n", EInt 0), EInt 0,
+    EIf (EEqual (EVar "n", EInt 1), EInt 1,
+     EAdd (EApply (EVar "fib", EAdd (EVar "n", EMul (EInt (-1), EInt 1))),
+      EApply (EVar "fib", EAdd (EVar "n", EMul (EInt (-1), EInt 2)))))),
+   EApply (EVar "fib", EInt 30))
+
+(* Evaluating the abstract syntax tree gives the result of the program as a value of the type value: *)
+# eval [] ast;;
+- : value = VInt 832040
+
+(* The result can be verified by evaluating the same program in the OCaml top-level: *)
+# let rec fib n =
+    if n=0 then 0 else
+      if n=1 then 1 else
+        fib(n - 1) + fib(n - 2) in
+  fib 30;;
+- : int = 832040
+(**)

@@ -1,5 +1,15 @@
 
 ;;;
+(defn get-list [start]
+    (loop [n start]
+       (let [url (str "http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing=" n)
+              data (first (line-seq (clojure.java.io/reader url)))
+              target (re-seq #"\d+" data)]
+            (println url data target)
+            (recur (first target)))))
+;一组java对象的seq
+(repeatedly 100 #(SomeClass. ))
+;;;
 ;Multiple Each Item in a List by 2
 (map #(* % 2) (range 1 11))
 
