@@ -1,9 +1,10 @@
 
-%%%%%%%%%%%%%%%%%%
+%%%
+[register(list_to_atom("pid" ++ integer_to_list(X)), spawn(fun() -> myFun() end)) || X <- lists:seq(1,10)].
 code:which('user_default').
-%%%%%%%%%%%%%%%%%%
+%%%
 erl -pa $MD/money -noshell -eval 'user_default:div618(1,2)' -s init stop
-%%%%%%%%%%%%%%%%%%
+%%%
 -record(client, {
 	state = wait :: wait | request | response | response_body,
 	opts = [] :: [any()],
@@ -15,15 +16,15 @@ erl -pa $MD/money -noshell -eval 'user_default:div618(1,2)' -s init stop
 	version = 'HTTP/1.1' :: cowboy:http_version(),
 	response_body = undefined :: undefined | non_neg_integer()
 }).
-%%%%%%%%%%%%%%%%%%
+%%%
 -type opts() :: any().
 -type state() :: any().
 -type terminate_reason() :: {normal, shutdown} | {normal, timeout} | {error, atom()}.
-%%%%%%%%%%%%%%%%%%
+%%%
 #!/bin/sh
 erl +K true +P 10240000 -sname testserver -pa ebin -pa deps/*/ebin -s htmlfilesimple\
 -eval "io:format(\"Server start with port 8000 Success!~n\")."
-%%%%%%%%%%%%%%%%%%
+%%%
 -module(snippet).
 -export([max/1]).
  
@@ -47,7 +48,7 @@ wait() ->
  
 for(N, N, F) -> [F()];
 for(I, N, F) -> [F()|for(I+1, N, F)].
-%%%%%%%%%%%%%%%%%%
+%%%
 源代码安装
 #wget https://elearning.erlang-solutions.com/binaries/sources/otp_src_R16B.tar.gz
 #tar xvf otp_src_R16B.tar.gz
@@ -59,7 +60,7 @@ make install
 添加到环境变量中(/etc/profile)
 export ERL_HOME=/usr/local/erlang export PATH=$ERL_HOME/bin:$PATH
 
-%%%%%%%%%%%%%%%%%%
+%%%
 写好的erlang程序要放在服务器上跑，总不能一直终端打开erl的吧？ 应该是让erlang程序运行得像deamon那样，需要时候再连接上去操作。
 
 erl启动使用  -detached 参数启动
@@ -77,7 +78,7 @@ erl启动使用  -detached 参数启动
    ctrl +g 进入JCL模式
 
    输入  q  回车
-%%%%%%%%%%%%%%%%%%
+%%%
 
 dbg:tracer(), dbg:p(all, [call, timestamp]).
 dbg:tpl(yaws_server, aloop, []).
@@ -86,7 +87,7 @@ dbg:tpl(yaws_server, aloop, []).
 
 To stop the tracing: dbg:stop_clear().
 
-%%%%%%%%%%%%%%%%%%
+%%%
 
 Root = filename:absname_join(filename:dirname(?FILE), ".."),
 application:set_env(mnesia, dir, filename:join(Root, "db")).

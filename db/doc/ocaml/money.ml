@@ -202,13 +202,13 @@ let win_ssq count noRed noBlue =
     assert (count >= 1) ;
     Random.self_init ();
     for i = 1 to count do
-	    if i = count - 1
-		then
-		  oneRed := pick_num yes_red 6
-		else
-		  oneRed := pick_num gr 5 @ pick_num nogr 1;
+	  if i = count
+	  then
+		oneRed := pick_num yes_red 6
+	  else
+		oneRed := pick_num gr 5 @ pick_num nogr 1;
 
-        result := !result ^ lst2str (sortLst 
+      result := !result ^ lst2str (sortLst 
            !oneRed @ [List.nth ok_blue (i-1)]) ^ "\n";
     done;
     print_endline !result;

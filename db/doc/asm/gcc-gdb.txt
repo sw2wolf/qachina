@@ -183,4 +183,8 @@ set logging on
 bt
 set logging off
 -----------------------------------------------------------------------------
-
+$pkg-config --cflags xft
+-D_THREAD_SAFE -I/usr/local/include/freetype2 -I/usr/local/include  
+$pkg-config --libs xft
+-L/usr/local/lib -lXft  
+-----------------------------------------------------------------------------
