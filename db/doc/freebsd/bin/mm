@@ -3,15 +3,18 @@ if test $# -ne 1; then
 	echo "Usage: `basename $0` cmd" 1>&2
     echo "`basename $0` [S]tart"
 	echo "`basename $0` [V]olume"
+	echo "`basename $0` [L]ist"
 	exit 1
 fi
 
 cmd=$1
 case $cmd in
 	-s|-S)
-		sudo /usr/local/etc/rc.d/musicpd onestart 2>&1 > /dev/null ;;
+		sudo /usr/local/etc/rc.d/musicpd onestart;;
 	-v|-V)
 		mpc volume 100;;
+    -l|-L)
+		mpc ls | nl;;
 	*)
 		echo "invalid command"
 esac

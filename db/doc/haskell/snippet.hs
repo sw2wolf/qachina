@@ -1,3 +1,5 @@
+
+------
 $ghci -i "$HOME/.xmonad/lib" ~/.xmonad/xmonad.hs
 
 $ghc -e 'System.Directory.getAppUserDataDirectory "xmonad"'

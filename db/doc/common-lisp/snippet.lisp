@@ -1,5 +1,9 @@
 
 ;;;;;;
+(ldb (byte 64 0) -1)         ;=> 18446744073709551615
+(mask-field (byte 64 0) -1)  ;=> 18446744073709551615
+(- (expt 2 64) 1)            ;=> 18446744073709551616
+;;;;;;
 (with-output-to-string (*standard-output*)
   #+clisp
   (let ((str (ext:run-shell-command cmd :output :stream :wait nil)))

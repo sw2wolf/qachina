@@ -3,9 +3,6 @@
 exec ocaml "$0" "$@"
 *)
 use "topfind";;
-#require "unix";;
-
-open Unix;;
 
 print_string "----------------------\n";;
 print_string "1:stumpwm-clisp with MPD\n";;
