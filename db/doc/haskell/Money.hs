@@ -136,20 +136,20 @@ winSSQ count noRed noBlue = do
         noBlueLst = map (\x -> read x::Int) $ words noBlue
 
     okBlue <- pickNums ([1..16] \\ noBlueLst) count []
-    result <- pickSSQ count ([1..33] \\ noRedLst) okBlue []
+    gr <- goodRed
+    result <- pickSSQ count gr ([1..33] \\ noRedLst) okBlue []
     forM_ result (\x -> print x)
     writeFile ssqNum $ ints2str result
 
-pickSSQ 0 _ _ acc = return acc
-pickSSQ 1 okRed okBlue acc = do
-    red <- sort <$> pickNums okRed 6 []
+pickSSQ 0 _ _ _ acc = return acc
+pickSSQ 1 _ yesRed okBlue acc = do
+    red <- sort <$> pickNums yesRed 6 []
     return $ (red ++ [okBlue!!0]) : acc
-pickSSQ count okRed okBlue acc = do
-    gr <- goodRed
-    red1 <- pickNums gr 5 []
-    red2 <- pickNums ([1..33] \\ gr) 1 []
+pickSSQ count gRed yesRed okBlue acc = do
+    red1 <- pickNums gRed 5 []
+    red2 <- pickNums ([1..33] \\ gRed) 1 []
 
-    pickSSQ (count-1) okRed okBlue $ 
+    pickSSQ (count-1) gRed yesRed okBlue $ 
         ((sort (red1 ++ red2)) ++ [okBlue!!(count-1)]) : acc
 
 ints2str :: [[Int]] -> String
@@ -215,8 +215,8 @@ hit_desc red blue
 
 his :: IO ()
 his = do
-  runCommand $ "tail " ++ ssqHitNum
-  return ()
+  pid <- runCommand $ "tail " ++ ssqHitNum
+  waitForProcess pid >>= exitWith
 
 ssqNum = "/media/D/qachina/db/doc/money/" ++ "ssqNum.txt"
 ssqHitNum = "/media/D/qachina/db/doc/money/" ++ "ssqHitNum.txt"
