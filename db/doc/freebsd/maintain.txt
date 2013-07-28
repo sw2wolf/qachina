@@ -1,3 +1,18 @@
+
+------
+$sysctl -a|grep -i kern.hz
+kern.hz: 1000
+
+$sysctl kern.securelevel
+kern.securelevel: -1
+
+$sysctl -n kern.osrelease kern.ostype
+
+$sysctl dev.cpu.0.cx_supported
+dev.cpu.0.cx_supported: C1/0
+
+$sysctl dev.cpu.0.freq
+dev.cpu.0.freq: 2100
 ------
 telnet irc.freenode.net 6667
 Trying 218.100.43.174...
@@ -28,15 +43,6 @@ xwininfo -root | grep geometry =>  -geometry 1440x900+0+0
 objdump -sj .data /boot/kernel/kernel | tail -n 22
 
 -----
-sysctl -n kern.osrelease kern.ostype
-
-sysctl dev.cpu.0.cx_supported
-dev.cpu.0.cx_supported: C1/0
-
-sysctl dev.cpu.0.freq
-dev.cpu.0.freq: 2100
-
------
 grep powerd /etc/rc.conf
 powerd_enable="YES"
 powerd_flags="-a maximum -b adaptive -i 50 -r 90 -p 500"
@@ -44,9 +50,6 @@ powerd_flags="-a maximum -b adaptive -i 50 -r 90 -p 500"
 -----
 mount -t cd9660 /dev/`mdconfig -f cdimage.iso` /mnt
 tunefs -n enable -j enable /dev/adXsYa
-
-export TERM=vt220 in console
-
 -----
 
 # pkgdb -fF

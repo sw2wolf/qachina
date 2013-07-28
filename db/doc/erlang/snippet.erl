@@ -1,5 +1,19 @@
 
 %%%
+原始的or和and是不带”短路运算”操作的，而orelse和andalso是带短路运算操作的。
+
+Express1 and Express2
+Express1 andalso Express2
+
+如果Express1 为假，and会继续判断Express2，然后整体判定为假，而andalso”短路”操作，直接判定整个表达式为假，从效率上来说，andalso会高一些
+%%%
+-record(g, {key, value}). 
+ets:new(g, [public, named_table, {keypos, #g.key}]). 
+ets:insert_new(g, #g{user_id, 0}). 
+
+Uid = ets:update_counter(g, user_id). 
+ets:insert_new(users, #user{id=Uid, name="Somebody"}.
+%%%
 [register(list_to_atom("pid" ++ integer_to_list(X)), spawn(fun() -> myFun() end)) || X <- lists:seq(1,10)].
 code:which('user_default').
 %%%
