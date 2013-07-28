@@ -1,3 +1,5 @@
+
+-----------------------------------------------------------------------------
 .use GDB as C's REPL
 
 % gdb ./test
@@ -188,3 +190,11 @@ $pkg-config --cflags xft
 $pkg-config --libs xft
 -L/usr/local/lib -lXft  
 -----------------------------------------------------------------------------
+So write it out to a file instead:
+(gdb) p creat("/tmp/somefile.dat", 0777)
+$26 = 37
+(gdb) p write(37, s, len)
+$27 = 168
+(gdb) p close(37)
+-----------------------------------------------------------------------------
+

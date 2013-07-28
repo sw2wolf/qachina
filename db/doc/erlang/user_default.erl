@@ -140,12 +140,12 @@ pick_ssq_nums(0, _, _, _) -> ok;
 pick_ssq_nums(Count, GRed, NoRed, OkBlue) ->
 	if
 		Count == 1 ->
+			Red6 = lists:sort( pick_num(6,lists:seq(1,33)--NoRed,[]) );
+	    true ->
 			Red6 = lists:sort( lists:append(
 								 pick_num(5,GRed,[]),
-								 pick_num(1,(lists:seq(1,33)--GRed)--NoRed,[])
-								));
-	    true ->
-			Red6 = lists:sort( pick_num(6,lists:seq(1,33)--NoRed,[]) )
+								 pick_num(1,(lists:seq(1,33)--GRed),[])
+								))
 	end,
 
     Result = lists:append(Red6, [lists:nth(Count,OkBlue)]),

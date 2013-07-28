@@ -100,9 +100,9 @@
 (global-set-key (kbd "<f4>") 'jump-run-shell)
 (global-set-key (kbd "<f5>") 'jump-run-mew)
 
-(global-set-key (kbd "<f6>") '(lambda () (interactive) (run-haskell)))
-(global-set-key (kbd "<f7>") 'jump-run-erlang)
-(global-set-key (kbd "<f8>") 'jump-run-lisp)
+(global-set-key (kbd "<f6>") 'jump-run-lisp)
+(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-haskell)))
+(global-set-key (kbd "<f8>") 'jump-run-erlang)
 ;(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
 
 (global-set-key [(f9)] 'list-bookmarks)
