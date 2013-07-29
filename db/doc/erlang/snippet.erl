@@ -1,5 +1,8 @@
 
 %%%
+-type http_version() :: 'HTTP/1.1' | 'HTTP/1.0'.
+-export_type([http_version/0]).
+%%%
 原始的or和and是不带”短路运算”操作的，而orelse和andalso是带短路运算操作的。
 
 Express1 and Express2

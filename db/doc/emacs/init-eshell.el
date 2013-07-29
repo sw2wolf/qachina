@@ -8,9 +8,9 @@
   (let ((inhibit-read-only t))
     (erase-buffer)))
 
-(defun eshell/csh ()
-  (interactive)
-  (ansi-term "csh"))
+;; (defun eshell/csh ()
+;;   (interactive)
+;;   (ansi-term "csh"))
 
 ;; (setq eshell-prompt-function
 ;;       (lambda ()
@@ -38,18 +38,16 @@
   (define-key eshell-mode-map [(control u)] 'eshell-kill-input) ;删除已输入命令
 
   (define-key eshell-mode-map [(control l)] 'eshell/clear)
-  (define-key eshell-mode-map [(control s)] 'eshell/csh)
+  ;(define-key eshell-mode-map [(control s)] 'eshell/csh)
 ))
 
-;; (add-hook 'eshell-mode-hook (lambda()
-;;     (def-key-s eshell-mode-map 
-;;         "<up>"     'eshell-previous-matching-input-from-input
-;;         "<down>"   'eshell-next-matching-input-from-input
-;;         "<tab>"    'user-tab
-;;         "<return>" 'user-ret
-;;         "SPC"      'user-spc)
-;; ))
+(defalias 'img (lambda(img)
+				 (propertize "Image" (quote display) 
+							 (create-image (expand-file-name img)))))
 
+;
+; misc.
+;
 ;alias ff 'find-file $1'
 ;alias d 'dired $1'
 
@@ -68,3 +66,5 @@
 ;; echo hello > /dev/kill
 
 ;; setq foobar ${date}
+
+;; C-c M-b will insert the printed name of a buffer

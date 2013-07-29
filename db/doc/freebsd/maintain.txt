@@ -13,6 +13,11 @@ dev.cpu.0.cx_supported: C1/0
 
 $sysctl dev.cpu.0.freq
 dev.cpu.0.freq: 2100
+
+#output of my kern.conf out of the running kernel:
+sysctl kern.conftxt
+
+strings -n3 /boot/kernel/kernel
 ------
 telnet irc.freenode.net 6667
 Trying 218.100.43.174...
