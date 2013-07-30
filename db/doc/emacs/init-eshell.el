@@ -8,15 +8,18 @@
   (let ((inhibit-read-only t))
     (erase-buffer)))
 
-;; (defun eshell/csh ()
-;;   (interactive)
-;;   (ansi-term "csh"))
+(defun eshell/clisp ()
+  (interactive)
+  (insert "clisp.sh \"()\"")
+  (backward-char 2) ;(goto-char (- (point) 2))
+)
 
 ;; (setq eshell-prompt-function
 ;;       (lambda ()
 ;; 	(concat "" (user-login-name) "@" (system-name) " "
 ;; 		(eshell/pwd) "% ")))
 
+(setq eshell-mode-hook nil)
 (add-hook 'eshell-mode-hook (lambda () 
     ;(outline-minor-mode 1)
     ;; (color-theme-my-eshell)
@@ -38,7 +41,7 @@
   (define-key eshell-mode-map [(control u)] 'eshell-kill-input) ;删除已输入命令
 
   (define-key eshell-mode-map [(control l)] 'eshell/clear)
-  ;(define-key eshell-mode-map [(control s)] 'eshell/csh)
+  (define-key eshell-mode-map [(control s)] 'eshell/clisp)
 ))
 
 (defalias 'img (lambda(img)

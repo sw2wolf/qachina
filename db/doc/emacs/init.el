@@ -62,6 +62,10 @@
 
 (setq kill-buffer-query-functions (remove 'process-kill-buffer-query-function kill-buffer-query-functions))
 
+(defadvice ibuffer-do-print (before print-buffer-query activate)
+   (unless (y-or-n-p "Print buffer? ")
+     (error "Cancelled")))
+
 ;(require 'dired+)
 ;(put 'dired-find-alternate-file 'disabled nil)  ;enable `a' command
 

@@ -831,6 +831,19 @@ DOUBLE-FLOAT
   "A 2-element array consisting of the character codes for a CRLF sequence.")
 
 ;;;;;;
+(defstruct (distributed-identifier
+            (:conc-name did/)
+            (:constructor %make-distributed-identifier (domain repository class numeric-id))
+            (:copier nil)
+            (:predicate distributed-identifier?))
+  "DIDs are interned, so you can use EQ to test for equality.  However, you should
+   never modify the slots in a DID."
+
+  (domain ""     :read-only t :type string)
+  (repository "" :read-only t :type string)
+  (class nil     :read-only t :type (or null keyword))
+  (numeric-id 0  :read-only t :type non-negative-integer))
+
 (defstruct (mystruct (:type list)) f1 f2 f3)
 
 (defstruct node 
