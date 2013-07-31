@@ -2,7 +2,6 @@
 ;C-x RET C-\ , then choose an input method.
 ;
 (add-to-list 'load-path "~/.emacs.d/")
-;(add-to-list 'load-path "~/.emacs.d/mu4e")
 
 ;disable logging to *Messages*
 ;(fset 'message 'ignore)
@@ -41,7 +40,7 @@
 ;(load "init-emms")
 ;(load "init-radio")
 
-(setq shell-file-name "/bin/csh")
+(setq shell-file-name "/usr/local/bin/bash")
 
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)

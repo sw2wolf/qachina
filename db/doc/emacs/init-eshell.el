@@ -10,7 +10,7 @@
 
 (defun eshell/clisp ()
   (interactive)
-  (insert "clisp.sh \"()\"")
+  (insert "clisp.sh '()'")
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 

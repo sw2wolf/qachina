@@ -6,7 +6,7 @@ fi
 
 #expr=`echo ""| dmenu -p Eval: -b -nb '#000000' -nf '#FFFFFF' -fn '-*-simsun-medium-r-normal-*-16-*-*-*-*-*-iso10646-1'`
 expr=`zenity --width 350 --entry --text "Please input a CL expression" \
-\(m:stopLoss\) \(m:div618\) \(m:winG\) \(m:his\) \(m:win-ssq\) \(m:hit-ssq\)`
+\(m:div618\) \(m:stopLoss\) \(m:winG\) \(m:his\) \(m:win-ssq\) \(m:hit-ssq\)`
 
 if [ $? -eq 0 ]
 then

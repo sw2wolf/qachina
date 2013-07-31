@@ -34,3 +34,18 @@ esac
 #mpc play
 
 #mpc stats
+
+# mpc clear
+# mpc ls
+# mpc listall FolderName1 FolderName2 .. | mpc add
+# mpc save playlist
+# mpc load playlist
+# 清空当前播放列表
+# 列出文件夹
+# 显示名字为 FolderName1 FolderName2 文件夹下的所有音乐并添加到当前播放列表
+# 保存当前播放列表为 playlist
+# 读取播放列表 playlist
+
+# 也可以通过类似下面的命令来创建播放列表，萝卜青菜
+# $ cd ~/Music
+# $ find * -iname "*.mp3" | sort | grep Keyword > ~/.mpd/playlist/playlist.m3u
