@@ -1,4 +1,9 @@
 #!/bin/sh
+if test $# -eq 1; then
+	~/ccl/fx86cl -n -Q -l $MD/money/money -e "(progn $1 (ccl:quit))"
+	exit 0
+fi
+
 expr=`zenity --width 350 --entry --text "Please input a CL expression" \
 \(m:div618\) \(m:stopLoss\) \(m:winG\) \(m:his\) \(m:win-ssq\) \(m:hit-ssq\)`
 

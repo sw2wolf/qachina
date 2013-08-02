@@ -8,9 +8,9 @@
   (let ((inhibit-read-only t))
     (erase-buffer)))
 
-(defun eshell/clisp ()
+(defun eshell/ccl ()
   (interactive)
-  (insert "clisp.sh '()'")
+  (insert "ccl.sh '()'")
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 
@@ -41,7 +41,7 @@
   (define-key eshell-mode-map [(control u)] 'eshell-kill-input) ;删除已输入命令
 
   (define-key eshell-mode-map [(control l)] 'eshell/clear)
-  (define-key eshell-mode-map [(control s)] 'eshell/clisp)
+  (define-key eshell-mode-map [(control s)] 'eshell/ccl)
 ))
 
 (defalias 'img (lambda(img)

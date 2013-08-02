@@ -1,5 +1,28 @@
 
 ;;;;;;
+#!/bin/sh
+#|
+exec ccl -e '(set-dispatch-macro-character #\# #\! 
+                (lambda (stream subchar arg)
+                  (declare (ignore subchar arg))
+                  (read-line stream)
+                  (values)))' \
+         -Q -n -l "$0" -- "$@"
+|#
+(setf *load-verbose* nil *load-print* nil)
+(load "~/quicklisp/setup.lisp" :verbose nil)
+(let ((*standard-output* (make-broadcast-stream))
+      (*trace-output* *standard-output*))
+  (ql:quickload :alexandria))
+(prin1 (alexandria:iota 20))
+(terpri)
+ 
+(defparameter *arguments* (subseq ccl:*command-line-argument-list* 
+                                  (1+ (or (position "--" ccl:*command-line-argument-list* :test 'string=) -1))))
+(prin1 *arguments*)
+(terpri)
+(ccl:quit 0)
+;;;;;;
 (ldb (byte 64 0) -1)         ;=> 18446744073709551615
 (mask-field (byte 64 0) -1)  ;=> 18446744073709551615
 (- (expt 2 64) 1)            ;=> 18446744073709551616

@@ -1,5 +1,7 @@
 
 ------
+setxkbmap -layout 'us,ru' -option gpr:alt_shift_toggle, grp_led:caps
+------
 $sysctl -a|grep -i kern.hz
 kern.hz: 1000
 
