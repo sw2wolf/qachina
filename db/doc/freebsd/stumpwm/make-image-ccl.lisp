@@ -1,14 +1,4 @@
-#!/bin/sh
-#|
-exec ~/ccl/fx86cl \
-	-e '(set-dispatch-macro-character #\# #\! 
-            (lambda (stream subchar arg)
-                (declare (ignore subchar arg))
-                (read-line stream)
-                (values)))' \
-    -Q -n -l "$0" -- "$@"
-|#
-
+":"; exec ~/ccl/fx86cl -Q -b -n -l $0
 (setf *load-verbose* nil *load-print* nil)
 (load "~/quicklisp/asdf")
 

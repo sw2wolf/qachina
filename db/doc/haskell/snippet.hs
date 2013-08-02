@@ -1,5 +1,19 @@
 
 ------
+[0..] >>= \n -> n^2 <$ guard (even n)
+[0,4,16 ...]
+
+[minBound, maxBound] :: String
+"\NUL\1114111"
+
+let fibs = 0:1:zipWith (+) fibs (tail fibs) in fibs !! 70000
+
+(do x <- id; y <- reverse; z <- map toUpper; return (x,y,z)) "hello"
+("hello","olleh","HELLO")
+
+sequence [id, (+2), (*2), (^2), (2^)] 5
+[5,7,10,25,32]
+------
 $ghci -i "$HOME/.xmonad/lib" ~/.xmonad/xmonad.hs
 
 $ghc -e 'System.Directory.getAppUserDataDirectory "xmonad"'
@@ -19,12 +33,6 @@ foreign import ccall "sin" c_sin :: CDouble -> CDouble
 flip runContT return $ callCC $
                   \exit -> forever $ do x < - getLine; when (x == "end") (exit ())
 ---------
-[minBound, maxBound] :: String
-"\NUL\1114111"
-
----------
-let fibs = 0:1:zipWith (+) fibs (tail fibs) in fibs !! 70000
----------
 import System
 import System.IO
 import System.Process (runProcess, waitForProcess)
@@ -37,6 +45,7 @@ import qualified Data.ByteString as B
 
 waitForProcess =<< runProcess "sdcv" ["-n", "apple"] (Just dir) Nothing Nothing Nothing (Just h)
 hSetBuffering stdout NoBuffering
+
 my_system str = do
   (_,_,_,p) <- createProcess c
   waitForProcess p
@@ -82,15 +91,6 @@ myManageHook = manageDocks <+> composeAll
     ]
 
 ---------
-
-(do x <- id; y <- reverse; z <- map toUpper; return (x,y,z)) "hello"
-("hello","olleh","HELLO")
-
-sequence [id, (+2), (*2), (^2), (2^)] 5
-<lambdabot>   [5,7,10,25,32]
-
----------
-
 import Data.Array.Vector
 main = print (sumU (enumFromToU 1 (200000000 :: Int)))
 
@@ -160,19 +160,10 @@ spawnPipe x = io $ do
     return h
 
 ---------
-
 import Data.Vector.Unboxed as U
  
 sumSqrV :: U.Vector Int -> Int
 sumSqrV = U.sum . U.map (^2) . U.filter odd
-
----------
-
-fib :: Int -> Int
-fib n = fib' !! n where
-    fib' :: [Int]
-    fib' = 0 : 1 : zipWith (+) fib' (tail fib')
-
 ---------
 
 import XMonad
