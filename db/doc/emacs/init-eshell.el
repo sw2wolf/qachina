@@ -8,10 +8,11 @@
   (let ((inhibit-read-only t))
     (erase-buffer)))
 
-(defun eshell/ccl ()
+(defun eshell/eval ()
   (interactive)
-  (insert "ccl.sh '()'")
-  (backward-char 2) ;(goto-char (- (point) 2))
+  (insert "ml ';;'")
+  ;(insert "ccl.sh '()'")
+  (backward-char 3) ;(goto-char (- (point) 2))
 )
 
 ;; (setq eshell-prompt-function
@@ -41,7 +42,7 @@
   (define-key eshell-mode-map [(control u)] 'eshell-kill-input) ;删除已输入命令
 
   (define-key eshell-mode-map [(control l)] 'eshell/clear)
-  (define-key eshell-mode-map [(control s)] 'eshell/ccl)
+  (define-key eshell-mode-map [(control s)] 'eshell/eval)
 ))
 
 (defalias 'img (lambda(img)

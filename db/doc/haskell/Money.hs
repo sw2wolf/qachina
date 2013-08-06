@@ -38,7 +38,7 @@ catchAny = Exception.catch
 qachina :: IO ()
 qachina = do
     -- putStrLn "Running qachina..."
-    -- runCommand "mighty mighty.conf mighty.route"
+    -- runCommand "mighty mighty.conf mighty.route" >>= waitForProcess
     return ()
     --pid <- runCommand "mighty mighty.conf mighty.route"
     --waitForProcess pid >>= exitWith
@@ -215,8 +215,8 @@ hit_desc red blue
 
 his :: IO ()
 his = do
-  pid <- runCommand $ "tail " ++ ssqHitNum
-  waitForProcess pid >>= exitWith
+  runCommand $ "tail " ++ ssqHitNum >>= waitForProcess
+  --waitForProcess pid >>= exitWith
 
 ssqNum = "/media/D/qachina/db/doc/money/" ++ "ssqNum.txt"
 ssqHitNum = "/media/D/qachina/db/doc/money/" ++ "ssqHitNum.txt"

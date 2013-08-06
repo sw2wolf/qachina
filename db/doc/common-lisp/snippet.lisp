@@ -1,5 +1,13 @@
 
 ;;;;;;
+;Turns a string into a stream so it can be read into a list
+(defun string-to-list (str)
+  (if (not (streamp str))
+	  (string-to-list (make-string-input-stream str))
+      (if (listen str)
+		  (cons (read str) (string-to-list str))
+          nil)))
+;;;;;;
 #!/bin/sh
 #|
 exec ccl -e '(set-dispatch-macro-character #\# #\! 
