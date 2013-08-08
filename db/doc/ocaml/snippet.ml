@@ -1,3 +1,19 @@
+
+(**)
+open Core.Std
+open Core_extended.Std
+open Async.Std
+ 
+let exec ~prog ~args ?working_dir () = 
+  Process.run ~prog ~args ?working_dir () 
+  >>= function 
+  | Error _ -> return None
+  | Ok res -> 
+    match String.strip res with 
+    | "" -> return (Some [])
+    | src -> return (Some (String.split ~on:'\n' src))
+ 
+(**)
 #load "unix.cma";; (* for sleep and gettimeofday; not needed for the signals stuff per se *)
  
 let start = Unix.gettimeofday ();;
@@ -43,6 +59,7 @@ let () =
       Printf.printf "Sum of recipr. factors of %d = %d exactly %s\n%!"
         candidate Num.(to_int !sum) (if Num.(!sum = 1) then "perfect!" else "")
   done
+
 (**)
 # #load "str.cma";;
 # let replace str occ by =
@@ -51,6 +68,7 @@ let () =
 val replace : string -> string -> string -> string = <fun>
 # replace "The white dog let out a single, loud bark." "white" "black" ;;
 - : string = "The black dog let out a single, loud bark."
+
 (**)
 # module IntSet = Set.Make(struct type t = int let compare = compare end);; (* Create a module for our type of set *)
 # IntSet.empty;; (* Empty set. A set is an abstract type that will not display in the interpreter *)
@@ -91,6 +109,7 @@ val s2 : IntSet.t = <abstr>
 - : IntSet.elt list = [1; 2; 3; 4; 99]
 # IntSet.elements (IntSet.remove 3 s1);; (* Create a new set by deleting *)
 - : IntSet.elt list = [1; 2; 4]
+
 (**)
 (* default values *)
 let somebool = ref false
@@ -113,6 +132,7 @@ let () =
     usage;
  
   Printf.printf " %b %d '%s'\n" !somebool !someint !somestr;
+
 (**)
 (*appop.ml*)
 open Camlp4.PreCast.Syntax
@@ -153,6 +173,7 @@ let () = print_endline (res [ 1; 2; 3 ])
 val sum : int list -> int = <fun>
 # string_of_int $ succ $ sum [1; 2; 3];;
 - : string = "7"
+
 (**)
 * Simple OCaml Web Server *) 
 
@@ -183,6 +204,7 @@ let _ =
   bind listen_sock (ADDR_INET (inet_addr_of_string "0.0.0.0", port)); 
   listen listen_sock 8; 
   do_listen ()
+
 (**)
 type expr =
   | EAdd of expr * expr
@@ -309,4 +331,3 @@ val ast : expr =
         fib(n - 1) + fib(n - 2) in
   fib 30;;
 - : int = 832040
-(**)

@@ -1,5 +1,8 @@
 
 ------
+portmaster --check-depends
+portmaster --force-config <pkg name>
+------
 setxkbmap -layout 'us,ru' -option gpr:alt_shift_toggle, grp_led:caps
 ------
 $sysctl -a|grep -i kern.hz
@@ -38,8 +41,6 @@ for i in `seq 200 230`; do sudo ifconfig eth0:$i 192.168.1.$i up ; done
 pwd_mkdb /etc/master.passwd fixed password DB.
 -----
 gpart destroy -F /dev/da0
------
-portmaster --force-config <pkg name>
 -----
 `nextboot -o '-v' -k kernel` to enable verbose booting during the next boot. 
 

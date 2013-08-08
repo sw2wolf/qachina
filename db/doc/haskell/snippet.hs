@@ -1,5 +1,9 @@
 
 ------
+.Data.Map.Map is a balanced binary tree internally, so its time complexity for lookups is O(log n). I believe it's a "persistent" data structure, meaning it's implemented such that mutative operations yield a new copy with only the relevant parts of the structure updated.
+.Data.HashMap.Map is a Data.IntMap.IntMap internally, which in turn is implemented as Patricia tree; its time complexity for lookups is O(min(n, W)) where W is the number of bits in an integer. It is also "persistent."
+.Data.HashTable.HashTable is an actual hash table, with time complexity O(1) for lookups. However, it is a mutable data structure -- operations are done in-place -- so you're stuck in the IO monad if you want to use it.
+------
 [0..] >>= \n -> n^2 <$ guard (even n)
 [0,4,16 ...]
 

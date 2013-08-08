@@ -1,0 +1,8 @@
+1. HD light twinkle
+.HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\CdRom\Autorun from 1 to 0.
+
+.Check that the windows indexing function is turned off.
+
+.msconfig 
+
+

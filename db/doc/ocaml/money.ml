@@ -191,10 +191,11 @@ let pick_num from count =
 ;;
 
 let win_ssq count noRed noBlue =
-    let gr = good_red() in
-	let nogr = set_diff (1--33) gr in
     let noRedLst = str2lst noRed in
     let noBlueLst = str2lst noBlue in
+    let gr = good_red() in
+	let yes_gr = set_diff gr noRedLst in
+	let yes_nogr = set_diff (set_diff (1--33) gr) noRedLst in
     let yes_red = set_diff (1--33) noRedLst in
     let ok_blue = pick_num (set_diff (1--16) noBlueLst) count in
 	let oneRed = ref [] in
@@ -206,7 +207,7 @@ let win_ssq count noRed noBlue =
 	  then
 		oneRed := pick_num yes_red 6
 	  else
-		oneRed := pick_num gr 5 @ pick_num nogr 1;
+		oneRed := pick_num yes_gr 5 @ pick_num yes_nogr 1;
 
       result := !result ^ lst2str (sortLst 
            !oneRed @ [List.nth ok_blue (i-1)]) ^ "\n";
