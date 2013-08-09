@@ -62,8 +62,8 @@ used for matching windows with run-or-raise or window placement
 
 (set-msg-border-width 1)
 
-;(set-font "-*-simsun-medium-r-normal-*-16-*-*-*-*-*-iso10646-1")
-(set-font "-misc-wenquanyi micro hei-medium-r-normal--0-0-0-0-p-0-iso10646-1")
+(set-font "-*-simsun-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
+;(set-font "-misc-wenquanyi micro hei-medium-r-normal--0-0-0-0-p-0-iso10646-1")
 
 ;(ql:quickload :clx-truetype)
 ;(xft:cache-fonts)
@@ -81,7 +81,7 @@ used for matching windows with run-or-raise or window placement
       *input-window-gravity* :bottom-right)
 
 ;;; Window Appearance
-(set-frame-outline-width 0)
+(set-frame-outline-width 1)
 
 (setf *normal-border-width* 0
       *maxsize-border-width* 0
