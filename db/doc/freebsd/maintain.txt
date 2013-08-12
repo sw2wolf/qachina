@@ -1,5 +1,32 @@
 
 ------
+To start FreeBSD network service: 
+
+ # /etc/rc.d/netif start 
+
+ To stop FreeBSD network service: 
+
+ # /etc/rc.d/netif stop 
+
+ To restart FreeBSD network service: 
+
+ # /etc/rc.d/netif restart 
+
+ Manual method using ifconfig
+ To stop network card (NIC) on-fly: 
+
+ # ifconfig network-interface down 
+
+ To start network card (NIC) on fly: 
+
+ # ifconfig network-interface up 
+
+ (C) To list down network interface: 
+
+ # ifconfig -d 
+
+ (D) To list up network interface:
+------
 portmaster --check-depends
 portmaster --force-config <pkg name>
 ------

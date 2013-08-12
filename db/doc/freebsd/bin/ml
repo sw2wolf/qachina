@@ -6,7 +6,7 @@ if test $# -ge 1; then
 fi
 
 expr=`zenity --width 350 --entry --text "Please input a CL expression" \
-div618 stopLoss winG his win_ssq hit_ssq`
+div618 stopLoss winG his\(\) win_ssq hit_ssq`
 
 if [ $? -eq 0 ]; then 
     res=$(echo "$expr ;;" | ocaml -noprompt 2>&1 | tail -n +16)
