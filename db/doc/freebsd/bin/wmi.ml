@@ -1,8 +1,5 @@
-#! /bin/sh
-# (*
-exec ocaml "$0" "$@"
-*)
-use "topfind";;
+#!/usr/bin/env ocaml
+#use "topfind";;
 
 Sys.set_signal Sys.sigint
   (Sys.Signal_handle (fun _signum -> exit 0));;
