@@ -10,8 +10,8 @@
 
 (defun eshell/eval ()
   (interactive)
-  (insert "ml ;;")
-  ;(insert "ccl.sh '()'")
+  ;(insert "ml ';;'")
+  (insert "ccl.sh '()'")
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 

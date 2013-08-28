@@ -1,8 +1,6 @@
-#!/bin/sh
-#|
-exec clisp -q -q -modern -ansi -norc $0 ${1+"$@"}
-exit
-|#
+":"; exec ~/ccl/fx86cl -Q -b -n -l $0
+(setf *load-verbose* nil *load-print* nil)
+;(load "~/quicklisp/asdf")
 
 (defun read-char-with-timeout (stream timeout)
     (loop with beg = (get-universal-time)
@@ -11,6 +9,16 @@ exit
        finally (if (listen stream)
                    (return-from read-char-with-timeout (read-char stream))
                    nil)))
+
+(defun sh (cmd)
+    #+clisp
+    (let ((str (ext:run-shell-command cmd :output :stream :wait nil)))
+        (loop for line = (read-line str nil)
+            until (null line)
+            do (print line)))
+    #+ecl (si:system cmd)
+    #+sbcl (sb-ext:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*)
+    #+ccl (ccl:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*))
 
 (defun main ()
     (format t "please choose WM(1/2/3)~%")
@@ -22,11 +30,12 @@ exit
 	(format t "9:console~%")
 	(format t "----------------------~%")
 	(case (read-char-with-timeout nil 5)
-		((#\1) (shell "sh -c 'xinit ccl&'"))
-		((#\2) (shell "sh -c 'xinit clisp&'"))
-		((#\3) (shell "sh -c 'xinit xmonad&'"))
-		((#\4) (shell "sh -c 'xinit dwm&'"))
+		((#\1) (sh "xinit ccl &"))
+		((#\2) (sh "xinit clisp &"))
+		((#\3) (sh "xinit xmonad &"))
+		((#\4) (sh "xinit dwm &"))
 		((#\9) (format t "welcome..."))
-		(otherwise (shell "sh -c 'xinit&'"))))
+		(otherwise (sh "xinit &"))))
 
 (main)
+(ccl:quit)

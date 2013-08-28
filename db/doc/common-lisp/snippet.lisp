@@ -1,5 +1,40 @@
 
 ;;;;;;
+#!/bin/sh
+#|
+exec clisp -q -q -modern -ansi -norc $0 ${1+"$@"}
+exit
+|#
+
+(defun read-char-with-timeout (stream timeout)
+    (loop with beg = (get-universal-time)
+       until (or (listen stream) (< timeout (- (get-universal-time) beg)))
+       do (sleep 0.01)
+       finally (if (listen stream)
+                   (return-from read-char-with-timeout (read-char stream))
+                   nil)))
+;;;;;;
+(load "calendar.l")
+ 
+(defun save-program ()
+  (ext:saveinitmem "african-calendar"
+                   :documentation "Displays an African calendar."
+                   :init-function (lambda ()
+                                    (handler-case
+                                        (african-calendar)
+                                      (condition ()
+                                        (ext:quit 1))))
+                   :locked-packages (list "CL" "KEYWORD")
+                   :start-package *package*
+                   :keep-global-handlers t
+                   :executable t
+                   :quiet t
+                   :norc t
+                   :script nil
+                   :verbose nil))
+ 
+(save-program)
+;;;;;;
 ;Turns a string into a stream so it can be read into a list
 (defun string-to-list (str)
   (if (not (streamp str))
@@ -34,6 +69,7 @@ exec ccl -e '(set-dispatch-macro-character #\# #\!
 (ldb (byte 64 0) -1)         ;=> 18446744073709551615
 (mask-field (byte 64 0) -1)  ;=> 18446744073709551615
 (- (expt 2 64) 1)            ;=> 18446744073709551616
+
 ;;;;;;
 (with-output-to-string (*standard-output*)
   #+clisp

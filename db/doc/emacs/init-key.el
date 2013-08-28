@@ -41,11 +41,11 @@
 ;; 	  (switch-to-buffer-other-window "*prolog*")
 ;; 	  (run-prolog 'swi)))
 
-(defun jump-run-erlang ()
-  (interactive)
-  (if (get-buffer "*erlang*")
-	  (switch-to-buffer-other-window "*erlang*")
-	  (run-erlang)))
+;; (defun jump-run-erlang ()
+;;   (interactive)
+;;   (if (get-buffer "*erlang*")
+;; 	  (switch-to-buffer-other-window "*erlang*")
+;; 	  (run-erlang)))
 
 (defun jump-run-lisp ()
   (interactive)
@@ -101,9 +101,9 @@
 (global-set-key (kbd "<f5>") 'jump-run-mew)
 
 (global-set-key (kbd "<f6>") 'jump-run-lisp)
-(global-set-key (kbd "<f7>") 'jump-run-erlang)
-(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
-;(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-haskell)))
+(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-haskell)))
+(global-set-key (kbd "<f8>") 'jump-run-erlang)
+;(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

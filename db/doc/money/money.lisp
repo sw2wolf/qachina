@@ -192,7 +192,8 @@ the process with the next item (~})."
 (defun win-ssq (nums no-red no-blue)
     (let* ((res) (resRed) (no-red-lst (str2lst no-red))
            (gr (good-red))
-           (nogr (set-difference (range 33) gr))
+           (yesNoGRed (set-difference (set-difference (range 33) gr) no-red-lst))
+		   (yesGRed (set-difference gr no-red-lst))
 		   (yesRed (set-difference (range 33) no-red-lst))
            (okBlue (pick-num (set-difference (range 16) (str2lst no-blue)) nums)))
         (assert (>= nums 1) (nums) "注数必须>=1")
@@ -202,7 +203,7 @@ the process with the next item (~})."
                 (setf resRed (sort
 				    (if (= i (1- nums))
 						(pick-num yesRed 6)
-				        (append (pick-num gr 5) (pick-num nogr 1)))
+				        (append (pick-num yesGRed 5) (pick-num yesNoGRed 1)))
 			        #'>))
                 (setf res (lst2str (reverse (cons (nth i okBlue) resRed))))
                 (write-line res out)

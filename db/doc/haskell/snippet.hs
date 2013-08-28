@@ -1,5 +1,31 @@
 
 ------
+ghci> let double :: Int -> Int; double x = x + x
+
+You can also use :{ and :} to do a muli-line definition:
+ghci> :{
+Prelude| let double :: Int -> Int
+Prelude|     double x = x + x
+Prelude| :}
+ghci> 
+--I recommend doing most of your work in a text editor, and then load the file into ghci (with :load, or providing it as an argument on the command line) and playing with it. I don't find ghci terribly pleasant to work with when actually writing code -- it's much better at messing around with code that's already written. Whenever you modify the text file, :reload (or just :r) in ghci.
+------
+universal means caller/destructor chooses, existential
+		   means callee/constructor chooses  [13:53]
+universal:  f :: forall a. a -> (a -> a) -> a  [13:54]
+caller chooses 'a'
+
+data X = forall a. X a (a -> a) (a -> String)
+the constructor (the one who constructs an X) chooses 'a'
+the destructor doesn't know anything about 'a'
+if you have an 'X x f gimme', then all the destructor knows is that f and gimme can be applied to x
+------
+import qualified Data.Vector as V
+main = print (V.foldl' (+) 0 (V.enumFromTo 1 1000000000) :: Int)
+
+import Data.Array.Vector
+main = print (sumU (enumFromToU 1 (200000000 :: Int)))
+------
 {-# LANGUAGE ScopedTypeVariables #-}
 
 retryOnTimeout :: IO a -> IO a
@@ -38,12 +64,15 @@ $cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-spli
 $cabal install mighttpd2 --ghc-options=-fllvm
 $cabal install hashable --constraint "unix==2.6.0.1" --constraint "bytestring==0.10.0.2" --dry-run
 $cabal install --enable-library-profiling
+$cabal install aeson --constraint="hashable==1.2.0.7" -v
 
 ---------
 foreign import ccall "sin" c_sin :: CDouble -> CDouble
+
 ---------
 flip runContT return $ callCC $
                   \exit -> forever $ do x < - getLine; when (x == "end") (exit ())
+
 ---------
 import System
 import System.IO
@@ -101,10 +130,6 @@ myManageHook = manageDocks <+> composeAll
     , className =? "Conky"          --> doIgnore
     , resource  =? "desktop_window" --> doIgnore
     ]
-
----------
-import Data.Array.Vector
-main = print (sumU (enumFromToU 1 (200000000 :: Int)))
 
 ---------
 
