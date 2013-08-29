@@ -2,6 +2,7 @@
 %%%
 -type http_version() :: 'HTTP/1.1' | 'HTTP/1.0'.
 -export_type([http_version/0]).
+
 %%%
 原始的or和and是不带”短路运算”操作的，而orelse和andalso是带短路运算操作的。
 
@@ -9,6 +10,7 @@ Express1 and Express2
 Express1 andalso Express2
 
 如果Express1 为假，and会继续判断Express2，然后整体判定为假，而andalso”短路”操作，直接判定整个表达式为假，从效率上来说，andalso会高一些
+
 %%%
 -record(g, {key, value}). 
 ets:new(g, [public, named_table, {keypos, #g.key}]). 
@@ -40,10 +42,12 @@ code:which('user_default').
 
 %%%
 #!/bin/sh
-erl +K true +P 10240000 -sname testserver -pa ebin -pa deps/*/ebin -s htmlfilesimple\
+$erl +K true +P 10240000 -sname testserver -pa ebin -pa deps/*/ebin -s htmlfilesimple\
 -eval "io:format(\"Server start with port 8000 Success!~n\")."
 
 $erl -pa $MD/erlang -noshell -eval 'user_default:div618(1,2)' -s init stop
+
+$erl -mnesia dir '"/home/sw2wolf/erlang/data"'
 %%%
 -module(snippet).
 -export([max/1]).
@@ -91,7 +95,7 @@ erl启动使用  -detached 参数启动
 
 如何链接：
 
-     erl -sname dp2 -remsh dp@dp0304
+     $erl -sname dp2 -remsh dp@dp0304
 
 如何退出：！！！超级要注意啊～～不能直接关掉退出
 
@@ -131,3 +135,38 @@ module_vsn(L) when is_list(L) ->
     {_, Attrs} = lists:keyfind(attributes, 1, L),
     {_, Vsn} = lists:keyfind(vsn, 1, Attrs),
     Vsn.
+
+%%%
+#! /usr/bin/env escript
+%% -*- erlang -*-
+%%! -smp enable -detached -pa /home/hakan/erl_libs/eflex/ebin
+
+main([]) ->
+    eflex:start();
+main(["--help"]) ->
+    AppDir = get_app_dir(),
+    File = filename:join([AppDir, "README"]),
+    case file:read_file(File) of
+	{ok, Bin} ->
+	    io:format("~s\n", [binary_to_list(Bin)]);
+	{error, Reason} ->
+	    io:format("~s: ~s\n", [File, file:format_error(Reason)]),
+	    halt(3)
+    end;
+main(_) ->
+    usage().
+
+usage() ->
+    FullName = escript:script_name(),
+    BaseName = filename:basename(FullName),
+    io:format("usage: ~s [--help]\n", [BaseName]),
+    halt(1).
+
+get_app_dir() ->
+    case code:lib_dir(eflex) of
+	{error, Reason} ->
+	    io:format("Illegal application directory: ~p\n", [Reason]),
+	    halt(2);
+	AppDir ->
+	    AppDir
+    end.

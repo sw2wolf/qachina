@@ -1,5 +1,11 @@
 
 ------
+Data.Monoid Endo :: (a -> a) -> Endo a
+Data.Monoid appEndo :: Endo a -> a -> a
+
+(appEndo $ (Endo (+1)) <> (Endo (+2))) 1
+4
+------
 ghci> let double :: Int -> Int; double x = x + x
 
 You can also use :{ and :} to do a muli-line definition:
@@ -346,6 +352,3 @@ better  = unlines . map linemanager . lines
 ------
 let inf ~(x:xs) = x : inf xs in length . take 5 $ inf [] => 5
 inf ~(x:xs) = ...  says you only actually look at the LHS  if anyone ever asks for the value of "x" or "xs".  But nobody does. try to read it as:  inf ? = ? : inf ? note that if nobody asks the question marks what they are, it's basically like a repeat
-
-------
-

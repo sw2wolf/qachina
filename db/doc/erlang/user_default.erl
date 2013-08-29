@@ -17,6 +17,8 @@
 %-export([winG/3, winQ/3, div618/2, stopLoss/3, sd/1, sh/1, qachina/0]).
 -compile(export_all).
 
+%-export([help/0, r/0]).
+
 -import(calendar, [date_to_gregorian_days/3, gregorian_days_to_date/1, day_of_the_week/1]).
 
 -ifdef(Debug).
@@ -27,6 +29,14 @@
 
 get_meta() -> 
 	user_default:module_info().
+
+help()->
+    shell_default:help(),
+    io:format("** user extended commands **~n",[]),
+    io:format("r() -- compile and load all modified modules on all nodes\n",[]).
+    
+r()->
+    make:all([netload]).
 
 %---------------------------------------------------------------------
 %       stock
@@ -137,7 +147,7 @@ win_ssq(Count, NoRed, NoBlue) ->
     file:write_file(ssqNum(), get(result)).
 
 pick_ssq_nums(0, _, _, _) -> ok;
-pick_ssq_nums(Count, GRed, NoRed, OkBlue) ->
+pick_ssq_nums(Count, GRed, YesRed, OkBlue) ->
 	if
 		Count == 1 ->
 			Red6 = lists:sort( lists:append(
@@ -145,7 +155,7 @@ pick_ssq_nums(Count, GRed, NoRed, OkBlue) ->
 								 pick_num(1,(lists:seq(1,33)--GRed),[])
 								));
 	    true ->
-			Red6 = lists:sort( pick_num(6, NoRed, []) )
+			Red6 = lists:sort( pick_num(6, YesRed, []) )
 	end,
 
     Result = lists:append(Red6, [lists:nth(Count,OkBlue)]),
@@ -158,7 +168,7 @@ pick_ssq_nums(Count, GRed, NoRed, OkBlue) ->
         _ ->
             put(result, get(result) ++ ResStr)
     end,
-    pick_ssq_nums(Count-1, GRed, NoRed, OkBlue).
+    pick_ssq_nums(Count-1, GRed, YesRed, OkBlue).
 
 good_red() ->
     {ok,Bin} = file:read_file(ssqHitNum()),
