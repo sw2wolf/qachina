@@ -10,9 +10,9 @@
 
 (defun eshell/eval ()
   (interactive)
-  ;(insert "ml ';;'")
-  (insert "ccl.sh '()'")
-  (backward-char 2) ;(goto-char (- (point) 2))
+  (insert "ml ';;'")
+  ;(insert "ccl.sh '(m:)'")
+  (backward-char 3) ;(goto-char (- (point) 2))
 )
 
 ;; (setq eshell-prompt-function

@@ -205,9 +205,9 @@ let win_ssq count noRed noBlue =
     for i = 1 to count do
 	  if i = count
 	  then
-		oneRed := pick_num yes_red 6
+		oneRed := pick_num yes_gr 5 @ pick_num yes_nogr 1
 	  else
-		oneRed := pick_num yes_gr 5 @ pick_num yes_nogr 1;
+		oneRed := pick_num yes_red 6;
 
       result := !result ^ lst2str (sortLst 
            !oneRed @ [List.nth ok_blue (i-1)]) ^ "\n";

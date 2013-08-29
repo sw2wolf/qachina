@@ -19,8 +19,7 @@ ets:insert_new(users, #user{id=Uid, name="Somebody"}.
 %%%
 [register(list_to_atom("pid" ++ integer_to_list(X)), spawn(fun() -> myFun() end)) || X <- lists:seq(1,10)].
 code:which('user_default').
-%%%
-erl -pa $MD/money -noshell -eval 'user_default:div618(1,2)' -s init stop
+
 %%%
 -record(client, {
 	state = wait :: wait | request | response | response_body,
@@ -33,14 +32,18 @@ erl -pa $MD/money -noshell -eval 'user_default:div618(1,2)' -s init stop
 	version = 'HTTP/1.1' :: cowboy:http_version(),
 	response_body = undefined :: undefined | non_neg_integer()
 }).
+
 %%%
 -type opts() :: any().
 -type state() :: any().
 -type terminate_reason() :: {normal, shutdown} | {normal, timeout} | {error, atom()}.
+
 %%%
 #!/bin/sh
 erl +K true +P 10240000 -sname testserver -pa ebin -pa deps/*/ebin -s htmlfilesimple\
 -eval "io:format(\"Server start with port 8000 Success!~n\")."
+
+$erl -pa $MD/erlang -noshell -eval 'user_default:div618(1,2)' -s init stop
 %%%
 -module(snippet).
 -export([max/1]).

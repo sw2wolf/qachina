@@ -202,8 +202,8 @@ the process with the next item (~})."
             (dotimes (i nums)
                 (setf resRed (sort
 				    (if (= i (1- nums))
-						(pick-num yesRed 6)
-				        (append (pick-num yesGRed 5) (pick-num yesNoGRed 1)))
+				        (append (pick-num yesGRed 5) (pick-num yesNoGRed 1))
+						(pick-num yesRed 6))
 			        #'>))
                 (setf res (lst2str (reverse (cons (nth i okBlue) resRed))))
                 (write-line res out)
