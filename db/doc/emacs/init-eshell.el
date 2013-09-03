@@ -10,10 +10,10 @@
 
 (defun eshell/eval ()
   (interactive)
-  ;(insert "ml ';;'")
+  (insert "ml ';;'")
   ;(insert "ccl.sh '(m:)'")
-  (insert "erl.sh 'user_default:'")
-  (backward-char 1) ;(goto-char (- (point) 2))
+  ;(insert "erl.sh 'user_default:'")
+  (backward-char 3) ;(goto-char (- (point) 2))
 )
 
 ;; (setq eshell-prompt-function
