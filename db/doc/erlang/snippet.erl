@@ -1,5 +1,8 @@
 
 %%%
+1) << <<(string:to_lower(C))/utf8>> || <<C/utf8>> <= Binary >>
+2) unicode:characters_to_binary(string:to_lower(unicode:characters_to_list(Binary)))
+%%%
 -type http_version() :: 'HTTP/1.1' | 'HTTP/1.0'.
 -export_type([http_version/0]).
 
