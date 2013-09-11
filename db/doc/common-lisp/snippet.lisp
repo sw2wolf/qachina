@@ -70,6 +70,7 @@ exec ccl -e '(set-dispatch-macro-character #\# #\!
 (prin1 *arguments*)
 (terpri)
 (ccl:quit 0)
+
 ;;;;;;
 (ldb (byte 64 0) -1)         ;=> 18446744073709551615
 (mask-field (byte 64 0) -1)  ;=> 18446744073709551615
@@ -199,7 +200,8 @@ Error: The condition #<STREAM-READ-TIMEOUT 2067574C> occurred
 #3r-21010    ;Same thing in base 3                
 #25R-7H      ;Same thing in base 25               
 #xACCEDED    ;181202413, in hexadecimal radix
-;;;
+
+;;;;;;
 (defun main ()
   (with-open-socket (socket :address-family :file
                             :type :stream

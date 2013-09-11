@@ -142,20 +142,20 @@ win_ssq(Count, NoRed, NoBlue) ->
     pick_ssq_nums(
         Count,
 	    good_red(),
-	    NoRedLst,
         lists:seq(1,33) -- NoRedLst,
         pick_num(Count, lists:seq(1,16)--str2ints(NoBlue), [])
     ),
     file:write_file(ssqNum(), get(result)).
 
-pick_ssq_nums(0, _, _, _, _) -> ok;
-pick_ssq_nums(Count, GRed, NoRed, YesRed, OkBlue) ->
+pick_ssq_nums(0, _, _, _) -> ok;
+pick_ssq_nums(Count, GRed, YesRed, OkBlue) ->
 	if
 		Count == 1 ->
-			Red6 = lists:sort( lists:append(
-								 pick_num(5,GRed--NoRed,[]),
-								 pick_num(1,((lists:seq(1,33)--GRed)--NoRed),[])
-								));
+			%% Red6 = lists:sort( lists:append(
+			%% 					 pick_num(5,GRed--NoRed,[]),
+			%% 					 pick_num(1,((lists:seq(1,33)--GRed)--NoRed),[])
+			%% 					));
+			Red6 = lists:sort( pick_num(6, GRed, []) );
 	    true ->
 			Red6 = lists:sort( pick_num(6, YesRed, []) )
 	end,
@@ -170,7 +170,7 @@ pick_ssq_nums(Count, GRed, NoRed, YesRed, OkBlue) ->
         _ ->
             put(result, get(result) ++ ResStr)
     end,
-    pick_ssq_nums(Count-1, GRed, NoRed, YesRed, OkBlue).
+    pick_ssq_nums(Count-1, GRed, YesRed, OkBlue).
 
 good_red() ->
     {ok,Bin} = file:read_file(ssqHitNum()),
