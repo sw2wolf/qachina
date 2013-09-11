@@ -110,6 +110,8 @@ erl启动使用  -detached 参数启动
 dbg:tracer(), dbg:p(all, [call, timestamp]).
 dbg:tpl(yaws_server, aloop, []).
 
+dbg:tpl(Module, '_', []) is a good starting point
+
 %Then hit the system with one client request. You should see some trace details on your Erlang console, including timestamps for the call in question. That function is recursive and it includes pretty much all of the server processing per request, so it's a quick way to help narrow down where the time is going.
 
 To stop the tracing: dbg:stop_clear().

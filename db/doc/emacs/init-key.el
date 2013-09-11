@@ -47,14 +47,14 @@
 	  (switch-to-buffer-other-window "*erlang*")
 	  (run-erlang)))
 
-;; (defun jump-run-lisp ()
-;;   (interactive)
-;;   (let ((repl (find-if (lambda (buff)
-;; 			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))))
-;;   (if repl
-;; 	  (switch-to-buffer-other-window (buffer-name repl))
-;; 	  (condition-case e (slime-connect "127.0.0.1" 4005)
-;; 		(file-error (slime))))))
+(defun jump-run-lisp ()
+  (interactive)
+  (let ((repl (find-if (lambda (buff)
+			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))))
+  (if repl
+	  (switch-to-buffer-other-window (buffer-name repl))
+	  (condition-case e (slime-connect "127.0.0.1" 4005)
+		(file-error (slime))))))
 ;(file-error (call-interactively 'run-lisp))))))
 ;(unless (slime-connected-p) (save-excursion (slime)))
 
@@ -93,20 +93,24 @@
 ;√:#x221a π:#x3c0 λ:#x3bb ∑:#x2211 ⊥:#x22a5 ≅:#x2245 ≠:#x2260 ☺:#x263a
 ;⋆:#x22c6 ≅:#x2245
 
-(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
 ; > @wn @src @where @undo @unmtl @pl @package
 ;@djinn turn a type into its corresponding expression
+(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
+;; (global-set-key (kbd "<f3>") '(lambda ()
+;; 								(interactive)
+;; 								(insert "/msg lazybot ,(doc )")
+;; 								(backward-char 1)))
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
 (global-set-key (kbd "<f5>") 'jump-run-mew)
 
-;(global-set-key (kbd "<f6>") 'jump-run-lisp)
-(global-set-key (kbd "<f6>") 'jump-run-prolog)
+(global-set-key (kbd "<f6>") 'jump-run-lisp)
+;(global-set-key (kbd "<f6>") 'jump-run-prolog)
 
 ;(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-haskell)))
-(global-set-key (kbd "<f7>") 'jump-run-erlang)
+(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-caml "ocaml")))
 
-(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
+(global-set-key (kbd "<f8>") 'jump-run-erlang)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

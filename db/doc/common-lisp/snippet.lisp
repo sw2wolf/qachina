@@ -1,5 +1,10 @@
 
 ;;;;;;
+":"; exec ~/ccl/fx86cl -Q -b -n -l $0
+(setf *load-verbose* nil *load-print* nil)
+;(load "~/quicklisp/asdf")
+
+;;;;;;
 #!/bin/sh
 #|
 exec clisp -q -q -modern -ansi -norc $0 ${1+"$@"}
