@@ -98,7 +98,7 @@
 ;(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
 (global-set-key (kbd "<f3>") '(lambda ()
 								(interactive)
-								(insert "/msg rudybot ()")
+								(insert "/msg lazybot ,()")
 								(backward-char 1)))
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)

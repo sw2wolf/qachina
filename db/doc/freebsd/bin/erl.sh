@@ -5,11 +5,10 @@ if test $# -eq 1; then
 fi
 
 expr=`zenity --width 350 --entry --text "Please input a expression" \
-user_default:div618\(\) user_default:stopLoss\(\) user_default:winG\(\) \
-user_default:his\(\) user_default:win-ssq\(\) user_default:hit_ssq\(\)`
+div618\(\) stopLoss\(\) winG\(\) his\(\) win-ssq\(\) hit_ssq\(\)`
 
 if [ $? -eq 0 ]
 then
-res=$(erl -pa $MD/erlang -noshell -eval "$expr" -s init stop)
+res=$(erl -noshell -eval "user_default:$expr" -s init stop)
 zenity --info --text="$res"
 fi

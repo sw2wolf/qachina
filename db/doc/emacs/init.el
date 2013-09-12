@@ -24,7 +24,7 @@
 
 (load "init-slime")
 (load "init-clojure")
-;(load "init-racket")
+(load "init-racket")
 
 (load "init-erlang")
 (load "init-prolog")

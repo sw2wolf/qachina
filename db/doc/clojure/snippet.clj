@@ -9,6 +9,7 @@
             (recur (first target)))))
 ;一组java对象的seq
 (repeatedly 100 #(SomeClass. ))
+
 ;;;
 ;Multiple Each Item in a List by 2
 (map #(* % 2) (range 1 11))
@@ -93,8 +94,8 @@
                                          
 (extend Vec2D IVec2D IVec2D-impl)
 (extend VerletParticle2D IVec2D IVec2D-impl)
-;;;;;;
 
+;;;;;;
 (reduce conj #{} (for [i (range 10) j (range 10)] [i j]))
 
 (defn serializable? [v]
@@ -126,8 +127,8 @@
 (let [output (StringWriter.)]
     (base64/encode (input-stream md5sum) output base64/*base64-alphabet* nil)
     (.toString output))
-;;;;;;
 
+;;;;;;
 1: how to read an entire file into memory.
 
 (slurp "/tmp/test.txt")
@@ -202,6 +203,7 @@ To read or write a file linewise you would use Java's reader and writer. They ar
 (def db { :classname "org.sqlite.JDBC"
           :subprotocol "sqlite"
           :subname "E:/temp/chinook.db"})
+
 (defmacro get-sql-metadata [db method & args]
     `(with-connection ~db 
         (doall 
@@ -288,14 +290,15 @@ Clojure中调用系统shell命令：
 (javadoc d)
 
 (import 'java.util.concurrent.Executors)
-(import 'java.util.concurrent.TimeUnit) 
+(import 'java.util.concurrent.TimeUnit)
+
 (.scheduleAtFixedRate (Executors/newScheduledThreadPool 1) 
   #(println "Hello") 0 5 TimeUnit/SECONDS)
 
 (last 
   (for [i (range 1000) 
         j (range 1000)
-        :let [n (* i j)] 
+        :let [n (* i j)]
         :when (and (= (mod n 13) 0) 
                    (= (mod i 7) 0))]
     n))
@@ -309,4 +312,3 @@ Clojure中调用系统shell命令：
     (vec (repeatedly n #(+ 1 (rand-int m)))))
 
 (bit-shift-left 2 38)
-

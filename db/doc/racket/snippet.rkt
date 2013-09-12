@@ -1,3 +1,5 @@
+
+;;;
 #lang racket
 (for/sum ([i (in-range 3000000)]) (random))
 
