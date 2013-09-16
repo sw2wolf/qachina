@@ -95,11 +95,11 @@
 
 ; > @wn @src @where @undo @unmtl @pl @package
 ;@djinn turn a type into its corresponding expression
-;(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
-(global-set-key (kbd "<f3>") '(lambda ()
-								(interactive)
-								(insert "/msg rudybot ()")
-								(backward-char 1)))
+(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
+;; (global-set-key (kbd "<f3>") '(lambda ()
+;; 								(interactive)
+;; 								(insert "/msg rudybot ()")
+;; 								(backward-char 1)))
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
 (global-set-key (kbd "<f5>") 'jump-run-mew)
