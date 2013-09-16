@@ -1,6 +1,6 @@
 #!/bin/sh
 if test $# -eq 1; then
-	erl -pa $MD/erlang -noshell -eval "$1" -s init stop
+	ERL_CRASH_DUMP_SECONDS=0 erl -pa $MD/erlang -noshell -eval "$1" -s init stop
 	exit 0
 fi
 
@@ -9,6 +9,6 @@ div618\(\) stopLoss\(\) winG\(\) his\(\) win-ssq\(\) hit_ssq\(\)`
 
 if [ $? -eq 0 ]
 then
-res=$(erl -noshell -eval "user_default:$expr" -s init stop)
+res=$(ERL_CRASH_DUMP_SECONDS=0 erl -noshell -eval "user_default:$expr" -s init stop)
 zenity --info --text="$res"
 fi

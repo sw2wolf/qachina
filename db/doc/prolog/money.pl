@@ -1,6 +1,7 @@
 %:- module(money, [winG/3, stopLoss/3]).
 %:- use_module(library(clpfd)).
 :- use_module(library(dcg/basics)).
+:- use_module(library(assoc)).
 
 :- set_prolog_flag(toplevel_print_options,
 	[backquoted_string(true), max_depth(9999),
@@ -81,7 +82,7 @@ win_ssq(Count, NoRedStr, NoBlueStr) :-
 	numlist(1,16,B), subtract(B,NoBlue,YesB),
 	set_random(seed(888)),
 	pick_nums(Count,YesB,OkB),
-	pick_red(Count,YesR,OkB,X), length(X,Count), !,
+	pick_red(Count, YesR, OkB, X), length(X,Count), !,
 	maplist(writeln,X),
 	ssqNumF(F),
     tell(F),maplist(format('~d ~d ~d ~d ~d ~d ~d~n'),X),told.
@@ -121,11 +122,6 @@ hit_desc(_,1,'6th(5)') :- !.
 hit_desc(_,_,'X') :- !.
 
 ints(L) --> blanks, (integer(I), ints(Is), {L = [I|Is]} ; {L = []}).
-
-read_ints(F, L) :-
-    open(F, read, S),
-    file_ints(S, L),
-    close(S).
 
 file_ints(S, L) :-
     read_line_to_codes(S, Cs),

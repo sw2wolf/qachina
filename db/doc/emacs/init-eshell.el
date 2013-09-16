@@ -11,8 +11,8 @@
 (defun eshell/eval ()
   (interactive)
   ;(insert "ml ';;'")
-  (insert "erl.sh 'user_default:'")
   ;(insert "ccl.sh '(m:)'")
+  (insert "erl.sh 'user_default:'")
   (backward-char 1) ;(goto-char (- (point) 2))
 )
 

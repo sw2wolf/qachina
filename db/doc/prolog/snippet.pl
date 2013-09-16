@@ -1,4 +1,3 @@
-%------
 
 %------
 %to create a stand-alone executable that starts by executing main/0 and for which the source is loaded through load.pl, use the command 
