@@ -1,4 +1,40 @@
 
+%%%
+match_regex(Regex, String, Result) :-
+    send(Regex, match, String),
+    findall(W, (between(1,9, Z),
+                 get(Regex, register_value, String, Z, name, W)),
+             Result), !.
+ 
+    amatchesregexb(Astring, Bregex, Result) :-
+       use_module(library(pce)),
+       setup_call_cleanup(new(Binternalregex, regex(Bregex)),
+                   match_regex(Binternalregex, Astring, Result),
+                   free(Binternalregex)).
+ 
+However, when I used it I got the following results:
+ 
+130 ?- amatchesregexb('ab12cd', '.*([0-9]+).*', Result).
+Result = ['2'].
+ 
+131 ?- amatchesregexb('ab12cd', '[^0-9]*([0-9]+).*', Result).
+Result = ['12'].
+ 
+132 ?-
+ 
+*I expected the first example capture **([0-9]+) to cap**ture '12', but
+it only captured '2'.*
+ 
+I had to add [^0-9] infront of the numeric capture to successfully
+capture both digits '12'.
+
+>>
+This regex behavior is correct and isn't specific to Prolog.  A * matches
+greedily.  That is, it consumes as many characters as possible while still
+allowing the whole pattern to match.  In the first example, .* can consume
+the 1 and the entire regex still matches.  Using [^0-9]* prevents that part
+of the pattern from matching the 1.
+
 %------
 %to create a stand-alone executable that starts by executing main/0 and for which the source is loaded through load.pl, use the command 
 swipl --goal=main --stand_alone=true -o myprog -c load.pl

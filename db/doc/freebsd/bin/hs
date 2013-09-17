@@ -1,3 +1,15 @@
 #!/bin/sh
-ghci
-#ghci +RTS -M30M -c20
+
+money=$MD/haskell/Money.hs
+if test $# -ge 1; then
+	ghc -ignore-dot-ghci -e "$*" $money
+    exit 0
+fi
+
+expr=`zenity --width 350 --entry --text "Please input a CL expression" \
+div618 stopLoss winG his\(\) win_ssq hit_ssq`
+
+if [ $? -eq 0 ]; then 
+    res=$(ghc -ignore-dot-ghci -e "$expr" $money)
+    zenity --info --text="$res"
+fi
