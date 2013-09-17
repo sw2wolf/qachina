@@ -1,5 +1,8 @@
 
 %%%
+read_file_to_codes('/media/D/qachina/db/doc/money/ssqHitNum.txt', X, []).
+
+%%%
 match_regex(Regex, String, Result) :-
     send(Regex, match, String),
     findall(W, (between(1,9, Z),
