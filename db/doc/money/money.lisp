@@ -131,7 +131,7 @@ THING is a string or a symbol.")
   (format t "You win: ~$~%"
 		  (- (* qty ps (- 1 SXF)) (* 2 GHF) (* qty pb (+ 1 SXF)))))
 
-(defun stopLoss (qty pb &optional (lossRate 0.02))
+(defun stopLoss (qty pb &optional (lossRate 0.03))
 "止损价"
   (let ((tot (* qty pb (+ 1 SXF))))
         (format t "Stop Loss at:~$~%" (- pb (/ (* tot lossRate) qty)))
@@ -221,16 +221,6 @@ the process with the next item (~})."
         ((= blue 1) (setf res "Sixth(5)")))
     res))
 
-;; (defun hit-desc-1 (red blue)
-;;   (case `(,red ,blue)
-;; 	((6 1) "First")
-;; 	((6 0) "Second")
-;; 	((5 1) "Third(3000)")
-;; 	((or (5 0) (4 1)) "Fourth(200)")
-;; 	((or (4 0) (3 1)) "Fifth(10)")
-;; 	((_ 1) "Sixth(5)")
-;; 	(otherwise "X")))
-
 (defun his () (sh (concatenate 'string "tail " +ssq-hit-num+)))
 
 (defun hitnum-saved? (term) 
@@ -259,4 +249,3 @@ the process with the next item (~})."
                     (setf hit-red (length (intersection (butlast num) (butlast hit-num) )))
                     (if (= (seventh hit-num) (seventh num)) (setf hit-blue 1) (setf hit-blue 0))
                     (format t "~22a~10t(~d ~d)   ~a~%" line hit-red hit-blue (hit-desc hit-red hit-blue))))))
-

@@ -100,7 +100,7 @@ hit_ssq(ID, HitNo) :-
     append(File), write(NumStr), nl, told,
 	atom2lst(HitNo,HN),
 	ssqNumF(F),
-	open(F, read, H), file_ints(H,Ns), close(H), ! ,
+	open(F, read, H), all_pick_nums(H,Ns), close(H), ! ,
 	maplist(hit_sum(HN), Ns) .
 	
 hit_sum(HitNo, No) :-
@@ -123,12 +123,12 @@ hit_desc(_,_,'X') :- !.
 
 ints(L) --> blanks, (integer(I), ints(Is), {L = [I|Is]} ; {L = []}).
 
-file_ints(S, L) :-
-    read_line_to_codes(S, Cs),
+all_pick_nums(F, L) :-
+    read_line_to_codes(F, Cs),
     (   Cs == end_of_file
     ->  L = []
     ;   phrase(ints(Is), Cs),
-        file_ints(S, R),
+        all_pick_nums(F, R),
         L = [Is|R]
     ).
 

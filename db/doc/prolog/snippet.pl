@@ -1,5 +1,78 @@
 
 %%%
+like(What) --> "I like ", list(What), ".", list(_).
+
+list([]) --> [].
+list([L|Ls]) --> [L], list(Ls).
+
+We can use this DCG to parse a given string, which is a list of character codes:
+?- phrase(like(What), "I like it. The rest is ignored").
+What = [105, 116] ;
+false.
+
+As expected, What is unified with the character codes for i and t.
+
+Using library(pio), we can transparently parse from a file with the same DCG. Assume that the file 'like.txt' starts with the string "I like it."
+?- use_module(library(pio)).
+true.
+
+?- phrase_from_file(like(What), 'like.txt').
+What = [105, 116] ;
+false.
+
+%%%
+singleassignment:-                   
+    functor(Array,array,100), % create a term with 100 free Variables as arguments
+                              % index of arguments start at 1
+    arg(1 ,Array,a),          % put an a at position 1 
+    arg(12,Array,b),          % put an b at position 12
+    arg(1 ,Array,Value1),     % get the value at position 1
+    print(Value1),nl,         % will print Value1 and therefore a followed by a newline 
+    arg(4 ,Array,Value2),     % get the value at position 4 which is a free Variable
+    print(Value2),nl. % will print that it is a free Variable followed by a newline
+
+%%%
+binary(X) :- format('~2r~n', [X]).
+main :- maplist(binary, [5,50,9000]), halt.
+
+%%%
+:- use_module(library(clpfd)).
+ 
+circle :-
+	bagof([X,Y], init(X,Y), BL),
+	length(BL, N),
+	length(L, 100),
+	maplist(choose(BL, N), L),
+	draw_circle(L). 
+
+% point selection
+choose(BL, N, V) :-
+	I is random(N),
+	nth0(I, BL, V).
+ 
+% to find all couples of numbers verifying 
+% 100 <= x^2 + y^2 <= 225
+init(X1, Y1) :-
+	X in -15..15,
+	Y in -15..15,
+	X*X + Y*Y #>= 100,
+	X*X + Y*Y #=< 225,
+	label([X,Y]),
+	X1 is 10 * X + 200,
+	Y1 is 10 * Y + 200.
+ 
+ 
+draw_circle(L) :-
+	new(D, window('Circle')),
+	send(D, size,size(400,400)),
+	forall(member([X,Y], L),
+	       (   new(C, circle(4)),
+		   send(C, fill_pattern, colour(@default, 0, 0, 0)),
+		   send(C, center(point(X,Y))),
+		   send(D, display, C))),
+	send(D, open).
+
+%%%
 read_file_to_codes('/media/D/qachina/db/doc/money/ssqHitNum.txt', X, []).
 
 %%%
@@ -9,11 +82,11 @@ match_regex(Regex, String, Result) :-
                  get(Regex, register_value, String, Z, name, W)),
              Result), !.
  
-    amatchesregexb(Astring, Bregex, Result) :-
-       use_module(library(pce)),
-       setup_call_cleanup(new(Binternalregex, regex(Bregex)),
-                   match_regex(Binternalregex, Astring, Result),
-                   free(Binternalregex)).
+amatchesregexb(Astring, Bregex, Result) :-
+    use_module(library(pce)),
+    setup_call_cleanup(new(Binternalregex, regex(Bregex)),
+               match_regex(Binternalregex, Astring, Result),
+               free(Binternalregex)).
  
 However, when I used it I got the following results:
  

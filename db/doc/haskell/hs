@@ -1,3 +1,0 @@
-#!/bin/sh
-ghci
-#ghci +RTS -M30M -c20
