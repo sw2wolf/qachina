@@ -1,5 +1,8 @@
 
 ------
+:t (?f >=> ?g)
+(Monad m, ?f::a -> m b, ?g::b -> m c) => a -> m c
+------
 Data.Monoid Endo :: (a -> a) -> Endo a
 Data.Monoid appEndo :: Endo a -> a -> a
 

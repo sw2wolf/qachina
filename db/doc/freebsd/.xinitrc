@@ -41,8 +41,8 @@ case $1 in
         exec xmonad
 		;;
 	clisp)
-		export MPD=YES
-	    /usr/local/etc/rc.d/musicpd onestart
+		#export MPD=YES
+	    #/usr/local/etc/rc.d/musicpd onestart
 		exec $HOME/bin/stumpwm-clisp-norc
         ;;
 	ccl)
@@ -56,9 +56,10 @@ case $1 in
     dwm)
         #xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex run
 		#xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex source ~/script.gdb
-        xterm -e gdb --quiet -nx -x ~/script.gdb
+        #xterm -e gdb --quiet -nx -x ~/script.gdb
+		exec $HOME/bin/dwm
 		;;
     *)
-		exec $HOME/bin/dwm
+		exec $HOME/bin/stumpwm-clisp-norc
 		;;
 esac

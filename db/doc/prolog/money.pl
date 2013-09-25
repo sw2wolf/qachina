@@ -1,7 +1,7 @@
 %:- module(money, [winG/3, stopLoss/3]).
-%:- use_module(library(clpfd)).
 :- use_module(library(dcg/basics)).
-:- use_module(library(assoc)).
+%:- use_module(library(clpfd)).
+%:- use_module(library(assoc)).
 
 :- set_prolog_flag(toplevel_print_options,
 	[backquoted_string(true), max_depth(9999),
@@ -97,8 +97,12 @@ pick_red(Count,YesR,OkB,[H|T]) :-
 hit_ssq(ID, HitNo) :-
 	atomic_list_concat([ID,' ',HitNo], NumStr),
 	ssqHitNumF(File),
-    append(File), write(NumStr), nl, told,
-	atom2lst(HitNo,HN),
+	open(File, read, HF),
+	(   \+ has_hit_id(HF, ID)
+	->  append(File), write(NumStr), nl, told
+	;   true
+	), close(HF),
+	atom2lst(HitNo,HN),	
 	ssqNumF(F),
 	open(F, read, H), all_pick_nums(H,Ns), close(H), ! ,
 	maplist(hit_sum(HN), Ns) .
@@ -111,18 +115,20 @@ hit_sum(HitNo, No) :-
 	intersection(RedH, RedN, X), length(X,HitR), hit_desc(HitR,HitB,Desc),
 	format('~p ~t(~p,~p)~25| ~t~p~38|~n',[No,HitR,HitB,Desc]).
 
-hit_desc(6,1,'1st') :- !.
-hit_desc(6,0,'2nd') :- !.
-hit_desc(5,1,'3rd(3000)') :- !.
-hit_desc(5,0,'4th(200)') :- !.
-hit_desc(4,1,'4th(200)') :- !.
-hit_desc(4,0,'5th(10)') :- !.
-hit_desc(3,1,'5th(10)') :- !.
-hit_desc(_,1,'6th(5)') :- !.
-hit_desc(_,_,'X') :- !.
-
 ints(L) --> blanks, (integer(I), ints(Is), {L = [I|Is]} ; {L = []}).
 
+has_hit_id(F, ID) :-
+	read_line_to_codes(F, Cs),
+    (   Cs == end_of_file
+    ->  false
+    ;   phrase(ints(Is), Cs),
+		atom_number(ID, IDNo),
+		(   memberchk(IDNo, Is)
+		->  true
+		 ;  has_hit_id(F, ID)
+		)
+    ).
+	
 all_pick_nums(F, L) :-
     read_line_to_codes(F, Cs),
     (   Cs == end_of_file
@@ -154,6 +160,16 @@ his :-
 	atom_concat('tail ', File, Cmd),
 	shell(Cmd).
 
+hit_desc(6,1,'1st') :- !.
+hit_desc(6,0,'2nd') :- !.
+hit_desc(5,1,'3rd(3000)') :- !.
+hit_desc(5,0,'4th(200)') :- !.
+hit_desc(4,1,'4th(200)') :- !.
+hit_desc(4,0,'5th(10)') :- !.
+hit_desc(3,1,'5th(10)') :- !.
+hit_desc(_,1,'6th(5)') :- !.
+hit_desc(_,_,'X') :- !.
+
 %%
 %% utilities
 %%
@@ -177,18 +193,14 @@ sys_info :-
 	current_prolog_flag(version_data, swi(Major, Minor, Patch, _)),
 	format('swi-prolog version: ~w.~w.~w~n',[Major,Minor,Patch]).
 
-%module_property(ansi_term, file(Path))
-
 % list comprehesion
 %% List of Pythagorean triples : 
 %% ?- V <- {X, Y, Z & X <- 1..20, Y <- X..20, Z <- Y..20 & X*X+Y*Y =:= Z*Z}.
 %% V = [ (3,4,5), (5,12,13), (6,8,10), (8,15,17), (9,12,15), (12,16,20)] ;
-%% false.
 
 %% List of double of x, where x^2 is greater than 50 : 
 %% ?- V <- {Y & X <- 1..20 & X*X > 50, Y is 2 * X}.
 %% V = [16,18,20,22,24,26,28,30,32,34,36,38,40] ;
-%% false.
 
 % We need operators
 :- op(700, xfx, <-).

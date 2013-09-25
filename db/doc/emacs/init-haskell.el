@@ -1,7 +1,7 @@
 (load "~/.emacs.d/haskell-mode/haskell-site-file")
 
 (setq haskell-program-name "~/ghc/bin/ghci")
-(visit-tags-table "/media/D/qachina/db/doc/haskell")
+;(visit-tags-table "/media/D/qachina/db/doc/haskell")
 
 ;(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 

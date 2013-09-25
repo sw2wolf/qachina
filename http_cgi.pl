@@ -197,7 +197,8 @@ method_has_data(put).
 setup_input(std, _).
 setup_input(pipe(Stream), Request) :-
 	memberchk(input(HTTPIn), Request),
-	set_stream(Stream, encoding(octet)),
+	%set_stream(Stream, encoding(octet)),
+	set_stream(Stream, encoding(utf8)),
 	setup_input_filters(HTTPIn, In, Request, Close),
 	thread_create(copy_post_data(In, Stream, Close), _,
 		      [ detached(true)

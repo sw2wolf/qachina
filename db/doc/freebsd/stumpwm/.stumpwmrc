@@ -77,8 +77,8 @@ used for matching windows with run-or-raise or window placement
       *suppress-abort-messages* t
       *timeout-wait* 9
       *mouse-focus-policy* :click ;; :click, :ignore, :sloppy
-      *message-window-gravity* :bottom-right
-      *input-window-gravity* :bottom-right)
+      *message-window-gravity* :bottom-left
+      *input-window-gravity* :bottom-left)
 
 ;;; Window Appearance
 (set-frame-outline-width 1)

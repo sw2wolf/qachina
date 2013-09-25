@@ -1,5 +1,44 @@
 
 %%%
+:- module(load_csv,
+    [load_csv_file/4
+    ]).
+ 
+:- use_module(library(csv)).
+ 
+load_csv_file(File, Functor, Skip, ColumnTypes) :-
+    FirstLine is Skip + 1,
+    forall(
+        load_table_row(File, Functor, ColumnTypes, Line, Row),
+        (   Line >= FirstLine
+        ->  assertz(Row)
+        ;   true
+        )
+    ).
+ 
+load_table_row(File, Functor, ColumnTypes, Line, Row) :-
+    csv_read_file_row(
+        File,
+        R,
+        [convert(false),line(Line)]
+    ),
+    R =.. [row|RawColumns],
+    maplist(convert_field, ColumnTypes, RawColumns, Columns),
+    Row =.. [Functor|Columns].
+ 
+convert_field(atom, Field, Field).
+convert_field(number, Field, Number) :-
+    atom_number(Field, Number).
+
+%%%
+?- member(X," _"), setof(T,code_type(X,T),L).
+X = 32,
+L = [ascii, space, white, to_lower(32), to_upper(32)] ;
+X = 95,
+L = [ascii, csym, csymf, graph, prolog_atom_start,
+prolog_identifier_continue, prolog_var_start, punct, to_lower(...)|...].
+
+%%%
 like(What) --> "I like ", list(What), ".", list(_).
 
 list([]) --> [].
@@ -98,22 +137,21 @@ Result = ['12'].
  
 132 ?-
  
-*I expected the first example capture **([0-9]+) to cap**ture '12', but
-it only captured '2'.*
+% I expected the first example capture **([0-9]+) to cap**ture '12', but
+% it only captured '2'.*
  
-I had to add [^0-9] infront of the numeric capture to successfully
-capture both digits '12'.
+% I had to add [^0-9] in front of the numeric capture to successfully
+% capture both digits '12'.
 
->>
-This regex behavior is correct and isn't specific to Prolog.  A * matches
-greedily.  That is, it consumes as many characters as possible while still
-allowing the whole pattern to match.  In the first example, .* can consume
-the 1 and the entire regex still matches.  Using [^0-9]* prevents that part
-of the pattern from matching the 1.
+% This regex behavior is correct and isn't specific to Prolog.  A * matches
+% greedily.  That is, it consumes as many characters as possible while still
+% allowing the whole pattern to match.  In the first example, .* can consume
+% the 1 and the entire regex still matches.  Using [^0-9]* prevents that part
+% of the pattern from matching the 1.
 
 %------
 %to create a stand-alone executable that starts by executing main/0 and for which the source is loaded through load.pl, use the command 
-swipl --goal=main --stand_alone=true -o myprog -c load.pl
+swipl --goal=main --stand_alone=true --quiet -o myprog -c load.pl
 
 % This performs exactly the same as executing 
 swipl
@@ -124,7 +162,7 @@ swipl
                  ]).
 ?- halt.
 
-%------
+%%%
 ?- debug_message_context(+time).
  
 %Using strace on the threaded program is a bit tricky, but can be done by selecting one of the HTTP threads and getting its thread-id using e.g.,
@@ -133,18 +171,16 @@ swipl
 	   (current_prolog_flag(system_thread_id, P),
 	    writeln(P))).
  
-%That writes (in my case): 14776.
- 
-%Now, use (in another terminal):
- 
+%That writes (in my case): 14776. 
+%Now, use (in another terminal): 
 % strace -e '!futex' -T -p 14776
 
-%------
+%%%
 phrase(utf8_codes("é"), L),
 phrase(utf8_codes(L), L2),
 forall(member(C,L2), format(' ~8r', [C])).
 
-%------
+%%%
 :- meta_predicate
 	monitor(0, +, -).
  
@@ -224,7 +260,7 @@ Status = stack_overflow(global).
 % 290,164 inferences, 0.833 CPU in 11.474 seconds (7% CPU, 348396 Lips)
 true.
 
-%-------
+%%%
 
 :- use_module(library(persistency)).
 :- use_module(library(aggregate)).
@@ -329,10 +365,10 @@ scheme(A) :-
 % To find all people of group 100, use: 
 ?- findall(User, in_table(H, [user(User), gid(100)], _), Users).
 
-%------
-
+%%%
 ?- d(sin(x^2)+5,x,Y).
-Y = cos(x ^ 2) * (1 * 2 * x ^ 1) + 0 
+Y = cos(x ^ 2) * (1 * 2 * x ^ 1) + 0
+
 d(U+V,X,DU+DV) :- !, 
     d(U,X,DU),
     d(V,X,DV).
@@ -382,7 +418,8 @@ get_performance_stats(GC, T):-
 
 with_output_to(atom(Atom), maplist(write, [a+b, b+c])).
 
-%Procedure nameList/1 just calls nameList/2 with an empty accumulator. Then procedure nameList/2 will call every person from the facts database and check whether the person is in the accumulator list. If it finds one such person then it recursively calls itself adding this person to the accumulator. If it does not find any person not in the input list then it unifies this accumulator with the output List of persons.
+% Procedure nameList/1 just calls nameList/2 with an empty accumulator. Then procedure nameList/2 will call every person from the facts database and check whether the person is in the accumulator list. If it finds one such person then it recursively calls itself adding this person to the accumulator. If it does not find any person not in the input list then it unifies this accumulator with the output List of persons.
+
 person('Alex', 'McBrien', male).
 person('Daniel', 'Gardner', male).
 person('Abbas', 'Phillips', male).
@@ -395,20 +432,18 @@ nameList(IList, List):-
   (
    call(person(FName, SName, _)),
    \+ (member((SName, FName), IList))
-  )-> nameList([(SName, FName)|IList], List) ; List=IList.
+  ) -> nameList([(SName, FName)|IList], List) ; List=IList.
 
 % computation of the position of the bowl.
 calc(Ang, Len, X, Y) :-
 	X is Len * cos(Ang)+ 250,
 	Y is Len * sin(Ang) + 20.
- 
 
-% computation of the next angle
-% if we reach 0 or pi, delta change.
+% computation of the next angle if we reach 0 or pi, delta change.
 next_Angle(A, D, NA, ND) :-
 	NA is D + A,
-	(((D > 0,   abs(pi-NA) < 0.01); (D < 0, abs(NA) < 0.01))->
-	  ND = - D;
+	(((D > 0, abs(pi-NA) < 0.01); (D < 0, abs(NA) < 0.01)) ->
+	  ND = -D;
 	  ND = D).
 
 assert((fun(X, Y) :- Y is 2 * X)).
@@ -418,6 +453,7 @@ L = [2,4,6,8,10].
 ?- append([1,2,3],[4,5,6],R).
 R = [1, 2, 3, 4, 5, 6].
 
+%%%
 repeat,
 	write('Your guess : '),
 	read(Guess),
@@ -438,8 +474,9 @@ Status=exit(0).
 
 evens(D, Es) :- findall(E, (member(E, D), E mod 2 =:= 0), Es).
 
+%%%
 fizzbuzz :-
-        foreach(between(1, 100, X), print_item(X)).
+   foreach(between(1, 100, X), print_item(X)).
  
 print_item(X) :-
         (  0 is X mod 15
@@ -452,6 +489,7 @@ print_item(X) :-
         ),
         nl.
 
+%%%
 :- use_module(library(error)).
 :- dynamic arc/2.
 
@@ -475,6 +513,7 @@ load_arcs(Term, Stream) :-
 
 open("ssqNum.txt",read,F),read_stream_to_codes(F,N),write(N),close(F).
 
+%%%
 list_w([W|Ws]) --> string(W), ",", !, list_w(Ws).
 list_w([W]) --> string(W).
 
@@ -527,7 +566,7 @@ catch(
         format('no : ~w~n',[Q]))),
     error(existence_error(procedure, _), _), format('error occurred.~n', [])).
 
-
+%%%
 :- use_module(library(http/http_open)).
 :- use_module(library(xpath)).
  
@@ -541,4 +580,3 @@ test5(UniversityName):-
 			 max_errors(-1)
 		       ]),
 	xpath(HTML, //h1/span(text), UniversityName).
-
