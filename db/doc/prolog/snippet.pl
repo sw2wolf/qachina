@@ -1,5 +1,83 @@
 
 %%%
+:- use_module(library(rbtrees)).
+:- use_module(library(nb_rbtrees)).
+ 
+ordkey :- rb_empty(R),
+   forall(member(W, [ls,mkdir,cd,ftp]),
+     ( atom_length(W, K),
+       (  nb_rb_get_node(R, K, N)
+       -> nb_rb_node_value(N, Ws),
+          nb_rb_set_node_value(N, [W|Ws])
+       ;  nb_rb_insert(R, K, [W])
+       )
+    )), rb_visit(R, L), writeln(L).
+ 
+?- ordkey.
+[2-[cd,ls],3-[ftp],5-[mkdir]]
+
+%%%
+binary(X) :- format('~2r~n', [X]).
+main :- maplist(binary, [5,50,9000]), halt.
+
+%%%
+%bit operators
+is(X, 5 << 1).
+is(X, 5 >> 1).
+is(X, 5 /\ 1).  % and
+is(X, 5 \/ 1).  % or
+is(X, 5 xor 1).
+is(X, 5 \ 1).   % not
+
+%%%
+timediff(DateTime1, DateTime2, Sec) :-
+        date_time_stamp(DateTime1, TimeStamp1),
+        date_time_stamp(DateTime2, TimeStamp2),
+        Sec is TimeStamp2 - TimeStamp1.
+
+?- timediff(date(2001, 03, 04, 23, 0, 32, 0, -, -),
+            date(2001, 03, 04, 23, 1, 33, 0, -, -), Sec).
+Sec = 61.0.
+
+%%%
+%I need all subsets of a list in the order of ascending length
+set_ascending_length_subset(Set, Sub) :-
+           length(Set, N),
+           between(0, N, L),
+           length(Sub, L),
+           phrase(subset(Set), Sub).
+ 
+subset([])     --> [].
+subset([L|Ls]) --> ( [L] ; []), subset(Ls).
+ 
+?- findall(Sub, set_ascending_length_subset([a,b,c], Sub), Subs).
+%@ Subs = [[], [a], [b], [c], [a, b], [a, c], [b, c], [a|...]].
+
+%%%
+add(A,B,R):-
+    R is A + B.
+ 
+mul(A,B,R):-
+    R is A * B.
+ 
+% define fold now.
+fold([], Act, Init, Init).
+ 
+fold(Lst, Act, Init, Res):-
+    head(Lst,Hd),
+    tail(Lst,Tl),
+    apply(Act,[Init, Hd, Ra]),
+    fold(Tl, Act, Ra, Res).
+ 
+sumproduct(Lst, Sum, Prod):-
+    fold(Lst,mul,1, Prod),
+    fold(Lst,add,0, Sum).
+ 
+?- sumproduct([1,2,3,4],Sum,Prod).
+Sum = 10,
+Prod = 24 .
+
+%%%
 :- module(load_csv,
     [load_csv_file/4
     ]).

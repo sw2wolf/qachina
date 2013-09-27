@@ -80,7 +80,7 @@ win_ssq(Count, NoRedStr, NoBlueStr) :-
 	atom2lst(NoBlueStr, NoBlue),
 	numlist(1,33,R), subtract(R,NoRed,YesR),
 	numlist(1,16,B), subtract(B,NoBlue,YesB),
-	set_random(seed(888)),
+	set_random(seed(random)),
 	pick_nums(Count,YesB,OkB),
 	pick_red(Count, YesR, OkB, X), length(X,Count), !,
 	maplist(writeln,X),
@@ -188,6 +188,12 @@ fib(N, X) :- N1 is N-1, N2 is N-2, fib(N1, X1), fib(N2, X2), X is X1+X2.
 binary(0,'0').
 binary(1,'1').
 binary(N,B) :- N>1,X is N mod 2,Y is N//2,binary(Y,B1),atom_concat(B1, X, B), !.
+
+sum([],0).
+sum([H|T],X) :- sum(T,Y), X is H + Y.
+
+product([],1).
+product([H|T],X) :- product(T,Y), X is H * Y.
 
 sys_info :-
 	current_prolog_flag(version_data, swi(Major, Minor, Patch, _)),

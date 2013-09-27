@@ -1,7 +1,12 @@
 
 ------
-:t (?f >=> ?g)
+@where rts-xc
+<lambdabot> ghc -prof -fprof-auto -rtsopts -osuf .p_o foo.hs && ./foo +RTS -xc
+	# print stack traces on unhandled exceptions
+
+@ty (?f >=> ?g)
 (Monad m, ?f::a -> m b, ?g::b -> m c) => a -> m c
+
 ------
 Data.Monoid Endo :: (a -> a) -> Endo a
 Data.Monoid appEndo :: Endo a -> a -> a
@@ -241,14 +246,6 @@ main = xmonad defaultConfig { keys =
         ((0, xK_F7), raiseVolume 4 >>= alert)
     ]
 }
-
--- message s = dzenConfig centered s
--- centered = timeout 5
---     >=> onCurr (center 150 66)
---     >=> font "-*-helvetica-*-r-*-*-12-*-*-*-*-*-*-*"
---     >=> addArgs ["-fg", "#80c0ff"]
---     >=> addArgs ["-bg", "#000040"]
---     >=> addArgs ["-l", "20""]
 
 ---------
 
