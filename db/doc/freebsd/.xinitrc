@@ -36,10 +36,6 @@ xmodmap ~/.Xmodmap
 #fcitx &
 
 case $1 in
-	xmonad)
-		#trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand false --width 360 --widthtype pixel --transparent true --tint 0x222222 --alpha 0 --height 20 & # 
-        exec xmonad
-		;;
 	clisp)
 		#export MPD=YES
 	    #/usr/local/etc/rc.d/musicpd onestart
@@ -53,7 +49,11 @@ case $1 in
     #sbcl)
 		#sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
 		#;;
+	xmonad)
+		exec xmonad
+		;;
     dwm)
+		#trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand false --width 360 --widthtype pixel --transparent true --tint 0x222222 --alpha 0 --height 20 & # 
         #xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex run
 		#xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex source ~/script.gdb
         #xterm -e gdb --quiet -nx -x ~/script.gdb
@@ -61,7 +61,7 @@ case $1 in
 		;;
     *)
 		#exec $HOME/bin/stumpwm-clisp-norc
-		#exec xmonad
-		exec $HOME/bin/dwm
+		exec xmonad
+		#exec $HOME/bin/dwm
 		;;
 esac

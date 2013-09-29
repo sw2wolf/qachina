@@ -15,6 +15,7 @@ match read_line() with
   | "1" -> Sys.command "xinit clisp &";
   | "2" -> Sys.command "xinit ccl &";
   | "3" -> Sys.command "xinit dwm &";
+  | "4" -> Sys.command "xinit xmonad &";
   | "9" -> 0;
   | _ -> Sys.command "xinit &";
   

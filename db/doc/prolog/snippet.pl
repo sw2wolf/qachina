@@ -1,5 +1,19 @@
 
 %%%
+?- use_module(library(http/html_write)).
+true.
+
+?- phrase(html(p('some stuff')), X).
+X = [nl(2), <, p, >, nl(1), some stuff, </, p, >].
+
+?- print_html($X).
+
+
+<p>
+some stuff</p>
+true.
+
+%%%
 :- use_module(library(rbtrees)).
 :- use_module(library(nb_rbtrees)).
  

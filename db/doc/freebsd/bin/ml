@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if test $# -ge 1; then
-    echo "$* ;;" | ocaml -noprompt 2>&1 | tail -n +16
+    echo "$* ;;" | ocaml -noprompt 2>&1 | tail -n +17
     exit 0
 fi
 
@@ -9,6 +9,6 @@ expr=`zenity --width 350 --entry --text "Please input a CL expression" \
 div618 stopLoss winG his\(\) win_ssq hit_ssq`
 
 if [ $? -eq 0 ]; then 
-    res=$(echo "$expr ;;" | ocaml -noprompt 2>&1 | tail -n +16)
+    res=$(echo "$expr ;;" | ocaml -noprompt 2>&1 | tail -n +17)
     zenity --info --text="$res"
 fi
