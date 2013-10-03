@@ -1,5 +1,37 @@
 
 ------
+myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
+
+    -- launch a terminal
+    [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
+      ...
+      , ((modm              , xK_s),      getSelection  >>= sdcv)
+      , ((modm .|. shiftMask, xK_s),      getDmenuInput >>= sdcv)
+      ...
+    ]
+
+getDmenuInput = fmap (filter isPrint) $ runProcessWithInput "dmenu" ["-p", "Dict: "] ""
+
+sdcv word = do
+    output <- runProcessWithInput "sdcv" [word] ""
+    mySafeSpawn "notify-send" [word, trString output]
+
+mySafeSpawn :: MonadIO m => FilePath -> [String] -> m ()
+mySafeSpawn prog args = io $ void_ $ forkProcess $ do
+    uninstallSignalHandlers
+    _ <- createSession
+    executeFile prog True args Nothing
+        where void_ = (>> return ()) -- TODO: replace with Control.Monad.void / void not in ghc6 apparently
+
+trString = foldl (\s c -> s ++ (trChar c)) ""
+
+trChar c
+    | c == '<' = "<"
+    | c == '>' = ">"
+    | c == '&' = "&"
+    | otherwise = [c]
+
+------
 @where rts-xc
 <lambdabot> ghc -prof -fprof-auto -rtsopts -osuf .p_o foo.hs && ./foo +RTS -xc
 	# print stack traces on unhandled exceptions
@@ -33,12 +65,14 @@ data X = forall a. X a (a -> a) (a -> String)
 the constructor (the one who constructs an X) chooses 'a'
 the destructor doesn't know anything about 'a'
 if you have an 'X x f gimme', then all the destructor knows is that f and gimme can be applied to x
+
 ------
 import qualified Data.Vector as V
 main = print (V.foldl' (+) 0 (V.enumFromTo 1 1000000000) :: Int)
 
 import Data.Array.Vector
 main = print (sumU (enumFromToU 1 (200000000 :: Int)))
+
 ------
 {-# LANGUAGE ScopedTypeVariables #-}
 
@@ -76,9 +110,13 @@ $ghc --info | egrep 'split|Host'
 
 $cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
 $cabal install mighttpd2 --ghc-options=-fllvm
-$cabal install hashable --constraint "unix==2.6.0.1" --constraint "bytestring==0.10.0.2" --dry-run
+$cabal install hashable --constraint "unix==2.6.0.1" --constraint "bytestring==0.10.0.2"
+--dry-run
 $cabal install --enable-library-profiling
 $cabal install aeson --constraint="hashable==1.2.0.7" -v
+
+--to build a cabal package packagename: 
+$ cabal install --ghc-options=-package const-math-ghc-plugin -fplugin ConstMath.Plugin packagename
 
 ---------
 foreign import ccall "sin" c_sin :: CDouble -> CDouble

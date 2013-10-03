@@ -1,5 +1,44 @@
 
 %%%
+% load the multi-threaded http server
+:- use_module(library(http/thread_httpd)).
+% and the standard handler dispatcher
+:- use_module(library(http/http_dispatch)).
+ 
+:- use_module(library(http/html_write)).
+:- use_module(library(thread_pool)).
+:- use_module(server_stats).
+:- use_module(library(http/http_session)).
+ 
+:- thread_pool_create(media,   20, []).
+ 
+start :-
+   http_set_session_options([enabled(false)]),
+   http_server(http_dispatch, [port(80), workers(200), timeout(1),
+   keep_alive_timeout(1)]).
+ 
+:- http_handler('/tnsf.png', give_em_the_grape, [spawn(media), priority(10)]).
+ 
+:- http_handler(/, holder, [prefix]).
+ 
+give_em_the_grape(Request) :-
+      http_reply_file('tnsf.jpg', [cache(true)], Request).
+ 
+holder(_Request) :-
+    reply_html_page(title('Transsexual Rights'),
+       div(p('Please support transsexual women\'s basic human right to live our lives.'))
+    ).
+ 
+ 
+:- http_handler('/admin', admin_pg , [spawn(media), priority(20)]).
+ 
+admin_pg(_Request) :-
+    reply_html_page(title('admin'),
+    [\http_session_table,
+     \http_server_statistics,
+     \http_server_pool_table]).
+
+%%%
 ?- use_module(library(http/html_write)).
 true.
 
