@@ -1,4 +1,38 @@
 
+
+%%%
+setup_call_cleanup(
+	    pack_open_entry(Pack, Name, Stream),
+	    read_stream_to_codes(Stream, Codes),
+	    close(Stream)),
+%%%
+
+test2 :-
+   atom_to_memory_file('t:-writeln(1).', H),
+   open_memory_file(H, read, S, [free_on_close(true)]),
+   load_files(a_name, [stream(S)]),
+   close(S),
+   t.
+%%%
+
+pack_version_hashes(Pack, VersionAHashesPairs) :-
+	setof(SHA1, sha1_pack(SHA1, Pack), Hashes),
+	map_list_to_pairs(sha1_version, Hashes, VersionHashPairs),
+	keysort(VersionHashPairs, Sorted),
+	group_pairs_by_key(Sorted, VersionHashesPairs),
+	reverse(VersionHashesPairs, RevPairs),
+	maplist(atomic_version_hashes, RevPairs, VersionAHashesPairs).
+
+%%%
+(   catch(pack_query(Query, Peer, Reply), E, true)
+	->  format('Content-type: text/x-prolog; charset=UTF8~n~n'),
+	    (   var(E)
+	    ->	format('~q.~n', [true(Reply)])
+	    ;	format('~q.~n', [exception(E)])
+	    )
+	;   format('Content-type: text/x-prolog; charset=UTF8~n~n'),
+	    format('false.~n')
+).
 %%%
 % load the multi-threaded http server
 :- use_module(library(http/thread_httpd)).

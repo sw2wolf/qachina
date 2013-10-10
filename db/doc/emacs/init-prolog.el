@@ -11,9 +11,9 @@
                                 ("\\.m$" . mercury-mode))
                                auto-mode-alist))
 
-(defun prolog-return( ) (interactive) (prolog-indent-line) (newline-and-indent))
-(add-hook 'prolog-mode-hook
-   '(lambda() 
-        (local-set-key [13] 'prolog-return)   ;;; RET with automatic indent
-        (local-set-key "\ep" 'indent-all)     ;;; Esc-p pretty-prints file
-    ))
+;; (defun prolog-return( ) (interactive) (prolog-indent-line) (newline-and-indent))
+;; (add-hook 'prolog-mode-hook
+;;    '(lambda() 
+;;         (local-set-key [13] 'prolog-return)   ;;; RET with automatic indent
+;;         (local-set-key "\ep" 'indent-all)     ;;; Esc-p pretty-prints file
+;;     ))

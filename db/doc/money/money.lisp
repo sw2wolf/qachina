@@ -191,7 +191,7 @@ the process with the next item (~})."
 
 (defun win-ssq (nums no-red no-blue)
     (let* ((res) (resRed) (no-red-lst (str2lst no-red))
-           (yesGRed (set-difference (good-red) no-red-lst))
+           (yesGRed (good-red)) ;(set-difference (good-red) no-red-lst))
            ;(yesNoGRed (set-difference (set-difference (range 33) gRed) no-red-lst))
 		   (yesRed (set-difference (range 33) no-red-lst))
            (okBlue (pick-num (set-difference (range 16) (str2lst no-blue)) nums)))
