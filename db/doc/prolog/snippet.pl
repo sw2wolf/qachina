@@ -1,6 +1,36 @@
 
+%%%
+assertz(count(_,1)).
+numlist(1,33,X), map_list_to_pairs(count,X,L).
 
 %%%
+% Let us now use a DCG to relate a binary tree to the in-order sequence of its node names. Let us assume a binary tree consists of leaves of the form nil and inner nodes of the form node(Name, Left, Right), where Left and Right are themselves binary trees. To obtain the in-order sequence of node names, consider: 
+tree_nodes(nil) --> [].
+tree_nodes(node(Name, Left, Right)) -->
+    tree_nodes(Left),
+    [Name],
+    tree_nodes(Right).
+    
+%Example: 
+?- phrase(tree_nodes(node(a, node(b, nil,
+                                 node(c, nil, nil)),
+                             node(d, nil, nil))), Ns).
+Ns = [b, c, a, d].
+    
+%You can obtain other orders by moving the terminal [Name] in the DCG body.
+
+%%%
+predicate_property(ssq_test,X).
+X = interpreted ;
+X = visible ;
+X = file(/media/D/qachina/db/doc/prolog/money.pl) ;
+X = line_count(96) ;
+X = nodebug ;
+X = number_of_clauses(1) ;
+X = number_of_rules(1) ;
+false.
+%%%
+
 setup_call_cleanup(
 	    pack_open_entry(Pack, Name, Stream),
 	    read_stream_to_codes(Stream, Codes),
@@ -315,7 +345,10 @@ Result = ['12'].
 % of the pattern from matching the 1.
 
 %------
-%to create a stand-alone executable that starts by executing main/0 and for which the source is loaded through load.pl, use the command 
+%to create a stand-alone executable that starts by executing main/0 and for which the source is loaded through load.pl, use the command
+swipl --goal="server(7000)" --stand_alone=true --foreign=save -o server_pl
+-c server.pl
+
 swipl --goal=main --stand_alone=true --quiet -o myprog -c load.pl
 
 % This performs exactly the same as executing 

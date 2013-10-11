@@ -93,13 +93,17 @@ pick_red(Count,YesR,OkB,[H|T]) :-
 	append(Red,[Blue],H), C1 is Count-1,
 	pick_red(C1,YesR,OkB,T).
 
+% :- dynamic
+% 	hitnum/3.
+	
 ssq_test :-
 	assertz(hitnum(13001,[1,2,3,4,5,6],1)),
 	assertz(hitnum(13002,[7,8,9,10,11,12],2)),
     assertz(hitnum(13002,[21,22,23,32,33,1],3)).
-	%findall(HitRed, hitnum(_,HitRed,_),X), append(X, Y).
 
+%findall(HitRed, hitnum(_,HitRed,_),X), append(X, Y).
 %read_file_to_codes('test.txt',X,[]), atom_codes(Y,X).
+
 hit_ssq(ID, HitNo) :-
 	atomic_list_concat([ID,' ',HitNo], NumStr),
 	ssqHitNumF(File),
