@@ -1,5 +1,17 @@
 
 ;;;;;;
+CL-USER> (loop
+            repeat 10000000 
+            if (zerop (random 2))
+              sum 1 into male
+            else
+              sum 1 into female
+           finally (return (list male female (/ male (+ male female)))))
+(4999985 5000015 999997/2000000)
+CL-USER> (mapcar 'float *)
+(4999985.0 5000015.0 0.4999985)
+
+;;;;;;
 ":"; exec ~/ccl/fx86cl -Q -b -n -l $0
 (setf *load-verbose* nil *load-print* nil)
 ;(load "~/quicklisp/asdf")
