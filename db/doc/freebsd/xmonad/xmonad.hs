@@ -204,7 +204,7 @@ myXPConfig = defaultXPConfig {
 xterm :: [Char]
 xterm="xterm -geometry 176x29+0+365"
 --eweiqi="wine \"c:/Program Files/eweiqi/LiveBaduk.exe\""
-winxp="VBoxManage startvm winxp"
+--winxp="VBoxManage startvm winxp"
 
 -- <Backspace> <Return>
 myKeys :: [([Char], X ())]
