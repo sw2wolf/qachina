@@ -146,7 +146,7 @@ winSSQ count noRed noBlue = do
 pickSSQ 0 _ _ _ acc = return acc
 pickSSQ 1 gRed _ okBlue acc = do
     red <- sort <$> pickNums gRed 6 []
-    return $ (red ++ [okBlue!!0]) : acc
+    return $ reverse $ (red ++ [okBlue!!0]) : acc
 pickSSQ count gRed yesRed okBlue acc = do
     red <- sort <$> pickNums yesRed 6 []
     pickSSQ (count-1) gRed yesRed okBlue $ 

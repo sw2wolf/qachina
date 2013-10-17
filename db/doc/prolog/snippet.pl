@@ -1,5 +1,49 @@
 
 %%%
+nothing("") --> "".
+ 
+upper_alpha(A) --> [A], { code_type(A, upper) }.
+ 
+lparen --> "(".
+ 
+rparen --> ")".
+ 
+upper_alpha_string([ A | B]) -->
+    upper_alpha(A), (upper_alpha_string(B); nothing(B)).
+ 
+parenthetic_phrase(A) -->
+    lparen, upper_alpha_string(A), rparen.
+ 
+% Here's how you use it in your application. 
+% Convert string to codes before calling string_search/2.
+ 
+string_search([], nil) :- 
+    !, fail.
+ 
+string_search(String, Atom) :-
+    phrase(parenthetic_phrase(Codes), String, _), !,
+    atom_codes(Atom, Codes).
+ 
+string_search([_ | More], Atom) :-
+    string_search(More, Atom).
+ 
+ 
+Tested:
+ 
+?- string_search("acme ltd (HELLO) 123", X).
+X = 'HELLO'.
+
+%%%
+
+%There is string//1 in library(dcg/basics), exactly the same.
+ 
+?- phrase((string(_), "(", string(S), ")", {forall(member(C,S), code_type(C, upper))} ), "hello (again) (WORLD)", _).
+ 
+S = [87, 79, 82, 76, 68]
+?- format('~s',[$S]).
+WORLD
+
+%%%
 assertz(count(_,1)).
 numlist(1,33,X), map_list_to_pairs(count,X,L).
 
@@ -359,6 +403,8 @@ swipl
                    stand_alone(true)
                  ]).
 ?- halt.
+
+swipl-ld -o calc calc.c calc.pl -lgmp -lrt -lm -lncurses -ldl -lunwind
 
 %%%
 ?- debug_message_context(+time).

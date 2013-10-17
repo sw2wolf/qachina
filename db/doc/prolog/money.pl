@@ -75,36 +75,90 @@ sd(Word) :-
 %% lottery
 %%
 win_ssq(Count, NoRedStr, NoBlueStr) :-
+	string_to_atom(NoRedStr, NoRedAtom),
+	string_to_atom(NoBlueStr, NoBlueAtom),
 	Count >= 1,
-	atom2lst(NoRedStr, NoRed),
-	atom2lst(NoBlueStr, NoBlue),
+	atom2lst(NoRedAtom, NoRed),
+	atom2lst(NoBlueAtom, NoBlue),
 	numlist(1,33,R), subtract(R,NoRed,YesR),
 	numlist(1,16,B), subtract(B,NoBlue,YesB),
 	set_random(seed(random)),
 	pick_nums(Count,YesB,OkB),
-	pick_red(Count, YesR, OkB, X), length(X,Count), !,
-	maplist(writeln,X),
+	pick_red(Count, YesR, OkB, X), length(X,Count), reverse(X,Res), !,
+	maplist(writeln, Res),
 	ssqNumF(F),
-    tell(F),maplist(format('~d ~d ~d ~d ~d ~d ~d~n'),X),told.
+    tell(F), maplist(format('~d ~d ~d ~d ~d ~d ~d~n'), Res), told.
 
-pick_red(0,_,_,_) :- !.
+pick_red(1,_,OkB,[H|_]) :-
+	good_red(GoodR),
+    pick_nums(6,GoodR,R1), sort(R1,Red), nth1(1,OkB,Blue),
+	append(Red,[Blue],H), !.
 pick_red(Count,YesR,OkB,[H|T]) :-
 	pick_nums(6,YesR,R1), sort(R1,Red), nth1(Count,OkB,Blue),
 	append(Red,[Blue],H), C1 is Count-1,
 	pick_red(C1,YesR,OkB,T).
 
-% :- dynamic
-% 	hitnum/3.
-	
-ssq_test :-
-	assertz(hitnum(13001,[1,2,3,4,5,6],1)),
-	assertz(hitnum(13002,[7,8,9,10,11,12],2)),
-    assertz(hitnum(13002,[21,22,23,32,33,1],3)).
+:- dynamic
+ 	hitnum/3.
 
-%findall(HitRed, hitnum(_,HitRed,_),X), append(X, Y).
-%read_file_to_codes('test.txt',X,[]), atom_codes(Y,X).
+good_red(GRed) :-
+	ssqHitNumF(HNFile),
+	setup_call_cleanup(
+		open(HNFile, read, HF),
+		(    hit_nums(HF),
+		     findall(HR, (hitnum([_|No]),last(No,B),append(HR,[B],No)), HitRed),
+			 append(HitRed, HitRedNo),
+			 numlist(1,33,X), map_list_to_pairs(count_hit_red(HitRedNo), X, Y),
+			 keysort(Y, Z), pairs_values(Z, ZZ), sublist(ZZ,15,32,ZZZ),
+			 sort(ZZZ, GRed)
+		),
+		close(HF)), !,
+	retractall(hitnum(_)).
 
-hit_ssq(ID, HitNo) :-
+count_hit_red(HitRed, RedNo, RedCnt) :-
+	countOf(HitRed, RedNo, 0, RedCnt), !.
+
+countOf([], _, Cnt, Acc) :-
+	Acc = Cnt, !.
+countOf([X|Rest], X, Cnt, Acc) :-
+	C1 is Cnt + 1,
+	countOf(Rest, X, C1, Acc).
+countOf([_|Rest], X, Cnt, Acc) :-
+	countOf(Rest, X, Cnt, Acc).
+
+sublist(L1, I, J, L2):-
+    sublist(L1, Temp, I, J, []),
+    !,
+    reverse(Temp, L2).
+sublist(L1,I,J,L2):-
+    length(L1, Length),
+    J > Length,
+    sublist(L1,I,Length,L2).
+
+sublist([], L2, _I, _J, L2).
+sublist(_L1, L2, I, J, L2):-
+    I > J.
+sublist(L1, L2, I, J, L2):-
+    I < 0,
+    sublist(L1, L2, 0, J, L2).
+sublist([_L|Ls], L2, I, J, Acc):-
+    I > 0,
+    sublist(Ls, L2, I-1, J-1, Acc).
+sublist([L|Ls], L2, I, J, Acc):-
+    sublist(Ls, L2, I, J-1, [L|Acc]).
+
+hit_nums(F) :-
+	read_line_to_codes(F, Cs),
+    (   Cs == end_of_file
+    ->  true
+    ;   phrase(ints(Is), Cs),
+		assertz(hitnum(Is)),
+		hit_nums(F)
+    ).
+
+hit_ssq(IDStr, HitNoStr) :-
+	string_to_atom(IDStr, ID),
+	string_to_atom(HitNoStr, HitNo),
 	atomic_list_concat([ID,' ',HitNo], NumStr),
 	ssqHitNumF(File),
 	setup_call_cleanup(
