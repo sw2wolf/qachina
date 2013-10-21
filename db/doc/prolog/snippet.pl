@@ -1,5 +1,48 @@
 
 %%%
+http_replay(Log, Options) :-
+	start_dispatchers(Options),
+	open(Log, read, In, [encoding(utf8)]),
+	call_cleanup((read(In, T0),
+		      replay(T0, In)),
+		     close(In)),
+	join_dispatchers.
+
+test :-
+    open_null_stream(Dest),
+	get_time(Now),
+	call_cleanup(http_get(ClientId, Parts, _Reply,
+			      [ to(stream(Dest))
+			      | Options
+			      ]),
+		     Reason, done(Path, Reason, Now, Dest)).
+	
+%%%
+%	Create a cookie value string with name=value, seperated by ";".
+cookie_value(List, Cookie) :-
+	with_output_to(string(Cookie),
+		       write_cookies(List)).
+
+write_cookies([]).
+write_cookies([Name=Value|T]) :-
+	format('~w=~w', [Name, Value]),
+	(   T == []
+	->  true
+	;   format('; ', []),
+	    write_cookies(T)
+	).
+
+%%%
+t:- 
+    empty_assoc(A0), 
+    term_to_atom('$root$'/a, V1), 
+    term_to_atom('$root$'/'$ui$', V2), 
+    put_assoc(V1, A0, some_value, A1), 
+    put_assoc(V2, A1, some_other_value, A2), 
+    assertion(is_assoc(A1)), 
+    assertion(is_assoc(A2)).
+
+%%%
 nothing("") --> "".
  
 upper_alpha(A) --> [A], { code_type(A, upper) }.

@@ -55,13 +55,25 @@ case $1 in
     dwm)
 		#trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand false --width 360 --widthtype pixel --transparent true --tint 0x222222 --alpha 0 --height 20 & # 
         #xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex run
-		#xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex source ~/script.gdb
         #xterm -e gdb --quiet -nx -x ~/script.gdb
+
+# while true; do
+#    xsetroot -name "$(CMAS) | $( date +"%F %R")  | $(acpi -b | awk 'sub(/,/,"") {print $3}') | $(acpi -b | awk 'sub(/,/,"") {print $4}')"
+#    sleep 1s   # Update time every minute
+# done &
+
+# exec /usr/bin/xterm -class tag2 &
+# exec /usr/bin/xterm -class tag9 -e cmus&
+# exec /usr/bin/xterm -class tag1 -e nohup firefox&
+# exec /usr/bin/xterm -class tag9 -e alsamixer &
+# exec /usr/bin/xterm -class tag9 -e wicd-curses &
+# exec /usr/bin/xterm -class tag9 -e pianobar &
+
 		exec $HOME/bin/dwm
 		;;
     *)
 		#exec $HOME/bin/stumpwm-clisp-norc
-		exec xmonad
-		#exec $HOME/bin/dwm
+		#exec xmonad
+		exec $HOME/bin/dwm
 		;;
 esac

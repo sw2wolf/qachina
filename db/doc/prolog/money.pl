@@ -84,8 +84,8 @@ win_ssq(Count, NoRedStr, NoBlueStr) :-
 	numlist(1,16,B), subtract(B,NoBlue,YesB),
 	set_random(seed(random)),
 	pick_nums(Count,YesB,OkB),
-	pick_red(Count, YesR, OkB, X), length(X,Count), reverse(X,Res), !,
-	maplist(writeln, Res),
+	pick_red(Count, YesR, OkB, Res), length(Res,Count), !,
+	maplist(writeln,Res),
 	ssqNumF(F),
     tell(F), maplist(format('~d ~d ~d ~d ~d ~d ~d~n'), Res), told.
 
