@@ -1,5 +1,30 @@
 
 -----------------------------------------------------------------------------
+/*
+gcc -o src src.S -Wall -g -nostdlib -Wa,-mmnemonic=intel,-msyntax=intel,-mnaked-reg -m32
+*/
+
+//buffer	resb 10000
+
+.global _start
+_start:
+	nop	//make ld happy
+
+_write:
+	mov eax, 4	//set syswrite
+	mov ebx, 1	//set stdout
+	lea ecx, str	//set text out
+	lea edx, strLen	//how much text out
+	int 0x80		//make the syscall
+
+_normEnd:
+	mov eax, 1	//ready syscall
+	mov ebx, 0	//no problem return code
+
+str: .string "hello\n"
+	 .equ strLen, 6
+
+-----------------------------------------------------------------------------
 .use GDB as C's REPL
 
 % gdb ./test

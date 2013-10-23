@@ -1,13 +1,19 @@
 -module(user_default).
 -author('***@163.com').
 
-%--------------------------------------------------
--opaque u16int() :: 0..(1 bsl 16 - 1). 
--export_type([u16int/0]). 
+%-compile([native, {hipe, [o3]}]).
+%% -compile({inline,[pi/0]}).
 
--record(headerrec, {message_id :: u16int()}). 
--opaque headerrec() :: #headerrec{}. 
--export_type([headerrec/0]).
+%% pi() -> 3.1416.
+
+%--------------------------------------------------
+%% -opaque u16int() :: 0..(1 bsl 16 - 1). 
+%% -export_type([u16int/0]). 
+
+%% -record(headerrec, {message_id :: u16int()}). 
+%% -opaque headerrec() :: #headerrec{}. 
+%% -export_type([headerrec/0]).
+
 %--------------------------------------------------
 %-type diskinfo() :: {non_neg_integer(), non_neg_integer()}.
 %-spec diskspace(nonempty_string()) -> {'ok', diskinfo()} | {'error', term()}.
@@ -50,16 +56,18 @@ r()->
 
 %计算股票盈利
 -spec winG(integer(), float(), float()) -> float .
-winG(Qty,Pb,Ps) -> Qty * Ps * (1 -?SXF - ?YHS) - 2 * ?GHF - Qty * Pb * (1 + ?SXF).
+winG(Qty,Pb,Ps) -> 
+	io:format("Win:~.2f~n", [Qty * Ps * (1 -?SXF - ?YHS) - 2 * ?GHF - Qty * Pb * (1 + ?SXF)]).
 
 %算权证盈利
-winQ(Qty,Pb,Ps) -> Qty * Ps * (1 - ?SXF) - 2 * ?GHF - Qty * Pb * (1 + ?SXF).
+winQ(Qty,Pb,Ps) ->
+	io:format("Win:~.2f~n", [Qty * Ps * (1 - ?SXF) - 2 * ?GHF - Qty * Pb * (1 + ?SXF)]).
 
 %止损价
 stopLoss(Qty,Pb,LossRate) ->
     T = Qty * Pb * (1 + ?SXF),
-    io:format("Stop Loss at: ~.2f\n",[Pb - (T * LossRate) / Qty]),
-    io:format("Lost Money: ~.2f\n",[T*LossRate]) .
+    io:format("Stop Loss at: ~.2f~n",[Pb - (T * LossRate) / Qty]),
+    io:format("Lost Money: ~.2f~n",[T*LossRate]) .
 
 div618(P1, P2) ->
     P = fun(R) ->

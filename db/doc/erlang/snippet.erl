@@ -1,5 +1,143 @@
 
 %%%
+WorkerPid = proc_lib:spawn(?MODULE, cgi_worker,
+                            [self(), Arg, ExeFN, Scriptfilename, PI, ExtraEnv, SC]),
+...
+
+cgi_worker(Parent, Arg, Exefilename, Scriptfilename, Pathinfo, ExtraEnv,SC) ->
+    Env = build_env(Arg, Scriptfilename, Pathinfo, ExtraEnv,SC),
+    ?Debug("~p~n", [Env]),
+    CGIPort = open_port({spawn, Exefilename},
+                        [{env, Env},
+                         {cd, pathof(Scriptfilename)},
+                         exit_status,
+                         binary]),
+...
+
+%%%
+-record(g, {key, value}). 
+ets:new(g, [public, named_table, {keypos, #g.key}]). 
+ets:insert_new(g, #g{user_id, 0}). 
+
+Uid = ets:update_counter(g, user_id). 
+ets:insert_new(users, #user{id=Uid, name="Somebody"}.
+
+%%%
+dbg:tracer(),dbg:p(all, [call]),dbg:tpl(heart, [{'_', [], [{return_trace}]}]). 
+{ok,[{matched,nonode@nohost,22},{saved,1}]}
+4> erlang:whereis(heart).
+(<0.4.0>) 
+
+%%%
+listen(Port, N) ->
+    Opts = [{active, false},
+            binary,
+            {backlog, 256},
+            {packet, http_bin},
+            {raw,6,9,<<1:32/native>>}, %defer accept
+            %%{delay_send,true},
+            %%{nodelay,true},
+            {reuseaddr, true}],
+ 
+    {ok, S} = gen_tcp:listen(Port, Opts),
+    Spawn = fun(I) ->    
+                    register(list_to_atom("acceptor_" ++ integer_to_list(I)),
+                             spawn_opt(?MODULE, accept, [S, I], [link, {scheduler, I}]))
+            end,
+    lists:foreach(Spawn, lists:seq(1, N)).
+
+%%%
+main() ->
+    random:seed(now()),
+    io:format("24 Game~n"),
+    play().
+ 
+play() ->
+    io:format("Generating 4 digits...~n"),
+    Digts = [random:uniform(X) || X <- [9,9,9,9]],
+    io:format("Your digits\t~w~n", [Digts]),
+    read_eval(Digts),
+    play().
+ 
+read_eval(Digits) ->
+    Exp = string:strip(io:get_line(standard_io, "Your expression: "), both, $\n),
+    case {correct_nums(Exp, Digits), eval(Exp)} of
+        {ok, X} when X == 24 -> io:format("You Win!~n");
+        {ok, X} -> io:format("You Lose with ~p!~n",[X]);
+        {List, _} -> io:format("The following numbers are wrong: ~p~n", [List])
+    end.
+ 
+correct_nums(Exp, Digits) ->
+    case re:run(Exp, "([0-9]+)", [global, {capture, all_but_first, list}]) of
+        nomatch ->
+            "No number entered";
+        {match, IntLs} ->
+            case [X || [X] <- IntLs, not lists:member(list_to_integer(X), Digits)] of
+                [] -> ok;
+                L -> L
+            end
+    end.
+ 
+eval(Exp) ->
+    {X, _} = eval(re:replace(Exp, "\\s", "", [{return, list},global]),
+                  0),
+    X.
+ 
+eval([], Val) ->
+    {Val,[]};
+eval([$(|Rest], Val) ->
+    {NewVal, Exp} = eval(Rest, Val),
+    eval(Exp, NewVal);
+eval([$)|Rest], Val) ->
+    {Val, Rest};
+eval([$[|Rest], Val) ->
+    {NewVal, Exp} = eval(Rest, Val),
+    eval(Exp, NewVal);
+eval([$]|Rest], Val) ->
+    {Val, Rest};
+eval([$+|Rest], Val) ->
+    {NewOperand, Exp} = eval(Rest, 0),
+    eval(Exp, Val + NewOperand);
+eval([$-|Rest], Val) ->
+    {NewOperand, Exp} = eval(Rest, 0),
+    eval(Exp, Val - NewOperand);
+eval([$*|Rest], Val) ->
+    {NewOperand, Exp} = eval(Rest, 0),
+    eval(Exp, Val * NewOperand);
+eval([$/|Rest], Val) ->
+    {NewOperand, Exp} = eval(Rest, 0),
+    eval(Exp, Val / NewOperand);
+eval([X|Rest], 0) when X >= $1, X =< $9 ->
+    eval(Rest, X-$0).
+ 
+
+The evaluator uses a simple infix scheme that doesn't care about operator precedence, but does support brackets and parentheses alike. Thus, ((9+1)*2)+2+2 is evaluated as: 
+9 + 1 = 10
+10 * 2 = 20
+2 + 2 = 4
+20 + 4
+
+Example: 
+1> c(g24).    
+{ok,g24}
+2> g24:main().
+24 Game
+Generating 4 digits...
+Your digits     [7,4,6,8]
+Your expression: 6*4
+You Win!
+Generating 4 digits...
+Your digits     [4,1,5,8]
+Your expression: 6*4
+The following numbers are wrong: ["6"]
+Generating 4 digits...
+Your digits     [8,5,8,2]
+Your expression: 2*([8/5]*2)
+You Lose with 6.4!
+Generating 4 digits...
+Your digits     [7,4,8,1]
+
+%%%
 io:format("<<~s>>~n", [[io_lib:format("~2.16.0B",[X]) || <<X:8>> <= <<255,16>> ]]).
 bin_to_hex_list(Bin) when is_binary(Bin) ->
   lists:flatten([integer_to_list(X,16) || <<X>> <= Bin]).
