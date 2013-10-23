@@ -169,6 +169,12 @@ hit_ssq(IDStr, HitNoStr) :-
 		),
 		close(HF)),
 	atom2lst(HitNo,HN),
+	/**/
+	good_red(GRed),
+	last(HN,B1),append(RedH,[B1],HN),
+	intersection(RedH, GRed, X), length(X, HitR),
+	format('Good red hit ~p~n', [HitR]), format('---------------~n'),
+	/**/
     ssqNumF(F),
 	setup_call_cleanup(
 		open(F, read, H),
@@ -182,7 +188,7 @@ hit_sum(HitNo, No) :-
 	append(RedH,[B1],HitNo), !,
 	append(RedN,[B2],No), !,
 	intersection(RedH, RedN, X), length(X,HitR), hit_desc(HitR,HitB,Desc),
-	format('~p ~t(~p,~p)~25| ~t~p~38|~n',[No,HitR,HitB,Desc]).
+	format('~p ~t(~p,~p)~30| ~t~p~38|~n',[No,HitR,HitB,Desc]).
 
 ints(L) --> blanks, (integer(I), ints(Is), {L = [I|Is]} ; {L = []}).
 

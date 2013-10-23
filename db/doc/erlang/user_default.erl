@@ -1,5 +1,11 @@
+%% coding: utf-8 
 -module(user_default).
 -author('***@163.com').
+
+-compile(nowarn_unused_function).
+-compile(export_all).
+%-export([winG/3, winQ/3, div618/2, stopLoss/3, sd/1, sh/1, qachina/0]).
+%-export([help/0, r/0]).
 
 %-compile([native, {hipe, [o3]}]).
 %% -compile({inline,[pi/0]}).
@@ -20,10 +26,6 @@
 %--------------------------------------------------
 
 -include("records.hrl").
-%-export([winG/3, winQ/3, div618/2, stopLoss/3, sd/1, sh/1, qachina/0]).
--compile(export_all).
-
-%-export([help/0, r/0]).
 
 -import(calendar, [date_to_gregorian_days/3, gregorian_days_to_date/1, day_of_the_week/1]).
 
