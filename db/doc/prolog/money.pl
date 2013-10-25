@@ -1,17 +1,23 @@
 %:- module(money, [winG/3, stopLoss/3]).
 :- use_module(library(dcg/basics)).
 %:- use_module(library(clpfd)).
-%:- use_module(library(assoc)).
+
+:- multifile
+	http_header:eos/2.
 
 :- set_prolog_flag(toplevel_print_options,
 	[backquoted_string(true), max_depth(9999),
 	 portray(true), spacing(next_argument)]).
+
 :- set_prolog_flag(debugger_print_options,
 	[backquoted_string(true), max_depth(9999),
 	 portray(true), spacing(next_argument)]).
 
 :- set_prolog_flag(generate_debug_info, false).
 %:- set_prolog_flag(verbose_file_search, true).
+
+%it prints out "hi Floris" in debug, not a bunch of numbers.
+%:- portray_text(true).
 
 :- assertz(user:file_search_path(qachina, '/media/D/qachina')).
 :- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
@@ -82,21 +88,21 @@ win_ssq(Count, NoRedStr, NoBlueStr) :-
 	atom2lst(NoBlueAtom, NoBlue),
 	numlist(1,33,R), subtract(R,NoRed,YesR),
 	numlist(1,16,B), subtract(B,NoBlue,YesB),
+	good_red(GoodR),
 	set_random(seed(random)),
 	pick_nums(Count,YesB,OkB),
-	pick_red(Count, YesR, OkB, Res), length(Res,Count), !,
+	pick_red(Count, GoodR, YesR, OkB, Res), length(Res,Count), !,
 	maplist(writeln,Res),
 	ssqNumF(F),
     tell(F), maplist(format('~d ~d ~d ~d ~d ~d ~d~n'), Res), told.
 
-pick_red(1,_,OkB,[H|_]) :-
-	good_red(GoodR),
-    pick_nums(6,GoodR,R1), sort(R1,Red), nth1(1,OkB,Blue),
+pick_red(1, _, YesR, OkB, [H|_]) :-
+    pick_nums(6,YesR,R1), sort(R1,Red), nth1(1,OkB,Blue),
 	append(Red,[Blue],H), !.
-pick_red(Count,YesR,OkB,[H|T]) :-
-	pick_nums(6,YesR,R1), sort(R1,Red), nth1(Count,OkB,Blue),
+pick_red(Count, GoodR, YesR, OkB, [H|T]) :-
+	pick_nums(6,GoodR,R1), sort(R1,Red), nth1(Count,OkB,Blue),
 	append(Red,[Blue],H), C1 is Count-1,
-	pick_red(C1,YesR,OkB,T).
+	pick_red(C1,GoodR,YesR,OkB,T).
 
 :- dynamic
  	hitnum/3.
@@ -262,7 +268,9 @@ fib(N, X) :- N1 is N-1, N2 is N-2, fib(N1, X1), fib(N2, X2), X is X1+X2.
 
 binary(0,'0').
 binary(1,'1').
-binary(N,B) :- N>1,X is N mod 2,Y is N//2,binary(Y,B1),atom_concat(B1, X, B), !.
+binary(N,B) :- N>1, X is N mod 2, Y is N//2, binary(Y,B1), atom_concat(B1, X, B), !.
+
+binary_str(X) :- format('~2r~n', [X]).
 
 sum([],0).
 sum([H|T],X) :- sum(T,Y), X is H + Y.

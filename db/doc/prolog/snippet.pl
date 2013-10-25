@@ -1,5 +1,25 @@
 
 %%%
+leap_year(L) :-
+	partition(is_leap_year, L, LIn, LOut),
+	format('leap years : ~w~n', [LIn]),
+	format('not leap years : ~w~n', [LOut]).
+ 
+is_leap_year(Year) :-
+	R4 is Year mod 4,
+	R100 is Year mod 100,
+	R400 is Year mod 400,
+	( (R4 = 0, R100 \= 0); R400 = 0 ).
+
+%%%
+%You have a bunch of places where you use univ (the =.. operator) to convert between lists and strings. Univ probably is NOT what you want here. Univ unifies a term with a list.
+foo(bar, baz)  =..  [foo, bar, baz]
+
+%%%
+current_prolog_flag(encoding,X).
+X = utf8.
+
+%%%
 http_replay(Log, Options) :-
 	start_dispatchers(Options),
 	open(Log, read, In, [encoding(utf8)]),
@@ -532,7 +552,8 @@ Status = timeout.
 %Found the deadlock (which was due to a bug in the code below).  I've
 %extended it a bit, gave it a (hopefully) reasonable name and uploaded
 %it as a pack.
- 
+
+% pack_install(Pack, [interactive(false),upgrade(true)|InstallOptions])
 ?- pack_install(resbound).
 ?- [library(resource_bounds)].
 ?- resource_bounded_call(numlist(1, 1000000, L), 1, Status, [global(1000)]).
