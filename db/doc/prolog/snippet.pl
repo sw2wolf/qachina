@@ -1,5 +1,23 @@
 
 %%%
+git_update -->
+	{ process_create(path(git), [pull],
+			 [ stdout(pipe(Out)),
+			   stderr(pipe(Error))
+			 ]),
+	  read_stream_to_codes(Out, OutCodes),
+	  read_stream_to_codes(Error, ErrorCodes),
+	  close(Out),
+	  close(Error)
+	},
+	output('', informational, OutCodes),
+	output('', error, ErrorCodes).
+
+?- process_create('/bin/ls', [], [process(PID)]), process_wait(PID,Status).
+PID=2999,
+Status=exit(0).
+
+%%%
 leap_year(L) :-
 	partition(is_leap_year, L, LIn, LOut),
 	format('leap years : ~w~n', [LIn]),
@@ -622,15 +640,6 @@ limit(Max, Goal) :-
 	;   nb_setarg(1, State, Count1)
 	).
 
-process_create(path(git), [pull],
-			 [ stdout(pipe(Out)),
-			   stderr(pipe(Error))
-			 ]),
-read_stream_to_codes(Out, OutCodes),
-read_stream_to_codes(Error, ErrorCodes),
-close(Out),
-close(Error).
-
 findall(C,
 		(   between(1, 1000, X),
 		    C is "a" + X mod 26
@@ -775,10 +784,6 @@ repeat,
 
 numlist(0, 9, L).
 L = [0,1,2,...]
-
-?- process_create('/bin/ls', [], [process(PID)]), process_wait(PID,Status).
-PID=2999,
-Status=exit(0).
 
 evens(D, Es) :- findall(E, (member(E, D), E mod 2 =:= 0), Es).
 
