@@ -204,20 +204,20 @@ myXPConfig = defaultXPConfig {
 xterm :: [Char]
 xterm="xterm -geometry 176x29+0+365"
 --eweiqi="wine \"c:/Program Files/eweiqi/LiveBaduk.exe\""
---winxp="VBoxManage startvm winxp"
+winxp="VBoxManage startvm winxp"
 
 -- <Backspace> <Return>
 myKeys :: [([Char], X ())]
 myKeys =
     [ ("M-w", raiseMaybe (spawn "opera") (className =? "Opera"))
      ,("M-e", raiseMaybe (spawn "emacs") (className =? "Emacs"))
-     ,("M-q", raiseMaybe (spawn "winxp") (className =? "VirtualBox"))
+     ,("M-v", raiseMaybe (spawn winxp) (className =? "VirtualBox"))
      ,("M-<Space>", raiseMaybe (spawn xterm) (className =? "XTerm"))
 
      ,("M-g", goToSelected defaultGSConfig)
      ,("M-p", spawn "~/bin/dmenu.sh")
      ,("M-c", spawn "~/bin/sdcv.sh")
-     ,("M-x", spawn "~/bin/pl.sh")
+     ,("M-x", spawn "~/bin/clisp.sh")
 
      ,("M-C-n", do
             spawn ("date>>" ++ "~/TODO")

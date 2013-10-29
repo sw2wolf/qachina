@@ -3,7 +3,7 @@
 module Money (
     winG, winQ, div618, stopLoss
     ,qachina, fibs
-    ,winSSQ, hitSSQ
+    ,win_ssq, hit_ssq
     )
 where
 import System.Random
@@ -129,7 +129,7 @@ picoSec = ctPicosec <$> (getClockTime >>= toCalendarTime)
 
 ------------------------------------------------------------------------
 
-winSSQ count noRed noBlue = do
+win_ssq count noRed noBlue = do
     --let noStr = (map (\x->show x) noRed) ++ ["-"] ++ (map (\x->show x) noBlue)
     --writeFile "noRedBlue.txt" $ concat $ intersperse " " noStr
     let noRedLst =  map (\x -> read x::Int) $ words noRed
@@ -144,11 +144,11 @@ winSSQ count noRed noBlue = do
     writeFile ssqNum $ ints2str result
 
 pickSSQ 0 _ _ _ acc = return acc
-pickSSQ 1 gRed _ okBlue acc = do
-    red <- sort <$> pickNums gRed 6 []
+pickSSQ 1 _ yesRed okBlue acc = do
+    red <- sort <$> pickNums yesRed 6 []
     return $ reverse $ (red ++ [okBlue!!0]) : acc
 pickSSQ count gRed yesRed okBlue acc = do
-    red <- sort <$> pickNums yesRed 6 []
+    red <- sort <$> pickNums gRed 6 []
     pickSSQ (count-1) gRed yesRed okBlue $ 
         (red ++ [okBlue!!(count-1)]) : acc
 
@@ -181,8 +181,8 @@ pickNums from count acc = do
     idx <-  rollDice $ length from
     pickNums (from \\ [from!!(idx-1)]) (count-1) (from!!(idx-1):acc)
 
-hitSSQ :: String -> String -> IO ()
-hitSSQ no hitNum = do
+hit_ssq :: String -> String -> IO ()
+hit_ssq no hitNum = do
     let hitLst =  map (\x -> read x::Int) $ words hitNum
     let hitRed redNo = foldl (\acc x -> if(x `elem` (init hitLst)) then acc+1 else acc) 0 redNo
 
