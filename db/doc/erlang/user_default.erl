@@ -165,9 +165,9 @@ pick_ssq_nums(Count, GRed, YesRed, OkBlue) ->
 			%% 					 pick_num(5,GRed--NoRed,[]),
 			%% 					 pick_num(1,((lists:seq(1,33)--GRed)--NoRed),[])
 			%% 					));
-			Red6 = lists:sort( pick_num(6, GRed, []) );
+			Red6 = lists:sort( pick_num(6, YesRed, []) );
 	    true ->
-			Red6 = lists:sort( pick_num(6, YesRed, []) )
+			Red6 = lists:sort( pick_num(6, GRed, []) )
 	end,
 
     Result = lists:append(Red6, [lists:nth(Count,OkBlue)]),

@@ -73,7 +73,7 @@ case $1 in
 		;;
     *)
 		#exec $HOME/bin/stumpwm-clisp-norc
-		#exec xmonad
-		exec $HOME/bin/dwm
+		exec xmonad
+		#exec $HOME/bin/dwm
 		;;
 esac
