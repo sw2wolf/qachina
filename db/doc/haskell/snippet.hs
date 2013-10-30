@@ -390,6 +390,3 @@ better  = unlines . map linemanager . lines
          case (take 13 l, drop 13 l) of
             ("<interactive>", xs) -> "YOUR SCRIPT DOESNT MAKE SENSE!\n" ++ tail xs
             _                     -> l
-------
-let inf ~(x:xs) = x : inf xs in length . take 5 $ inf [] => 5
-inf ~(x:xs) = ...  says you only actually look at the LHS  if anyone ever asks for the value of "x" or "xs".  But nobody does. try to read it as:  inf ? = ? : inf ? note that if nobody asks the question marks what they are, it's basically like a repeat
