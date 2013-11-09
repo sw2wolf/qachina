@@ -1,5 +1,41 @@
 
 ------
+# cd /usr/ports/ports-mgmt/pkg && make install clean
+# echo WITH_PKGNG=yes >> /etc/make.conf
+# pkg2ng
+ 
+You can now either continue to use ports with portmaster/portupgrade, as
+before or switch to using binary packages only.
+ 
+ 
+To use binary packages:
+ 
+1. Ensure your pkg(8) is up-to-date. 'pkg -v' should say at least
+   1.1.4_8. If it does not, first upgrade from ports.
+2. Remove any repository-specific configuration from
+   /usr/local/etc/pkg.conf, such as PACKAGESITE, MIRROR_TYPE, PUBKEY.
+   If this leaves your pkg.conf empty, just remove it.
+3. mkdir -p /usr/local/etc/pkg/repos
+4. Create the file /usr/local/etc/pkg/repos/FreeBSD.conf with:
+FreeBSD: {
+  url: "http://pkg.FreeBSD.org/${ABI}/latest",
+  mirror_type: "srv",
+  enabled: "yes"
+}
+
+* Note that pkg.FreeBSD.org does not have a browsable web page on it and
+does not have a DNS A record. This is intended as it is an SRV host.
+pkg(8) knows how to properly use it. You can use 'pkg search' to browse
+the available packages in the repository.
+ 
+Mirrors you may use instead of the global pkg.FreeBSD.org:
+ 
+    pkg.eu.FreeBSD.org
+    pkg.us-east.FreeBSD.org
+    pkg.us-west.FreeBSD.org
+ 
+Your system is now ready to use packages!
+------
 To start FreeBSD network service: 
 
  # /etc/rc.d/netif start 
