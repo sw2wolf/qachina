@@ -47,10 +47,10 @@ stopLoss(Qty,Pb,LossRate) :-
 	format("Lost Money: ~2f~n", [T * LossRate]).
 
 show618(P1, P2, R) :-
-	RP1 is rationalize(P1),
-	RP2 is rationalize(P2),
-	RR is rationalize(R),
-	(P1=<P2 -> P is RP1+(RP2-RP1)*RR; P is RP1-(RP1-RP2)*RR),
+	%RP1 is rationalize(P1),
+	%RP2 is rationalize(P2),
+	%RR is rationalize(R),
+	(P1=<P2 -> P is P1+(P2-P1)*R; P is P1-(P1-P2)*R),
 	format("---~3f ~2f---~n",[R,P]).
 div618(P1, P2) :-
 	RATIO = [0.0, 0.191, 0.236, 0.382, 0.5, 0.618, 0.809, 1.0],
