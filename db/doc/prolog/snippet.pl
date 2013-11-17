@@ -1,5 +1,15 @@
 
 %%%
+atom_to_term('assert(pony).', Term, _), call(Term).
+
+%%%
+?- thread_create((repeat, fail), ID, [alias(mymain)]).
+?- thread_signal(mymain, abort) % from another thread results in mymain terminating with an exception '$aborted'.
+
+catch(Goal, stop, <whatever>).
+signal(Target, throw(stop)).
+
+%%%
 git_update -->
 	{ process_create(path(git), [pull],
 			 [ stdout(pipe(Out)),

@@ -146,7 +146,6 @@ http_run_cgi(ScriptSpec, Options, Request) :-
 			 process(PID)
 		       ]),
 	setup_input(ScriptInput, Request),
-	%set_stream(CGI, encoding(octet)),
 	set_stream(CGI, encoding(utf8)),
 	debug(http(cgi), 'Waiting for CGI data ...', []),
 	maplist(header_option, Options),
@@ -197,8 +196,7 @@ method_has_data(put).
 setup_input(std, _).
 setup_input(pipe(Stream), Request) :-
 	memberchk(input(HTTPIn), Request),
-	%set_stream(Stream, encoding(octet)),
-	set_stream(Stream, encoding(utf8)),
+	set_stream(Stream, encoding(octet)),
 	setup_input_filters(HTTPIn, In, Request, Close),
 	thread_create(copy_post_data(In, Stream, Close), _,
 		      [ detached(true)

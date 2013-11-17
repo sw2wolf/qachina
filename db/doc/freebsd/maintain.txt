@@ -1,5 +1,16 @@
 
 ------
+$cat /etc/make.conf
+FORCE_MAKE_JOBS=yes
+MAKE_JOBS_NUMBER=4
+MASTER_SITE_OVERRIDE=http://ftp.jaist.ac.jp/pub/FreeBSD/ports/distfiles/${DIST_SUBDIR}
+WITH_PKGNG=yes
+
+.if ${.CURDIR:M*/editors/vim}
+WITH_OPTIONS=YES
+.endif
+------
+
 # cd /usr/ports/ports-mgmt/pkg && make install clean
 # echo WITH_PKGNG=yes >> /etc/make.conf
 # pkg2ng
