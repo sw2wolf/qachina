@@ -1,5 +1,20 @@
 
 ;;;;;;
+(defun bytes->string (bytes)
+  (flexi-streams:octets-to-string bytes :external-format :utf-16))
+
+(defun condensed-example ()
+  (let* ((socket (usocket:socket-connect "192.168.0.21" 25565
+                                        :element-type '(unsigned byte 8)))
+         (stream (flexi-streams:make-flexi-stream (usocket:socket-stream socket)
+                     :external-format (flexi-streams:make-external-format
+                     :utf-16
+                     :eol-style :crlf))))
+    (write-byte #x02 stream)
+    (format t "~A~%" (bytes->string (read-byte stream)))
+    (usocket:socket-close socket)))
+
+;;;;;;
 CL-USER> (loop
             repeat 10000000 
             if (zerop (random 2))

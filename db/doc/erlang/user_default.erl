@@ -7,7 +7,7 @@
 %-export([winG/3, winQ/3, div618/2, stopLoss/3, sd/1, sh/1, qachina/0]).
 %-export([help/0, r/0]).
 
-%-compile([native, {hipe, [o3]}]).
+-compile([native, {hipe, [o3]}]).
 %% -compile({inline,[pi/0]}).
 
 %% pi() -> 3.1416.

@@ -1,5 +1,48 @@
 
 ------
+If the passwd databases become out of synch, repairing it, you could try:
+
+# pwd_mkdb -p /etc/master.passwd
+
+------
+Mount the .iso that you want to copy to your memorystick.
+mdconfig -a -t vnode -f FreeBSD-9.2-RELEASE-amd64-bootonly.iso -u 0
+mount -t cd9660 /dev/md0 /media
+  
+Unambiguously identify the device node of your USB memory stick. For example, you could plug it in while you are reading the console messages. If you see a lot of things happening for da0, then you can be sure that your memory stick is on /dev/da0. Don't simply do the following steps with /dev/da0, because this may destroy contents of another USB disk (if connected).
+  
+Format the memory stick /dev/daX. Here X is the index of the identified stick. Issue the following commands all as root, replacing X with the actual device index -- be careful, don't do this with a device that you did not identify like said above.
+Code:
+# delete the old partitions of the memory stick and destroy the old partition scheme
+gpart show daX
+gpart delete -i 3 daX
+gpart delete -i 2 daX
+gpart delete -i 1 daX
+gpart destroy daX
+
+# create a GPT partition scheme and partition it for being bootable
+gpart create -s gpt daX
+gpart add -s 128 -a 4k -t freebsd-boot daX
+gpart add -a 4k -t freebsd-ufs daX
+
+# Place the boodcode
+gpart bootcode -b /media/boot/pmbr -p /media/boot/gptboot -i 1 daX
+
+# Set the bootme attribute
+gpart set -a bootme -i 2 daX
+
+# Create a new UFS filesystem and mount it at /mnt
+newfs /dev/daXp2
+mount /dev/daXp2 /mnt 
+
+Copy over the content of the .iso mounted on /media to your memory stick mounted on /mnt. Issue the following command as user root: cp -pR /media/ /mnt/
+ Note, the cd9660 filesystem on FreeBSD does not advertise the Rock Ridge inode attributes to userland tools, and since for this reason, hard links on a .iso cannot be reliably identified anyway, no special care needs to be taken to maintain them here. cp copies them as separate files, which is the best solution in this case.
+  
+Unmount the .iso and the memory stick.
+umount /mnt
+umount /media; mdconfig -d -u 0
+
+------
 $cat /etc/make.conf
 FORCE_MAKE_JOBS=yes
 MAKE_JOBS_NUMBER=4
