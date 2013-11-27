@@ -14,37 +14,24 @@ traceBinary(X) -> spawn(fun() -> io:format("~p~n",[b2h(X)]) end).
 for(Max, Max, F) -> [F(Max)];
 for(I, Max, F) -> [F(I)|for(I+1, Max, F)].
 
-
 b2h(Bin) -> lists:flatten([io_lib:format("~2.16.0B", [X]) || X <- binary_to_list(Bin)]).
 h2b(String) -> << << (erlang:list_to_integer([Char], 16)):4/integer >> || Char <- String >>.
 t(String)-> h2b(String).
 txt(Bin) -> [X || <<X>> <= Bin,X > 32, X < 127, X =/= 45].
-b2s(Bin) ->    b2s1(binary_to_list(Bin),[]).
-b2s1([],Str) ->    lists:reverse(Str);
+
+b2s(Bin) ->  b2s1(binary_to_list(Bin),[]).
+b2s1([],Str) -> lists:reverse(Str);
 b2s1([H|T],Str) -> 
   case H > 32 andalso H < 127 andalso H =/= 45 of      
    true -> b2s1(T,[H|Str]);
    false -> b2s1(T,[46,46|Str])
-   end.
+  end.
   
-pmap(F, L,Parent) -> [receive {Pid, Res} -> Res end || Pid <- [spawn(fun() -> Parent ! {self(), F(X)} end) || X <- L]].
+pmap(F, L, Parent) -> [receive {Pid, Res} -> Res end || Pid <- [spawn(fun() -> Parent ! {self(), F(X)} end) || X <- L]].
 
 timer(Time,Fun) -> spawn(fun() -> receive after Time -> ?MODULE:Fun() end end).
 
-
-signSubtract(A,B) ->   
-    case A<0 of       
-     true -> (erlang:abs(A)-erlang:abs(B))*-1;
-     false -> (erlang:abs(A)-erlang:abs(B))   
-    end.
-   
-signSubtract1(A,B) ->   
-          case A<0 of       
-          true -> (erlang:abs(A)-B)*-1;
-          _ -> (erlang:abs(A)-B)   
-     end.
-
-%%     u:floor(-4.7).
+%% u:floor(-4.7).
 %% Output: -5
 floor(X) when X < 0 ->   
   T = trunc(X),   
@@ -52,7 +39,7 @@ floor(X) when X < 0 ->
        true -> T;
        false -> T - 1   
   end;
-floor(X) ->    trunc(X).
+floor(X) ->  trunc(X).
 
 %%添加协议头
 addLen(Bin) ->   
@@ -101,8 +88,8 @@ listen(Port, N) ->
  
     {ok, S} = gen_tcp:listen(Port, Opts),
     Spawn = fun(I) ->    
-                    register(list_to_atom("acceptor_" ++ integer_to_list(I)),
-                             spawn_opt(?MODULE, accept, [S, I], [link, {scheduler, I}]))
+                register(list_to_atom("acceptor_" ++ integer_to_list(I)),
+                         spawn_opt(?MODULE, accept, [S, I], [link, {scheduler, I}]))
             end,
     lists:foreach(Spawn, lists:seq(1, N)).
 
@@ -139,8 +126,7 @@ correct_nums(Exp, Digits) ->
     end.
  
 eval(Exp) ->
-    {X, _} = eval(re:replace(Exp, "\\s", "", [{return, list},global]),
-                  0),
+    {X, _} = eval(re:replace(Exp, "\\s", "", [{return, list},global]), 0),
     X.
  
 eval([], Val) ->
@@ -170,8 +156,7 @@ eval([$/|Rest], Val) ->
 eval([X|Rest], 0) when X >= $1, X =< $9 ->
     eval(Rest, X-$0).
  
-
-The evaluator uses a simple infix scheme that doesn't care about operator precedence, but does support brackets and parentheses alike. Thus, ((9+1)*2)+2+2 is evaluated as: 
+%The evaluator uses a simple infix scheme that doesn't care about operator precedence, but does support brackets and parentheses alike. Thus, ((9+1)*2)+2+2 is evaluated as: 
 9 + 1 = 10
 10 * 2 = 20
 2 + 2 = 4
@@ -238,6 +223,7 @@ hex(X) ->
 %% -*- erlang -*-
 %%! -smp enable -sname factorial -mnesia debug verbose
 %%%
+
 特性1： 
 On the third line (or second line depending on the presence of the Emacs directive), it is possible to give arguments to the emulator, such as
 
@@ -246,17 +232,16 @@ On the third line (or second line depending on the presence of the Emacs directi
 Such an argument line must start with %%! and the rest of the line will interpreted as arguments to the emulator.
 
 特性2： 
- -mode(compile).
+-mode(compile).
 
-这个选项是在escript.erl这个模块处理的。默认情况下 escript是被解释执行的，如果你的脚本很复杂，那么效率估计会是瓶颈。这种情况下， 你可以通过这个选项来让escript来先编译你的模块成opcode, 在vm里面运行。
+%这个选项是在escript.erl这个模块处理的。默认情况下 escript是被解释执行的，如果你的脚本很复杂，那么效率估计会是瓶颈。这种情况下， 你可以通过这个选项来让escript来先编译你的模块成opcode, 在vm里面运行。
 
 特性3：
  -d 选项 用来调试script的
  -c 编译执行
  -i 解释执行
  -s 只检查不执行
- root@nd-desktop:~#　escript -d ./factorial 10
- 我们就可以看到 调试界面如下图
+#escript -d ./factorial 10
 
 %%%
 1) << <<(string:to_lower(C))/utf8>> || <<C/utf8>> <= Binary >>
@@ -267,12 +252,12 @@ Such an argument line must start with %%! and the rest of the line will interpre
 -export_type([http_version/0]).
 
 %%%
-原始的or和and是不带”短路运算”操作的，而orelse和andalso是带短路运算操作的。
+原始的or和and是不带"短路运算"操作的，而orelse和andalso是带短路运算操作的。
 
 Express1 and Express2
 Express1 andalso Express2
 
-如果Express1 为假，and会继续判断Express2，然后整体判定为假，而andalso”短路”操作，直接判定整个表达式为假，从效率上来说，andalso会高一些
+%如果Express1 为假，and会继续判断Express2，然后整体判定为假，而andalso”短路”操作，直接判定整个表达式为假，从效率上来说，andalso会高一些
 
 %%%
 -record(g, {key, value}). 
@@ -281,6 +266,7 @@ ets:insert_new(g, #g{user_id, 0}).
 
 Uid = ets:update_counter(g, user_id). 
 ets:insert_new(users, #user{id=Uid, name="Somebody"}.
+
 %%%
 [register(list_to_atom("pid" ++ integer_to_list(X)), spawn(fun() -> myFun() end)) || X <- lists:seq(1,10)].
 code:which('user_default').
@@ -335,37 +321,35 @@ for(N, N, F) -> [F()];
 for(I, N, F) -> [F()|for(I+1, N, F)].
 
 %%%
-源代码安装
+%源代码安装
 #wget https://elearning.erlang-solutions.com/binaries/sources/otp_src_R16B.tar.gz
 #tar xvf otp_src_R16B.tar.gz
 cd otp_src_R16B
-./configure --prefix=/usr/local/erlang --enable-hipe --enable-threads --enable-smp-support --enable-kernel-poll
+./configure --prefix=~/erlang --enable-hipe --enable-threads --enable-smp-support --enable-kernel-poll
 make
 make install
 
-添加到环境变量中(/etc/profile)
-export ERL_HOME=/usr/local/erlang export PATH=$ERL_HOME/bin:$PATH
+%添加到环境变量中(/etc/profile)
+export ERL_HOME=~/erlang export PATH=$ERL_HOME/bin:$PATH
 
 %%%
-写好的erlang程序要放在服务器上跑，总不能一直终端打开erl的吧？ 应该是让erlang程序运行得像deamon那样，需要时候再连接上去操作。
+%写好的erlang程序要放在服务器上跑，总不能一直终端打开erl的吧？ 应该是让erlang程序运行得像deamon那样，需要时候再连接上去操作。
 
-erl启动使用  -detached 参数启动
+%这个参数可以让erl节点脱离了终端。
 
-这个参数可以让erl节点脱离了终端。
+例如： $erl -sname dp -detached
 
-例如 ：   $erl -sname dp -detached
-
-如何链接：
+%如何链接：
 
      $erl -sname dp2 -remsh dp@dp0304
 
-如何退出：！！！超级要注意啊～～不能直接关掉退出
+%如何退出：！！！超级要注意啊～～不能直接关掉退出
 
    ctrl +g 进入JCL模式
 
    输入  q  回车
-%%%
 
+%%%
 dbg:tracer(), dbg:p(all, [call, timestamp]).
 dbg:tpl(yaws_server, aloop, []).
 
@@ -376,7 +360,6 @@ dbg:tpl(Module, '_', []) is a good starting point
 To stop the tracing: dbg:stop_clear().
 
 %%%
-
 Root = filename:absname_join(filename:dirname(?FILE), ".."),
 application:set_env(mnesia, dir, filename:join(Root, "db")).
 

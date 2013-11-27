@@ -8,15 +8,21 @@
   (let ((inhibit-read-only t))
     (erase-buffer)))
 
-(defun eshell/eval ()
+(defun eshell/eval1 ()
   (interactive)
-  ;(insert "ml ';;'")
   ;(insert "hs ''")
-  ;(insert "erl.sh 'user_default:'")
+  ;(insert "ml ';;'")
   ;(insert "clisp.sh '(m:)'")
-  (insert "pl.sh ''")
+  ;(insert "pl.sh ''")  
+  (insert "erl.sh 'user_default:'")
   (backward-char 1) ;(goto-char (- (point) 2))
 )
+
+;; (defun eshell/eval2 ()
+;;   (interactive)
+;;   (insert "erl.sh 'io:format(\"~p~n\", [])'")
+;;   (backward-char 3)
+;; )
 
 ;; (setq eshell-prompt-function
 ;;       (lambda ()
@@ -45,7 +51,8 @@
   (define-key eshell-mode-map [(control u)] 'eshell-kill-input) ;删除已输入命令
 
   (define-key eshell-mode-map [(control l)] 'eshell/clear)
-  (define-key eshell-mode-map [(control e)] 'eshell/eval)
+  (define-key eshell-mode-map [(control e)] 'eshell/eval1)
+  ;(define-key eshell-mode-map [(control t)] 'eshell/eval2)
 ))
 
 (defalias 'img (lambda(img)

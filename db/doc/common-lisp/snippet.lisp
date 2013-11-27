@@ -1,5 +1,13 @@
 
 ;;;;;;
+(defun ^^ (base power)
+  (declare (optimize (debug 0) (safety 0) (speed 3))
+           (fixnum base power))
+  (loop :repeat power
+        :for x :of-type bignum := (expt base base) :then (expt x base)
+        :finally (return x)))
+
+;;;;;;
 (defun bytes->string (bytes)
   (flexi-streams:octets-to-string bytes :external-format :utf-16))
 

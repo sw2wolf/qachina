@@ -4,7 +4,6 @@ fac n = snd (until ((>n) . fst) (\(i,m) -> (i+1, i*m)) (1,1))
 
 ------
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
-
     -- launch a terminal
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
       ...
@@ -12,27 +11,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
       , ((modm .|. shiftMask, xK_s),      getDmenuInput >>= sdcv)
       ...
     ]
-
-getDmenuInput = fmap (filter isPrint) $ runProcessWithInput "dmenu" ["-p", "Dict: "] ""
-
-sdcv word = do
-    output <- runProcessWithInput "sdcv" [word] ""
-    mySafeSpawn "notify-send" [word, trString output]
-
-mySafeSpawn :: MonadIO m => FilePath -> [String] -> m ()
-mySafeSpawn prog args = io $ void_ $ forkProcess $ do
-    uninstallSignalHandlers
-    _ <- createSession
-    executeFile prog True args Nothing
-        where void_ = (>> return ()) -- TODO: replace with Control.Monad.void / void not in ghc6 apparently
-
-trString = foldl (\s c -> s ++ (trChar c)) ""
-
-trChar c
-    | c == '<' = "<"
-    | c == '>' = ">"
-    | c == '&' = "&"
-    | otherwise = [c]
 
 ------
 @where rts-xc
@@ -58,16 +36,14 @@ Prelude|     double x = x + x
 Prelude| :}
 ghci> 
 --I recommend doing most of your work in a text editor, and then load the file into ghci (with :load, or providing it as an argument on the command line) and playing with it. I don't find ghci terribly pleasant to work with when actually writing code -- it's much better at messing around with code that's already written. Whenever you modify the text file, :reload (or just :r) in ghci.
-------
-universal means caller/destructor chooses, existential
-		   means callee/constructor chooses  [13:53]
-universal:  f :: forall a. a -> (a -> a) -> a  [13:54]
-caller chooses 'a'
 
+------
 data X = forall a. X a (a -> a) (a -> String)
-the constructor (the one who constructs an X) chooses 'a'
-the destructor doesn't know anything about 'a'
-if you have an 'X x f gimme', then all the destructor knows is that f and gimme can be applied to x
+
+-- the constructor (the one who constructs an X) chooses 'a'
+-- the destructor doesn't know anything about 'a'
+
+-- if you have an 'X x f gimme', then all the destructor knows is that f and gimme can be applied to x
 
 ------
 import qualified Data.Vector as V
@@ -76,18 +52,24 @@ main = print (V.foldl' (+) 0 (V.enumFromTo 1 1000000000) :: Int)
 import Data.Array.Vector
 main = print (sumU (enumFromToU 1 (200000000 :: Int)))
 
+import Data.Vector.Unboxed as U 
+sumSqrV :: U.Vector Int -> Int
+sumSqrV = U.sum . U.map (^2) . U.filter odd
+
 ------
 {-# LANGUAGE ScopedTypeVariables #-}
 
 retryOnTimeout :: IO a -> IO a
 retryOnTimeout action = catch action $ \ (_ :: HttpException) -> do
-  putStrLn "Timed out. Trying again."
-  threadDelay 5000000
-  action
+   putStrLn "Timed out. Trying again."
+   threadDelay 5000000
+   action
+
 ------
 .Data.Map.Map is a balanced binary tree internally, so its time complexity for lookups is O(log n). I believe it's a "persistent" data structure, meaning it's implemented such that mutative operations yield a new copy with only the relevant parts of the structure updated.
 .Data.HashMap.Map is a Data.IntMap.IntMap internally, which in turn is implemented as Patricia tree; its time complexity for lookups is O(min(n, W)) where W is the number of bits in an integer. It is also "persistent."
 .Data.HashTable.HashTable is an actual hash table, with time complexity O(1) for lookups. However, it is a mutable data structure -- operations are done in-place -- so you're stuck in the IO monad if you want to use it.
+
 ------
 [0..] >>= \n -> n^2 <$ guard (even n)
 [0,4,16 ...]
@@ -102,6 +84,7 @@ let fibs = 0:1:zipWith (+) fibs (tail fibs) in fibs !! 70000
 
 sequence [id, (+2), (*2), (^2), (2^)] 5
 [5,7,10,25,32]
+
 ------
 $ghci -i "$HOME/.xmonad/lib" ~/.xmonad/xmonad.hs
 
@@ -196,7 +179,7 @@ myManageHook = manageDocks <+> composeAll
 
 ---------
 
--- > (-->) :: Monoid m => Query Bool -> Query m -> Query m -- a simpler type
+-- (-->) :: Monoid m => Query Bool -> Query m -> Query m -- a simpler type
 (-->) :: (Monad m, Monoid a) => m Bool -> m a -> m a
 p --> f = p >>= \b -> if b then f else return mempty
 
@@ -230,14 +213,6 @@ xfork x = liftIO . forkProcess . finally nullStdin $ do
 
 ---------
 
-case () of
-    _ | W.member w s && W.peek s /= Just w -> windows (W.focusWindow w)
-      | Just new <- mnew, w == root && curr /= new
-                                          -> windows (W.view new)
-      | otherwise                         -> return ()
-
----------
-
 -- | Launch an external application through the system shell and return a @Handle@ to its standard input.
 spawnPipe :: MonadIO m => String -> m Handle
 spawnPipe x = io $ do
@@ -251,13 +226,7 @@ spawnPipe x = io $ do
     closeFd rd
     return h
 
----------
-import Data.Vector.Unboxed as U
- 
-sumSqrV :: U.Vector Int -> Int
-sumSqrV = U.sum . U.map (^2) . U.filter odd
----------
-
+------
 import XMonad
 import XMonad.Actions.Volume
 import XMonad.Util.Dzen
@@ -333,8 +302,10 @@ clockEventHook e = do               -- e is the event we've hooked
 ------
 Functor < Applicative < Monad.
 where, "x < y" means x is a superclass of y.
+
 All monads are conceptually applicative as well.
 So if you can define a function to work on applicatives instead of monads, it's more flexible in that it should still work on all monads but also works on non-monadic applicatives.
+
 ------
 fix can make recursive lambdas
 (a -> a) -> a
