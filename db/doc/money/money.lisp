@@ -191,7 +191,7 @@ the process with the next item (~})."
 
 (defun win-ssq (nums no-red no-blue)
     (let* ((res) (resRed) (no-red-lst (str2lst no-red))
-           (yesGRed (good-red)) ;(set-difference (good-red) no-red-lst))
+           (yesGRed (set-difference (good-red) no-red-lst))
 		   (yesRed (set-difference (range 33) no-red-lst))
            (okBlue (pick-num (set-difference (range 16) (str2lst no-blue)) nums)))
         (assert (>= nums 1) (nums) "注数必须>=1")

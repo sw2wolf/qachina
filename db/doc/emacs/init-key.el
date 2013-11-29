@@ -95,11 +95,11 @@
 
 ; > @wn @src @where @undo @unmtl @pl @package
 ;@djinn turn a type into its corresponding expression
-;(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
-(global-set-key (kbd "<f3>") '(lambda () 
-								(interactive)
-								(insert "/msg clojurebot ,(println Math/PI)")
-								(backward-char 1)))
+(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
+;; (global-set-key (kbd "<f3>") '(lambda () 
+;; 								(interactive)
+;; 								(insert "/msg clojurebot ,(println Math/PI)")
+;; 								(backward-char 1)))
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
 (global-set-key (kbd "<f5>") 'jump-run-mew)
@@ -109,7 +109,7 @@
 ;(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-caml "ocaml")))
 ;(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-haskell)))
 
-;(global-set-key (kbd "<f7>") 'jump-run-prolog)
+;(global-set-key (kbd "<f8>") 'jump-run-prolog)
 (global-set-key (kbd "<f8>") 'jump-run-erlang)
 
 (global-set-key [(f9)] 'list-bookmarks)
