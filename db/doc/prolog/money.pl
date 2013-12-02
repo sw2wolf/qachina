@@ -19,10 +19,10 @@
 %it prints out "hi Floris" in debug, not a bunch of numbers.
 %:- portray_text(true).
 
-:- assertz(user:file_search_path(qachina, '/media/D/qachina')).
-:- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
+% :- assertz(user:file_search_path(qachina, '/media/D/qachina')).
+% :- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
 
-:- load_files([ qachina(test_web) ], [ silent(true) ]).
+% :- load_files([ qachina(test_web) ], [ silent(true) ]).
 
 sxf(0.0015).
 yhs(0.001).
@@ -86,23 +86,24 @@ win_ssq(Count, NoRedStr, NoBlueStr) :-
 	Count >= 1,
 	atom2lst(NoRedAtom, NoRed),
 	atom2lst(NoBlueAtom, NoBlue),
-	numlist(1,33,R), subtract(R,NoRed,YesR),
+	%numlist(1,33,R), subtract(R,NoRed,YesR),
 	numlist(1,16,B), subtract(B,NoBlue,YesB),
-	good_red(GoodR),
+	good_red(GR), subtract(GR,NoRed,GoodR),
 	set_random(seed(random)),
 	pick_nums(Count,YesB,OkB),
-	pick_red(Count, GoodR, YesR, OkB, Res), length(Res,Count), !,
+	pick_red(Count, GoodR, OkB, Res), length(Res,Count), !,
 	maplist(writeln,Res),
 	ssqNumF(F),
     tell(F), maplist(format('~d ~d ~d ~d ~d ~d ~d~n'), Res), told.
 
-pick_red(1, _, YesR, OkB, [H|_]) :-
-    pick_nums(6,YesR,R1), sort(R1,Red), nth1(1,OkB,Blue),
-	append(Red,[Blue],H), !.
-pick_red(Count, GoodR, YesR, OkB, [H|T]) :-
+% pick_red(1, _, YesR, OkB, [H|_]) :-
+%     pick_nums(6,YesR,R1), sort(R1,Red), nth1(1,OkB,Blue),
+% 	append(Red,[Blue],H), !.
+pick_red(0, _, _, _) :- !.
+pick_red(Count, GoodR, OkB, [H|T]) :-
 	pick_nums(6,GoodR,R1), sort(R1,Red), nth1(Count,OkB,Blue),
 	append(Red,[Blue],H), C1 is Count-1,
-	pick_red(C1,GoodR,YesR,OkB,T).
+	pick_red(C1,GoodR,OkB,T).
 
 :- dynamic
  	hitnum/3.
@@ -254,8 +255,8 @@ hit_desc(_,_,'X') :- !.
 %%
 %% utilities
 %%
-qachina :-
-	server(8000).
+% qachina :-
+% 	server(8000).
 	%thread_create(shell('cd /media/D/qachina; ./start.bat'),_,[detached(true)]).
 
 fac(N,F) :-
@@ -319,3 +320,5 @@ is_leap_year(Year) :-
 	R100 is Year mod 100,
 	R400 is Year mod 400,
 	( (R4 = 0, R100 \= 0); R400 = 0 ).
+
+bits(X) :- format('~2r~n', [X]).

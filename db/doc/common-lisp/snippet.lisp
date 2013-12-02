@@ -125,14 +125,6 @@ exec ccl -e '(set-dispatch-macro-character #\# #\!
 ;;;;;;
 (defclass foo ()
     ((#.(gensym (random 42)) :reader foo-slot :initarg :slot)))
-;;;
-;; (defun read-char-with-timeout (stream timeout)
-;;     (loop with beg = (get-universal-time)
-;;           until (or (listen stream) (< timeout (- (get-universal-time) beg)))
-;;           do (sleep 0.01)
-;;           finally (if (listen stream)
-;;                       (read-char stream)
-;;                       (error "Time out"))))
 
 (defun read-char-with-timeout (stream timeout)
     (loop with beg = (get-universal-time)
@@ -167,6 +159,7 @@ CL-USER 1 > (read-char-with-timeout *standard-input* 2.0)
 Error: The condition #<STREAM-READ-TIMEOUT 2067574C> occurred
    1 (abort) Return to level 0.
    2 Return to top loop level 0.
+
 ;;;
 (defun test-it ()
    (unread-char (read-char))

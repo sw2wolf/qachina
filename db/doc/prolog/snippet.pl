@@ -164,22 +164,21 @@ X = nodebug ;
 X = number_of_clauses(1) ;
 X = number_of_rules(1) ;
 false.
-%%%
 
+%%%
 setup_call_cleanup(
 	    pack_open_entry(Pack, Name, Stream),
 	    read_stream_to_codes(Stream, Codes),
 	    close(Stream)),
 %%%
-
 test2 :-
    atom_to_memory_file('t:-writeln(1).', H),
    open_memory_file(H, read, S, [free_on_close(true)]),
    load_files(a_name, [stream(S)]),
    close(S),
    t.
-%%%
 
+%%%
 pack_version_hashes(Pack, VersionAHashesPairs) :-
 	setof(SHA1, sha1_pack(SHA1, Pack), Hashes),
 	map_list_to_pairs(sha1_version, Hashes, VersionHashPairs),
@@ -198,6 +197,7 @@ pack_version_hashes(Pack, VersionAHashesPairs) :-
 	;   format('Content-type: text/x-prolog; charset=UTF8~n~n'),
 	    format('false.~n')
 ).
+
 %%%
 % load the multi-threaded http server
 :- use_module(library(http/thread_httpd)).
@@ -209,12 +209,12 @@ pack_version_hashes(Pack, VersionAHashesPairs) :-
 :- use_module(server_stats).
 :- use_module(library(http/http_session)).
  
-:- thread_pool_create(media,   20, []).
+:- thread_pool_create(media, 20, []).
  
 start :-
    http_set_session_options([enabled(false)]),
    http_server(http_dispatch, [port(80), workers(200), timeout(1),
-   keep_alive_timeout(1)]).
+							   keep_alive_timeout(1)]).
  
 :- http_handler('/tnsf.png', give_em_the_grape, [spawn(media), priority(10)]).
  
@@ -225,9 +225,8 @@ give_em_the_grape(Request) :-
  
 holder(_Request) :-
     reply_html_page(title('Transsexual Rights'),
-       div(p('Please support transsexual women\'s basic human right to live our lives.'))
+      div(p('Please support transsexual women\'s basic human right to live our lives.'))
     ).
- 
  
 :- http_handler('/admin', admin_pg , [spawn(media), priority(20)]).
  
@@ -245,7 +244,6 @@ true.
 X = [nl(2), <, p, >, nl(1), some stuff, </, p, >].
 
 ?- print_html($X).
-
 
 <p>
 some stuff</p>
@@ -269,8 +267,8 @@ ordkey :- rb_empty(R),
 [2-[cd,ls],3-[ftp],5-[mkdir]]
 
 %%%
-binary(X) :- format('~2r~n', [X]).
-main :- maplist(binary, [5,50,9000]), halt.
+bits(X) :- format('~2r~n', [X]).
+main :- maplist(bits, [5,50,9000]), halt.
 
 %%%
 %bit operators
@@ -279,7 +277,8 @@ is(X, 5 >> 1).
 is(X, 5 /\ 1).  % and
 is(X, 5 \/ 1).  % or
 is(X, 5 xor 1).
-is(X, 5 \ 1).   % not
+
+is(X, 5 \ 1).   % not  ???
 
 %%%
 timediff(DateTime1, DateTime2, Sec) :-
@@ -294,10 +293,10 @@ Sec = 61.0.
 %%%
 %I need all subsets of a list in the order of ascending length
 set_ascending_length_subset(Set, Sub) :-
-           length(Set, N),
-           between(0, N, L),
-           length(Sub, L),
-           phrase(subset(Set), Sub).
+   length(Set, N),
+   between(0, N, L),
+   length(Sub, L),
+   phrase(subset(Set), Sub).
  
 subset([])     --> [].
 subset([L|Ls]) --> ( [L] ; []), subset(Ls).
