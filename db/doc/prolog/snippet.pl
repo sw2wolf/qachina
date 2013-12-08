@@ -1,5 +1,13 @@
 
 %%%
+?- max_list([1, 2, 10, 3, 0, 7, 9, 5], M).
+M = 10.
+
+%can be implemented like this: 
+max_list(L, V) :-
+	select(V, L, R), \+((member(X, R), X > V)).
+
+%%%
 atom_to_term('assert(pony).', Term, _), call(Term).
 
 %%%
@@ -79,6 +87,43 @@ write_cookies([Name=Value|T]) :-
 	;   format('; ', []),
 	    write_cookies(T)
 	).
+
+%%%
+:- use_module(library(lambda)).
+ 
+is_divisor(V, N) :-
+	0 =:= V mod N.
+ 
+is_perfect(N) :-
+	N1 is floor(N/2),
+	numlist(1, N1, L),
+	f_compose_1(foldl((\X^Y^Z^(Z is X+Y)), 0), filter(is_divisor(N)), F),
+	call(F, L, N).
+ 
+f_perfect_numbers(N, L) :-
+	numlist(2, N, LN),
+	filter(is_perfect, LN, L).
+ 
+% functionnal predicates
+ 
+% foldl(Pred, Init, List, R).
+%
+foldl(_Pred, Val, [], Val).
+foldl(Pred, Val, [H | T], Res) :-
+	call(Pred, Val, H, Val1),
+	foldl(Pred, Val1, T, Res).
+ 
+% filter(Pred, LstIn, LstOut)
+%
+filter(_Pre, [], []).
+ 
+filter(Pred, [H|T], L) :-
+	filter(Pred, T, L1),
+	(call(Pred,H) -> L = [H|L1]; L = L1).
+ 
+% f_compose_1(Pred1, Pred2, Pred1(Pred2)).
+%
+f_compose_1(F, G, \X^Z^(call(G,X,Y), call(F,Y,Z))).
 
 %%%
 t:- 
@@ -297,36 +342,52 @@ set_ascending_length_subset(Set, Sub) :-
    between(0, N, L),
    length(Sub, L),
    phrase(subset(Set), Sub).
- 
 subset([])     --> [].
 subset([L|Ls]) --> ( [L] ; []), subset(Ls).
  
 ?- findall(Sub, set_ascending_length_subset([a,b,c], Sub), Subs).
 %@ Subs = [[], [a], [b], [c], [a, b], [a, c], [b, c], [a|...]].
 
-%%%
-add(A,B,R):-
-    R is A + B.
- 
-mul(A,B,R):-
-    R is A * B.
- 
-% define fold now.
-fold([], Act, Init, Init).
- 
-fold(Lst, Act, Init, Res):-
-    head(Lst,Hd),
-    tail(Lst,Tl),
-    apply(Act,[Init, Hd, Ra]),
-    fold(Tl, Act, Ra, Res).
- 
-sumproduct(Lst, Sum, Prod):-
-    fold(Lst,mul,1, Prod),
-    fold(Lst,add,0, Sum).
- 
-?- sumproduct([1,2,3,4],Sum,Prod).
-Sum = 10,
-Prod = 24 .
+?- length(X,1),subset([a,b,c],X,Y).
+X = [a],
+Y = [] ;
+X = [b],
+Y = [] ;
+X = [c],
+Y = [] ;
+X = Y, Y = [_G309].
+
+?- length(X,2),subset([a,b,c],X,Y).
+X = [a, b],
+Y = [] ;
+X = [a, c],
+Y = [] ;
+X = [a, _G312],
+Y = [_G312] ;
+X = [b, c],
+Y = [] ;
+X = [b, _G312],
+Y = [_G312] ;
+X = [c, _G312],
+Y = [_G312] ;
+X = Y, Y = [_G309, _G312].
+
+?- length(X,3),subset([a,b,c],X,Y).
+X = [a, b, c],
+Y = [] ;
+X = [a, b, _G315],
+Y = [_G315] ;
+X = [a, c, _G315],
+Y = [_G315] ;
+X = [a, _G312, _G315],
+Y = [_G312, _G315] ;
+X = [b, c, _G315],
+Y = [_G315] ;
+X = [b, _G312, _G315],
+Y = [_G312, _G315] ;
+X = [c, _G312, _G315],
+Y = [_G312, _G315] ;
+X = Y, Y = [_G309, _G312, _G315].
 
 %%%
 :- module(load_csv,
@@ -400,8 +461,8 @@ singleassignment:-
     print(Value2),nl. % will print that it is a free Variable followed by a newline
 
 %%%
-binary(X) :- format('~2r~n', [X]).
-main :- maplist(binary, [5,50,9000]), halt.
+bits(X) :- format('~2r~n', [X]).
+main :- maplist(bits, [5,50,9000]), halt.
 
 %%%
 :- use_module(library(clpfd)).
@@ -456,7 +517,7 @@ amatchesregexb(Astring, Bregex, Result) :-
                match_regex(Binternalregex, Astring, Result),
                free(Binternalregex)).
  
-However, when I used it I got the following results:
+%However, when I used it I got the following results:
  
 130 ?- amatchesregexb('ab12cd', '.*([0-9]+).*', Result).
 Result = ['2'].
@@ -654,6 +715,7 @@ findall(C,
 		    C is "a" + X mod 26
 		), S)
 
+%%%
 :- use_module(library(lambda)).
 
 setify(L, Set) :-
@@ -789,7 +851,8 @@ repeat,
 	;   digits(Digits), Max is Digits + 1,
 	    format('Guess must be of ~w digits between 1 and ~w~n',
 		   [LenGuess, Max]),
-	    fail).
+	    fail
+	).
 
 numlist(0, 9, L).
 L = [0,1,2,...]
@@ -801,46 +864,46 @@ fizzbuzz :-
    foreach(between(1, 100, X), print_item(X)).
  
 print_item(X) :-
-        (  0 is X mod 15
-        -> print('FizzBuzz')
-        ;  0 is X mod 3
-        -> print('Fizz')
-        ;  0 is X mod 5
-        -> print('Buzz')
-        ;  print(X)
-        ),
-        nl.
+    (  0 is X mod 15
+    -> print('FizzBuzz')
+    ;  0 is X mod 3
+    -> print('Fizz')
+    ;  0 is X mod 5
+    -> print('Buzz')
+    ;  print(X)
+    ),
+    nl.
 
 %%%
 :- use_module(library(error)).
 :- dynamic arc/2.
 
 load_arcs(File) :-
-        retractall(arc(_,_)),
-        open(File, read, Stream),
-        call_cleanup(load_arcs(Stream),
-                     close(Stream)).
+    retractall(arc(_,_)),
+    open(File, read, Stream),
+    call_cleanup(load_arcs(Stream), close(Stream)).
 
 load_arcs(Stream) :-
-        read(Stream, T0),
-        load_arcs(T0, Stream).
+    read(Stream, T0),
+    load_arcs(T0, Stream).
 
 load_arcs(end_of_file, _) :- !.
 load_arcs(arc(From, To), Stream) :- !,
-        assert(arc(From, To)),
-        read(Stream, T2),
-        load_arcs(T2, Stream).
+    assert(arc(From, To)),
+    read(Stream, T2),
+    load_arcs(T2, Stream).
 load_arcs(Term, Stream) :-
-        type_error(arc, Term).
+    type_error(arc, Term).
 
-open("ssqNum.txt",read,F),read_stream_to_codes(F,N),write(N),close(F).
+%
+open("ssqNum.txt",read,F), read_stream_to_codes(F,N), write(N), close(F).
 
 %%%
 list_w([W|Ws]) --> string(W), ",", !, list_w(Ws).
 list_w([W]) --> string(W).
 
 string([]) -->  [].
-string([H|T]) -->[H],string(T).
+string([H|T]) --> [H],string(T).
 
 test:
 ?- phrase(list_w(S),"cat,dog").
@@ -848,6 +911,7 @@ S = [[99, 97, 116], [100, 111, 103]] ;
 false.
 
 %X^ means "there exists X", so the whole formula means something like "count the number of ways that permutation([1,2,3,4],X) succeeds for some X and call that number N."
+
 aggregate(count, X^permutation([1,2,3,4], X), N).
 
 loop :- 

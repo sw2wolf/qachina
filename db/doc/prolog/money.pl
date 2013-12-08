@@ -20,7 +20,7 @@
 %:- portray_text(true).
 
 % :- assertz(user:file_search_path(qachina, '/media/D/qachina')).
-% :- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
+:- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
 
 % :- load_files([ qachina(test_web) ], [ silent(true) ]).
 
@@ -322,3 +322,8 @@ is_leap_year(Year) :-
 	( (R4 = 0, R100 \= 0); R400 = 0 ).
 
 bits(X) :- format('~2r~n', [X]).
+
+utf8(Str) :-
+	phrase(utf8_codes(Str), X),
+	print(X), nl.
+
