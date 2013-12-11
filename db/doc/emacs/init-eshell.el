@@ -10,12 +10,12 @@
 
 (defun eshell/eval1 ()
   (interactive)
-  ;(insert "hs ''")
   ;(insert "ml ';;'")
-  ;(insert "pl.sh ''")  
+  ;(insert "hs ''")
   ;(insert "erl.sh 'user_default:'")
-  (insert "clisp.sh '(m:)'")
-  (backward-char 2) ;(goto-char (- (point) 2))
+  ;(insert "clisp.sh '(m:)'")
+  (insert "pl.sh ''")
+  (backward-char 1) ;(goto-char (- (point) 2))
 )
 
 ;; (defun eshell/eval2 ()

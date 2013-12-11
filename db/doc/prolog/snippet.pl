@@ -1,5 +1,25 @@
 
 %%%
+bits(0,'0').
+bits(1,'1').
+bits(N,B) :- N>1, X is N mod 2, Y is N//2, binary(Y,B1), atom_concat(B1, X, B), !.
+
+%%%
+plus :-
+    read_line_to_codes(user_input,X),
+    atom_codes(A, X),
+    atomic_list_concat(L, ' ', A),
+    maplist(atom_number, L, LN),
+    sumlist(LN, N),
+    write(N).
+
+output : 
+?- plus.
+|: 4 5
+9
+true.
+
+%%%
 ?- max_list([1, 2, 10, 3, 0, 7, 9, 5], M).
 M = 10.
 

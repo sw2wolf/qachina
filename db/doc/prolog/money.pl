@@ -19,10 +19,10 @@
 %it prints out "hi Floris" in debug, not a bunch of numbers.
 %:- portray_text(true).
 
-% :- assertz(user:file_search_path(qachina, '/media/D/qachina')).
+%:- assertz(user:file_search_path(qachina, '/media/D/qachina')).
 :- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
 
-% :- load_files([ qachina(test_web) ], [ silent(true) ]).
+%:- load_files([ qachina(test_web) ], [ silent(true) ]).
 
 sxf(0.0015).
 yhs(0.001).
@@ -86,24 +86,22 @@ win_ssq(Count, NoRedStr, NoBlueStr) :-
 	Count >= 1,
 	atom2lst(NoRedAtom, NoRed),
 	atom2lst(NoBlueAtom, NoBlue),
-	%numlist(1,33,R), subtract(R,NoRed,YesR),
 	numlist(1,16,B), subtract(B,NoBlue,YesB),
-	good_red(GR), subtract(GR,NoRed,GoodR),
+	good_red(GR), subtract(GR,NoRed,YesR),
 	set_random(seed(random)),
 	pick_nums(Count,YesB,OkB),
-	pick_red(Count, GoodR, OkB, Res), length(Res,Count), !,
+	pick_red(Count, GR, YesR, OkB, Res), length(Res,Count), !,
 	maplist(writeln,Res),
 	ssqNumF(F),
     tell(F), maplist(format('~d ~d ~d ~d ~d ~d ~d~n'), Res), told.
 
-% pick_red(1, _, YesR, OkB, [H|_]) :-
-%     pick_nums(6,YesR,R1), sort(R1,Red), nth1(1,OkB,Blue),
-% 	append(Red,[Blue],H), !.
-pick_red(0, _, _, _) :- !.
-pick_red(Count, GoodR, OkB, [H|T]) :-
+pick_red(1, _, YesR, OkB, [H|_]) :-
+    pick_nums(6,YesR,R1), sort(R1,Red), nth1(1,OkB,Blue),
+	append(Red,[Blue],H), !.
+pick_red(Count, GoodR, YesR, OkB, [H|T]) :-
 	pick_nums(6,GoodR,R1), sort(R1,Red), nth1(Count,OkB,Blue),
 	append(Red,[Blue],H), C1 is Count-1,
-	pick_red(C1,GoodR,OkB,T).
+	pick_red(C1,GoodR,YesR,OkB,T).
 
 :- dynamic
  	hitnum/3.
@@ -252,37 +250,6 @@ hit_desc(3,1,'5th(10)') :- !.
 hit_desc(_,1,'6th(5)') :- !.
 hit_desc(_,_,'X') :- !.
 
-%%
-%% utilities
-%%
-% qachina :-
-% 	server(8000).
-	%thread_create(shell('cd /media/D/qachina; ./start.bat'),_,[detached(true)]).
-
-fac(N,F) :-
-	N is 0, F is 1;
-    N > 0, M is N - 1, fac(M,G), F is N*G.
-
-fib(0, 0) :- !.
-fib(1, 1) :- !.
-fib(N, X) :- N1 is N-1, N2 is N-2, fib(N1, X1), fib(N2, X2), X is X1+X2.
-
-binary(0,'0').
-binary(1,'1').
-binary(N,B) :- N>1, X is N mod 2, Y is N//2, binary(Y,B1), atom_concat(B1, X, B), !.
-
-binary_str(X) :- format('~2r~n', [X]).
-
-sum([],0).
-sum([H|T],X) :- sum(T,Y), X is H + Y.
-
-product([],1).
-product([H|T],X) :- product(T,Y), X is H * Y.
-
-sys_info :-
-	current_prolog_flag(version_data, swi(Major, Minor, Patch, _)),
-	format('swi-prolog version: ~w.~w.~w~n',[Major,Minor,Patch]).
-
 % list comprehesion
 %% List of Pythagorean triples : 
 %% ?- V <- {X, Y, Z & X <- 1..20, Y <- X..20, Z <- Y..20 & X*X+Y*Y =:= Z*Z}.
@@ -315,15 +282,36 @@ Vs <- {Var & Dec & Pred} :-
 %
 % misc.
 %
+% qachina :-
+% 	server(8000).
+	%thread_create(shell('cd /media/D/qachina; ./start.bat'),_,[detached(true)]).
+
 is_leap_year(Year) :-
 	R4 is Year mod 4,
 	R100 is Year mod 100,
 	R400 is Year mod 400,
 	( (R4 = 0, R100 \= 0); R400 = 0 ).
 
-bits(X) :- format('~2r~n', [X]).
-
 utf8(Str) :-
 	phrase(utf8_codes(Str), X),
 	print(X), nl.
 
+fac(N,F) :-
+	N is 0, F is 1;
+    N > 0, M is N - 1, fac(M,G), F is N*G.
+
+fib(0, 0) :- !.
+fib(1, 1) :- !.
+fib(N, X) :- N1 is N-1, N2 is N-2, fib(N1, X1), fib(N2, X2), X is X1+X2.
+
+bits(X) :- format('~2r~n', [X]).
+
+sum([],0).
+sum([H|T],X) :- sum(T,Y), X is H + Y.
+
+product([],1).
+product([H|T],X) :- product(T,Y), X is H * Y.
+
+sys_info :-
+	current_prolog_flag(version_data, swi(Major, Minor, Patch, _)),
+	format('swi-prolog version: ~w.~w.~w~n',[Major,Minor,Patch]).

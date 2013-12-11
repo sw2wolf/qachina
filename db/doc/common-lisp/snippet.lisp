@@ -1,5 +1,17 @@
 
 ;;;;;;
+(require 'cffi)
+
+(load "glx/constants.lisp")
+
+(defvar *glx-dpy* nil)
+
+; For XOpenDisplay() and XFlush() only
+(define-foreign-library xlib
+  (t (:default "libX11")))
+(use-foreign-library xlib)
+
+;;;;;;
 (defun ^^ (base power)
   (declare (optimize (debug 0) (safety 0) (speed 3))
            (fixnum base power))

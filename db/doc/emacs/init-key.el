@@ -38,8 +38,7 @@
 (defun jump-run-prolog ()
   (interactive)
   (if (get-buffer "*prolog*")
-	  ;(switch-to-buffer-other-window "*prolog*")
-	  (switch-to-buffer "*prolog*")
+	  (switch-to-buffer-other-window "*prolog*")
 	  (run-prolog 'swi)))
 
 (defun jump-run-erlang ()
