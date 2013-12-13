@@ -230,19 +230,18 @@ fibgen n1 n2 = n1 : fibgen n2 (n1+n2)
 
 --求解素数的一个无限数列方法：
 prime = sieve [2..]        
-sieve (x:xs) = x : sieve (filter (\y ->y `rem` x /= 0) xs)
+sieve (x:xs) = x : sieve (filter (\y -> y `rem` x /= 0) xs)
 
 --排列组合 same as Data.List.subsequences
 combination :: [a] -> [[a]]
 combination [] =  [[]]
-combination (x:xs) = concat [[(x:ys), ys] | ys <- combination xs] 
-
-mcombs :: [a] -> [[a]]
-mcombs = foldr (flip (>>=) . f) [[]]
-    where
-        f x xs = [x:xs,xs] 
+combination (x:xs) = concat [[(x:ys), ys] | ys <- combination xs]
 
 permutation :: Eq a => [a] -> [[a]]
 permutation [] = [[]]
 permutation xs = concatMap (\x -> map (x:) $ permutation (delete x xs)) xs
 
+combLen :: Int -> Int -> Int
+combLen x len
+  | x > len = product [x-len+1..x] `div` product [1..len]
+  | otherwise = 0

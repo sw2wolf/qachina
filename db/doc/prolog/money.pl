@@ -19,10 +19,10 @@
 %it prints out "hi Floris" in debug, not a bunch of numbers.
 %:- portray_text(true).
 
-%:- assertz(user:file_search_path(qachina, '/media/D/qachina')).
+:- assertz(user:file_search_path(qachina, '/media/D/qachina')).
 :- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
 
-%:- load_files([ qachina(test_web) ], [ silent(true) ]).
+:- load_files([ qachina(test_web) ], [ silent(true) ]).
 
 sxf(0.0015).
 yhs(0.001).
@@ -135,7 +135,7 @@ sublist(L1, I, J, L2):-
     sublist(L1, Temp, I, J, []),
     !,
     reverse(Temp, L2).
-sublist(L1,I,J,L2):-
+sublist(L1, I, J, L2):-
     length(L1, Length),
     J > Length,
     sublist(L1,I,Length,L2).
@@ -282,8 +282,8 @@ Vs <- {Var & Dec & Pred} :-
 %
 % misc.
 %
-% qachina :-
-% 	server(8000).
+qachina :-
+	server(8000).
 	%thread_create(shell('cd /media/D/qachina; ./start.bat'),_,[detached(true)]).
 
 is_leap_year(Year) :-

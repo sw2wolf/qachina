@@ -1,5 +1,8 @@
 
 %%%
+prolog_ide(debug_monitor).
+
+%%%
 bits(0,'0').
 bits(1,'1').
 bits(N,B) :- N>1, X is N mod 2, Y is N//2, binary(Y,B1), atom_concat(B1, X, B), !.
