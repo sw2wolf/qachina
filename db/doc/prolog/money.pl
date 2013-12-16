@@ -9,15 +9,11 @@
 	[backquoted_string(true), max_depth(9999),
 	 portray(true), spacing(next_argument)]).
 
-:- set_prolog_flag(debugger_print_options,
-	[backquoted_string(true), max_depth(9999),
-	 portray(true), spacing(next_argument)]).
-
 :- set_prolog_flag(generate_debug_info, false).
-%:- set_prolog_flag(verbose_file_search, true).
+:- set_prolog_flag(verbose_file_search, true).
 
 %it prints out "hi Floris" in debug, not a bunch of numbers.
-%:- portray_text(true).
+:- portray_text(true).
 
 :- assertz(user:file_search_path(qachina, '/media/D/qachina')).
 :- assertz(user:file_search_path(money, '/media/D/qachina/db/doc/money')).
@@ -312,6 +308,16 @@ sum([H|T],X) :- sum(T,Y), X is H + Y.
 product([],1).
 product([H|T],X) :- product(T,Y), X is H * Y.
 
+combLen(N, CN, Cnt) :-
+	N >= CN,
+	X1 is N-CN+1, numlist(X1,N,X2), product(X2,X),
+	numlist(1,CN,Y2), product(Y2,Y),
+	Cnt is X / Y.
+
 sys_info :-
 	current_prolog_flag(version_data, swi(Major, Minor, Patch, _)),
 	format('swi-prolog version: ~w.~w.~w~n',[Major,Minor,Patch]).
+
+dbg_mon :-
+    prolog_ide(debug_monitor).
+
