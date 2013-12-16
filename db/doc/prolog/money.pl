@@ -1,9 +1,5 @@
 %:- module(money, [winG/3, stopLoss/3]).
 :- use_module(library(dcg/basics)).
-%:- use_module(library(clpfd)).
-
-:- multifile
-	http_header:eos/2.
 
 :- set_prolog_flag(toplevel_print_options,
 	[backquoted_string(true), max_depth(9999),
@@ -279,6 +275,8 @@ Vs <- {Var & Dec & Pred} :-
 % misc.
 %
 qachina :-
+	% working_directory(_, '/media/D/qachina'),
+	% consult('test_web.pl'),
 	server(8000).
 	%thread_create(shell('cd /media/D/qachina; ./start.bat'),_,[detached(true)]).
 
@@ -321,3 +319,5 @@ sys_info :-
 dbg_mon :-
     prolog_ide(debug_monitor).
 
+% :- initialization
+% 	working_directory(_, '/media/D/qachina').
