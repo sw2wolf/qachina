@@ -1,6 +1,48 @@
 
 %%%
+% l 0x9823 1
+% s 0x1111 3
+% l 0x1111 12
+:- [library(dcg/basics)].
+
+load_trace_0(Filename, Ls) :-
+    phrase_from_file(lines(Ls), Filename).
+
+lines([s(H,I)|R]) -->
+    "s 0x", xinteger(H), " ",
+    integer(I), blanks,
+    !, lines(R).
+lines([l(H,I)|R]) -->
+    "l 0x", xinteger(H), " ",
+    integer(I), blanks,
+    !, lines(R).
+lines([]) --> [].
+
+%%%
+map(_Map, [], []).
+map(Map, [HIN|TIN], [HOUT|TOUT]) :-
+	Map =..Terms,  %Terms = [lower_upper].
+	append(Terms, [HIN,HOUT], TermsExtended),
+	MapExtended =.. TermsExtended,
+	call(MapExtended),
+	map(Map, TIN, TOUT).
+
+This works 'both ways':
+map(lower_upper, [a,b], U) gives U=['A','B']
+map(lower_upper, L, ['A','B']) gives L=[a,b].
+
+%The code can be simplified by using the built-in and standard call/N control construct:
+ 
+map(_Map, [], []).
+map(Map, [HIN|TIN], [HOUT|TOUT]) :-
+	call(Map, HIN, HOUT),
+	map(Map, TIN, TOUT).
+
+%%%
 prolog_ide(debug_monitor).
+
+?- format(codes(B, C), '~16r', [1]).
+B = [49|C].
 
 %%%
 bits(0,'0').

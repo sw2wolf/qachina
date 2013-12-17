@@ -1,6 +1,0 @@
-$ godi_console -list -names
-$ godi_console perform -build godi-curl
-$ ocamlfind opt -package yojson -package curl -package unix -package pcre -c search.ml
-$ ocamlfind opt -package yojson -package curl -package unix -package pcre -linkpkg -o search search.cmx
-
-
