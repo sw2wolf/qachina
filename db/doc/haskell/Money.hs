@@ -137,8 +137,9 @@ win_ssq count noRed noBlue = do
 
     okBlue <- pickNums ([1..16] \\ noBlueLst) count []
     gRed <- goodRed
-    result <- pickSSQ count gRed
+    result <- pickSSQ count
               (gRed \\ noRedLst)
+              ([1..33] \\ noRedLst)
               okBlue []
     forM_ result (\x -> print x)
     writeFile ssqNum $ ints2str result

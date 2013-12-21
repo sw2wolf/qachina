@@ -1,5 +1,48 @@
 
 %%%
+?- with_output_to(codes(Head, Tail), write(1.23)).
+Head = "1.23|Tail".
+
+%%%
+$swipl -s f.pl -g "leash(-all),trace,numbers(X),print(X),nl,fail." -t halt
+% /home/carlo/.plrc compiled 0.04 sec, 1,439 clauses
+% /home/carlo/prolog/f.pl compiled 0.00 sec, 2 clauses
+   Call: (6) numbers(_G1453)
+   Call: (7) between(1, 10, _G1453)
+   Exit: (7) between(1, 10, 1)
+   Exit: (6) numbers(1)
+   Call: (6) print(1)
+1
+   Exit: (6) print(1)
+   Call: (6) nl
+
+   Exit: (6) nl
+   Call: (6) fail
+   Fail: (6) fail
+   Redo: (7) between(1, 10, _G1453)
+   Exit: (7) between(1, 10, 2)
+   Exit: (6) numbers(2)
+   Call: (6) print(2)
+2
+   Exit: (6) print(2)
+...
+
+%%%
+tcp_accept(Server, Socket, _Peer),
+tcp_open(Socket, In, Out),
+set_stream(In, timeout(10)),
+catch(read(In, Term), _, (close(Out), close(In), fail)),
+
+tql :-
+    current_player(I),
+    writef('Its %d. players turn: ', [I]),
+    flush_output,
+    current_input(Input),
+    wait_for_input([Input], [Input], 5),
+    read(Input, Move),
+    writeln(Move).
+
+%%%
 % l 0x9823 1
 % s 0x1111 3
 % l 0x1111 12
@@ -39,17 +82,24 @@ map(Map, [HIN|TIN], [HOUT|TOUT]) :-
 	map(Map, TIN, TOUT).
 
 %%%
-prolog_ide(debug_monitor).
+?- prolog_ide(debug_monitor).
 
 ?- format(codes(B, C), '~16r', [1]).
 B = [49|C].
 
-%%%
-bits(0,'0').
-bits(1,'1').
-bits(N,B) :- N>1, X is N mod 2, Y is N//2, binary(Y,B1), atom_concat(B1, X, B), !.
+?- catch(expand_file_name(~, [UserHome]), _, fail)
+UserHome = /home/sw2wolf.
 
-%%%
+?- integer(D,"13888 1 2 3 4 5 6 7",R).
+D = 13888,
+R = " 1 2 3 4 5 6 7".
+
+?- stream_property(user_input, X).
+X = mode(read) ;
+X = input ;
+X = alias(user_input)
+...
+
 plus :-
     read_line_to_codes(user_input,X),
     atom_codes(A, X),
@@ -74,6 +124,11 @@ max_list(L, V) :-
 
 %%%
 atom_to_term('assert(pony).', Term, _), call(Term).
+
+%%%
+bits(0,'0').
+bits(1,'1').
+bits(N,B) :- N>1, X is N mod 2, Y is N//2, binary(Y,B1), atom_concat(B1, X, B), !.
 
 %%%
 ?- thread_create((repeat, fail), ID, [alias(mymain)]).
@@ -265,7 +320,7 @@ Ns = [b, c, a, d].
 %You can obtain other orders by moving the terminal [Name] in the DCG body.
 
 %%%
-predicate_property(ssq_test,X).
+?- predicate_property(ssq_test,X).
 X = interpreted ;
 X = visible ;
 X = file(/media/D/qachina/db/doc/prolog/money.pl) ;
@@ -605,11 +660,12 @@ Result = ['12'].
 % of the pattern from matching the 1.
 
 %------
-%to create a stand-alone executable that starts by executing main/0 and for which the source is loaded through load.pl, use the command
-swipl --goal="server(7000)" --stand_alone=true --foreign=save -o server_pl
+$swipl --goal="server(7000)" --stand_alone=true --foreign=save -o server_pl
 -c server.pl
 
-swipl --goal=main --stand_alone=true --quiet -o myprog -c load.pl
+$swipl --goal=main --stand_alone=true --quiet -o myprog -c load.pl
+
+$swipl -O --goal=main --stand_alone=true -o wmi -c wmi.pl
 
 % This performs exactly the same as executing 
 swipl

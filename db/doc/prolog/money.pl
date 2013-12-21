@@ -76,10 +76,13 @@ win_ssq(Count, NoRedStr, NoBlueStr) :-
 	string_to_atom(NoRedStr, NoRedAtom),
 	string_to_atom(NoBlueStr, NoBlueAtom),
 	Count >= 1,
+%
 	atom2lst(NoRedAtom, NoRed),
 	atom2lst(NoBlueAtom, NoBlue),
+    good_red(GR1), subtract(GR1,NoRed,GR),
 	numlist(1,16,B), subtract(B,NoBlue,YesB),
-	good_red(GR), subtract(GR,NoRed,YesR),
+	numlist(1,33,R), subtract(R,NoRed,YesR),
+%	
 	set_random(seed(random)),
 	pick_nums(Count,YesB,OkB),
 	pick_red(Count, GR, YesR, OkB, Res), length(Res,Count), !,

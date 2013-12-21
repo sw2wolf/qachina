@@ -1,5 +1,10 @@
 
 ;;;;;;
+(defun partition (n list)
+  (loop for v on list by #'(lambda (l) (nthcdr n l))
+        collect (loop repeat n for x in v collect x)))
+
+;;;;;;
 (require 'cffi)
 
 (load "glx/constants.lisp")

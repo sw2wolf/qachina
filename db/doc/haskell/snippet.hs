@@ -2,6 +2,9 @@
 ------
 fac n = snd (until ((>n) . fst) (\(i,m) -> (i+1, i*m)) (1,1))
 
+@guard (3 > 5) >> listToMaybe (drop 3 [1..9])
+Nothing
+
 ------
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch a terminal
