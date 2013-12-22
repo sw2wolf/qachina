@@ -1,0 +1,52 @@
+:- dynamic   user:file_search_path/2.
+:- multifile user:file_search_path/2.
+
+:- asserta(user:file_search_path(library, '.')).
+:- asserta(user:file_search_path(pldoc, '.')).
+
+:- load_files([ pldoc,
+		doc_http,
+		doc_latex,
+		library(http/http_error)
+	      ],
+	      [ silent(true),
+		if(not_loaded)
+	      ]).
+:- debug(pldoc).
+
+%	Using doc_server(4004, []), the server   is publically available
+%	on the internet. ?-  doc_server(4004)   only  allows access from
+%	localhost.
+
+% :- doc_server(4004, []).
+:- doc_server(4004).
+
+%%%
+?- write('        ~~~~ hello!! this line is coming from the .plrc file!').
+
+
+:- expand_file_name("~/.pl-history", [File|_]),
+         ( exists_file(File)
+         -> rl_read_history(File)
+         ; true
+         ).
+
+rl_write_history :-
+         expand_file_name("~/.pl-history", [File|_]),
+         rl_write_history(File).
+
+:- at_halt(rl_write_history).
+
+% prolog_file_type is a dynamic multifile predicate defined in module user.
+user:prolog_file_type(pro,prolog).
+
+% mini_datatypes is ONE OPTION (there are others) for the datatypes that we want the camping module to 'see'
+?- use_module(modules/dbms/mini_datatypes).
+
+
+?- use_module(modules/camping/camping).
+?- use_module(modules/camping/query_barcode).
+
+% comment out the portrayal module if we suspect that my custom printing functions are obscuring some bug.
+% another reason to comment it out: if you need output formatted in a way that you can paste it back into the repl.
+%?- use_module(modules/camping/camping_portrayal).

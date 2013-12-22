@@ -193,7 +193,7 @@ the process with the next item (~})."
     (let* ((res) (resRed) (no-red-lst (str2lst no-red))
 		   (goodR (good-red))
            (yesGRed (set-difference goodR no-red-lst))
-		   ;(yesRed (set-difference (range 33) no-red-lst))
+		   (yesRed (set-difference (range 33) no-red-lst))
            (okBlue (pick-num (set-difference (range 16) (str2lst no-blue)) nums)))
         (assert (>= nums 1) (nums) "注数必须>=1")
         (setf *random-state* (make-random-state t))
@@ -202,7 +202,7 @@ the process with the next item (~})."
                 (setf resRed (sort
 				    (if (= i (1- nums))
 						(pick-num yesGRed 6)
-						(pick-num goodR 6))
+						(pick-num yesRed 6))
 			        #'>))
                 (setf res (lst2str (reverse (cons (nth i okBlue) resRed))))
                 (write-line res out)

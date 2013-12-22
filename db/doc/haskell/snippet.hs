@@ -107,6 +107,11 @@ $cabal install aeson --constraint="hashable==1.2.0.7" -v
 --to build a cabal package packagename: 
 $ cabal install --ghc-options=-package const-math-ghc-plugin -fplugin ConstMath.Plugin packagename
 
+$cabal unpack parconc-examples
+$cabal install --only-dependencies
+$cabal configure
+$cabal build
+
 ---------
 foreign import ccall "sin" c_sin :: CDouble -> CDouble
 
