@@ -105,11 +105,12 @@
 (global-set-key (kbd "<f5>") 'jump-run-mew)
 
 (global-set-key (kbd "<f6>") '(lambda () (interactive) (run-caml "ocaml")))
-;(global-set-key (kbd "<f6>") '(lambda () (interactive) (run-haskell)))
+
+;(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-haskell)))
+;(global-set-key (kbd "<f7>") 'jump-run-erlang)
 
 ;(global-set-key (kbd "<f8>") 'jump-run-lisp)
 (global-set-key (kbd "<f8>") 'jump-run-prolog)
-;(global-set-key (kbd "<f8>") 'jump-run-erlang)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

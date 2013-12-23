@@ -195,7 +195,7 @@ let win_ssq count noRed noBlue =
     let noBlueLst = str2lst noBlue in
     let gRed = good_red() in
 	let yes_gRed = set_diff gRed noRedLst in
-    (*let yes_red = set_diff (1--33) noRedLst in*)
+    let yes_red = set_diff (1--33) noRedLst in
     let ok_blue = pick_num (set_diff (1--16) noBlueLst) count in
 	let oneRed = ref [] in
     let result = ref "" in
@@ -204,9 +204,9 @@ let win_ssq count noRed noBlue =
     for i = 1 to count do
 	  if i = count
 	  then
-		oneRed := pick_num yes_gRed 6 
+		oneRed := pick_num yes_red 6 
 	  else
-		oneRed := pick_num gRed 6;
+		oneRed := pick_num yes_gRed 6;
 
       result := !result ^ lst2str (sortLst 
            !oneRed @ [List.nth ok_blue (i-1)]) ^ "\n";
@@ -214,17 +214,6 @@ let win_ssq count noRed noBlue =
     print_endline !result;
     writeFile num_file !result
 ;;
-(*
-let hit_desc red blue = 
-    match (red,blue) with
-    |(6,1) -> "First"
-    |(6,0) -> "Second"
-    |(5,1) -> "Third(3000)"
-    |(5,0) | (4,1) -> "Fourth(200)"
-    |(4,0) | (3,1) -> "Fifth(10)"
-    |(_,1) -> "Sixth(5)"
-    |_ -> "X"
-;;*)
 
 let hit_desc  = function
     |(6,1) -> "First"

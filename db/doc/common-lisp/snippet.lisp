@@ -1,5 +1,10 @@
 
 ;;;;;;
+(cl-ppcre:all-matches-as-strings "[a-zA-Z]{3,}" "this is") ->  ("this")
+;; Retrun all the sequences of three or more alphabetic words
+;; {d} is "of length "d", {d1,d2} is of d1<=length<=d2, and if you omit d1 or d2, is of length above or up-to
+
+;;;;;;
 (defun partition (n list)
   (loop for v on list by #'(lambda (l) (nthcdr n l))
         collect (loop repeat n for x in v collect x)))

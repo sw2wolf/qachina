@@ -1,5 +1,12 @@
 
 %%%
+% +Foo means "must be bound"
+% -Foo means "must be unbound"
+% ?Foo means "either"
+% 0 means  'call this after adding zero more arguments'
+% : means 'this needs resolved as a module, but won't acutally be called'
+
+%%%
 ?- with_output_to(codes(Head, Tail), write(1.23)).
 Head = "1.23|Tail".
 
