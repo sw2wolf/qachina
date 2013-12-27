@@ -1,5 +1,14 @@
 
 ------
+--Endo is the monoid wrapper for (a -> a) with mappend = (.), mempty = id
+
+Data.Monoid Endo :: (a -> a) -> Endo a
+Data.Monoid appEndo :: Endo a -> a -> a
+
+(appEndo $ (Endo (+1)) <> (Endo (+2))) 1
+4
+
+------
 fac n = snd (until ((>n) . fst) (\(i,m) -> (i+1, i*m)) (1,1))
 
 @guard (3 > 5) >> listToMaybe (drop 3 [1..9])
@@ -23,12 +32,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 @ty (?f >=> ?g)
 (Monad m, ?f::a -> m b, ?g::b -> m c) => a -> m c
 
-------
-Data.Monoid Endo :: (a -> a) -> Endo a
-Data.Monoid appEndo :: Endo a -> a -> a
-
-(appEndo $ (Endo (+1)) <> (Endo (+2))) 1
-4
 ------
 ghci> let double :: Int -> Int; double x = x + x
 

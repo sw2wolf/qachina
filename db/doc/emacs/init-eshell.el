@@ -13,9 +13,9 @@
   ;(insert "hs ''")
   ;(insert "ml ';;'")
   ;(insert "erl.sh 'user_default:'")
-  ;(insert "clisp.sh '()'")
-  (insert "pl.sh ''")
-  (backward-char 1) ;(goto-char (- (point) 2))
+  ;(insert "pl.sh ''")
+  (insert "clisp.sh '()'")
+  (backward-char 2) ;(goto-char (- (point) 2))
 )
 
 ;; (defun eshell/eval2 ()

@@ -11,7 +11,7 @@
 (export '(*base-dir*
           pkg-src-dir pkg-ver find-pkg sys-info
           fac fab perfect-number bits
-          sh sd range now leap-year-p assoc*))
+          sh sd range now leap-year-p assoc* combLen))
 
 #|
    Utility
@@ -113,6 +113,15 @@ THING is a string or a symbol.")
 "Perfect Number"
     (loop for i from s to e 
         when (perfectp i) collect i))
+
+(defun combLen (m n)
+  (assert (>= m n) (n) "m >= n")
+  (let ((X) (Y))
+	(setf X (loop for total = 1 then (* total i)
+			      for i from (+ 1 (- m n)) to m finally (return total)))
+	(setf Y (loop for total = 1 then (* total i)
+			      for i from 1 to n finally (return total)))
+	(format t "It is ~d~%" (/ X Y))))
 
 #|
    Stock Exchange

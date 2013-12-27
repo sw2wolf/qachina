@@ -1,5 +1,243 @@
 
 %%%
+?- d(sin(x^2)+5,x,Y).
+Y = cos(x ^ 2) * (1 * 2 * x ^ 1) + 0
+
+d(U+V,X,DU+DV) :- !, 
+    d(U,X,DU),
+    d(V,X,DV).
+d(U-V,X,DU-DV) :- !,
+    d(U,X,DU),
+    d(V,X,DV).
+d(U*V,X,DU*V+U*DV) :- !,
+    d(U,X,DU),
+    d(V,X,DV).
+d(U/V,X,(DU*V-U*DV)/(^(V,2))) :- !,
+    d(U,X,DU),
+    d(V,X,DV).
+d(^(U,N),X,DU*N*(^(U,N1))) :- !, 
+    integer(N),
+    N1 is N-1,
+    d(U,X,DU).
+d(-U,X,-DU) :- !,
+    d(U,X,DU).
+d(exp(U),X,exp(U)*DU) :- !,
+    d(U,X,DU).
+d(log(U),X,DU/U) :- !,
+    d(U,X,DU).
+d(sin(U),X,cos(U)*DU):-!,
+    d(U,X,DU).
+d(cos(U),X,-sin(U)*DU):-!,
+    d(U,X,DU).
+
+d(X,X,1) :- !.
+d(_,_,0).
+
+%------
+
+format('~`2t~9|~n').
+%222222222
+
+:- if(statistics(gctime, _)).
+get_performance_stats(GC, T):-
+	statistics(gctime, GC),		% SWI-Prolog
+	statistics(cputime, T).
+:- else.
+get_performance_stats(GC, T):-
+	statistics(garbage_collection, [_,_,TGC]),
+	statistics(cputime, [TT,_]),
+	GC is TGC / 1000,
+	T is TT / 1000.
+:- endif.
+
+with_output_to(atom(Atom), maplist(write, [a+b, b+c])).
+
+% Procedure nameList/1 just calls nameList/2 with an empty accumulator. Then procedure nameList/2 will call every person from the facts database and check whether the person is in the accumulator list. If it finds one such person then it recursively calls itself adding this person to the accumulator. If it does not find any person not in the input list then it unifies this accumulator with the output List of persons.
+
+person('Alex', 'McBrien', male).
+person('Daniel', 'Gardner', male).
+person('Abbas', 'Phillips', male).
+person('Paul', 'Pietzuch', male).
+
+nameList(List):-
+  nameList([], List).
+
+nameList(IList, List):-
+  (
+   call(person(FName, SName, _)),
+   \+ (member((SName, FName), IList))
+  ) -> nameList([(SName, FName)|IList], List) ; List=IList.
+
+% computation of the position of the bowl.
+calc(Ang, Len, X, Y) :-
+	X is Len * cos(Ang)+ 250,
+	Y is Len * sin(Ang) + 20.
+
+% computation of the next angle if we reach 0 or pi, delta change.
+next_Angle(A, D, NA, ND) :-
+	NA is D + A,
+	(((D > 0, abs(pi-NA) < 0.01); (D < 0, abs(NA) < 0.01)) ->
+	  ND = -D;
+	  ND = D).
+
+assert((fun(X, Y) :- Y is 2 * X)).
+?- maplist(fun, [1,2,3,4,5], L).
+L = [2,4,6,8,10].
+
+?- append([1,2,3],[4,5,6],R).
+R = [1, 2, 3, 4, 5, 6].
+
+%%%
+repeat,
+	write('Your guess : '),
+	read(Guess),
+	(   study(Solution, Guess, Bulls, Cows)
+	->  format('Bulls : ~w Cows : ~w~n', [Bulls, Cows]),
+	    Bulls = LenGuess
+	;   digits(Digits), Max is Digits + 1,
+	    format('Guess must be of ~w digits between 1 and ~w~n',
+		   [LenGuess, Max]),
+	    fail
+	).
+
+numlist(0, 9, L).
+L = [0,1,2,...]
+
+evens(D, Es) :- findall(E, (member(E, D), E mod 2 =:= 0), Es).
+
+%%%
+fizzbuzz :-
+   foreach(between(1, 100, X), print_item(X)).
+ 
+print_item(X) :-
+    (  0 is X mod 15
+    -> print('FizzBuzz')
+    ;  0 is X mod 3
+    -> print('Fizz')
+    ;  0 is X mod 5
+    -> print('Buzz')
+    ;  print(X)
+    ),
+    nl.
+
+%%%
+:- use_module(library(error)).
+:- dynamic arc/2.
+
+load_arcs(File) :-
+    retractall(arc(_,_)),
+    open(File, read, Stream),
+    call_cleanup(load_arcs(Stream), close(Stream)).
+
+load_arcs(Stream) :-
+    read(Stream, T0),
+    load_arcs(T0, Stream).
+
+load_arcs(end_of_file, _) :- !.
+load_arcs(arc(From, To), Stream) :- !,
+    assert(arc(From, To)),
+    read(Stream, T2),
+    load_arcs(T2, Stream).
+load_arcs(Term, Stream) :-
+    type_error(arc, Term).
+
+%
+open("ssqNum.txt",read,F), read_stream_to_codes(F,N), write(N), close(F).
+
+%%%
+list_w([W|Ws]) --> string(W), ",", !, list_w(Ws).
+list_w([W]) --> string(W).
+
+string([]) -->  [].
+string([H|T]) --> [H],string(T).
+
+?- phrase(list_w(S),"cat,dog").
+S = [[99, 97, 116], [100, 111, 103]] ;
+false.
+
+%X^ means "there exists X", so the whole formula means something like "count the number of ways that permutation([1,2,3,4],X) succeeds for some X and call that number N."
+
+aggregate(count, X^permutation([1,2,3,4], X), N).
+
+loop :- 
+	write('Type end to end'),read(Word), 
+	write('Input was '),write(Word),nl, 
+	(Word=end;loop).
+
+?- X=..[write,'hello world'], call(X).
+hello world X = write('hello world')
+
+repeat, read(X), (X==end_of_file, !, fail; true).
+
+format(atom(X),"~d",[12]).
+
+?- with_output_to(atom(Atom), maplist(write, [a+b, b+c])).
+Atom = 'a+bb+c'.
+
+forall(member(X, ["1","2","3"]), (number_codes(Y,X), writeln(Y))).
+
+?- atom_concat(/,X,'/abc/def').
+X = 'abc/def'.
+
+partition(=<(0), [1,-2,3,4,-8,0], X, Y).
+
+G =.. [H,Item],G.
+% can be converted to:
+functor(Goal,H,1),   % unifies Goal with H(_)
+arg(1,Goal,Item),    % unifies first argument of Goal with Item
+call(Goal).          % use this for portability
+
+Suits = [clubs, hearts, spades, diamonds],
+Pips = [2, 3, 4, 5, 6, 7, 8, 9, 10, jack, queen, king, ace],
+setof(card(Pip, Suit), (member(Suit, Suits), member(Pip, Pips)), Deck).
+
+catch(
+    forall(query(Q), (Q ->
+        format('yes: ~w~n',[Q]) ;
+        format('no : ~w~n',[Q]))),
+    error(existence_error(procedure, _), _), format('error occurred.~n', [])).
+
+%%%
+:- use_module(library(http/http_open)).
+:- use_module(library(xpath)).
+ 
+test5(UniversityName):-
+	http_open('http://en.wikipedia.org/wiki/Eotvos_Lorand_University',
+		  In,
+		  []),
+	set_stream(In, encoding(utf8)),
+	load_structure(In, HTML,
+		       [ dialect(xml),
+			 max_errors(-1)
+		       ]),
+	xpath(HTML, //h1/span(text), UniversityName).
+
+%%%
+%As volatile is an operator with precedence higher than comma
+
+?- current_op(X,Y,volatile). 
+X = 1150, 
+Y = fx. 
+
+?- writeln((volatile):a). 
+(volatile):a 
+true. 
+
+?- writeln('volatile:a'). 
+volatile:a 
+true.
+
+?- predicate_property(ssq_test,X).
+X = interpreted ;
+X = visible ;
+X = file(/media/D/qachina/db/doc/prolog/money.pl) ;
+X = line_count(96) ;
+X = nodebug ;
+X = number_of_clauses(1) ;
+X = number_of_rules(1) ;
+false.
+
+%%%
 % +Foo means "must be bound"
 % -Foo means "must be unbound"
 % ?Foo means "either"
@@ -327,17 +565,6 @@ Ns = [b, c, a, d].
 %You can obtain other orders by moving the terminal [Name] in the DCG body.
 
 %%%
-?- predicate_property(ssq_test,X).
-X = interpreted ;
-X = visible ;
-X = file(/media/D/qachina/db/doc/prolog/money.pl) ;
-X = line_count(96) ;
-X = nodebug ;
-X = number_of_clauses(1) ;
-X = number_of_rules(1) ;
-false.
-
-%%%
 setup_call_cleanup(
 	    pack_open_entry(Pack, Name, Stream),
 	    read_stream_to_codes(Stream, Codes),
@@ -416,7 +643,6 @@ true.
 X = [nl(2), <, p, >, nl(1), some stuff, </, p, >].
 
 ?- print_html($X).
-
 <p>
 some stuff</p>
 true.
@@ -449,8 +675,6 @@ is(X, 5 >> 1).
 is(X, 5 /\ 1).  % and
 is(X, 5 \/ 1).  % or
 is(X, 5 xor 1).
-
-is(X, 5 \ 1).   % not  ???
 
 %%%
 timediff(DateTime1, DateTime2, Sec) :-
@@ -675,7 +899,7 @@ $swipl --goal=main --stand_alone=true --quiet -o myprog -c load.pl
 $swipl -O --goal=main --stand_alone=true -o wmi -c wmi.pl
 
 % This performs exactly the same as executing 
-swipl
+$swipl
 ?- [load].
 ?- qsave_program(myprog,
                  [ goal(main),
@@ -873,224 +1097,7 @@ scheme(A) :-
                gecos(code_list),
                homedir(atom),
                shell(atom)
-             ],
-             [ field_separator(0':)
-             ],
-             H).
+             ], [ field_separator(0':) ], H).
 
 % To find all people of group 100, use: 
 ?- findall(User, in_table(H, [user(User), gid(100)], _), Users).
-
-%%%
-?- d(sin(x^2)+5,x,Y).
-Y = cos(x ^ 2) * (1 * 2 * x ^ 1) + 0
-
-d(U+V,X,DU+DV) :- !, 
-    d(U,X,DU),
-    d(V,X,DV).
-d(U-V,X,DU-DV) :- !,
-    d(U,X,DU),
-    d(V,X,DV).
-d(U*V,X,DU*V+U*DV) :- !,
-    d(U,X,DU),
-    d(V,X,DV).
-d(U/V,X,(DU*V-U*DV)/(^(V,2))) :- !,
-    d(U,X,DU),
-    d(V,X,DV).
-d(^(U,N),X,DU*N*(^(U,N1))) :- !, 
-    integer(N),
-    N1 is N-1,
-    d(U,X,DU).
-d(-U,X,-DU) :- !,
-    d(U,X,DU).
-d(exp(U),X,exp(U)*DU) :- !,
-    d(U,X,DU).
-d(log(U),X,DU/U) :- !,
-    d(U,X,DU).
-d(sin(U),X,cos(U)*DU):-!,
-    d(U,X,DU).
-d(cos(U),X,-sin(U)*DU):-!,
-    d(U,X,DU).
-
-d(X,X,1) :- !.
-d(_,_,0).
-
-%------
-
-format('~`2t~9|~n').
-%222222222
-
-:- if(statistics(gctime, _)).
-get_performance_stats(GC, T):-
-	statistics(gctime, GC),		% SWI-Prolog
-	statistics(cputime, T).
-:- else.
-get_performance_stats(GC, T):-
-	statistics(garbage_collection, [_,_,TGC]),
-	statistics(cputime, [TT,_]),
-	GC is TGC / 1000,
-	T is TT / 1000.
-:- endif.
-
-with_output_to(atom(Atom), maplist(write, [a+b, b+c])).
-
-% Procedure nameList/1 just calls nameList/2 with an empty accumulator. Then procedure nameList/2 will call every person from the facts database and check whether the person is in the accumulator list. If it finds one such person then it recursively calls itself adding this person to the accumulator. If it does not find any person not in the input list then it unifies this accumulator with the output List of persons.
-
-person('Alex', 'McBrien', male).
-person('Daniel', 'Gardner', male).
-person('Abbas', 'Phillips', male).
-person('Paul', 'Pietzuch', male).
-
-nameList(List):-
-  nameList([], List).
-
-nameList(IList, List):-
-  (
-   call(person(FName, SName, _)),
-   \+ (member((SName, FName), IList))
-  ) -> nameList([(SName, FName)|IList], List) ; List=IList.
-
-% computation of the position of the bowl.
-calc(Ang, Len, X, Y) :-
-	X is Len * cos(Ang)+ 250,
-	Y is Len * sin(Ang) + 20.
-
-% computation of the next angle if we reach 0 or pi, delta change.
-next_Angle(A, D, NA, ND) :-
-	NA is D + A,
-	(((D > 0, abs(pi-NA) < 0.01); (D < 0, abs(NA) < 0.01)) ->
-	  ND = -D;
-	  ND = D).
-
-assert((fun(X, Y) :- Y is 2 * X)).
-?- maplist(fun, [1,2,3,4,5], L).
-L = [2,4,6,8,10].
-
-?- append([1,2,3],[4,5,6],R).
-R = [1, 2, 3, 4, 5, 6].
-
-%%%
-repeat,
-	write('Your guess : '),
-	read(Guess),
-	(   study(Solution, Guess, Bulls, Cows)
-	->  format('Bulls : ~w Cows : ~w~n', [Bulls, Cows]),
-	    Bulls = LenGuess
-	;   digits(Digits), Max is Digits + 1,
-	    format('Guess must be of ~w digits between 1 and ~w~n',
-		   [LenGuess, Max]),
-	    fail
-	).
-
-numlist(0, 9, L).
-L = [0,1,2,...]
-
-evens(D, Es) :- findall(E, (member(E, D), E mod 2 =:= 0), Es).
-
-%%%
-fizzbuzz :-
-   foreach(between(1, 100, X), print_item(X)).
- 
-print_item(X) :-
-    (  0 is X mod 15
-    -> print('FizzBuzz')
-    ;  0 is X mod 3
-    -> print('Fizz')
-    ;  0 is X mod 5
-    -> print('Buzz')
-    ;  print(X)
-    ),
-    nl.
-
-%%%
-:- use_module(library(error)).
-:- dynamic arc/2.
-
-load_arcs(File) :-
-    retractall(arc(_,_)),
-    open(File, read, Stream),
-    call_cleanup(load_arcs(Stream), close(Stream)).
-
-load_arcs(Stream) :-
-    read(Stream, T0),
-    load_arcs(T0, Stream).
-
-load_arcs(end_of_file, _) :- !.
-load_arcs(arc(From, To), Stream) :- !,
-    assert(arc(From, To)),
-    read(Stream, T2),
-    load_arcs(T2, Stream).
-load_arcs(Term, Stream) :-
-    type_error(arc, Term).
-
-%
-open("ssqNum.txt",read,F), read_stream_to_codes(F,N), write(N), close(F).
-
-%%%
-list_w([W|Ws]) --> string(W), ",", !, list_w(Ws).
-list_w([W]) --> string(W).
-
-string([]) -->  [].
-string([H|T]) --> [H],string(T).
-
-test:
-?- phrase(list_w(S),"cat,dog").
-S = [[99, 97, 116], [100, 111, 103]] ;
-false.
-
-%X^ means "there exists X", so the whole formula means something like "count the number of ways that permutation([1,2,3,4],X) succeeds for some X and call that number N."
-
-aggregate(count, X^permutation([1,2,3,4], X), N).
-
-loop :- 
-	write('Type end to end'),read(Word), 
-	write('Input was '),write(Word),nl, 
-	(Word=end;loop).
-
-?- X=..[write,'hello world'], call(X).
-hello world X = write('hello world')
-
-repeat, read(X), (X==end_of_file, !, fail; true).
-
-format(atom(X),"~d",[12]).
-
-?- with_output_to(atom(Atom), maplist(write, [a+b, b+c])).
-Atom = 'a+bb+c'.
-
-forall(member(X, ["1","2","3"]), (number_codes(Y,X), writeln(Y))).
-
-?- atom_concat(/,X,'/abc/def').
-X = 'abc/def'.
-
-partition(=<(0), [1,-2,3,4,-8,0], X, Y).
-
-G =.. [H,Item],G.
-% can be converted to:
-functor(Goal,H,1),   % unifies Goal with H(_)
-arg(1,Goal,Item),    % unifies first argument of Goal with Item
-call(Goal).          % use this for portability
-
-Suits = [clubs, hearts, spades, diamonds],
-Pips = [2, 3, 4, 5, 6, 7, 8, 9, 10, jack, queen, king, ace],
-setof(card(Pip, Suit), (member(Suit, Suits), member(Pip, Pips)), Deck).
-
-catch(
-    forall(query(Q), (Q ->
-        format('yes: ~w~n',[Q]) ;
-        format('no : ~w~n',[Q]))),
-    error(existence_error(procedure, _), _), format('error occurred.~n', [])).
-
-%%%
-:- use_module(library(http/http_open)).
-:- use_module(library(xpath)).
- 
-test5(UniversityName):-
-	http_open('http://en.wikipedia.org/wiki/Eotvos_Lorand_University',
-		  In,
-		  []),
-	set_stream(In, encoding(utf8)),
-	load_structure(In, HTML,
-		       [ dialect(xml),
-			 max_errors(-1)
-		       ]),
-	xpath(HTML, //h1/span(text), UniversityName).
