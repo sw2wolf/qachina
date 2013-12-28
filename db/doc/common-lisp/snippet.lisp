@@ -2,6 +2,7 @@
 ;;;;;;
 ;will return nil as soon as it encounters any nil entries in list, and true if no items are nil. (notany #’null list) is equivalent.
 (every #’identity list)
+(apply #'funcall '(* 1 2 3))
 
 ;;;;;;
 (cl-ppcre:all-matches-as-strings "[a-zA-Z]{3,}" "this is") ->  ("this")

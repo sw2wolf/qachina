@@ -207,6 +207,25 @@ used for matching windows with run-or-raise or window placement
 				  (nw (remove-if #'(lambda (w) (eq w cw)) (group-windows group))))
 			  (if (not (null nw)) (focus-window (first nw))
 				  (no-focus group nil)))))))
+
+(defcommand move-window-right (val) (:number)
+  "Move current floating window right by VAL."
+  (float-window-move-resize (current-window)
+                            :x (+ (window-x (current-window)) val)))
+
+;moving window in floating group
+(defcommand move-window-down (val) (:number)
+  "Move current floating window down by VAL."
+  (float-window-move-resize (current-window)
+                            :y (+ (window-y (current-window)) val)))
+
+(define-key *float-group-top-map* (kbd "s-Left" ) "move-window-right -1")
+(define-key *float-group-top-map* (kbd "s-Right") "move-window-right 1" )
+(define-key *float-group-top-map* (kbd "s-Up"   ) "move-window-down -1" )
+(define-key *float-group-top-map* (kbd "s-Down" ) "move-window-down 1"  )
+
+(define-key *top-map* (kbd "s-F") *float-group-top-map*)
+
 #-MPD
 (defcommand activate-mpd () () (cl:push :MPD *features*))
 
@@ -291,13 +310,12 @@ used for matching windows with run-or-raise or window placement
     (if *swank-p*
         (message "Swank server already running")
         (progn
-            (setf *swank-p* t)
             (message "Starting swank on port 4005")
-            ;(ql:quickload :swank)
 			(push #p"~/quicklisp/dists/quicklisp/software/slime-20131211-cvs/" asdf:*central-registry*)			
 			(asdf:oos 'asdf:load-op :swank)
 			(setf (symbol-value (intern "*log-output*" :swank)) nil)
 			(funcall (intern (string '#:create-server) :swank) :port 4005 :style :spawn :dont-close t) ; :coding-system "utf-8-unix"
+            (setf *swank-p* t)
             (echo-string (current-screen) "Starting Swank...Done")
         )))
   (defkey-root "s-l" "swank"))

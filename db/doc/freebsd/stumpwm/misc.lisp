@@ -1,3 +1,44 @@
+
+;;;;;;
+(defcommand move-window-right (val) (:number)
+  "Move current floating window right by VAL."
+  (float-window-move-resize (current-window)
+                            :x (+ (window-x (current-window)) val)))
+(defcommand move-window-down (val) (:number)
+  "Move current floating window down by VAL."
+  (float-window-move-resize (current-window)
+                            :y (+ (window-y (current-window)) val)))
+(define-key *top-map* (kbd "s-Left"  ) "move-window-right -10")
+(define-key *top-map* (kbd "s-Right" ) "move-window-right 10")
+(define-key *top-map* (kbd "s-Up"    ) "move-window-down -10")
+(define-key *top-map* (kbd "s-Down"  ) "move-window-down 10")
+
+(defcommand move-window-to-left-edge () ()
+  "Move current floating window to the left edge."
+  (float-window-move-resize (current-window) :x 0))
+(defcommand move-window-to-right-edge () ()
+  "Move current floating window to the right edge."
+  (float-window-move-resize (current-window)
+                            :x (- (screen-width (current-screen))
+                                  (window-width (current-window))
+                                  (* 2 *float-window-border*))))
+(defcommand move-window-to-top-edge () ()
+  "Move current floating window to the top edge."
+  (float-window-move-resize (current-window) :y 0))
+(defcommand move-window-to-bottom-edge () ()
+  "Move current floating window to the bottom edge."
+  (float-window-move-resize (current-window)
+                            :y (- (screen-height (current-screen))
+                                  (window-height (current-window))
+                                  *float-window-border*
+                                  *float-window-title-height*)))
+
+(define-key *top-map* (kbd "C-s-Left"  ) "move-window-to-left-edge")
+(define-key *top-map* (kbd "C-s-Right" ) "move-window-to-right-edge")
+(define-key *top-map* (kbd "C-s-Up"    ) "move-window-to-top-edge")
+(define-key *top-map* (kbd "C-s-Down"  ) "move-window-to-bottom-edge")
+
+;;;;;;
 ;gimp-layout-1024x768
 #S(STUMPWM::GDUMP :NUMBER 2. :NAME "gimp"
    :TREE
