@@ -298,7 +298,7 @@ used for matching windows with run-or-raise or window placement
     ;(run-shell-command "xsetroot -solid black")
     ;(run-shell-command "fcitx")
     (vsplit "2/5") (move-focus :down)
-	#-MPD (run-commands "gselect 2")
+	;#-MPD (run-commands "gselect 2")
 	;(when (not (stumpwm::getenv "MPD")) (run-commands "gselect 2"))
 )
 (replace-hook *start-hook* 'my-start-hook)

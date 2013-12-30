@@ -13,6 +13,8 @@
 ;(setq slime-lisp-implementations
 ;    '((sbcl ("/usr/local/bin/sbcl") :coding-system utf-8-unix)
 ;      (cmucl ("/usr/local/bin/cmucl") :coding-system iso-latin-1-unix)))
+;; (setq slime-lisp-implementations
+;;      '((sbcl ("sbcl" "--core" "my-sbcl.core"))))
 
 ;; (setq browse-url-browser-function
 ;;     '(("/home/sw2wolf/HyperSpec" . w3m-browse-url)

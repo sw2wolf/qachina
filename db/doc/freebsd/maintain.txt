@@ -1,4 +1,5 @@
-
+------
+mplayer -cache 2048 -cache-min 10 `youtube-dl.py -gf5 -- XCnK3B7Ftow`
 ------
 If the passwd databases become out of synch, repairing it, you could try:
 

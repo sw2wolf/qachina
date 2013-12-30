@@ -35,17 +35,17 @@
 ;;         (find-file file))
 ;;     (message "Current buffer does not have an associated file.")))
 
-(defun jump-run-prolog ()
-  (interactive)
-  (if (get-buffer "*prolog*")
-	  (switch-to-buffer-other-window "*prolog*")
-	  (run-prolog 'swi)))
+;; (defun jump-run-prolog ()
+;;   (interactive)
+;;   (if (get-buffer "*prolog*")
+;; 	  (switch-to-buffer-other-window "*prolog*")
+;; 	  (run-prolog 'swi)))
 
-(defun jump-run-erlang ()
-  (interactive)
-  (if (get-buffer "*erlang*")
-	  (switch-to-buffer "*erlang*")
-	  (run-erlang)))
+;; (defun jump-run-erlang ()
+;;   (interactive)
+;;   (if (get-buffer "*erlang*")
+;; 	  (switch-to-buffer "*erlang*")
+;; 	  (run-erlang)))
 
 (defun jump-run-lisp ()
   (interactive)
@@ -63,6 +63,11 @@
   (if (get-buffer "+inbox")
 	  (switch-to-buffer-other-window "+inbox")
 	  (mew)))
+
+(defun jump-to-lambdabot ()
+  (interactive)
+  (if (get-buffer "lambdabot")
+	  (switch-to-buffer-other-window "lambdabot")))
 
 (defun jump-run-shell ()
   (interactive)
@@ -109,8 +114,10 @@
 ;(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-caml "ocaml")))
 ;(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-haskell)))
 
+(global-set-key (kbd "<f8>") 'jump-to-lambdabot)
+
 ;(global-set-key (kbd "<f8>") 'jump-run-erlang)
-(global-set-key (kbd "<f8>") 'jump-run-prolog)
+;(global-set-key (kbd "<f8>") 'jump-run-prolog)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

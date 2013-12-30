@@ -41,14 +41,10 @@ case $1 in
 	    #/usr/local/etc/rc.d/musicpd onestart
 		exec $HOME/bin/stumpwm-clisp-norc
         ;;
-	# ccl)
-    #     export MPD=YES
-	#     /usr/local/etc/rc.d/musicpd onestart
-	# 	exec $HOME/bin/stumpwm-ccl-norc
-    #     ;;
-    # sbcl)
-	# 	sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
-	# 	;;
+    sbcl)
+		#sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
+        exec $HOME/bin/stumpwm-sbcl
+		;;
 	xmonad)
 		exec xmonad
 		;;
