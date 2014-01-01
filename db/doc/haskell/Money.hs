@@ -3,7 +3,7 @@
 module Money (
     winG, winQ, div618, stopLoss
     ,qachina, fibs
-    ,win_ssq, hit_ssq
+    ,win_ssq, hit_ssq, his
     )
 where
 import System.Random

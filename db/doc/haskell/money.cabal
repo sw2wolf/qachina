@@ -3,21 +3,21 @@
 
 name:                money
 version:             0.1.0.0
--- synopsis:            
+synopsis:            a money module
 -- description:         
-license:             BSD3
+-- license:             
 license-file:        LICENSE
 author:              sw2wolf
-maintainer:          czsq888@163.com
+-- maintainer:          
 -- copyright:           
 -- category:            
 build-type:          Simple
 cabal-version:       >=1.8
 
-data-files: ssqHitNum.txt ssqNum.txt
-extra-source-files:  readme.txt
-
 library
   exposed-modules:     Money
   -- other-modules:       
-  build-depends:       base ==4.5.*, random ==1.0.*, old-time ==1.1.*, directory ==1.1.*, process ==1.1.*, time ==1.4.*
+  build-depends:       base ==4.6.*, random ==1.0.*, old-time ==1.1.*, directory ==1.2.*, process ==1.1.*, time ==1.4.*
+
+  if true
+      ghc-options:    -fno-warn-unused-do-bind -Wall -O2
