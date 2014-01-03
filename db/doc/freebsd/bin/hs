@@ -7,8 +7,8 @@ if test $# -ge 1; then
     exit 0
 fi
 
-expr=`zenity --width 350 --entry --text "Please input a CL expression" \
-div618 stopLoss winG his\(\) winSSQ hitSSQ`
+expr=`zenity --width 350 --entry --text "Please input a Haskell expression" \
+div618 stopLoss winG his winSSQ hitSSQ`
 
 if [ $? -eq 0 ]; then 
     #res=$(ghc -ignore-dot-ghci -e "$expr" $money)

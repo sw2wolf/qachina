@@ -196,7 +196,7 @@ the process with the next item (~})."
         (maphash #'(lambda (k v) (push (cons k v) res)) tab)
         (setq sort-res (sort res #'> :key #'cdr))
         ;(print sort-res)))
-        (sort (subseq (mapcar #'car sort-res) 0 18) #'<)))
+        (sort (subseq (mapcar #'car sort-res) 0 21) #'<)))
 
 (defun win-ssq (nums no-red no-blue)
     (let* ((res) (resRed) (no-red-lst (str2lst no-red))

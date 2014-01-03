@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -cpp #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module Money (
     winG, winQ, div618, stopLoss
@@ -10,7 +11,7 @@ import System.Random
 import System.IO
 import System.Time
 import System.Directory
-import System.Environment
+import System.Environment()
 import System.Process
 import System.Exit
 
@@ -162,7 +163,7 @@ ints2str ints = concat $ intersperse "\n" strLst
 goodRed:: IO [Int]
 goodRed = do {
     samp <- fmap (concat . str_ints_hit) $ readFile ssqHitNum;
-    return $ sort $ take 18 $ map (\(a,_) -> a) $ statis samp;
+    return $ sort $ take 21 $ map (\(a,_) -> a) $ statis samp;
 }
 
 statis :: [Int] -> [(Int,Int)]
