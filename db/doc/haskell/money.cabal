@@ -20,4 +20,4 @@ library
   build-depends:       base ==4.6.*, random ==1.0.*, old-time ==1.1.*, directory ==1.2.*, process ==1.1.*, time ==1.4.*
 
   if true
-      ghc-options:    -fno-warn-unused-do-bind -Wall -O2
+      ghc-options:    -fno-warn-missing-signatures -fno-warn-unused-do-bind -Wall -O2

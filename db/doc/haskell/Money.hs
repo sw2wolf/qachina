@@ -1,5 +1,4 @@
 {-# OPTIONS_GHC -cpp #-}
-{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module Money (
     winG, winQ, div618, stopLoss
@@ -9,8 +8,8 @@ module Money (
 where
 import System.Random
 import System.IO
-import System.Time
-import System.Directory
+--import System.Time
+--import System.Directory
 import System.Environment()
 import System.Process
 import System.Exit
@@ -19,8 +18,8 @@ import Text.Printf (printf)
 --import Text.Regex
 
 import Data.List
-import Data.Time.Calendar
-import Data.Time.Calendar.WeekDate 
+--import Data.Time.Calendar
+--import Data.Time.Calendar.WeekDate 
 
 import qualified Control.Exception as Exception
 import Control.Monad
@@ -73,22 +72,22 @@ div618 p1 p2 = do
         
     return ()
 
-fG y m d = fromGregorian y m d
+-- fG y m d = fromGregorian y m d
 
-no_trade_days = [fG 2011 1 1, fG 2011 1 2, fG 2011 1 3, --元旦
-                 fG 2011 2 2, fG 2011 2 3, fG 2011 2 4, fG 2011 2 5, fG 2011 2 6, --春节
-                 fG 2011 2 7, fG 2011 2 8,
-                 fG 2011 4 3, fG 2011 4 4, fG 2011 4 5, --清明
-                 fG 2011 4 30, fG 2011 5 1, fG 2011 5 2, --劳动
-                 fG 2011 6 4, fG 2011 6 5, fG 2011 6 6,  --端午
-                 fG 2013 9 19, fG 2013 9 20, fG 2013 9 21,  --中秋
-                 fG 2011 10 1, fG 2011 10 2, fG 2011 10 3, fG 2011 10 4, fG 2011 10 5,  --国庆
-                 fG 2011 10 6, fG 2011 10 7
-                ]
+-- no_trade_days = [fG 2011 1 1, fG 2011 1 2, fG 2011 1 3, --元旦
+--                  fG 2011 2 2, fG 2011 2 3, fG 2011 2 4, fG 2011 2 5, fG 2011 2 6, --春节
+--                  fG 2011 2 7, fG 2011 2 8,
+--                  fG 2011 4 3, fG 2011 4 4, fG 2011 4 5, --清明
+--                  fG 2011 4 30, fG 2011 5 1, fG 2011 5 2, --劳动
+--                  fG 2011 6 4, fG 2011 6 5, fG 2011 6 6,  --端午
+--                  fG 2013 9 19, fG 2013 9 20, fG 2013 9 21,  --中秋
+--                  fG 2011 10 1, fG 2011 10 2, fG 2011 10 3, fG 2011 10 4, fG 2011 10 5,  --国庆
+--                  fG 2011 10 6, fG 2011 10 7
+--                 ]
 
-is_trade_day day =
-    if (elem wd [6,7]) || (elem day no_trade_days) then False else True
-    where (y,w,wd) = toWeekDate day
+-- is_trade_day day =
+--     if (elem wd [6,7]) || (elem day no_trade_days) then False else True
+--     where (y,w,wd) = toWeekDate day
 
 --dateWindow sDayStr n = mapM_ (\nday -> dayByNTDay  sDayStr nday) $ fibs n
 {--
@@ -100,33 +99,33 @@ dayByNTDay sDayStr nDay = do {
     print $ find_the_day sDay nDay ;
 }
 --}
-find_the_day sDay 0 = sDay
-find_the_day sDay nDay = 
-    let nextDay = addDays 1 sDay
-    in if (is_trade_day $ nextDay)
-    then find_the_day nextDay (nDay - 1)
-    else find_the_day nextDay nDay
+-- find_the_day sDay 0 = sDay
+-- find_the_day sDay nDay = 
+--     let nextDay = addDays 1 sDay
+--     in if (is_trade_day $ nextDay)
+--     then find_the_day nextDay (nDay - 1)
+--     else find_the_day nextDay nDay
 
 ------------------------------------------------------------------------
-rollDice :: Int -> IO Int
-rollDice n = do 
-    tmp <- doesFileExist "/dev/urandom" 
-    myGen <- if tmp
-        then mkStdGen <$> betterSeed
-        else (mkStdGen . fromInteger) <$> picoSec
+-- rollDice :: Int -> IO Int
+-- rollDice n = do 
+--     tmp <- doesFileExist "/dev/urandom" 
+--     myGen <- if tmp
+--         then mkStdGen <$> betterSeed
+--         else (mkStdGen . fromInteger) <$> picoSec
     
-    return $ (take 1 $ randomRs (1,n) myGen) !! 0
+--     return $ (take 1 $ randomRs (1,n) myGen) !! 0
+
+-- picoSec :: IO Integer
+-- picoSec = ctPicosec <$> (getClockTime >>= toCalendarTime)
 
 betterSeed :: IO Int
 betterSeed = alloca $ \p -> do
     --h <- openBinaryFile "/dev/urandom" ReadMode
+    --hClose h
     withBinaryFile "/dev/urandom" ReadMode $ \h ->
         hGetBuf h p $ sizeOf (undefined :: Int)
-    --hClose h
     peek p
-
-picoSec :: IO Integer
-picoSec = ctPicosec <$> (getClockTime >>= toCalendarTime)
 
 ------------------------------------------------------------------------
 
@@ -135,6 +134,8 @@ win_ssq count noRed noBlue = do
     --writeFile "noRedBlue.txt" $ concat $ intersperse " " noStr
     let noRedLst =  map (\x -> read x::Int) $ words noRed
         noBlueLst = map (\x -> read x::Int) $ words noBlue
+        
+    setStdGen <$> (mkStdGen <$> betterSeed)
 
     okBlue <- pickNums ([1..16] \\ noBlueLst) count []
     gRed <- goodRed
@@ -145,14 +146,21 @@ win_ssq count noRed noBlue = do
     forM_ result (\x -> print x)
     writeFile ssqNum $ ints2str result
 
+pickSSQ :: Int -> [Int] -> [Int] -> [Int] -> [[Int]] -> IO [[Int]]
 pickSSQ 0 _ _ _ acc = return acc
 pickSSQ 1 gRed _ okBlue acc = do
     red <- sort <$> pickNums gRed 6 []
     return $ reverse $ (red ++ [okBlue!!0]) : acc
 pickSSQ count gRed yesRed okBlue acc = do
     red <- sort <$> pickNums yesRed 6 []
-    pickSSQ (count-1) yesRed yesRed okBlue $ 
+    pickSSQ (count-1) gRed yesRed okBlue $ 
         (red ++ [okBlue!!(count-1)]) : acc
+
+pickNums :: [Int] -> Int -> [Int] -> IO [Int]
+pickNums _ 0 acc = return acc
+pickNums from count acc = do
+    idx <- randomRIO (1, length from)
+    pickNums (from \\ [from!!(idx-1)]) (count-1) (from!!(idx-1):acc)
 
 ints2str :: [[Int]] -> String
 ints2str ints = concat $ intersperse "\n" strLst
@@ -177,11 +185,6 @@ str_ints_hit str = map (\line -> map (\x->read x::Int) line) $ map (init . tail 
 
 str_ints_pick :: String -> [[Int]]
 str_ints_pick str = map (\line -> map (\x->read x::Int) line) $ map words $ lines str
-
-pickNums _ 0 acc = return acc
-pickNums from count acc = do
-    idx <-  rollDice $ length from
-    pickNums (from \\ [from!!(idx-1)]) (count-1) (from!!(idx-1):acc)
 
 hit_ssq :: String -> String -> IO ()
 hit_ssq no hitNum = do
