@@ -2,8 +2,8 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module Money (
     winG, winQ, div618, stopLoss
-    ,qachina, fibs
     ,win_ssq, hit_ssq, his
+    ,qachina, combLen
     )
 where
 import System.Random
@@ -18,6 +18,7 @@ import Text.Printf (printf)
 --import Text.Regex
 
 import Data.List
+--import Data.IORef
 --import Data.Time.Calendar
 --import Data.Time.Calendar.WeekDate 
 
@@ -26,10 +27,14 @@ import Control.Monad
 import Control.Applicative
 import Control.Arrow
 
+import Control.Concurrent
+
 import Foreign.Marshal.Alloc
 import Foreign.Storable
 
 #if __GLASGOW_HASKELL__ >= 610
+catchAny :: forall a.
+                  IO a -> (Exception.SomeException -> IO a) -> IO a
 catchAny f h = Exception.catch f (\e -> h (e :: Exception.SomeException))
 #else
 catchAny = Exception.catch
@@ -45,14 +50,21 @@ qachina = do
 
 ------------------------------------------------------------------------------
 
+sxf :: Float
 sxf = 0.0015  --手续费
+
+yhs :: Float
 yhs = 0.001   --印花费
+
+ghf :: Float
 ghf = 1.0     --过户费
 
 --计算股票盈利
+winG :: Float -> Float -> Float -> Float
 winG qty pb ps = qty * ps * (1 - sxf - yhs) - 2 * ghf - qty * pb * (1 + sxf)
 
 --算权证盈利
+winQ :: Float -> Float -> Float -> Float
 winQ qty pb ps = qty * ps * (1 - sxf) - 2 * ghf - qty * pb * (1 + sxf)
 
 --止损价
@@ -128,23 +140,33 @@ betterSeed = alloca $ \p -> do
     peek p
 
 ------------------------------------------------------------------------
-
+win_ssq :: Int -> String -> String -> IO ()
 win_ssq count noRed noBlue = do
     --let noStr = (map (\x->show x) noRed) ++ ["-"] ++ (map (\x->show x) noBlue)
     --writeFile "noRedBlue.txt" $ concat $ intersperse " " noStr
     let noRedLst =  map (\x -> read x::Int) $ words noRed
         noBlueLst = map (\x -> read x::Int) $ words noBlue
-        
-    setStdGen <$> (mkStdGen <$> betterSeed)
 
-    okBlue <- pickNums ([1..16] \\ noBlueLst) count []
     gRed <- goodRed
+
+    _ <- setStdGen <$> (mkStdGen <$> betterSeed)
+    okBlue <- pickNums ([1..16] \\ noBlueLst) count []
     result <- pickSSQ count
               (gRed \\ noRedLst)
               ([1..33] \\ noRedLst)
               okBlue []
     forM_ result (\x -> print x)
     writeFile ssqNum $ ints2str result
+    
+-- count :: Int -> IO Int
+-- count n = do {r <- newIORef 0 ; 
+--               loop r 1 }
+--         where 
+--           loop :: IORef Int -> Int -> IO Int
+--           loop r i | i>n       = readIORef r
+--                    | otherwise = do { v <- readIORef r ; 
+--                                       writeIORef r (v+i) ;
+--                                       loop r (i+1) }
 
 pickSSQ :: Int -> [Int] -> [Int] -> [Int] -> [[Int]] -> IO [[Int]]
 pickSSQ 0 _ _ _ acc = return acc
@@ -156,11 +178,16 @@ pickSSQ count gRed yesRed okBlue acc = do
     pickSSQ (count-1) gRed yesRed okBlue $ 
         (red ++ [okBlue!!(count-1)]) : acc
 
+pick :: [a] -> IO a
+pick xs = randomRIO (0, length xs - 1) >>= return . (xs !!)
+
 pickNums :: [Int] -> Int -> [Int] -> IO [Int]
 pickNums _ 0 acc = return acc
 pickNums from count acc = do
-    idx <- randomRIO (1, length from)
-    pickNums (from \\ [from!!(idx-1)]) (count-1) (from!!(idx-1):acc)
+  x <- pick from
+  --'threadDelay 1000000' should wait one second
+  threadDelay 1000
+  pickNums (from \\ [x]) (count-1) (x:acc)
 
 ints2str :: [[Int]] -> String
 ints2str ints = concat $ intersperse "\n" strLst
@@ -209,6 +236,9 @@ hit_ssq no hitNum = do
             hitB = if (n!!6 == hitLst!!6) then 1 else 0 
         printf "%s\t%d:%d\t%s\n" (show n) (hitR::Int) (hitB::Int) (hit_desc hitR hitB))
 
+hit_desc :: forall a a1.
+                  (Eq a, Eq a1, Num a, Num a1) =>
+                  a -> a1 -> [Char]
 hit_desc red blue
     | red == 6 && blue == 1 = "First"
     | red == 6 && blue == 0 = "Second"
@@ -223,28 +253,35 @@ his = do
   pid <- runCommand $ "tail " ++ ssqHitNum
   waitForProcess pid >>= exitWith
 
+ssqNum :: [Char]
 ssqNum = "/media/D/qachina/db/doc/money/" ++ "ssqNum.txt"
+
+ssqHitNum :: [Char]
 ssqHitNum = "/media/D/qachina/db/doc/money/" ++ "ssqHitNum.txt"
 
 ------------------------------------------------------------------------
   
 -- 菲波纳契数列
---fibs = 0 : 1 : [ a + b | (a, b) <- zip fibs (tail fibs)] 
-fibs n = take n $ fibgen 1 1
-fibgen n1 n2 = n1 : fibgen n2 (n1+n2) 
+--fibs = 0 : 1 : [ a + b | (a, b) <- zip fibs (tail fibs)]
+-- fibs :: forall a. Num a => Int -> [a]
+-- fibs n = take n $ fibgen 1 1
+
+-- fibgen :: forall a. Num a => a -> a -> [a]
+-- fibgen n1 n2 = n1 : fibgen n2 (n1+n2) 
 
 --求解素数的一个无限数列方法：
-prime = sieve [2..]        
-sieve (x:xs) = x : sieve (filter (\y -> y `rem` x /= 0) xs)
+-- sieve :: forall a. Integral a => [a] -> [a]
+-- sieve [] = sieve [2..]
+-- sieve (x:xs) = x : sieve (filter (\y -> y `rem` x /= 0) xs)
 
 --排列组合 same as Data.List.subsequences
-combination :: [a] -> [[a]]
-combination [] =  [[]]
-combination (x:xs) = concat [[(x:ys), ys] | ys <- combination xs]
+-- combination :: [a] -> [[a]]
+-- combination [] =  [[]]
+-- combination (x:xs) = concat [[(x:ys), ys] | ys <- combination xs]
 
-permutation :: Eq a => [a] -> [[a]]
-permutation [] = [[]]
-permutation xs = concatMap (\x -> map (x:) $ permutation (delete x xs)) xs
+-- permutation :: Eq a => [a] -> [[a]]
+-- permutation [] = [[]]
+-- permutation xs = concatMap (\x -> map (x:) $ permutation (delete x xs)) xs
 
 combLen :: Int -> Int -> Int
 combLen x len
