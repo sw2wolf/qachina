@@ -1,5 +1,70 @@
 
 ------
+newtype ByteString0 = BS0 ByteString
+
+readFile0 :: FilePath -> IO ByteString0
+readFile0 x = do
+    src <- BS.readFile x
+    return $ BS0 $ src `BS.snoc` '\0'
+
+-- We define a newtype wrapper around ByteString so we gain some type safety. We also define a readFile0 that reads a file as a ByteString0, by explicitly calling snoc with \0. We can now define our own break0 function (this is the only big chunk of Haskell in this article):
+break0 :: (Char -> Bool) -> ByteString0 -> (ByteString, ByteString0)
+break0 f (BS0 bs) = (BS.unsafeTake i bs, BS0 $ BS.unsafeDrop i bs)
+    where
+        i = Internal.inlinePerformIO $ BS.unsafeUseAsCString bs $ \ptr -> do
+            let start = castPtr ptr :: Ptr Word8
+            let end = go start
+            return $! end `minusPtr` start
+
+        go s | c == '\0' || f c = s
+             | otherwise = go $ inc s
+            where c = chr s
+
+chr :: Ptr Word8 -> Char
+chr x = Internal.w2c $ Internal.inlinePerformIO $ peek x
+
+inc :: Ptr Word8 -> Ptr Word8
+inc x = x `plusPtr` 1
+
+------
+fact n = runST (do
+    r < - newSTRef 1
+    for (1,n) (\x -> do
+       val < - readSTRef r
+       writeSTRef r (val * x))
+    readSTRef r)
+
+import Control.Monad
+import Control.Monad.Reader
+
+-- count :: Int -> IO Int
+-- count n = do {r <- newIORef 0 ; 
+--               loop r 1 }
+--         where 
+--           loop :: IORef Int -> Int -> IO Int
+--           loop r i | i>n       = readIORef r
+--                    | otherwise = do { v <- readIORef r ; 
+--                                       writeIORef r (v+i) ;
+--                                       loop r (i+1) }
+hello :: Reader String String
+hello = do
+    name <- ask
+    return ("hello, " ++ name ++ "!")
+
+bye :: Reader String String
+bye = do
+    name <- ask
+    return ("bye, " ++ name ++ "!")
+
+convo :: Reader String String
+convo = do
+    c1 <- hello
+    c2 <- bye
+    return $ c1 ++ c2
+
+main = print . runReader convo $ "adit"
+
+------
 import Control.Monad
 import Random
 import Data.IORef
@@ -136,6 +201,9 @@ $ghc -e 'System.Directory.getAppUserDataDirectory "xmonad"'
 $ghc --info | egrep 'split|Host'
 ,("Host platform","i386-unknown-freebsd")
 ,("Object splitting supported","YES")
+
+-- The full output of log.txt is available here. It contains the GHC Core (which looks a bit like Haskell), then the C-- (which looks a bit like C) and finally the assembly code (which looks exactly like assembly).
+ghc -c -O2 InnerLoop.hs -ddump-simpl -ddump-cmm -ddump-asm > log.txt
 
 $cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
 $cabal install mighttpd2 --ghc-options=-fllvm

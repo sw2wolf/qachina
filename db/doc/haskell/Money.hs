@@ -23,10 +23,12 @@ import Data.List
 --import Data.Time.Calendar.WeekDate 
 
 import qualified Control.Exception as Exception
-import Control.Monad
-import Control.Applicative
-import Control.Arrow
 
+import Control.Monad
+import Control.Monad.Reader
+import Control.Applicative
+
+import Control.Arrow
 import Control.Concurrent
 
 import Foreign.Marshal.Alloc
@@ -157,16 +159,6 @@ win_ssq count noRed noBlue = do
               okBlue []
     forM_ result (\x -> print x)
     writeFile ssqNum $ ints2str result
-    
--- count :: Int -> IO Int
--- count n = do {r <- newIORef 0 ; 
---               loop r 1 }
---         where 
---           loop :: IORef Int -> Int -> IO Int
---           loop r i | i>n       = readIORef r
---                    | otherwise = do { v <- readIORef r ; 
---                                       writeIORef r (v+i) ;
---                                       loop r (i+1) }
 
 pickSSQ :: Int -> [Int] -> [Int] -> [Int] -> [[Int]] -> IO [[Int]]
 pickSSQ 0 _ _ _ acc = return acc

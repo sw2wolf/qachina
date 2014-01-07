@@ -17,7 +17,7 @@
 
 (load "init-erc")
 ;(load "init-w3m")
-(load "init-mew")
+;(load "init-mew")
 (load "init-eshell")
 
 ;(load "init-ac")
@@ -30,7 +30,7 @@
 (load "init-prolog")
 
 (load "init-haskell")
-(load "init-ocaml")
+;(load "init-ocaml")
 ;(load "init-ruby")
 ;(load "init-forth")
 

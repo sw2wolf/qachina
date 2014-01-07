@@ -98,6 +98,13 @@ pick_red(Count, GoodR, YesR, OkB, [H|T]) :-
 	append(Red,[Blue],H), C1 is Count-1,
 	pick_red(C1,GoodR,YesR,OkB,T).
 
+pick_nums(0, _, []).
+pick_nums(Count, From, [X|SelectedFromRemaining]) :-
+  random_member(X, From), sleep(0.001),
+  select(X, From, Remaining),
+  C1 is Count - 1,
+  pick_nums(C1, Remaining, SelectedFromRemaining).
+
 :- dynamic
  	hitnum/3.
 
@@ -212,13 +219,6 @@ all_pick_nums(F, L) :-
         all_pick_nums(F, R),
         L = [Is|R]
     ).
-
-pick_nums(0, _, []).
-pick_nums(Count, From, [X|SelectedFromRemaining]) :-
-  random_member(X, From),
-  select(X, From, Remaining),
-  C1 is Count - 1,
-  pick_nums(C1, Remaining, SelectedFromRemaining).
 
 atom2lst(Atom,L) :-
     atomic_list_concat(X, ' ', Atom),
