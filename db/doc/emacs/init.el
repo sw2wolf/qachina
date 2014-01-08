@@ -22,12 +22,12 @@
 
 ;(load "init-ac")
 
-(load "init-slime")
+;(load "init-slime")
 ;(load "init-clojure")
-;(load "init-racket")
+(load "init-scheme")
 
-;(load "init-erlang")
-(load "init-prolog")
+(load "init-erlang")
+;(load "init-prolog")
 
 (load "init-haskell")
 ;(load "init-ocaml")

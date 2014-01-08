@@ -32,6 +32,9 @@
 		(for-each (lambda(r) (format #t "---~3$  ~$---~%" r (price r))) (reverse ratio))
         (for-each (lambda(r) (format #t "---~3$  ~$---~%" r (price r))) ratio))))
 
+(define +ssq-hit-num+ "/media/D/qachina/db/doc/money/ssqHitNum.txt")
+(define +ssq-num+ "/media/D/qachina/db/doc/money/ssqNum.txt")
+
 (define *RED-NUMS* (cdr (iota 34)))
 (define *BLUE-NUMS* (cdr (iota 17)))
 
@@ -39,7 +42,7 @@
   (let ((yesRed (set-difference *RED-NUMS* (str2lst noRed)))
 		(okBlue (pickNums count (set-difference *BLUE-NUMS* (str2lst noBlue))))
 		(num '()))
-	(call-with-output-file "ssqNum.txt"
+	(call-with-output-file +ssq-num+
 	  (lambda(h)
 		(map (lambda(n)
 		   (set! num (lst2str (append (pickNums 6 yesRed) (list (list-ref okBlue n)))))
@@ -50,10 +53,10 @@
 
 (define (hit-ssq term hitNum)
   (let ((hitNumLst (str2lst hitNum)) (hitR 0) (hitB 0) (num '()) (hitH 0))
-	(set! hitH (open-file "ssqHitNum.txt" "a"))
+	(set! hitH (open-file +ssq-hit-num+ "a"))
 	(display (string-append term " " hitNum "\n") hitH)
 	(close-port hitH)
-	(call-with-input-file "ssqNum.txt"
+	(call-with-input-file +ssq-num+
 	  (lambda (h)
 		(do ((line (read-line h) (read-line h))) ((eof-object? line))
 		  (set! num (str2lst line))
@@ -92,7 +95,7 @@
         ((= blue 1) (set! res "Sixth(5)")))
     res))
 
-(define (his) (system "tail ssqHitNum.txt"))
+(define (his) (system (string-append "tail " +ssq-hit-num+)))
 
 (define (sd word)
   (system (string-append "sdcv -n " word)))
