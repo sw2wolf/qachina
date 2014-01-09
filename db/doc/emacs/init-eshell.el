@@ -11,11 +11,11 @@
 (defun eshell/eval1 ()
   (interactive)
   ;(insert "ml ';;'")
-  ;(insert "erl.sh 'user_default:'")
   ;(insert "pl.sh ''")
   ;(insert "clisp.sh '()'")
   ;(insert "sb.sh '()'")
-  (insert "hs ''")
+  ;(insert "hs ''")
+  (insert "erl.sh 'user_default:'")
   (backward-char 1) ;(goto-char (- (point) 2))
 )
 

@@ -151,7 +151,7 @@ win_ssq(Count, NoRed, NoBlue) ->
 	NoRedLst = str2ints(NoRed),
     pick_ssq_nums(
         Count,
-	    good_red(),
+	    good_red() -- NoRedLst,
         lists:seq(1,33) -- NoRedLst,
         pick_num(Count, lists:seq(1,16)--str2ints(NoBlue), [])
     ),
@@ -165,9 +165,9 @@ pick_ssq_nums(Count, GRed, YesRed, OkBlue) ->
 			%% 					 pick_num(5,GRed--NoRed,[]),
 			%% 					 pick_num(1,((lists:seq(1,33)--GRed)--NoRed),[])
 			%% 					));
-			Red6 = lists:sort( pick_num(6, YesRed, []) );
+			Red6 = lists:sort( pick_num(6, GRed, []) );
 	    true ->
-			Red6 = lists:sort( pick_num(6, GRed, []) )
+			Red6 = lists:sort( pick_num(6, YesRed, []) )
 	end,
 
     Result = lists:append(Red6, [lists:nth(Count,OkBlue)]),
@@ -196,7 +196,7 @@ good_red() ->
                     ets:insert(T,{N,Cnt+1})
                 end, lists:sublist(Ns,6))
         end, NumLst),
-    Tmp = lists:sublist(lists:keysort(2, ets:tab2list(T)), 16, 18),
+    Tmp = lists:sublist(lists:keysort(2, ets:tab2list(T)), 13, 21),
     lists:sort( lists:map(fun({K,_})->K end, Tmp) ).
     
 %检查是否中奖
