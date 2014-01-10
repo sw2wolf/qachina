@@ -47,22 +47,22 @@
 	  (switch-to-buffer "*erlang*")
 	  (run-erlang)))
 
-;; (defun jump-run-lisp ()
-;;   (interactive)
-;;   (let ((repl (find-if (lambda (buff)
-;; 			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))))
-;;   (if repl
-;; 	  (switch-to-buffer-other-window (buffer-name repl))
-;; 	  (condition-case e (slime-connect "127.0.0.1" 4005)
-;; 		(file-error (slime))))))
-
-(defun jump-run-scheme ()
+(defun jump-run-lisp ()
   (interactive)
   (let ((repl (find-if (lambda (buff)
-			 (string-match "^*scheme*" (buffer-name buff))) (buffer-list))))
+			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))))
   (if repl
 	  (switch-to-buffer-other-window (buffer-name repl))
-	  (run-scheme))))
+	  (condition-case e (slime-connect "127.0.0.1" 4005)
+		(file-error (slime))))))
+
+;; (defun jump-run-scheme ()
+;;   (interactive)
+;;   (let ((repl (find-if (lambda (buff)
+;; 			 (string-match "^*scheme*" (buffer-name buff))) (buffer-list))))
+;;   (if repl
+;; 	  (switch-to-buffer-other-window (buffer-name repl))
+;; 	  (run-scheme))))
 
 ;; (defun jump-run-guile ()
 ;;   (interactive)
@@ -75,11 +75,11 @@
 ;(file-error (call-interactively 'run-lisp))))))
 ;(unless (slime-connected-p) (save-excursion (slime)))
 
-;; (defun jump-run-mew ()
-;;   (interactive)
-;;   (if (get-buffer "+inbox")
-;; 	  (switch-to-buffer-other-window "+inbox")
-;; 	  (mew)))
+(defun jump-run-mew ()
+  (interactive)
+  (if (get-buffer "+inbox")
+	  (switch-to-buffer-other-window "+inbox")
+	  (mew)))
 
 (defun jump-to-lambdabot ()
   (interactive)
@@ -124,17 +124,17 @@
 ;; 								(backward-char 1)))
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
-;(global-set-key (kbd "<f5>") 'jump-run-mew)
+(global-set-key (kbd "<f5>") 'jump-run-mew)
 
-;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-caml "ocaml")))
-;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-haskell)))
-(global-set-key (kbd "<f5>") 'jump-to-lambdabot)
+;(global-set-key (kbd "<f6>") 'jump-run-scheme)
+(global-set-key (kbd "<f6>") 'jump-run-lisp)
 
-;(global-set-key (kbd "<f6>") 'jump-run-lisp)
-(global-set-key (kbd "<f6>") 'jump-run-scheme)
+;(global-set-key (kbd "<f7>") 'jump-run-erlang)
+;(global-set-key (kbd "<f7>") 'jump-run-prolog)
+;(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-haskell)))
+(global-set-key (kbd "<f7>") 'jump-to-lambdabot)
 
-(global-set-key (kbd "<f7>") 'jump-run-erlang)
-(global-set-key (kbd "<f8>") 'jump-run-prolog)
+(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

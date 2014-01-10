@@ -1,5 +1,43 @@
 
 %%%
+-module(busywait). 
+
+-export([add_microsec/2, microsleep/1, test/0]). 
+
+-define(JITTER, 5). 
+
+add_microsec(Micro, {Mega0, Sec0, Micro0}) -> 
+    Micro1 = Micro0 + Micro, 
+    Sec1 = Sec0 + (Micro1 div 1000000), 
+    Mega1 = Mega0 + (Sec1 div 1000000), 
+    {Mega1, (Sec1 rem 1000000), (Micro1 rem 1000000)}. 
+
+busywait_until(Target, Loops) -> 
+    case now() of 
+        Now when Now >= Target -> 
+            {Now, Loops}; 
+        _ -> 
+            erlang:yield(), 
+            busywait_until(Target, 1 + Loops) 
+    end. 
+
+microsleep(MicroSec) -> 
+    Target = add_microsec(MicroSec, now()), 
+    AdjMsec = MicroSec - ?JITTER, 
+    case AdjMsec > 10000 of 
+        true -> 
+            timer:sleep(AdjMsec div 1000); 
+        false -> 
+            ok 
+    end, 
+    {Finish, Loops} = busywait_until(Target, 1), 
+    {timer:now_diff(Finish, Target), Loops}. 
+
+test() -> 
+    {Accuracy, Loops} = microsleep(16 * 1000), 
+    io:format("Jitter: ~p ms Iterations: ~p~n", [Accuracy, Loops]).
+
+%%%
 eval(S) ->
     {ok,Scanned,_} = erl_scan:string(S),
     {ok,Parsed} = erl_parse:parse_exprs(Scanned),

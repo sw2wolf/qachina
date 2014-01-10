@@ -1,2 +1,2 @@
 #!/usr/local/bin/bash
-/usr/local/lib/ccl/fx86cl --eval "(progn (load \"$1\") (ccl:quit))"
+fx86cl --eval '(progn (load \"$1\") (ccl:quit))'

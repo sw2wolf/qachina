@@ -1,5 +1,83 @@
 
 (**)
+(* Use FFI and build your own. *)
+
+(* The most direct solution is to write your own FFI and call a memmove in C. To ensure that this is not misused for array types that may have references, the types should be fixed to the concrete types that this is allowed for. *)
+CAMLprim value _array_blit64(value src, value dst,
+                             value src_pos, value dst_pos,
+                             value len)
+{
+  CAMLparam5(src, dst, src_pos, dst_pos, len);
+  int isrc_pos = Int_val(src_pos);
+  int idst_pos = Int_val(dst_pos);
+  int ilen = Int_val(len);
+
+  int idst_len = Wosize_val(dst);
+  int isrc_len = Wosize_val(src);
+
+  // ensure we are dealing with 64-bit values
+  assert(sizeof(value) == 8);
+
+  //ensure that we are within bounds
+  assert(ilen >=0);
+  assert(isrc_pos >= 0 && isrc_pos + ilen <= isrc_len);
+  assert(idst_pos >= 0 && idst_pos + ilen <= idst_len);
+
+  memmove(String_val(dst) + idst_pos * sizeof(value),
+          String_val(src) + isrc_pos * sizeof(value),
+          ilen * sizeof(value));
+
+  CAMLreturn (Val_unit);
+}
+
+ml/mli file bindings:
+external int_array_blit :
+  src:int array -> dst:int array ->
+  src_pos:int -> dst_pos:int ->
+  len:int -> unit
+    = "_array_blit64"
+
+external float_array_blit :
+  src:float array -> dst:float array ->
+  src_pos:int -> dst_pos:int ->
+  len:int -> unit
+    = "_array_blit64"
+
+CAMLprim value caml_rdtsc( )
+{
+    unsigned hi, lo;
+    __asm__ __volatile__ ("rdtsc" : "=a"(lo), "=d"(hi));
+    return Val_int( ((unsigned long long)lo) | ( ((unsigned long long)hi)<<32 ));
+}
+
+(**)
+open Core.Std
+open Async.Std
+open Parallel.Std
+ 
+let worker h =
+  Pipe.iter_without_pushback (Hub.listen_simple h) ~f:(fun (id, `Ping) ->
+    Hub.send h id `Pong;
+  >>| fun () -> `Done
+ 
+let main () =
+  Parallel.spawn ~where:Parallel.random worker >>> fun (c, _res) ->
+  let rec loop () =
+    Channel.write c `Ping;
+    Channel.read c >>> fun `Pong ->
+    Clock.after (sec 1.) >>> loop
+  in
+  loop ();
+  Clock.after (sec 60.) >>> fun () -> Shutdown.shutdown 0
+ 
+let () =
+  Parallel.init ~cluster:
+    {Cluster.master_machine = Unix.gethostname ();
+     worker_machines = ["host0"; "host1"]} ();
+  main ();
+  never_returns (Scheduler.go ())
+
+(**)
 (*********************************************************************
  * This program alters an .exe file to make it use the "windows subsystem"
  * instead of the "console subsystem".  In other words, when Windows runs

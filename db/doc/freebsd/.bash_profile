@@ -4,4 +4,5 @@ if [ -f ~/.bashrc ]; then
    source ~/.bashrc
 fi
 
-~/bin/wmi.lisp
+#~/bin/wmi.lisp
+xinit &

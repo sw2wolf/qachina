@@ -3,8 +3,8 @@
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
 
 ;(setq inferior-lisp-program "~/clisp/bin/clisp -q -q -modern -ansi")
-;(setq inferior-lisp-program "~/ccl/fx86cl -K utf-8")
-(setq inferior-lisp-program "/usr/local/bin/sbcl")
+(setq inferior-lisp-program "~/ccl/fx86cl -K utf-8")
+;(setq inferior-lisp-program "/usr/local/bin/sbcl")
 
 (setq slime-multiprocessing t)
 (setq slime-net-coding-system 'utf-8-unix)

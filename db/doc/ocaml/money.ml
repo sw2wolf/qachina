@@ -87,6 +87,17 @@ let random_gaussian () =
 
 let sd ~word = Sys.command ("sdcv -n " ^ word) ;;
 
+let mysleep (sec: float) = 
+  let start = Unix.gettimeofday() in 
+  let rec delay t = 
+	try 
+	  ignore (Unix.select [] [] [] t)
+	with Unix.Unix_error(Unix.EINTR, _, _) ->
+	  let now = Unix.gettimeofday() in 
+	  let remaining = start +. sec -. now in 
+	  if remaining > 0.0 then delay remaining in 
+  delay sec;;
+
 (**
     Stock Exchange
 *)
@@ -171,7 +182,7 @@ let good_red () =
     );
     let b = Array.mapi (fun i freq -> (i+1,freq)) a in
         Array.sort (fun (i1,f1) (i2,f2) -> compare f2 f1) b;
-    Array.to_list(Array.map (fun x -> fst x) (Array.sub b 0 18))
+    Array.to_list(Array.map (fun x -> fst x) (Array.sub b 0 21))
 ;;
 
 let sortLst l = List.sort (fun x y -> compare x y) l ;;
@@ -184,10 +195,11 @@ let pick_num from count =
     let rec pick l c acc =
         if c = 0 then sortLst acc
         else (
-            let one = List.nth l (Random.int (List.length l)) in
-            pick (List.filter (fun x -> x <> one) l) (c-1) (one :: acc)
-        ) in
-    pick from count []
+          let one = List.nth l (Random.int (List.length l)) in
+		  mysleep(0.1);
+          pick (List.filter (fun x -> x <> one) l) (c-1) (one :: acc)
+        )
+	in pick from count []
 ;;
 
 let win_ssq count noRed noBlue =
@@ -204,7 +216,7 @@ let win_ssq count noRed noBlue =
     for i = 1 to count do
 	  if i = count
 	  then
-		oneRed := pick_num yes_red 6 
+		oneRed := pick_num yes_red 6
 	  else
 		oneRed := pick_num yes_gRed 6;
 
