@@ -247,10 +247,10 @@ Error: The condition #<STREAM-READ-TIMEOUT 2067574C> occurred
                       #*000000000000000000000000001))))
 
 #2r11010101  ;Another way of writing 213 decimal  
-#b11010101   ;Ditto                               
-#b+11010101  ;Ditto                               
-#o325        ;Ditto, in octal radix               
-#xD5         ;Ditto, in hexadecimal radix         
+#b11010101   ;Ditto
+#b+11010101  ;Ditto
+#o325        ;Ditto, in octal radix
+#xD5         ;Ditto, in hexadecimal radix
 #16r+D5      ;Ditto                               
 #o-300       ;Decimal -192, written in base 8     
 #3r-21010    ;Same thing in base 3                

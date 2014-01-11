@@ -25,7 +25,7 @@ import Data.List
 import qualified Control.Exception as Exception
 
 import Control.Monad
-import Control.Monad.Reader
+--import Control.Monad.Reader
 import Control.Applicative
 
 import Control.Arrow
