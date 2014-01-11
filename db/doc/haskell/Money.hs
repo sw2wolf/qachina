@@ -25,7 +25,6 @@ import Data.List
 import qualified Control.Exception as Exception
 
 import Control.Monad
---import Control.Monad.Reader
 import Control.Applicative
 
 import Control.Arrow
@@ -162,11 +161,11 @@ win_ssq count noRed noBlue = do
 
 pickSSQ :: Int -> [Int] -> [Int] -> [Int] -> [[Int]] -> IO [[Int]]
 pickSSQ 0 _ _ _ acc = return acc
-pickSSQ 1 gRed _ okBlue acc = do
-    red <- sort <$> pickNums gRed 6 []
+pickSSQ 1 _ yesRed okBlue acc = do
+    red <- sort <$> pickNums yesRed 6 []
     return $ reverse $ (red ++ [okBlue!!0]) : acc
 pickSSQ count gRed yesRed okBlue acc = do
-    red <- sort <$> pickNums yesRed 6 []
+    red <- sort <$> pickNums gRed 6 []
     pickSSQ (count-1) gRed yesRed okBlue $ 
         (red ++ [okBlue!!(count-1)]) : acc
 

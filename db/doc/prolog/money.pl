@@ -90,11 +90,11 @@ win_ssq(Count, NoRedStr, NoBlueStr) :-
 	ssqNumF(F),
     tell(F), maplist(format('~d ~d ~d ~d ~d ~d ~d~n'), Res), told.
 
-pick_red(1, GoodR, _, OkB, [H|_]) :-
-    pick_nums(6,GoodR,R1), sort(R1,Red), nth1(1,OkB,Blue),
+pick_red(1, _, YesR, OkB, [H|_]) :-
+    pick_nums(6,YesR,R1), sort(R1,Red), nth1(1,OkB,Blue),
 	append(Red,[Blue],H), !.
 pick_red(Count, GoodR, YesR, OkB, [H|T]) :-
-	pick_nums(6,YesR,R1), sort(R1,Red), nth1(Count,OkB,Blue),
+	pick_nums(6,GoodR,R1), sort(R1,Red), nth1(Count,OkB,Blue),
 	append(Red,[Blue],H), C1 is Count-1,
 	pick_red(C1,GoodR,YesR,OkB,T).
 
@@ -116,7 +116,7 @@ good_red(GRed) :-
 		     findall(HR, (hitnum([_|No]),last(No,B),append(HR,[B],No)), HitRed),
 			 append(HitRed, HitRedNo),
 			 numlist(1,33,X), map_list_to_pairs(count_hit_red(HitRedNo), X, Y),
-			 keysort(Y, Z), pairs_values(Z, ZZ), sublist(ZZ,15,32,ZZZ),
+			 keysort(Y, Z), pairs_values(Z, ZZ), sublist(ZZ,12,32,ZZZ),
 			 sort(ZZZ, GRed)
 		),
 		close(HF)), !,
