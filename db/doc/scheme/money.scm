@@ -63,13 +63,13 @@
 
 (define (pickNums count from)
   (let ((res 0))
-	(sort (map (lambda(c)
+	(sort (map (lambda (c)
 		   (set! res (list-ref from (random (length from))))
 		   (set! from (delete res from))
 		   res) (iota count)) <)))
 
 (define (str2lst str)
-  (map (lambda(c) (string->number c)) (string-split str #\space)))
+  (map (lambda (c) (string->number c)) (string-split str #\space)))
 
 (define (lst2str lst)
   (let ((res ""))
