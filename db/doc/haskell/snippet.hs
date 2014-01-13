@@ -206,7 +206,11 @@ $ghc --info | egrep 'split|Host'
 ghc -c -O2 InnerLoop.hs -ddump-simpl -ddump-cmm -ddump-asm > log.txt
 
 $cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
+
 $cabal install mighttpd2 --ghc-options=-fllvm
+--Mighttpd2 supports HTTPS (HTTP over SSL/TLS) experimentally. To use it, type:
+$cabal install --flags="tls" mighttpd2
+
 $cabal install hashable --constraint "unix==2.6.0.1" --constraint "bytestring==0.10.0.2"
 --dry-run
 $cabal install --enable-library-profiling
