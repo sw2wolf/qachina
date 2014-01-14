@@ -139,7 +139,6 @@
    ("\\.session" . emacs-lisp-mode)
    ("\\.l$" . c-mode)
    ("\\.hs$" . haskell-mode)
-   ;("\\.ss$" . scheme-mode)
    ("\\.ml[iyl]?$" . caml-mode)
    ;("\\.pl$" . prolog-mode)
    ("\\.fs\\'" . forth-mode)

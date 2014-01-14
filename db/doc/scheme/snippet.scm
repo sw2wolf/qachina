@@ -1,5 +1,12 @@
 
 ;;;;;;
+#!/usr/local/bin/petite --script 
+
+(for-each 
+ (lambda (x) (display x) (newline)) 
+ (cdr (command-line)))
+
+;;;;;;
 (let* ((yin ((lambda (foo) (newline) foo)
              (call/cc (lambda (bar) bar))))
        (yang ((lambda (foo) (write-char #\*) foo)
