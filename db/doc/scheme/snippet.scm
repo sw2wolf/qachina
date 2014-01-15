@@ -1,5 +1,10 @@
 
 ;;;;;;
+;guile
+;autogen == autoreconf -i --force --verbose
+;./configure --prefix=/home/sw2wolf/guile/ BDW_GC_LIBS="-L/usr/local/lib -lgc-threaded"
+
+;;;;;;
 #!/usr/local/bin/petite --script 
 
 (for-each 
