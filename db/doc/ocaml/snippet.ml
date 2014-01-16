@@ -1,5 +1,23 @@
 
 (**)
+(* define a type “person” that is a particular subset of
+   a compound type called Record *)
+type person = {mutable name:string; mutable age:int };;
+
+let mj = {name="Mary Jane"; age=19 };;
+
+(* extracting a field *)
+print_string mj.name;                   (* prints “Mary Jane” *)
+
+(* changing a field's value *)
+mj.name <- "Mary Johnson";
+
+print_string mj.name;                   (* prints “Mary Johnson” *)
+
+(**)
+print_string "α β λ ≤ ≥ ≠ ⊂ ℚ ℝ ℂ ∑ ↔ ⇔ ◀▶▲▼\n";;
+
+(**)
 (* Use FFI and build your own. *)
 
 (* The most direct solution is to write your own FFI and call a memmove in C. To ensure that this is not misused for array types that may have references, the types should be fixed to the concrete types that this is allowed for. *)

@@ -13,9 +13,10 @@
   ;(insert "erl.sh 'user_default:'")
   ;(insert "pl.sh ''")
   ;(insert "sb.sh '()'")
-  ;(insert "clisp.sh '()'")
   ;(insert "ccl.sh '()'")
-  (insert "hs ''")
+  ;(insert "hs ''")
+  ;(insert "clisp.sh '()'")
+  (insert "ml ''")
   (backward-char 1) ;(goto-char (- (point) 2))
 )
 

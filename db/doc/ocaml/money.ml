@@ -55,10 +55,10 @@ let round x =
     let db = Sqlite3.db_open "/media/D/www/qachina/db/qachina.db";;
     Sqlite3.db_close db;
 *)
-let qachina () = 
-    Thread.create (fun _ -> Sys.command "cd /media/D/www/qachina; ./start.bat") ()
+(* let qachina () =  *)
+(*     Thread.create (fun _ -> Sys.command "cd /media/D/www/qachina; ./start.bat") () *)
 
-;;
+(* ;; *)
 (*
 let sum x = let num = ref x in for i = 0 to 999999 do num := !num + i done; !num;;
 printf "Sum(4) takes %f seconds.\n" (time_it sum 4);;
