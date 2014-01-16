@@ -27,8 +27,8 @@
 		(for-each (lambda(r) (format #t "---~3$  ~$---~%" r (price r))) (reverse ratio))
         (for-each (lambda(r) (format #t "---~3$  ~$---~%" r (price r))) ratio))))
 
-;; (define +ssq-hit-num+ "/media/D/qachina/db/doc/money/ssqHitNum.txt")
-;; (define +ssq-num+ "/media/D/qachina/db/doc/money/ssqNum.txt")
+(define +ssq-hit-num+ "/media/D/qachina/db/doc/money/ssqHitNum.txt")
+(define +ssq-num+ "/media/D/qachina/db/doc/money/ssqNum.txt")
 
 ;; (define *RED-NUMS* (cdr (iota 34)))
 ;; (define *BLUE-NUMS* (cdr (iota 17)))
