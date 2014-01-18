@@ -1,5 +1,40 @@
 
 ;;;;;;
+(in-package #:smarkup)
+
+;;; quote macro reader
+
+(defun get-delimiter (char)
+  (case char
+    (#\{ #\})
+    (#\( #\))
+    (#\[ #\])
+    (#\< #\>)
+    (t char)))
+
+(defun read-sharp-q (in c n)
+  (declare (ignore c n))
+  (let ((delimiter (get-delimiter (read-char in))))
+    (let ((string (make-array '(0) :element-type 'character
+                              :fill-pointer 0 :adjustable t)))
+      (with-output-to-string (string-stream string)
+        (loop for char = (read-char in nil)
+           while (and char (not (char-equal char delimiter)))
+           do
+           (princ char string-stream)))
+      string)))
+
+(named-readtables:defreadtable quote-reader
+  (:merge :standard)
+  (:dispatch-macro-char #\# #\q #'read-sharp-q))
+
+;;;;;;
+(symbol-name '|char* c_code() { return "Better avoid pipes!"; }|)
+"char* c_code() { return \"Better avoid pipes!\"; }"
+(symbol-name '#:|char* c_code() { return "Better avoid pipes!"; }|)
+"CHAR* C_CODE() { RETURN \"bETTER AVOID PIPES!\"; }"
+
+;;;;;;
 ;will return nil as soon as it encounters any nil entries in list, and true if no items are nil. (notany #’null list) is equivalent.
 (every #’identity list)
 (apply #'funcall '(* 1 2 3))

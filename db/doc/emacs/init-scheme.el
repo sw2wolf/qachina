@@ -8,8 +8,8 @@
 (autoload 'balanced-on "balanced" "Turn on balanced ``mode''" t)
 (add-hook 'scheme-mode-hook 'balanced-on)
 
-(custom-set-variables '(scheme-program-name "petite /media/D/qachina/db/doc/scheme/money.scm"))
-
+;(custom-set-variables '(scheme-program-name "petite /media/D/qachina/db/doc/scheme/money.scm"))
+(custom-set-variables '(scheme-program-name "huski"))
 ;
 ; Guile
 ;

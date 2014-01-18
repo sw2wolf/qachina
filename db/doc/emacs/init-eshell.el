@@ -14,9 +14,9 @@
   ;(insert "pl.sh ''")
   ;(insert "sb.sh '()'")
   ;(insert "ccl.sh '()'")
-  ;(insert "hs ''")
   ;(insert "clisp.sh '()'")
-  (insert "ml ''")
+  ;(insert "ml ''")
+  (insert "hs ''")
   (backward-char 1) ;(goto-char (- (point) 2))
 )
 
