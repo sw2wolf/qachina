@@ -1,5 +1,14 @@
 
 ;;;
+;; project_classpath=`lein classpath`
+;; echo $project_classpath
+;; java -cp $project_classpath  clojure.main -i ./src/foreclojure/mongo.clj -e "(use 'foreclojure.mongo) (prepare-mongo) (shutdown-agents)"
+
+;; #!/bin/bash
+;; java -cp `lein classpath` clojure.main -e \
+;;     "(do (require 'foreclojure.core) (foreclojure.core/-main))"
+
+;;;
 (defn get-list [start]
     (loop [n start]
        (let [url (str "http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing=" n)
