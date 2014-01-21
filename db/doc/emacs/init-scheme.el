@@ -2,19 +2,24 @@
 
 ;; (autoload 'scheme-mode "iuscheme" "Major mode for Scheme." t)
 ;; (autoload 'run-scheme "iuscheme" "Switch to interactive Scheme buffer." t)
-;; (setq auto-mode-alist (cons '("\\.ss" . scheme-mode) auto-mode-alist))
-;; (setq auto-mode-alist (cons '("\\.sld" . scheme-mode) auto-mode-alist))
+
+(setq auto-mode-alist (cons '("\\.ss" . scheme-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.sls" . scheme-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.sld" . scheme-mode) auto-mode-alist))
 
 ;; (autoload 'balanced-toggle "balanced" "Toggle balanced ``mode''" t)
 ;; (autoload 'balanced-on "balanced" "Turn on balanced ``mode''" t)
 ;; (add-hook 'scheme-mode-hook 'balanced-on)
 
-;(custom-set-variables '(scheme-program-name "petite /media/D/qachina/db/doc/scheme/money.scm"))
+;(custom-set-variables '(scheme-program-name "petite /media/D/qachina/db/doc/scheme/money-petite.scm"))
 
 ;(custom-set-variables '(scheme-program-name "huski"))
-(custom-set-variables '(scheme-program-name "guile -q -l /media/D/qachina/db/doc/scheme/money.scm"))
+;(custom-set-variables '(scheme-program-name "gsi"))
+;(custom-set-variables '(scheme-program-name "csi -q -n"))
+
+(custom-set-variables '(scheme-program-name "guile -q -l /media/D/qachina/db/doc/scheme/money-guile.scm"))
 ;
-; Guile
+; geiser
 ;
 ;; (load "~/test/geiser/build/elisp/geiser-load")
 

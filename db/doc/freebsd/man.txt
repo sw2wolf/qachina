@@ -154,3 +154,33 @@ Qemu 模拟 Win2000
 # qemu -m 1024 -hda win2000.img -cdrom win2000.iso -boot d -win2k-hack
 # qemu-system-x86_64  -m 1500 -hda win2000.img -cdrom win2000.iso \
 -localtime -M pc -smp 2 -soundhw es1370 -usb -enable-kqemu -kernel-kqemu  -name win2000
+
+Updating Base System 
+$ freebsd-update fetch install
+
+Updating Ports System 
+$ portsnap fetch extract
+
+Installing kqemu-kmod 
+$ pkg_add -r kqemu-kmod
+
+Intalling qemu 
+$ pkg_add -r qemu
+
+Loading kernel modules 
+$ kldload kqemu
+$ kldload aio
+
+Creating the image file 
+$ qemu-img create -f qcow2 kwinxp.img 5G
+
+Starting the vm 
+$ qemu -cdrom /dev/acd0 -hda kwinxp.img -m 512 -boot d -kernel-kqemu -localtime
+
+Troubleshooting 
+
+If you run into problems installing W2K or XP Os, run qemu without acpi and kqemu. 
+$ qemu -cdrom /dev/acd0 -hda kwinxp.img -m 512 -boot d -no-kqemu -no-acpi -localtime
+
+If you are running a server without X, access your VM through VNC 
+$ qemu -cdrom /dev/acd0 -hda kwinxp.img -m 512 -boot d -kernel-kqemu -vnc :0 -localtime

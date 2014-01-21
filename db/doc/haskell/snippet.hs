@@ -1,5 +1,11 @@
 
 ------
+data Free f a = Pure a | Free (f (Free a))
+-- A free monad is the least amount of structure that you need to add to a functor to make it a monad. There are more rigorous mathematical definitions, but that's the gist.
+
+-- "Free f a" is an ADT that has a Monad instance. However, it requires that 'f' is a Functor. There's an instance Functor f => Monad (Free f). I'm not sure it's a helpful gist unless you already know what it  means. The point of gists is that they're sufficient for rudimentary understanding. So it is roughly said that Free makes any Functor a Monad: "Got a functor? Here's a monad... for free!". So you can write e.g. "data Four a = Four a a a a" and a Functor instance for it and then "Free Four a" is a Quadtree and comes with a Monad instance. So it is really just a cute way of wording what is going on. After all, you could also say... have a type 'a'? here is a Monad!
+
+------
 newtype ByteString0 = BS0 ByteString
 
 readFile0 :: FilePath -> IO ByteString0

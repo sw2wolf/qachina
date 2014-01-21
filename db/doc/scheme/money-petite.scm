@@ -48,9 +48,9 @@
 
 (define (hit-ssq term hitNum)
   (let ((hitNumLst (str2lst hitNum)) (hitR 0) (hitB 0) (num '()) (hitH 0))
-	(set! hitH (open-output-file +ssq-hit-num+ 'append))
-	(display (string-append term " " hitNum "\n") hitH)
-	(close-port hitH)
+	;; (set! hitH (open-output-file +ssq-hit-num+ 'append))
+	;; (display (string-append term " " hitNum "\n") hitH)
+	;; (close-port hitH)
 	(call-with-input-file +ssq-num+
 	  (lambda (h)
 		(do ((line (get-line h) (get-line h))) ((eof-object? line))

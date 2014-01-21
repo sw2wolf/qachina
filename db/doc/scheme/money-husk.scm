@@ -41,33 +41,44 @@
 ;; (import (scheme time))
 ;; (random (current-second))
 
-;; (define (win-ssq count noRed noBlue)
-;;   (let ((yesRed (set-difference *RED-NUMS* (str2lst noRed)))
-;; 		(okBlue (pickNums count (set-difference *BLUE-NUMS* (str2lst noBlue))))
-;; 		(num '()))
-;; 	(call-with-output-file +ssq-num+
-;; 	  (lambda(h)
-;; 		(map (lambda(n)
-;; 		   (set! num (lst2str (append (pickNums 6 yesRed) (list (list-ref okBlue n)))))
-;; 			   (display num) (newline)
-;; 			   (display num h) (newline h)
-;; 			 ) (iota count))
-;; 		))) #t)
+(define (win-ssq count noRed noBlue)
+  (let ((yesRed (lset-difference = *RED-NUMS* (str2lst noRed)))
+		(okBlue (pickNums count (lset-difference = *BLUE-NUMS* (str2lst noBlue))))
+		(num '()))
+	(call-with-output-file +ssq-num+
+	  (lambda(h)
+		(map (lambda(n)
+		   (set! num (lst2str (append (pickNums 6 yesRed) (list (list-ref okBlue n)))))
+			   (display num) (newline)
+			   (display num h) (display #\newline h) ;(newline h)
+			 ) (iota count))
+		))) #t)
 
-;; (define (hit-ssq term hitNum)
-;;   (let ((hitNumLst (str2lst hitNum)) (hitR 0) (hitB 0) (num '()) (hitH 0))
-;; 	(set! hitH (open-file +ssq-hit-num+ "a"))
-;; 	(display (string-append term " " hitNum "\n") hitH)
-;; 	(close-port hitH)
-;; 	(call-with-input-file +ssq-num+
-;; 	  (lambda (h)
-;; 		(do ((line (read-line h) (read-line h))) ((eof-object? line))
-;; 		  (set! num (str2lst line))
-;; 		  (set! hitR (length (intersection hitNumLst (list-head num 6))))
-;; 		  (if (= (list-ref hitNumLst 6) (list-ref num 6))
-;; 			  (set! hitB 1)
-;; 			  (set! hitB 0))
-;; 		  (format #t "~s   (~d ~d)   ~s~%" line hitR hitB (hitDesc hitR hitB)))))))
+(define list-head
+    (lambda (orig-ls orig-n)
+      (let f ([ls orig-ls] [n orig-n])
+        (cond
+          [(zero? n) '()]
+          [(null? ls) (error 'list-head "index out of range" orig-ls orig-n)]
+          [else (cons (car ls) (f (cdr ls) (- n 1)))]))))
+
+(define (hit-ssq term hitNum)
+  (let ((hitNumLst (str2lst hitNum)) (hitR 0) (hitB 0) (num '()) (hitH 0))
+	;; (set! hitH (open-file +ssq-hit-num+ "a"))
+	;; (display (string-append term " " hitNum "\n") hitH)
+	;; (close-port hitH)
+	(call-with-input-file +ssq-num+
+	  (lambda (h)
+		(do ((line (read-line h) (read-line h))) ((eof-object? line))
+		  (set! num (str2lst line))
+		  (set! hitR (length (lset-intersection = hitNumLst (list-head num 6))))
+		  (if (= (list-ref hitNumLst 6) (list-ref num 6))
+			  (set! hitB 1)
+			  (set! hitB 0))
+   		  (display 
+		   (string-append line " " "(" (number->string hitR) "," (number->string hitB) ")" "      " (hitDesc hitR hitB) "\n")))))))
+
+;(format #t "~s   (~d ~d)   ~s~%" line hitR hitB (hitDesc hitR hitB))
 
 (define (pickNums count from)
   (let ((res 0))
