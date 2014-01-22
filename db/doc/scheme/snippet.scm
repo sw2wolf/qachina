@@ -1,5 +1,8 @@
 
 ;;;;;;
+(catch #t (lambda () (/ 1 0)) (lambda (key . args) (display "ehhhhh")))
+
+;;;;;;
 ;guile
 ;autogen == autoreconf -i --force --verbose
 ;./configure --prefix=/home/sw2wolf/guile/ BDW_GC_LIBS="-L/usr/local/lib -lgc-threaded"

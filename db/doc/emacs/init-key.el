@@ -87,6 +87,12 @@
   ;(set-process-query-on-exit-flag proc nil))
 )
 
+(defun jump-run-huski ()
+   (interactive)
+   (if (get-buffer "*HUSKI*")
+	  (switch-to-buffer-other-window "*HUSKI*")
+	 (async-shell-command "huski" "*HUSKI*")))
+
 ;; (remove-if-not (lambda (buff)
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
 ;; (some (lambda (buff) (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))
@@ -125,8 +131,9 @@
 (global-set-key (kbd "<f6>") 'jump-run-lisp)
 
 ;(global-set-key (kbd "<f7>") 'jump-run-erlang)
-(global-set-key (kbd "<f7>") 'jump-run-prolog)
+;(global-set-key (kbd "<f7>") 'jump-run-prolog)
 
+(global-set-key (kbd "<f7>") 'jump-run-huski)
 (global-set-key (kbd "<f8>") 'run-scheme)
 
 (global-set-key [(f9)] 'list-bookmarks)

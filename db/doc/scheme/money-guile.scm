@@ -32,6 +32,9 @@
 		(for-each (lambda(r) (format #t "---~3$  ~$---~%" r (price r))) (reverse ratio))
         (for-each (lambda(r) (format #t "---~3$  ~$---~%" r (price r))) ratio))))
 
+;
+; lottery
+;
 (define +ssq-hit-num+ "/media/D/qachina/db/doc/money/ssqHitNum.txt")
 (define +ssq-num+ "/media/D/qachina/db/doc/money/ssqNum.txt")
 
@@ -42,6 +45,7 @@
   (let ((yesRed (set-difference *RED-NUMS* (str2lst noRed)))
 		(okBlue (pickNums count (set-difference *BLUE-NUMS* (str2lst noBlue))))
 		(num '()))
+	(seed->random-state (current-time))
 	(call-with-output-file +ssq-num+
 	  (lambda(h)
 		(map (lambda(n)
@@ -84,21 +88,6 @@
 			   (set! res (string-append res " " (number->string n)))))
 		   lst) res))
 
-;; (defun good-red ()
-;;     (let ((tab (make-hash-table)) (res '()) (nums) (sort-res))
-;;         (dotimes (i 33) (setf (gethash (+ i 1) tab) 0))
-;;         (with-open-file (stream +ssq-hit-num+)
-;;             (loop :for line = (read-line stream nil)
-;;                  :until (null line)
-;;                  :do
-;;                     (setq nums (butlast (str2lst (subseq line 6))))
-;;                     (dolist (n nums) (incf (gethash n tab)))
-;;                     ))
-;;         (maphash #'(lambda (k v) (push (cons k v) res)) tab)
-;;         (setq sort-res (sort res #'> :key #'cdr))
-;;         ;(print sort-res)))
-;;         (sort (subseq (mapcar #'car sort-res) 0 21) #'<)))
-
 (define (hitDesc red blue)
     (let ((res "X"))
     (cond
@@ -112,6 +101,9 @@
 
 (define (his) (system (string-append "tail " +ssq-hit-num+)))
 
+;
+; helpers
+;
 (define (sd word)
   (system (string-append "sdcv -n " word)))
 
@@ -119,3 +111,13 @@
   (make-thread (system "cd /media/D/qachina; ./start.bat")))
 
 (define (sh cmd) (system cmd))
+
+(define (fac n)
+  (fact-iter 1 1 n))
+  
+(define (fact-iter product counter max-count)  
+  (if (> counter max-count)  
+      product  
+      (fact-iter (* counter product)  
+                 (+ counter 1)  
+                 max-count)))

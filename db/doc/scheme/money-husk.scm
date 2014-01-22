@@ -21,16 +21,19 @@
 (define (stopLoss qty pb lossRate)
 ;"止损价"
   (let ((tot (* qty pb (+ 1 SXF))))
-        (write "Stop Loss at:~$~%" (- pb (/ (* tot lossRate) qty)))
-        (write "Lost Money:~$(~d%)~%" (* tot lossRate) (* 100 lossRate))))
+        (display (string-append "Stop Loss at:" 
+							  (number->string (- pb (/ (* tot lossRate) qty))) "\n"))
+        (display (string-append "Lost Money:" 
+							  (number->string (* tot lossRate)) "% "  
+							  (number->string (* 100 lossRate)) "\n"))))
 
-(define (div618 p1 p2)
-;"黄金分割"
-  (let ((ratio '(0.0 0.191 0.236 0.382 0.5 0.618 0.809 1.0))
-        (price (lambda (r) (if (<= p1 p2) (+ p1 (* (- p2 p1) r)) (- p1 (* (- p1 p2) r))))))
-	(if (<= p1 p2)
-		(for-each (lambda(r) (format #t "---~3$  ~$---~%" r (price r))) (reverse ratio))
-        (for-each (lambda(r) (format #t "---~3$  ~$---~%" r (price r))) ratio))))
+;; (define (div618 p1 p2)
+;; ;"黄金分割"
+;;   (let ((ratio '(0.0 0.191 0.236 0.382 0.5 0.618 0.809 1.0))
+;;         (price (lambda (r) (if (<= p1 p2) (+ p1 (* (- p2 p1) r)) (- p1 (* (- p1 p2) r))))))
+;; 	(if (<= p1 p2)
+;; 		(for-each (lambda(r) (format #t "---~3$  ~$---~%" r (price r))) (reverse ratio))
+;;         (for-each (lambda(r) (format #t "---~3$  ~$---~%" r (price r))) ratio))))
 
 (define +ssq-hit-num+ "/media/D/qachina/db/doc/money/ssqHitNum.txt")
 (define +ssq-num+ "/media/D/qachina/db/doc/money/ssqNum.txt")
