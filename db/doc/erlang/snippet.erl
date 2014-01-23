@@ -1,6 +1,67 @@
 
+%%%%%%
+#!/bin/bash
+
+# This is a unix wrapper around the erlang vm. It provides the following functionality:
+#
+# * Spawns in foreground
+# * Handle SIGHUP and call RELOADFUNC
+# * Handle SIGTERM SIGQUIT and SIGINT telling to the vm to quit
+# * Dies if the vm dies (for example kernel killing because out of memory)
+#
+# Forks and improvements are welcome.
+#
+
+export APPNAME=my_app
+export BASEDIR=`readlink -f $(dirname $0)/..`
+export HOME=$BASEDIR
+export APPDIR=$BASEDIR/apps/$APPNAME
+export ENV=production
+export PORT=18080
+export SERVICE=my_service_name
+export NODE="$SERVICE@`hostname -f`"
+export CONFIG_FILE=$APPDIR/priv/$ENV.config
+export COOKIE=sbs
+export RELOAD="my_module my_func [my_args]"
+
+cd $BASEDIR
+
+reload(){
+	echo Reloading the app..
+	erl_call -c $COOKIE -a "$RELOAD" -n ${NODE}
+}
+trap reload SIGHUP
+
+stop(){
+        echo Stopping the app
+        erl_call -c $COOKIE -q -n ${NODE}
+}
+trap stop SIGQUIT SIGINT SIGTERM
+
+
+# Maybe you should adapt this to your needs.
+exec erl -pa deps/*/ebin apps/*/ebin \
+        -boot start_sasl \
+        -sasl sasl_error_logger '{file, "./log/sasl.log"}' \
+        -s ${APPNAME}_app \
+        -noinput \
+        +K true \
+        +A 4 \
+        +swt very_low \
+        -$APPNAME environment $ENV \
+        -$APPNAME port $PORT \
+        -config "${CONFIG_FILE}" \
+        -setcookie $COOKIE \
+        -name $NODE $* &
+pid=$!
+sleep 0
+
+
+echo Controlling the erlang VM $NODE running in $pid from $$. Waiting...
+while kill -0 $pid ; do wait $pid ; done
+
 %%%
--module(busywait). 
+-module(snippet). 
 
 -export([add_microsec/2, microsleep/1, test/0]). 
 

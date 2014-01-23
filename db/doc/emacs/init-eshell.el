@@ -10,15 +10,15 @@
 
 (defun eshell/eval1 ()
   (interactive)
-  ;(insert "erl.sh 'user_default:'")
   ;(insert "pl.sh ''")
   ;(insert "sb.sh '()'")
   ;(insert "ccl.sh '()'")
   ;(insert "ml ''")
   ;(insert "hs ''")
   ;(insert "clisp.sh '()'")
-  (insert "guile.sh '()'")
-  (backward-char 2) ;(goto-char (- (point) 2))
+  ;(insert "guile.sh '()'")
+  (insert "erl.sh 'user_default:'")
+  (backward-char 1) ;(goto-char (- (point) 2))
 )
 
 ;; (defun eshell/eval2 ()

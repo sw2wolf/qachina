@@ -2,6 +2,15 @@
 ;;;;;;
 (catch #t (lambda () (/ 1 0)) (lambda (key . args) (display "ehhhhh")))
 
+(define libc-obj (dynamic-link "libc.so"))
+libc-obj
+⇒ #<dynamic-object "libc.so">
+(dynamic-args-call 'rand libc-obj '())
+⇒ 269167349
+(dynamic-unlink libc-obj)
+libc-obj
+⇒ #<dynamic-object "libc.so" (unlinked)>
+
 ;;;;;;
 ;guile
 ;autogen == autoreconf -i --force --verbose

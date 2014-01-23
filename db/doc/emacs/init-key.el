@@ -1,4 +1,4 @@
-(global-unset-key "\C-z")
+global-unset-key "\C-z")
 
 ;; 绑定全局键值
 ;; 也可以绑定单独到某个mode，比如cc-mode (define-key cc-mode-map (kbd "(") 'skeleton-pair-insert-maybe)
@@ -35,17 +35,17 @@
 ;;         (find-file file))
 ;;     (message "Current buffer does not have an associated file.")))
 
-;; (defun jump-run-prolog ()
-;;   (interactive)
-;;   (if (get-buffer "*prolog*")
-;; 	  (switch-to-buffer-other-window "*prolog*")
-;; 	  (run-prolog 'swi)))
+(defun jump-run-prolog ()
+  (interactive)
+  (if (get-buffer "*prolog*")
+	  (switch-to-buffer-other-window "*prolog*")
+	  (run-prolog 'swi)))
 
-;; (defun jump-run-erlang ()
-;;   (interactive)
-;;   (if (get-buffer "*erlang*")
-;; 	  (switch-to-buffer "*erlang*")
-;; 	  (run-erlang)))
+(defun jump-run-erlang ()
+  (interactive)
+  (if (get-buffer "*erlang*")
+	  (switch-to-buffer "*erlang*")
+	  (run-erlang)))
 
 (defun jump-run-lisp ()
   (interactive)
@@ -87,11 +87,11 @@
   ;(set-process-query-on-exit-flag proc nil))
 )
 
-(defun jump-run-huski ()
+(defun jump-run-chez ()
    (interactive)
-   (if (get-buffer "*HUSKI*")
-	  (switch-to-buffer-other-window "*HUSKI*")
-	 (async-shell-command "huski" "*HUSKI*")))
+   (if (get-buffer "*CHEZ*")
+	  (switch-to-buffer-other-window "*CHEZ*")
+	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
 
 ;; (remove-if-not (lambda (buff)
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
@@ -128,13 +128,12 @@
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-haskell)))
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-caml "ocaml")))
 
-(global-set-key (kbd "<f6>") 'jump-run-lisp)
+(global-set-key (kbd "<f6>") 'jump-run-erlang)
+;(global-set-key (kbd "<f6>") 'jump-run-prolog)
 
-;(global-set-key (kbd "<f7>") 'jump-run-erlang)
-;(global-set-key (kbd "<f7>") 'jump-run-prolog)
-
-(global-set-key (kbd "<f7>") 'jump-run-huski)
+(global-set-key (kbd "<f7>") 'jump-run-chez)
 (global-set-key (kbd "<f8>") 'run-scheme)
+;(global-set-key (kbd "<f8>") 'jump-run-lisp)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)
