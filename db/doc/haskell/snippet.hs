@@ -1,5 +1,12 @@
 
 ------
+--git log -p
+------
+:set -fbreak-on-exception
+:trace functionName
+:hist
+
+------
 data Free f a = Pure a | Free (f (Free a))
 -- A free monad is the least amount of structure that you need to add to a functor to make it a monad. There are more rigorous mathematical definitions, but that's the gist.
 

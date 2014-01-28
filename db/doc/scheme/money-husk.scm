@@ -1,4 +1,3 @@
-;(require-extension (srfi 1))
 (import (husk random))
 (import (srfi 1))
 (import (srfi 69))
@@ -67,14 +66,15 @@
 
 (define (hit-ssq term hitNum)
   (let ((hitNumLst (str2lst hitNum)) (hitR 0) (hitB 0) (num '()) (hitH 0))
-	;; (set! hitH (open-file +ssq-hit-num+ "a"))
+	;; (set! hitH (open-output-file +ssq-hit-num+))
 	;; (display (string-append term " " hitNum "\n") hitH)
-	;; (close-port hitH)
+	;; (close-output-port hitH)
 	(call-with-input-file +ssq-num+
 	  (lambda (h)
 		(do ((line (read-line h) (read-line h))) ((eof-object? line))
 		  (set! num (str2lst line))
-		  (set! hitR (length (lset-intersection = hitNumLst (list-head num 6))))
+		  (set! hitR (length (lset-intersection =
+							   (list-head hitNumLst 6) (list-head num 6))))
 		  (if (= (list-ref hitNumLst 6) (list-ref num 6))
 			  (set! hitB 1)
 			  (set! hitB 0))

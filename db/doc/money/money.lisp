@@ -1,7 +1,7 @@
 (defpackage #:money
     (:nicknames #:m)
     (:use :cl)
-    (:export :win-ssq :hit-ssq :his :sh
+    (:export :win_ssq :hit_ssq :his :sh
              :winG :stopLoss :div618))
 
 (in-package :money)
@@ -196,13 +196,12 @@ the process with the next item (~})."
                     ))
         (maphash #'(lambda (k v) (push (cons k v) res)) tab)
         (setq sort-res (sort res #'> :key #'cdr))
-        ;(print sort-res)))
         (sort (subseq (mapcar #'car sort-res) 0 21) #'<)))
 
-(defun win-ssq (nums no-red no-blue)
+(defun win_ssq (nums no-red no-blue)
     (let* ((res) (resRed) (no-red-lst (str2lst no-red))
-		   (goodR (good-red))
-           (yesGRed (set-difference goodR no-red-lst))
+		   ;(goodR (good-red))
+           ;(yesGRed (set-difference goodR no-red-lst))
 		   (yesRed (set-difference (range 33) no-red-lst))
            (okBlue (pick-num (set-difference (range 16) (str2lst no-blue)) nums)))
         (assert (>= nums 1) (nums) "注数必须>=1")
@@ -210,10 +209,10 @@ the process with the next item (~})."
         (with-open-file (out +ssq-num+ :direction :output :if-exists :supersede)
             (dotimes (i nums)
                 (setf resRed (sort
-				    (if (= i (1- nums))
-						(pick-num yesGRed 6)
-						(pick-num yesRed 6))
-			        #'>))
+				    ;; (if (= i (1- nums))
+					;; 	(pick-num yesGRed 6)
+					;; 	(pick-num yesRed 6))
+			        (pick-num yesRed 6) #'>))
                 (setf res (lst2str (reverse (cons (nth i okBlue) resRed))))
                 (write-line res out)
                 (format t "~A~%" res)))))
@@ -245,7 +244,7 @@ the process with the next item (~})."
     (with-open-file (f +ssq-hit-num+ :direction :output :if-does-not-exist :create :if-exists :append)
         (write-line (concatenate 'string term " " hitNum) f)))
 
-(defun hit-ssq (term hitNum)
+(defun hit_ssq (term hitNum)
     (let ((hit-num (str2lst hitNum)) (hit-red 0) (hit-blue 0) (num))
         (when (not (hitnum-saved? term)) (save-hitnum term hitNum))
         (format t "Good Red Hit:~D~%" (length (intersection (butlast hit-num) (butlast (good-red) ))))

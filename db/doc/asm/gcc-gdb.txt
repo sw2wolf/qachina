@@ -1,4 +1,63 @@
 
+-----
+~/.gdbinit
+1.
+def  redirect 
+call (void)close(1) 
+call (void)close(2) 
+call (int)open($arg0, 2) 
+call (int)open($arg0, 2) 
+end
+
+document redirect 
+redirect("argument"), this is used to switch stderr and stdout to gdb window.
+The argument is the name of gdb window.
+end
+
+(gdb) help redirect
+this is used to switch stderr and stdout to gdb window. 
+The argument is the name of gdb window.
+
+(gdb)redirect("/dev/ttyp3")
+$1=1 
+$2=2
+
+(gdb)call (int)fflush(0)
+
+2.
+# Ignore some signals.
+handle SIGUSR1 noprint pass
+handle SIGPIPE noprint pass
+
+# Convenience command.
+define rake
+        shell rake $arg0
+end
+
+# Break on breakpoint() function.
+break Passenger::breakpoint
+
+# Linux-only. Comment out when not on Linux.
+set print thread-events off
+
+3.
+# set to 1 to enable 64bits target by default (32bit is the default)
+set $64BITS = 1
+ 
+set confirm off
+set verbose off
+set prompt \033[31mgdb$ \033[0m
+ 
+set output-radix 0x10
+set input-radix 0x10
+ 
+# These make gdb never pause in its output
+set height 0
+set width 0
+ 
+# Display instructions in Intel format
+set disassembly-flavor intel
+
 -----------------------------------------------------------------------------
 /*
 gcc -o src src.S -Wall -g -nostdlib -Wa,-mmnemonic=intel,-msyntax=intel,-mnaked-reg -m32

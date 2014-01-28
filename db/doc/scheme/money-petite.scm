@@ -50,16 +50,17 @@
 			 ) (iota count))
 		) 'replace)) #t)
 
-(define (hit-ssq hitNum)
+(define (hit-ssq term hitNum)
   (let ((hitNumLst (str2lst hitNum)) (hitR 0) (hitB 0) (num '()) (hitH 0))
-	;; (set! hitH (open-file +ssq-hit-num+ "a"))
-	;; (display (string-append term " " hitNum "\n") hitH)
-	;; (close-port hitH)
+	(set! hitH (open-file +ssq-hit-num+ "a"))
+	(display (string-append term " " hitNum "\n") hitH)
+	(close-port hitH)
 	(call-with-input-file +ssq-num+
 	  (lambda (h)
 		(do ((line (get-line h) (get-line h))) ((eof-object? line))
 		  (set! num (str2lst line))
-		  (set! hitR (length (intersection hitNumLst (list-head num 6))))
+		  (set! hitR (length (intersection
+							    (list-head hitNumLst 6) (list-head num 6))))
 		  (if (= (list-ref hitNumLst 6) (list-ref num 6))
 			  (set! hitB 1)
 			  (set! hitB 0))

@@ -205,8 +205,8 @@ let pick_num from count =
 let win_ssq count noRed noBlue =
     let noRedLst = str2lst noRed in
     let noBlueLst = str2lst noBlue in
-    let gRed = good_red() in
-	let yes_gRed = set_diff gRed noRedLst in
+    (* let gRed = good_red() in *)
+	(* let yes_gRed = set_diff gRed noRedLst in *)
     let yes_red = set_diff (1--33) noRedLst in
     let ok_blue = pick_num (set_diff (1--16) noBlueLst) count in
 	let oneRed = ref [] in
@@ -214,12 +214,12 @@ let win_ssq count noRed noBlue =
     assert (count >= 1) ;
     Random.self_init ();
     for i = 1 to count do
-	  if i = count
-	  then
-		oneRed := pick_num yes_gRed 6
-	  else
-		oneRed := pick_num yes_red 6;
-
+	  (* if i = count *)
+	  (* then *)
+	  (* 	oneRed := pick_num yes_gRed 6 *)
+	  (* else *)
+	  (* 	oneRed := pick_num yes_red 6; *)
+      oneRed := pick_num yes_red 6;
       result := !result ^ lst2str (sortLst 
            !oneRed @ [List.nth ok_blue (i-1)]) ^ "\n";
     done;
@@ -249,7 +249,6 @@ let hit_ssq no hitNum =
     );
     if not !hasNo then appendFile hit_num_file (no ^ " " ^ hitNum ^ "\n");
     printf "Good Red Hit:%d of %d\n" (hitRed gr) (List.length gr);
-    printf "------ result ------\n";
     withFile num_file (fun line ->
         let numLst = str2lst line in
         assert (List.length numLst = 7);

@@ -64,7 +64,8 @@
 	  (lambda (h)
 		(do ((line (read-line h) (read-line h))) ((eof-object? line))
 		  (set! num (str2lst line))
-		  (set! hitR (length (intersection hitNumLst (list-head num 6))))
+		  (set! hitR (length (intersection 
+							    (list-head hitNumLst 6) (list-head num 6))))
 		  (if (= (list-ref hitNumLst 6) (list-ref num 6))
 			  (set! hitB 1)
 			  (set! hitB 0))

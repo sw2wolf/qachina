@@ -148,25 +148,25 @@ win_ssq count noRed noBlue = do
     let noRedLst =  map (\x -> read x::Int) $ words noRed
         noBlueLst = map (\x -> read x::Int) $ words noBlue
 
-    gRed <- goodRed
+    -- gRed <- goodRed
 
     _ <- setStdGen <$> (mkStdGen <$> betterSeed)
     okBlue <- pickNums ([1..16] \\ noBlueLst) count []
     result <- pickSSQ count
-              (gRed \\ noRedLst)
+              --(gRed \\ noRedLst)
               ([1..33] \\ noRedLst)
               okBlue []
     forM_ result (\x -> print x)
     writeFile ssqNum $ ints2str result
 
-pickSSQ :: Int -> [Int] -> [Int] -> [Int] -> [[Int]] -> IO [[Int]]
-pickSSQ 0 _ _ _ acc = return acc
-pickSSQ 1 gRed _ okBlue acc = do
-    red <- sort <$> pickNums gRed 6 []
-    return $ reverse $ (red ++ [okBlue!!0]) : acc
-pickSSQ count gRed yesRed okBlue acc = do
+pickSSQ :: Int -> [Int] -> [Int] -> [[Int]] -> IO [[Int]]
+pickSSQ 0 _ _ acc = return acc
+-- pickSSQ 1 _ okBlue acc = do
+--     red <- sort <$> pickNums gRed 6 []
+--     return $ reverse $ (red ++ [okBlue!!0]) : acc
+pickSSQ count yesRed okBlue acc = do
     red <- sort <$> pickNums yesRed 6 []
-    pickSSQ (count-1) gRed yesRed okBlue $ 
+    pickSSQ (count-1) yesRed okBlue $ 
         (red ++ [okBlue!!(count-1)]) : acc
 
 pick :: [a] -> IO a
@@ -197,7 +197,7 @@ statis samp = map (\(a,b) -> (b,a)) $ times4n
     where
         times4n = (reverse . sort) $ map (length &&& head) $ (group . sort) samp
 
--- skip the 期号
+--skip the 期号
 str_ints_hit :: String -> [[Int]]
 str_ints_hit str = map (\line -> map (\x->read x::Int) line) $ map (init . tail . words) $ lines str
 
@@ -208,19 +208,14 @@ hit_ssq :: String -> String -> IO ()
 hit_ssq no hitNum = do
     let hitLst =  map (\x -> read x::Int) $ words hitNum
     let hitRed redNo = foldl (\acc x -> if(x `elem` (init hitLst)) then acc+1 else acc) 0 redNo
-
     dats <- readFile ssqHitNum
     if (any (\x -> no `elem` (words x)) (lines dats) == False)
         then catchAny (appendFile ssqHitNum $ unwords $ [no] ++ map (\n -> show n) hitLst ++ ["\n"]) (\e -> fail $ "Unable save hit numbers" ++ show e)
         else return ()
 
-    gr <- goodRed
-    
-    appendFile "goodHitNums.txt" $ show (hitRed gr :: Int) ++ " "
+    gRed <- goodRed
+    printf "good red hit %d\n" ((hitRed gRed) :: Int)
 
-    printf "Good Red Hit:%d of %d\n" (hitRed gr :: Int) (length gr)
-
-    printf "------ result ------\n"
     nums <- fmap str_ints_pick $ readFile ssqNum
     forM_ nums (\n -> do
         let hitR = hitRed $ init n

@@ -1,4 +1,4 @@
-global-unset-key "\C-z")
+(global-unset-key "\C-z")
 
 ;; 绑定全局键值
 ;; 也可以绑定单独到某个mode，比如cc-mode (define-key cc-mode-map (kbd "(") 'skeleton-pair-insert-maybe)
@@ -87,11 +87,17 @@ global-unset-key "\C-z")
   ;(set-process-query-on-exit-flag proc nil))
 )
 
-(defun jump-run-chez ()
+;; (defun jump-run-chez ()
+;;    (interactive)
+;;    (if (get-buffer "*CHEZ*")
+;; 	  (switch-to-buffer-other-window "*CHEZ*")
+;; 	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
+
+(defun jump-run-husk ()
    (interactive)
-   (if (get-buffer "*CHEZ*")
-	  (switch-to-buffer-other-window "*CHEZ*")
-	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
+   (if (get-buffer "*HUSK*")
+	  (switch-to-buffer-other-window "*HUSK*")
+	 (async-shell-command "huski" "*HUSK*")))
 
 ;; (remove-if-not (lambda (buff)
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
@@ -126,14 +132,16 @@ global-unset-key "\C-z")
 
 (global-set-key (kbd "<f5>") 'jump-to-lambdabot)
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-haskell)))
-;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-caml "ocaml")))
 
-(global-set-key (kbd "<f6>") 'jump-run-erlang)
+;(global-set-key (kbd "<f6>") 'jump-run-erlang)
 ;(global-set-key (kbd "<f6>") 'jump-run-prolog)
+(global-set-key (kbd "<f6>") 'jump-run-lisp)
 
-(global-set-key (kbd "<f7>") 'jump-run-chez)
-(global-set-key (kbd "<f8>") 'run-scheme)
-;(global-set-key (kbd "<f8>") 'jump-run-lisp)
+;(global-set-key (kbd "<f7>") 'jump-run-chez)
+;(global-set-key (kbd "<f7>") 'jump-run-husk)
+(global-set-key (kbd "<f7>") 'run-scheme)
+
+(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

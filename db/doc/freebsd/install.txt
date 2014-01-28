@@ -1,4 +1,47 @@
 
+######
+# dd if=/dev/da0a of=bsd-install.dd bs=4M 
+# gpart destroy -F da0 
+# gpart create -s mbr da0 
+# gpart bootcode -b /boot/mbr da0 
+# gpart add -t freebsd da0 
+# gpart set -a active -i 1 da0 
+# gpart create -s bsd da0s1 
+# gpart bootcode -b /boot/boot da0s1 
+# gpart add -t freebsd-ufs -a 4k da0s1 
+# dd if=bsd-install.dd of=/dev/da0s1a bs=4M 
+# mount /dev/da0s1a /mnt 
+# echo "/dev/da0s1a / ufs ro,noatime 1 1" > /mnt/etc/fstab 
+# umount /mnt
+
+######
+# freebsd-update fetch
+# freebsd-update install
+# feebsd-update upgrade -r 10.0-RELEASE -s "update2.freebsd.org"
+If any updates where installed above – reboot your system before continuing.
+
+Now the freebsd-update(8) utility can fetch bits belonging to 9.1-RELEASE. During this process freebsd-update(8) will ask for help in merging configuration files. If you are upgrading from FreeBSD 7.X or 8.X – consult the official installation document.
+# freebsd-update upgrade -r 9.1-RELEASE
+# freebsd-update install
+
+
+The system must now be rebooted with the newly installed kernel before the non-kernel components are updated.
+# shutdown -r now
+
+
+After rebooting, freebsd-update(8) needs to be run again to install the new userland components:
+# freebsd-update install
+
+
+At this point, users of systems being upgraded from FreeBSD 8.2-RELEASE or earlier will be prompted by freebsd-update(8) to rebuild all third-party applications (e.g., ports installed from the ports tree) due to updates in system libraries.
+
+After updating installed third-party applications (and again, only if freebsd-update(8) printed a message indicating that this was necessary), run freebsd-update(8) again so that it can delete the old (no longer used) system libraries:
+# freebsd-update install
+
+
+Finally, reboot into 9.1-RELEASE
+# shutdown -r now
+
 ------------------------------------------------------------------------
 >gpart show ada0
  =>       63  125829018  ada0  MBR  (60G)
