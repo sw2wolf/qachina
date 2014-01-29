@@ -138,8 +138,8 @@
 (global-set-key (kbd "<f6>") 'jump-run-lisp)
 
 ;(global-set-key (kbd "<f7>") 'jump-run-chez)
-;(global-set-key (kbd "<f7>") 'jump-run-husk)
-(global-set-key (kbd "<f7>") 'run-scheme)
+;(global-set-key (kbd "<f7>") 'run-scheme)
+(global-set-key (kbd "<f7>") 'jump-run-husk)
 
 (global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
 

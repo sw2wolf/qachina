@@ -39,6 +39,7 @@
 
 ;(load "init-emms")
 ;(load "init-radio")
+(load "init-maxima")
 
 (setq shell-file-name "/usr/local/bin/bash")
 
@@ -79,7 +80,8 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- )
+ '(safe-local-variable-values (quote ((eval add-hook (quote write-file-hooks) (quote time-stamp)))))
+ '(scheme-program-name "guile -q -l /media/D/qachina/db/doc/scheme/money-guile.scm"))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
