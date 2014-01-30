@@ -12,3 +12,9 @@ Install and configure SLIME
 (ql:system-apropos "vector")
 
 (ql-dist:uninstall (ql-dist:release "babel"))
+
+:dist-url can be used to specify the initial dist version to use at installation time. Valid URLs can be obtained from an existing Quicklisp installation by evaluating one of the new functions (ql:dist-url "quicklisp") or (ql:available-dist-versions "quicklisp")
+
+:client-url can be used to specify the initial client version to use at installation time. Valid URLs can be obtained from an existing Quicklisp installation by evaluating one of the new functions (ql:client-url) or (ql:available-client-versions)
+
+

@@ -1,0 +1,2 @@
+#!/bin/sh
+~/ccl/fx86cl -Q -K utf-8
