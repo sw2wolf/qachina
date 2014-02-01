@@ -148,25 +148,25 @@ win_ssq count noRed noBlue = do
     let noRedLst =  map (\x -> read x::Int) $ words noRed
         noBlueLst = map (\x -> read x::Int) $ words noBlue
 
-    -- gRed <- goodRed
+    gRed <- goodRed
 
     _ <- setStdGen <$> (mkStdGen <$> betterSeed)
     okBlue <- pickNums ([1..16] \\ noBlueLst) count []
     result <- pickSSQ count
-              --(gRed \\ noRedLst)
+              (gRed \\ noRedLst)
               ([1..33] \\ noRedLst)
               okBlue []
     forM_ result (\x -> print x)
     writeFile ssqNum $ ints2str result
 
-pickSSQ :: Int -> [Int] -> [Int] -> [[Int]] -> IO [[Int]]
-pickSSQ 0 _ _ acc = return acc
--- pickSSQ 1 _ okBlue acc = do
---     red <- sort <$> pickNums gRed 6 []
---     return $ reverse $ (red ++ [okBlue!!0]) : acc
-pickSSQ count yesRed okBlue acc = do
+pickSSQ :: Int -> [Int] -> [Int] -> [Int] -> [[Int]] -> IO [[Int]]
+pickSSQ 0 _ _ _ acc = return acc
+pickSSQ 1 gRed _ okBlue acc = do
+    red <- sort <$> pickNums gRed 6 []
+    return $ reverse $ (red ++ [okBlue!!0]) : acc
+pickSSQ count gRed yesRed okBlue acc = do
     red <- sort <$> pickNums yesRed 6 []
-    pickSSQ (count-1) yesRed okBlue $ 
+    pickSSQ (count-1) gRed yesRed okBlue $ 
         (red ++ [okBlue!!(count-1)]) : acc
 
 pick :: [a] -> IO a
@@ -177,7 +177,7 @@ pickNums _ 0 acc = return acc
 pickNums from count acc = do
   x <- pick from
   --'threadDelay 1000000' should wait one second
-  threadDelay 1000
+  threadDelay 100000
   pickNums (from \\ [x]) (count-1) (x:acc)
 
 ints2str :: [[Int]] -> String
