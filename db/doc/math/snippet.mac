@@ -1,0 +1,145 @@
+
+;;;;;;
+f(x):=(modedeclare(x,fixnum),x*x)$
+(%i11) compile(f)$
+(%i12) f(2^30);
+
+Maxima encountered a Lisp error:
+ The value 1073741824 is not of the expected type FIXNUM.
+ 
+;;;;;;
+f(x,n) := block([s : 0],
+    for i : 0 thru n-1 do (
+       s : s + rectform(1/(x + i))),
+    s)$
+
+(%i4) g(x,n) := block([s : 0],
+    for i : 0 thru n-1 do (
+       s : s + 1/(x + i)),
+    s)$
+
+(%i5) showtime : all$
+Evaluation took 0.0000 seconds (0.0000 elapsed)
+(%i6) f(0.5+%i,10^4);
+Evaluation took 0.5540 seconds (0.6320 elapsed)
+(\%o6) 9.262102028387256-1.564840517816298\,i
+(%i7) g(0.5+%i,10^4)$
+Evaluation took 80.8230 seconds (80.9960 elapsed)
+
+;;;;;;
+/* Generating the first few terms of a Taylor series solution to an ode can be done with a few lines of Maxima. Likely this isn't the fastest method, but it's  straightforward (Picard method more or less) */
+
+(%i1) taylorode(f, x, y, xo, yo, n) := block([yy, k : 1,listarith : true],
+  yy : taylor(yo,x,xo,1),
+  while k < n do (
+      yy : yo + integrate(subst(map("=", y, yy),f),x,xo,x),
+      yy : taylor(yy,x,xo,k),
+      k : k + 1),
+  map("=", y, yy))$
+
+Solve y'  = y, y(0) =1
+
+  (%i2) taylorode([y],x, [y],0,[1],5);
+  (%o2)/T/ [y=1+x+x^2/2+x^3/6+x^4/24+...]
+
+Solve y' = x * y, y(0) = 1
+
+  (%i3) taylorode([x*y],x, [y],0,[1],8);
+  (%o3)/T/ [y=1+x^2/2+x^4/8+x^6/48+...]
+
+Solve y' = -z, z' = y, y(0) = 1, z(0) = 0
+
+  (%i4) taylorode([-z,y],x, [y,z], 0,[1,0],8);
+  taylor: assumed to be zero: 0+...
+  (%o4)/T/ [y=1-x^2/2+x^4/24-x^6/720+...,z=x-x^3/6+x^5/120-x^7/5040+...]
+
+Solve y' = y^2 + x * sqrt(1+y)/(1+x^2) + cos(y);
+
+  (%i5) de : y^2 + x * sqrt(1+y)/(1+x^2) + cos(y);
+  (%o5) cos(y)+(x*sqrt(y+1))/(x^2+1)+y^2
+
+  (%i6) taylorode([de],x, [y], 0, [0],18);
+  (%o6)/T/ [y=x+x^2/2+x^3/3-(3*x^4)/32+x^5/48+(355*x^6)/2304+(6829*x^7)/80640-(22627*x^8)/368640-(34207*x^9)/1451520+(7328227*x^10)/103219200+(419054659*x^11)/10218700800-(1967178467*x^12)/44590694400-(6211722199*x^13)/245248819200+(1155380308451*x^14)/27467867750400+(20988560747087*x^15)/765176315904000-(3678327181425647*x^16)/114266329841664000-(6452454141930451*x^17)/291379141096243200+...]
+
+And  a check:
+
+  (%i7) subst(%, 'diff(y,x)-de);
+  (%o7)/T/ -(5689558840403423*x^17)/10969567664799744+...
+
+
+You can extend this to an ode solver--use horner to evaluate the Taylor polynomials, ...
+
+;;;;;;
+/* Installing tex-texmflocal: 1.9 */
+/* Installing teTeX-texmf: 3.0_9 */
+/* Installing teTeX-base: 3.0_25 */
+/* Installing texmacs: 1.0.7.14_2 */
+/* dvipsk-tetex-5.95a_7 */
+/* gnuplot-4.6.3_2 */
+
+/* - You may want to run texconfig(1) to configure teTeX for your */
+/*   local environment. You will find teTeX's local documentation */
+/*   in /usr/local/share/texmf-dist/doc/. */
+
+/* - Note that if you have environment variables for teTeX in a wrong */
+/*   way (such as TEXINPUTS, TEXMF, TEXMFCNF, and so on), */
+/*   they may prevent teTeX from working. */
+
+;;;;;;
+首先，它可以做为一个计算器使用。
+ (%i1) 1+2*3+4/5+6^7;
+ (%o1) 1399719
+ 
+maxima的命令行i代表输入，o代表输出，语句以;结束，回车后，自动输出。用wxmaxima回车不输出，shift+Enter才输出。
+结果可重用。如下，将上面的输出，换成浮点数。
+ (%i2) float(%o1);
+ (%o2) 279943.8
+
+命名，使用label，名字和表达式之间用:分隔。
+ (%i3) radius: 11;
+ (%o3) 11
+ (%i4) area: %pi * radius^2;
+ (%o4) 121π 
+
+(%i5) y: 3*x^2+5*x+7;
+ (%o5) 3*x^2+5*x+7
+ (%i6) solve(y=1,x);
+ (%o6) [x=−47 √i+5 6 ,x= 47  √i+5 6 ]
+
+不单变量可以命名，表达式也可以，(%i5)是命名，不是函数定义。
+函数定义的语法是:=
+ (%i7) y(x) := x^2;
+ (%o7) y(x):=x2
+ (%i8) y(4);
+ (%o8) 16
+解方程使用solve命令。
+ (%i9) solve(y(x)=3, x);
+ (%o9) [x=−3 √,x=3 √]
+
+另外一个重要的命令是ev，ev可以强制使用数值输出，还可以定义局部变量。
+ (%i10) exp(5/3);
+ (%o10) e5/3
+
+ (%i11) ev(exp(5/3), float);
+ (%o11) 5.29449005047003
+
+ev是evaluate的缩写，float参数表示使用浮点数输出，还有另一个参数numer，float是numer的一种类型，使用float不会对numerval的变量求值。
+ (%i12) numerval(b,5);
+ (%o12) [b]
+ (%i13) a:3;
+ (%o13) 3
+ (%i14) ev(a*b, float);
+ (%o14) 3*b
+ (%i15) ev(a*b, numer);
+ (%o15) 15
+
+ev还可以用于定义局部变量。下面的例子a,b,c,d都是局部变量。
+ (%i16) ev(solve(a*x^2+b*x+c=d,x),a=3,b=4,c=5,d=6);
+ (%o16) [x=−7 √−2 3 ,x= 7 √−2 3 ] 
+
+数列求和:
+ (%i17) sum(k^3,k,1,10);
+ (%o17) 3025
+在表达示前加上'将会列出相应的表达式子，而不会进行求值。
+ (%i17) 'sum(k^3,k,1,10);
+ (%o17) ∑ k=1 10 k 3

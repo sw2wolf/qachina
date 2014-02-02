@@ -6,6 +6,5 @@
 (setq imaxima-use-maxima-mode-flag t)
 (add-to-list 'auto-mode-alist '("\\.ma[cx]" . maxima-mode))
 
-;(setq imaxima-fnt-size "Large")
+(setq imaxima-fnt-size "Large")
 ;(setq imaxima-print-tex-command "latex %s; dvipdf %s.dvi imax.pdf; open imax.pdf")
-;/usr/local/share/texmf/tex/
