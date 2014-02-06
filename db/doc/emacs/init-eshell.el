@@ -15,10 +15,10 @@
   ;(insert "erl.sh 'user_default:'")
   ;(insert "ml ''")
   ;(insert "clisp.sh '()'")
-  ;(insert "sb.sh '()'")
   ;(insert "ccl.sh '()'")
-  (insert "hs ''")
-  (backward-char 1) ;(goto-char (- (point) 2))
+  ;(insert "hs ''")
+  (insert "sb.sh '()'")
+  (backward-char 2) ;(goto-char (- (point) 2))
 )
 
 ;; (defun eshell/eval2 ()

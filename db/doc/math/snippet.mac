@@ -1,5 +1,369 @@
 
 ;;;;;;
+block([ans], loop, if (ans: read("Really quit ? (y, n)")) = 'y
+                   then quit()
+                   elseif ans = 'n then (print("Nice choice!"), 'done)
+                   else (print("I dont' understand..."), go(loop)));
+
+;;;;;;
+".."(a, b) := makelist(i, i, a, b)$
+infix("..")$
+ 
+perfectp(n) := is(divsum(n) = 2*n)$
+ 
+sublist(1 .. 10000, perfectp);
+/* [6, 28, 496, 8128] */
+
+;;;;;;
+leapyearp(year) := is(mod(year,  4) = 0 and (mod(year,  100) # 0 or mod(year,  400) = 0))$
+
+;;;;;;
+collatz(n) := block([L], L: [n], while n > 1 do
+(n: if evenp(n) then n/2 else 3*n + 1, L: endcons(n, L)), L)$
+ 
+collatz_length(n) := block([m], m: 1, while n > 1 do
+(n: if evenp(n) then n/2 else 3*n + 1, m: m + 1), m)$
+ 
+collatz_max(n) := block([j, m, p], m: 0,
+for i from 1 thru n do
+   (p: collatz_length(i), if p > m then (m: p, j: i)),
+[j, m])$
+ 
+collatz(27);           /* [27, 82, 41, ..., 4, 2, 1] */
+length(%);             /* 112 */
+collatz_length(27);    /* 112 */
+collatz_max(100000);   /* [77031, 351] */
+
+;;;;;;
+a: [sin, cos, lambda([x], x^3)]$
+b: [asin, acos, lambda([x], x^(1/3))]$
+compose(f, g) := buildq([f, g], lambda([x], f(g(x))))$
+map(lambda([fun], fun(x)), map(compose, a, b));
+[x, x, x]
+
+;;;;;;
+a: makelist(i, i, 1, 20);
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+ 
+sublist(a, evenp);
+[2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+ 
+sublist(a, lambda([n], mod(n, 3) = 0));
+[3, 6, 9, 12, 15, 18]
+
+;;;;;;
+/* Two solutions */
+plot3d(1, [theta, 0, %pi], [phi, 0, 2 * %pi],
+[transform_xy, spherical_to_xyz], [grid, 30, 60],
+[box, false], [legend, false])$
+ 
+load(draw)$
+draw3d(xu_grid=30, yv_grid=60, surface_hide=true,
+   parametric_surface(cos(phi)*sin(theta),
+                      sin(phi)*sin(theta),
+                      cos(theta),
+                      theta, 0, %pi, phi, 0, 2 * %pi))$
+                  
+;;;;;;
+weekday(year, month, day) := block([m: month, y: year, k],
+   if m < 3 then (m: m + 12, y: y - 1),
+   k: 1 + remainder(day + quotient((m + 1)*26, 10) + y + quotient(y, 4)
+        + 6*quotient(y, 100) + quotient(y, 400) + 5, 7),
+   ['monday, 'tuesday, 'wednesday, 'thurdsday, 'friday, 'saturday, 'sunday][k]
+)$
+ 
+sublist(makelist(i, i, 2008, 2121),
+        lambda([y], weekday(y, 12, 25) = 'sunday));
+/* [2011, 2016, 2022, 2033, 2039, 2044, 2050, 2061, 2067, 2072, 2078, 2089, 2095, 2101, 2107, 2112, 2118] */
+
+;;;;;;
+".."(a, b) := if a < b then makelist(i, i, a, b) else makelist(i, i, a, b, -1)$
+(%i37) infix("..")$
+(%i38) a: sublist(1 .. 1000, primep);
+
+;;;;;;
+doors(n) := block([v: makelist(i, i, 1, n)],
+   for i from 2 thru n do
+      for j from i step i while j <= n do v[j]: -v[j],
+   sublist(v, ?plusp))$
+ 
+doors(100);
+[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+ 
+/* Note: ?plusp is a Lisp function. Maxima has nonnegintegerp, which is equivalent,
+but it needs load(linearalgebra)$ first. */
+
+;;;;;;
+linsolve( [ 3*x + 4*y = 7, 2*x + a*y = 13], [x,y]); 
+                               7 a - 52        25 
+(D11)                     [x = --------, y = -------] 
+                               3 a - 8       3 a - 8
+                               
+(C12) solve( x^3 - 3*x^2 + 5*x = 15, x); 
+(D12)              [x = - SQRT(5) %I, x = SQRT(5) %I, x = 3]
+
+/* MAXIMA也可以求解非线形方程。注意，如果你不打算在屏幕上显示结果的话，可以使用“$”来代替命令结尾的“；”。 */ 
+C13) eq1: x^2 + 3*x*y + y^2 = 0$ 
+(C14) eq2: 3*x + y = 1$ 
+(C15) solve([eq1, eq2]);
+
+;;;;;;
+/* ...Perform some symbolic calculation... */
+qq: integrate(x^4*log(x),x)$
+
+/* ... define a function with that formula... */
+define(fun(x),funmake('block,['(modedeclare(x,float)),%o2]))
+/* ...the modedeclare is necessary because otherwise Maxima will assume that */
+/* fun's argument is symbolic, and use symbolic operations on it... */
+
+/* ...translate into Lisp... */
+translate(fun)
+
+/* ...inspect result... */
+:lisp (symbol-function '$fun)     /* ... Maxima function fun is Lisp function */
+$fun
+(LAMBDA-BLOCK $FUN ($X)
+  (DECLARE (SPECIAL $X) (TYPE FLONUM $X))
+  ((LAMBDA ()
+     NIL
+     NIL
+     (+ (* -0.040000000000000001 (EXPT$ $X 5))
+        (* 0.20000000000000001 (EXPT$ $X 5) (LOG $X))))))
+
+/* ...you'll see that Maxima in some cases uses its own version of Lisp */
+/* functions, like EXPT$ instead of EXPT, which you'll want to either define */
+/* or substitute. */
+
+;;;;;;
+fpprec:1000;
+(%i23) bfloat(%pi);
+
+;;;;;;
+/* display2d is a boolean controlling the formatting of displayed equations: */
+(%i1) display2d;
+(%o1)                                TRUE
+(%i2) x/(y^2+z^2);
+                                       x
+(%o2)                               -------
+                                     2    2
+                                    z  + y
+(%i3) display2d:false;
+(%o3) FALSE
+(%i4) x/(y^2+z^2);
+(%o4) x/(z^2+y^2)
+
+/* stardisp controls whether spaces or *'s are used to represent multiplication: */
+(%i1) stardisp;
+(%o1)                                FALSE
+(%i2) a*b*c;
+(%o2)                                a b c
+(%i3) stardisp:true;
+(%o3)                                TRUE
+(%i4) a*b*c;
+(%o4)                                a*b*c
+
+/* linel controls the number of characters per line: */
+(%i1) linel;
+(%o1)                                 79
+(%i2) ratexpand((x+y+z)^3);
+       3        2        2      2                  2      3        2      2
+(%o2) z  + 3 y z  + 3 x z  + 3 y  z + 6 x y z + 3 x  z + y  + 3 x y  + 3 x  y
+                                                                              3
+                                                                           + x
+(%i3) linel:40;
+(%o3)              40
+(%i4) ratexpand((x+y+z)^3);
+       3        2        2      2
+(%o4) z  + 3 y z  + 3 x z  + 3 y  z
+                2      3        2
+ + 6 x y z + 3 x  z + y  + 3 x y
+      2      3
+ + 3 x  y + x
+ 
+;;;;;;
+/* An example maxima-init.lisp that re-enables the Lisp debugger: */
+(setf *debugger-hook* nil)
+(format t "*** My personal maxima-init.lisp has been loaded ***~%")
+
+/* An example maxima-init.mac that enables gnuplot's pm3d mode: */
+set_plot_option([gnuplot_pm3d,true]);
+print("*** My very own personal maxima-init.mac has been loaded. ***");
+
+/* The print/format statements are useful for debugging. They can be removed once the init files are established to be working. */
+
+;;;;;;
+/* The Lisp debugger can be re-enabled by setting the *debugger-hook* variable in Lisp to nil, i.e., */
+(setf *debugger-hook* nil)
+
+/* To restore Maxima's default behavior, set *debugger-hook* to point to the function maxima-lisp-debugger, i.e., */
+(setf *debugger-hook* #'maxima-lisp-debugger)
+
+
+;;;;;;
+/* A Lisp symbol which begins with a dollar sign $ corresponds to a Maxima symbol without the dollar sign.  */
+/* A Maxima symbol which begins with a question mark ? corresponds to a Lisp symbol without the question mark. For example, the Maxima symbol foo corresponds to the Lisp symbol $foo, while the Maxima symbol ?foo corresponds to the Lisp symbol foo */
+/* Note that ?foo is written without a space between ? and foo; otherwise it might be mistaken for describe ("foo"). */
+/* Hyphen -, asterisk *, or other special characters in Lisp symbols must be escaped by backslash \ where they appear in Maxima code. For example, the Lisp identifier *foo-bar* is written ?\*foo\-bar\* in Maxima." */
+ 
+;;;;;;
+map(lambda([s], every('ratnump,s)),[[1,2,1/3],["a",1/2,3]]);
+=> [true,false]
+
+for i : r1 thru r2 while ok do (
+    for j : c1 thru c2 while ok do (
+       e : apply(fn, [m[i,j]]),
+       if is(apply(frel, [e, mf])) then (
+         im : i,
+         cm : j,
+         if rel = 'bool then ok : false,
+         mf : e)))
+
+;;;;;;
+/* Maxima 可以求解很多种类的常微分方程。 */
+/*  对于可以给出闭式解的一阶和二阶常微分方程，Maxima 会试图求出其精确解。 */
+/*  下面给出三个简单的例子。  */
+
+ (%i1) 	 eq1:'diff(y,x)+y=x;
+ sol1:ode2(eq1,y,x); 
+
+ (%i3) 	 eq2:'diff(y,x,2)+y=sin(3*x);
+ sol2:ode2(eq2,y,x); 
+
+ (%i5) 	 eq3:'diff(y,x,3)+y=0;
+ sol3:ode2(eq3,y,x); 
+
+/* 上面的例子用了ode2函数来求解常微分方程。 */
+/* 在定义方程时，微分函数diff之前有一个单引号（‘），这表示让Maxima只给出形式上的输出，并不真的进行计算。 */
+/* 这是因为我们这里只要列出方程，并不想让Maxima真的求导。 */
+/* sol1 中的%c 和 sol2 中的 %k1 %k2 是任意常数。 */
+/* ode2函数只能求解一阶和二阶常微分方程，第三个例子给出的是一个三阶常微分方程，无法求解，因此输出 false。  */
+   
+/* 2 初值问题 */
+
+/*  函数ic1 (solution, xval, yval)和ic2 (solution, xval, yval, dval)分别用来解一阶和二阶微分方程的初值问题，其中solution是用ode2解得的通解，xval和yval分别是自变量和因变 */
+/*  量的初值，dval是因变量一阶导数的初值。 */
+
+ (%i7) 	 ic1(sol1,x=0,y=1); 
+
+ (%i8) 	 ic2(sol2,x=0,y=1,'diff(y,x)=-1); 
+
+ /* 3 边值问题  */
+
+ /* 函数bc2 (solution, xval_1, yval_1, xval_2, yval_2)用来求解二阶微分方程的边值问题， */
+ /* 其中solution是ode2解得的通解，xval_1、yval_1、xval_2和yval_2分别为自变量和因变量在第一点和第二点的取值。  */
+
+ (%i9) 	 eq4:'diff(y,x,2)+diff(y,x)/2+3*y=0;
+ sol4:ode2(eq4,y,x);
+ bc2(sol4,x=0,y=1,x=5,y=-1); 
+
+/* 如果待求解的常微分方程(组)是线性常系数的。则可以利用Laplace变换法来求解。 */
+/*  Maxima 中也提供了相应的求解函数 desolve()，desolve()函数既可以求解ODE 方程，也可以求解ODE方程组。函数的基本形式如下。 */
+/*  desolve (eqn, y)  */
+/*  desolve ([eqn_1, ..., eqn_n], [y_1, ..., y_n])  */
+/*  这里待解函数不能只写变量名（例如y），而需要明确写出对自变量的依赖关系（例如y(x)）。  */
+
+/*  下面是一个简单的例子：  */
+
+ (%i12) 	 kill(all);
+ eq5:'diff(y(x),x,3)+y(x)=0;
+ desolve(eq5,y(x));
+
+/* 如果初值是已知的，可以使用atvalue()命令来提供初值。 */
+/*  如果提供了足够的初值条件，再用的desolve()函数求解时积分常数自然就可以确定了。  */
+
+ (%i3) 	 atvalue(y(x),x=0,1);
+ desolve(eq5,y(x));
+ atvalue('diff(y(x),x),x=0,-1);
+ desolve(eq5,y(x));
+ atvalue('diff(y(x),x,2),x=0,0);
+ desolve(eq5,y(x));
+
+/* 说明 desolve 函数提供的初值必须是x=0 处的。 ic1 不能用来直接求解 desolve 函数的结果。必须要人为的处理一下结果的形式。 */
+
+;;;;;;
+EXPTDISPFLAG:FALSE; 
+使得tex(x^(-2))的输出是$x^{-2}$而不是$1\over x^2$. 
+
+SQRTDISPFLAG:FALSE;
+变量以1/2为指数而不是开根号出现? 
+
+DISPLAY_FORMAT_INTERNAL : true;
+
+block 
+
+block([x,y],arg1,arg2...); 
+
+用来将一堆命令堆在一起， 顺序执行， 中间用逗号隔开， 返回最后一个值， 其中方括号的内容表示是本地变量。 
+
+和（。。。）的区别就在于block中[x]可以被认出是本地量， 如果不加block这几个字， 也能顺序执行。 
+
+多数是用block来写一个子程序或函数， 如 
+
+f(x):block([x],x+3); 
+
+ev 
+
+在ev环境中一步一步地往下做, 输出的是最后的结果, 例 
+
+(%i22) ev(x:1/3,float); 
+
+(%o22) 0.33333333333333 
+
+radcan 
+
+化简得比较彻底一点. 基本上就是把小数化成分数, 把指数, 对数中的东西化简. 
+
+小心: 
+
+(%i832) RADCAN(1.E-38); 
+
+RAT replaced 0.0 by 0//1 = 0.0 
+
+(%o832) 0 
+
+会把比较小的量变成0. 
+
+变 量的含义: 
+
+numer 
+
+将含有特殊数字的字符转换成数字, 如果numer为false(默认), 就不转换了. 
+
+(%i113) NUMER; 
+
+
+(%o113) FALSE 
+
+(%i114) %pi; 
+
+
+(%o114) %PI 
+
+(%i115) NUMER:true; 
+
+
+(%o115) TRUE 
+
+(%i116) %pi; 
+
+(%o116) 3.141592653589793
+
+;;;;;;
+dimension.mac 用来做量纲分析的, 还有一个pdf的说明文件; 
+physconst.mac 存了很多物理常数在里边; 
+units.mac 用来做单位转换的;
+
+load(physconst)$
+
+load("mactex-utilities")$
+texput(st,"\\Sigma_t"); 
+
+load(recur);
+(\%o1) \verb|/home/sw2wolf/maxima/share/maxima/5.32.1/share/algebra/recur.mac|
+(%i2) char(T(N+1)-2*T(N),1,T,N,1,[T(0)=0]);
+(\%o2) T\left(N\right)=2^{N}-1
+
+;;;;;;
 f(x):=(modedeclare(x,fixnum),x*x)$
 (%i11) compile(f)$
 (%i12) f(2^30);
@@ -90,8 +454,8 @@ You can extend this to an ode solver--use horner to evaluate the Taylor polynomi
  (%i1) 1+2*3+4/5+6^7;
  (%o1) 1399719
  
-maxima的命令行i代表输入，o代表输出，语句以;结束，回车后，自动输出。用wxmaxima回车不输出，shift+Enter才输出。
-结果可重用。如下，将上面的输出，换成浮点数。
+/* maxima的命令行i代表输入，o代表输出，语句以;结束，回车后，自动输出。用wxmaxima回车不输出，shift+Enter才输出。 */
+/* 结果可重用。如下，将上面的输出，换成浮点数。 */
  (%i2) float(%o1);
  (%o2) 279943.8
 

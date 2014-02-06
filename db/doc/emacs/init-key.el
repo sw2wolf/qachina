@@ -41,11 +41,11 @@
 	  (switch-to-buffer-other-window "*prolog*")
 	  (run-prolog 'swi)))
 
-(defun jump-run-erlang ()
-  (interactive)
-  (if (get-buffer "*erlang*")
-	  (switch-to-buffer "*erlang*")
-	  (run-erlang)))
+;; (defun jump-run-erlang ()
+;;   (interactive)
+;;   (if (get-buffer "*erlang*")
+;; 	  (switch-to-buffer "*erlang*")
+;; 	  (run-erlang)))
 
 (defun jump-run-lisp ()
   (interactive)
@@ -87,17 +87,17 @@
   ;(set-process-query-on-exit-flag proc nil))
 )
 
-;; (defun jump-run-chez ()
-;;    (interactive)
-;;    (if (get-buffer "*CHEZ*")
-;; 	  (switch-to-buffer-other-window "*CHEZ*")
-;; 	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
-
-(defun jump-run-husk ()
+(defun jump-run-chez ()
    (interactive)
-   (if (get-buffer "*HUSK*")
-	  (switch-to-buffer-other-window "*HUSK*")
-	 (async-shell-command "huski" "*HUSK*")))
+   (if (get-buffer "*CHEZ*")
+	  (switch-to-buffer-other-window "*CHEZ*")
+	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
+
+;; (defun jump-run-husk ()
+;;    (interactive)
+;;    (if (get-buffer "*HUSK*")
+;; 	  (switch-to-buffer-other-window "*HUSK*")
+;; 	 (async-shell-command "huski" "*HUSK*")))
 
 ;; (remove-if-not (lambda (buff)
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
@@ -133,15 +133,16 @@
 (global-set-key (kbd "<f5>") 'jump-to-lambdabot)
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-haskell)))
 
-;(global-set-key (kbd "<f6>") 'jump-run-erlang)
-;(global-set-key (kbd "<f6>") 'jump-run-prolog)
 (global-set-key (kbd "<f6>") 'jump-run-lisp)
+(global-set-key (kbd "<f7>") 'imaxima)
 
-;(global-set-key (kbd "<f7>") 'jump-run-chez)
-;(global-set-key (kbd "<f7>") 'run-scheme)
-(global-set-key (kbd "<f7>") 'jump-run-husk)
+;(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-caml "ocaml")))
+;(global-set-key (kbd "<f7>") 'jump-run-erlang)
+;(global-set-key (kbd "<f7>") 'jump-run-prolog)
 
-(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
+(global-set-key (kbd "<f8>") 'jump-run-chez)
+;(global-set-key (kbd "<f8>") 'jump-run-husk)
+;(global-set-key (kbd "<f8>") 'run-scheme)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)
