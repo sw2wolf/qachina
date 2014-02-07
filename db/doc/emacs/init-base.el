@@ -146,7 +146,6 @@
    ("\\.cfm$" . html-mode)
    ("gnus" . emacs-lisp-mode)
    ("\\.clj$" . clojure-mode)
-   ("\\.rkt$" . geiser-mode)
    ("\\.py$" . python-mode)
    ("\\.idl$" . idl-mode)))
 

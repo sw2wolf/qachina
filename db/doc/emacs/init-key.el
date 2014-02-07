@@ -90,7 +90,7 @@
 (defun jump-run-chez ()
    (interactive)
    (if (get-buffer "*CHEZ*")
-	  (switch-to-buffer-other-window "*CHEZ*")
+	  (switch-to-buffer "*CHEZ*")
 	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
 
 ;; (defun jump-run-husk ()
