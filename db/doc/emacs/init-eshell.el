@@ -16,9 +16,9 @@
   ;(insert "ml ''")
   ;(insert "clisp.sh '()'")
   ;(insert "ccl.sh '()'")
-  ;(insert "hs ''")
-  (insert "sb.sh '()'")
-  (backward-char 2) ;(goto-char (- (point) 2))
+  (insert "hs ''")
+  ;(insert "sb.sh '()'")
+  (backward-char 1) ;(goto-char (- (point) 2))
 )
 
 ;; (defun eshell/eval2 ()

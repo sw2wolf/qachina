@@ -41,6 +41,33 @@ catchAny f h = Exception.catch f (\e -> h (e :: Exception.SomeException))
 catchAny = Exception.catch
 #endif
 
+-- 菲波纳契数列
+--fibs = 0 : 1 : [ a + b | (a, b) <- zip fibs (tail fibs)]
+-- fibs :: forall a. Num a => Int -> [a]
+-- fibs n = take n $ fibgen 1 1
+
+-- fibgen :: forall a. Num a => a -> a -> [a]
+-- fibgen n1 n2 = n1 : fibgen n2 (n1+n2) 
+
+--求解素数的一个无限数列方法：
+-- sieve :: forall a. Integral a => [a] -> [a]
+-- sieve [] = sieve [2..]
+-- sieve (x:xs) = x : sieve (filter (\y -> y `rem` x /= 0) xs)
+
+--排列组合 same as Data.List.subsequences
+-- combination :: [a] -> [[a]]
+-- combination [] =  [[]]
+-- combination (x:xs) = concat [[(x:ys), ys] | ys <- combination xs]
+
+-- permutation :: Eq a => [a] -> [[a]]
+-- permutation [] = [[]]
+-- permutation xs = concatMap (\x -> map (x:) $ permutation (delete x xs)) xs
+
+combLen :: Int -> Int -> Int
+combLen x len
+  | x > len = product [x-len+1..x] `div` product [1..len]
+  | otherwise = 0
+
 qachina :: IO ()
 qachina = do
     -- putStrLn "Running qachina..."
@@ -246,30 +273,3 @@ ssqHitNum :: [Char]
 ssqHitNum = "/media/D/qachina/db/doc/money/" ++ "ssqHitNum.txt"
 
 ------------------------------------------------------------------------
-  
--- 菲波纳契数列
---fibs = 0 : 1 : [ a + b | (a, b) <- zip fibs (tail fibs)]
--- fibs :: forall a. Num a => Int -> [a]
--- fibs n = take n $ fibgen 1 1
-
--- fibgen :: forall a. Num a => a -> a -> [a]
--- fibgen n1 n2 = n1 : fibgen n2 (n1+n2) 
-
---求解素数的一个无限数列方法：
--- sieve :: forall a. Integral a => [a] -> [a]
--- sieve [] = sieve [2..]
--- sieve (x:xs) = x : sieve (filter (\y -> y `rem` x /= 0) xs)
-
---排列组合 same as Data.List.subsequences
--- combination :: [a] -> [[a]]
--- combination [] =  [[]]
--- combination (x:xs) = concat [[(x:ys), ys] | ys <- combination xs]
-
--- permutation :: Eq a => [a] -> [[a]]
--- permutation [] = [[]]
--- permutation xs = concatMap (\x -> map (x:) $ permutation (delete x xs)) xs
-
-combLen :: Int -> Int -> Int
-combLen x len
-  | x > len = product [x-len+1..x] `div` product [1..len]
-  | otherwise = 0

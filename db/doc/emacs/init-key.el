@@ -93,11 +93,11 @@
 	  (switch-to-buffer "*CHEZ*")
 	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
 
-;; (defun jump-run-husk ()
-;;    (interactive)
-;;    (if (get-buffer "*HUSK*")
-;; 	  (switch-to-buffer-other-window "*HUSK*")
-;; 	 (async-shell-command "huski" "*HUSK*")))
+(defun jump-run-husk ()
+   (interactive)
+   (if (get-buffer "*HUSK*")
+	  (switch-to-buffer "*HUSK*")
+	 (async-shell-command "huski" "*HUSK*")))
 
 ;; (remove-if-not (lambda (buff)
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
@@ -140,8 +140,8 @@
 ;(global-set-key (kbd "<f7>") 'jump-run-erlang)
 ;(global-set-key (kbd "<f7>") 'jump-run-prolog)
 
-(global-set-key (kbd "<f8>") 'jump-run-chez)
-;(global-set-key (kbd "<f8>") 'jump-run-husk)
+;(global-set-key (kbd "<f8>") 'jump-run-chez)
+(global-set-key (kbd "<f8>") 'jump-run-husk)
 ;(global-set-key (kbd "<f8>") 'run-scheme)
 
 (global-set-key [(f9)] 'list-bookmarks)
