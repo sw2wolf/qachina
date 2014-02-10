@@ -1,5 +1,27 @@
 
 ------
+import Data.Time
+
+time op = 
+    getCurrentTime >>= \ t0 -> 
+    op >> 
+    getCurrentTime >>= \ tf -> 
+    return $! (diffUTCTime tf t0)
+
+------
+:set -isrc
+:l src/Misc.hs
+:set prompt ">> "
+:set -Wall
+:set -fno-warn-unused-binds
+:set -fno-warn-unused-do-bind
+:set -fno-warn-unused-imports
+:set -fno-warn-type-defaults
+:set -XNoImplicitPrelude
+:set -XScopedTypeVariables
+:set -XOverloadedStrings
+
+------
 --git log -p
 ------
 :set -fbreak-on-exception

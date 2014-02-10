@@ -35,11 +35,11 @@
 ;;         (find-file file))
 ;;     (message "Current buffer does not have an associated file.")))
 
-(defun jump-run-prolog ()
-  (interactive)
-  (if (get-buffer "*prolog*")
-	  (switch-to-buffer-other-window "*prolog*")
-	  (run-prolog 'swi)))
+;; (defun jump-run-prolog ()
+;;   (interactive)
+;;   (if (get-buffer "*prolog*")
+;; 	  (switch-to-buffer-other-window "*prolog*")
+;; 	  (run-prolog 'swi)))
 
 ;; (defun jump-run-erlang ()
 ;;   (interactive)
@@ -56,13 +56,11 @@
 	  (condition-case e (slime-connect "127.0.0.1" 4005)
 		(file-error (slime))))))
 
-;; (defun jump-run-guile ()
-;;   (interactive)
-;;   (let ((repl (find-if (lambda (buff)
-;; 			 (string-match "^* Guile" (buffer-name buff))) (buffer-list))))
-;;   (if repl
-;; 	  (switch-to-buffer-other-window (buffer-name repl))
-;; 	  (run-guile))))
+(defun jump-run-clisp ()
+   (interactive)
+   (if (get-buffer "*CLISP*")
+	  (switch-to-buffer-other-window "*CLISP*")
+	 (async-shell-command "~/bin/cl" "*CLISP*")))
 
 ;(file-error (call-interactively 'run-lisp))))))
 ;(unless (slime-connected-p) (save-excursion (slime)))
@@ -133,16 +131,17 @@
 (global-set-key (kbd "<f5>") 'jump-to-lambdabot)
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-haskell)))
 
-(global-set-key (kbd "<f6>") 'jump-run-lisp)
-(global-set-key (kbd "<f7>") 'imaxima)
+(global-set-key (kbd "<f6>") 'jump-run-chez)
+;(global-set-key (kbd "<f6>") 'jump-run-husk)
+;(global-set-key (kbd "<f6>") 'run-scheme)
 
 ;(global-set-key (kbd "<f7>") '(lambda () (interactive) (run-caml "ocaml")))
 ;(global-set-key (kbd "<f7>") 'jump-run-erlang)
 ;(global-set-key (kbd "<f7>") 'jump-run-prolog)
 
-;(global-set-key (kbd "<f8>") 'jump-run-chez)
-(global-set-key (kbd "<f8>") 'jump-run-husk)
-;(global-set-key (kbd "<f8>") 'run-scheme)
+(global-set-key (kbd "<f7>") 'jump-run-lisp)
+(global-set-key (kbd "<f8>") 'jump-run-clisp)
+;(global-set-key (kbd "<f8>") 'imaxima)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)
