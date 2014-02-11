@@ -186,7 +186,7 @@ $10 = (int *) 0x7fff5fbff570
 $11 = (int (*)[3]) 0x7fff5fbff578
 
 -----------------------------------------------------------
-gdb	启动gdb进行调试
+启动gdb进行调试
 gdb-many-windows	切换单窗格/多窗格模式
 gdb-restore-windows	恢复窗格布局
 

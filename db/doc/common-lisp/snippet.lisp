@@ -1,3 +1,4 @@
+
 ;;;;;;
 ;the headers exchanged between Drakma and the HTTP server should be shown, for illustration purposes. This can be achieved like so: 
 (setf drakma:*header-stream* *standard-output*)
