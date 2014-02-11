@@ -46,6 +46,17 @@ help()->
 r()->
     make:all([netload]).
 
+sd(Word) -> sh("sdcv -n " ++ Word).
+	
+sh(Cmd) -> 
+    Res = string:tokens(os:cmd(Cmd),"\n"),
+    lists:foreach(
+        fun(X)->io:format("~ts~n", [unicode:characters_to_list(erlang:iolist_to_binary(X))]) end,
+        Res).
+
+qachina() ->
+	ok = application:start(yaws).
+
 %---------------------------------------------------------------------
 %       stock
 %---------------------------------------------------------------------
@@ -83,58 +94,6 @@ div618(P1, P2) ->
         lists:foreach(fun(R)-> io:format("---~.3f  ~.2f---\n",[R,P(R)]) end, ?RATIO)
     end.
 
--define(NO_TRADE_DAYS,[{2011,1,1},{2011,1,2},{2011,1,3},        %元旦
-                       {2011,2,2},{2011,2,3},{2011,2,4},{2011,2,5},{2011,2,6},
-                       {2011,2,7},{2011,2,8},                   %春节
-                       {2011,4,3},{2011,4,4},{2011,4,5},        %清明
-                       {2011,4,30},{2011,5,1},{2011,5,2},       %劳动
-                       {2011,6,4},{2011,6,5},{2011,6,6},        %端午
-                       {2011,9,10},{2011,9,11},{2011,9,12},     %中秋
-                       {2011,10,1}, {2011,10,2}, {2011,10,3},{2011,10,4},{2011,10,5}, %国庆
-                       {2011,10,6},{2011,10,7}
-                      ]).
-%
-%   what's the date from the given trading day passing some trading days ?
-%   date window: 7, 13
-%
-date_by_nday({Y,M,D}, NTday) when NTday > 0 ->
-    do_date_by_nday({Y,M,D}, NTday).
-
-do_date_by_nday({Y,M,D}, NTday) when NTday >=1 ->
-    case is_trade_day({Y,M,D}) of
-        true ->
-            if NTday == 1 -> {Y,M,D};
-                true -> do_date_by_nday(next_day({Y,M,D}), NTday-1)
-            end;
-        _    -> do_date_by_nday(next_day({Y,M,D}), NTday)
-    end.
-
-trade_days({Y1,M1,D1}, {Y2,M2,D2}) ->
-    Day1 = date_to_gregorian_days(Y1, M1, D1+1),
-    Day2 = date_to_gregorian_days(Y2, M2, D2),
-    F = fun(E, Acc) ->
-        {Y, M, D} = gregorian_days_to_date(E),
-        case is_trade_day({Y, M, D}) of
-            true -> [{Y, M, D} | Acc] ;
-            _ -> Acc
-        end
-    end,
-    Days = lists:reverse( lists:foldl(F, [], lists:seq(Day1, Day2)) ),
-    Days.
-
-is_trade_day({Y,M,D}) ->
-    DOW = day_of_the_week({Y,M,D}),
-    if DOW == 6 orelse DOW == 7 -> false;
-    true -> 
-        case lists:member({Y,M,D}, ?NO_TRADE_DAYS) of
-            true -> false;
-            _ -> true
-        end
-    end.
-
-next_day({Y, M, D}) ->
-    Day1 = date_to_gregorian_days(Y, M, D),
-    gregorian_days_to_date(Day1 + 1).
 
 %---------------------------------------------------------------------
 %       lottery
@@ -151,21 +110,20 @@ win_ssq(Count, NoRed, NoBlue) ->
 	NoRedLst = str2ints(NoRed),
     pick_ssq_nums(
         Count,
-	    %good_red() -- NoRedLst,
+	    good_red() -- NoRedLst,
         lists:seq(1,33) -- NoRedLst,
         pick_num(Count, lists:seq(1,16)--str2ints(NoBlue), [])
     ),
     file:write_file(ssqNum(), get(result)).
 
-pick_ssq_nums(0, _, _) -> ok;
-pick_ssq_nums(Count, YesRed, OkBlue) ->
-	%% if
-	%% 	Count == 1 ->
-	%% 		Red6 = lists:sort( pick_num(6, GRed, []) );
-	%%     true ->
-	%% 		Red6 = lists:sort( pick_num(6, YesRed, []) )
-	%% end,
-	Red6 = lists:sort( pick_num(6, YesRed, []) ),
+pick_ssq_nums(0, _, _, _) -> ok;
+pick_ssq_nums(Count, GRed, YesRed, OkBlue) ->
+	if
+		Count == 1 ->
+			Red6 = lists:sort( pick_num(6, GRed, []) );
+	    true ->
+			Red6 = lists:sort( pick_num(6, YesRed, []) )
+	end,
     Result = lists:append(Red6, [lists:nth(Count,OkBlue)]),
     ResStr = lists:append(string:strip(
                 lists:foldl(fun(X,Acc) -> Acc ++ integer_to_list(X) ++ " " end, "", Result)), "\n"),
@@ -176,44 +134,44 @@ pick_ssq_nums(Count, YesRed, OkBlue) ->
         _ ->
             put(result, get(result) ++ ResStr)
     end,
-    pick_ssq_nums(Count-1, YesRed, OkBlue).
+    pick_ssq_nums(Count-1, GRed, YesRed, OkBlue).
 
-%% good_red() ->
-%%     {ok,Bin} = file:read_file(ssqHitNum()),
-%%     NumLst = string:tokens(binary_to_list(Bin), "\n"),
-%%     T = ets:new(tmp, [public,ordered_set]),
-%%     lists:foreach(fun(I)-> ets:insert(T, {I,0}) end, lists:seq(1,33)),
-%%     lists:foreach(
-%%         fun(Num) ->
-%%             Ns =  str2ints(string:sub_string(Num,7)),
-%%             lists:foreach(
-%%                 fun(N) ->
-%%                     [{_,Cnt}] = ets:lookup(T,N),
-%%                     ets:insert(T,{N,Cnt+1})
-%%                 end, lists:sublist(Ns,6))
-%%         end, NumLst),
-%%     Tmp = lists:sublist(lists:keysort(2, ets:tab2list(T)), 13, 21),
-%%     lists:sort( lists:map(fun({K,_})->K end, Tmp) ).
+good_red() ->
+    {ok,Bin} = file:read_file(ssqHitNum()),
+    NumLst = string:tokens(binary_to_list(Bin), "\n"),
+    T = ets:new(tmp, [public,ordered_set]),
+    lists:foreach(fun(I)-> ets:insert(T, {I,0}) end, lists:seq(1,33)),
+    lists:foreach(
+        fun(Num) ->
+            Ns =  str2ints(string:sub_string(Num,7)),
+            lists:foreach(
+                fun(N) ->
+                    [{_,Cnt}] = ets:lookup(T,N),
+                    ets:insert(T,{N,Cnt+1})
+                end, lists:sublist(Ns,6))
+        end, NumLst),
+    Tmp = lists:sublist(lists:keysort(2, ets:tab2list(T)), 13, 21),
+    lists:sort( lists:map(fun({K,_})->K end, Tmp) ).
     
 %检查是否中奖
 %    HitNo:  中奖号
 %hit_ssq(NoStr, HitNo) ->
-hit_ssq(HitNo) ->
-    %% {ok,HitBin} = file:read_file(ssqHitNum()),
-    %% HasNoStr = string:str(binary_to_list(HitBin),NoStr),
-    %% if HasNoStr == 0 ->
-    %%     HitNoStr = NoStr ++ "\s" ++ HitNo ++ "\n",
-    %%     {ok,H} = file:open(ssqHitNum(),[append]),
-    %%     file:write(H,HitNoStr),
-    %%     file:close(H);
-    %% true -> ok
-    %% end,
+hit_ssq(NoStr,HitNo) ->
+    {ok,HitBin} = file:read_file(ssqHitNum()),
+    HasNoStr = string:str(binary_to_list(HitBin),NoStr),
+    if HasNoStr == 0 ->
+        HitNoStr = NoStr ++ "\s" ++ HitNo ++ "\n",
+        {ok,H} = file:open(ssqHitNum(),[append]),
+        file:write(H,HitNoStr),
+        file:close(H);
+    true -> ok
+    end,
     HitNoLst = str2ints(HitNo),
     HitRed = lists:sublist(HitNoLst, 6),
     HitBlue = lists:sublist(HitNoLst, 7, 1),
 
-    %% {GoodHit,_} = hit_check({good_red(), HitRed}, {[], HitBlue}),
-    %% io:format("Good Red Hit:~w~n",[GoodHit]),
+    {GoodHit,_} = hit_check({good_red(), HitRed}, {[], HitBlue}),
+    io:format("Good Red Hit:~w~n",[GoodHit]),
 
     {ok,Bin} = file:read_file(ssqNum()),
     NumLst = string:tokens(binary_to_list(Bin), "\n"),
@@ -292,14 +250,3 @@ hit_check({NumFst, HitFst}, {NumSnd, HitSnd}) ->
 his() -> sh("tail " ++ ssqHitNum()).
 
 %-----------------------------------------------------------------
-sd(Word) -> sh("sdcv -n " ++ Word).
-	
-sh(Cmd) -> 
-    Res = string:tokens(os:cmd(Cmd),"\n"),
-    lists:foreach(
-        fun(X)->io:format("~ts~n", [unicode:characters_to_list(erlang:iolist_to_binary(X))]) end,
-        Res).
-
-qachina() ->
-	ok = application:start(yaws).
-
