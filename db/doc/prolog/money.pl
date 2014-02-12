@@ -1,5 +1,5 @@
-%:- module(money, [winG/3, stopLoss/3]).
 :- use_module(library(dcg/basics)).
+:- use_module(library(lambda)).
 
 :- set_prolog_flag(toplevel_print_options,
 	[backquoted_string(true), max_depth(9999),
@@ -16,6 +16,90 @@
 
 :- load_files([ qachina(test_web) ], [ silent(true) ]).
 
+sd(Word) :-
+	(   atom(Word)
+	->  true
+	;   throw(error(type_error(atom, Word), _))
+	),
+	format(string(Cmd),'sdcv -n ~w',[Word]), shell(Cmd).
+
+% list comprehesion
+%% List of Pythagorean triples : 
+%% ?- V <- {X, Y, Z & X <- 1..20, Y <- X..20, Z <- Y..20 & X*X+Y*Y =:= Z*Z}.
+%% V = [ (3,4,5), (5,12,13), (6,8,10), (8,15,17), (9,12,15), (12,16,20)] ;
+
+%% List of double of x, where x^2 is greater than 50 : 
+%% ?- V <- {Y & X <- 1..20 & X*X > 50, Y is 2 * X}.
+%% V = [16,18,20,22,24,26,28,30,32,34,36,38,40] ;
+
+% We need operators
+:- op(700, xfx, <-).
+:- op(450, xfx, ..).
+:- op(1100, yfx, &).
+
+% we need to define the intervals of numbers
+Vs <- M..N :-
+    integer(M),
+	integer(N),
+	M =< N,
+	between(M, N, Vs).
+ 
+% finally we define list comprehension
+% prototype is Vs <- {Var, Dec, Pred} where
+% Var is the list of variables to output
+% Dec is the list of intervals of the variables
+% Pred is the list of predicates
+Vs <- {Var & Dec & Pred} :-
+	findall(Var,  maplist(call, [Dec, Pred]), Vs).
+
+qachina :-
+	% working_directory(_, '/media/D/qachina'),
+	% consult('test_web.pl'),
+	server(8000).
+	%thread_create(shell('cd /media/D/qachina; ./start.bat'),_,[detached(true)]).
+
+is_leap_year(Year) :-
+	R4 is Year mod 4,
+	R100 is Year mod 100,
+	R400 is Year mod 400,
+	( (R4 = 0, R100 \= 0); R400 = 0 ).
+
+utf8(Str) :-
+	phrase(utf8_codes(Str), X),
+	print(X), nl.
+
+fac(N,F) :-
+	N is 0, F is 1;
+    N > 0, M is N - 1, fac(M,G), F is N*G.
+
+fib(0, 0) :- !.
+fib(1, 1) :- !.
+fib(N, X) :- N1 is N-1, N2 is N-2, fib(N1, X1), fib(N2, X2), X is X1+X2.
+
+bits(X) :- format('~2r~n', [X]).
+
+sum([],0).
+sum([H|T],X) :- sum(T,Y), X is H + Y.
+
+product([],1).
+product([H|T],X) :- product(T,Y), X is H * Y.
+
+combLen(N, CN, Cnt) :-
+	N >= CN,
+	X1 is N-CN+1, numlist(X1,N,X2), product(X2,X),
+	numlist(1,CN,Y2), product(Y2,Y),
+	Cnt is X / Y.
+
+sys_info :-
+	current_prolog_flag(version_data, swi(Major, Minor, Patch, _)),
+	format('swi-prolog version: ~w.~w.~w~n',[Major,Minor,Patch]).
+
+dbg_mon :-
+    prolog_ide(debug_monitor).
+
+%
+% investment
+%
 sxf(0.0015).
 yhs(0.001).
 ghf(1.0).
@@ -61,13 +145,6 @@ div618(P1, P2) :-
 %% 	(P1>P2 -> R = RATIO;
 %% 		predsort(my_comp, RATIO, R)),
 %% 	maplist(show618(P1,P2), R).
-
-sd(Word) :-
-	(   atom(Word)
-	->  true
-	;   throw(error(type_error(atom, Word), _))
-	),
-	format(string(Cmd),'sdcv -n ~w',[Word]), shell(Cmd).
 
 %%
 %% lottery
@@ -244,83 +321,6 @@ hit_desc(4,0,'5th(10)') :- !.
 hit_desc(3,1,'5th(10)') :- !.
 hit_desc(_,1,'6th(5)') :- !.
 hit_desc(_,_,'X') :- !.
-
-% list comprehesion
-%% List of Pythagorean triples : 
-%% ?- V <- {X, Y, Z & X <- 1..20, Y <- X..20, Z <- Y..20 & X*X+Y*Y =:= Z*Z}.
-%% V = [ (3,4,5), (5,12,13), (6,8,10), (8,15,17), (9,12,15), (12,16,20)] ;
-
-%% List of double of x, where x^2 is greater than 50 : 
-%% ?- V <- {Y & X <- 1..20 & X*X > 50, Y is 2 * X}.
-%% V = [16,18,20,22,24,26,28,30,32,34,36,38,40] ;
-
-% We need operators
-:- op(700, xfx, <-).
-:- op(450, xfx, ..).
-:- op(1100, yfx, &).
-
-% we need to define the intervals of numbers
-Vs <- M..N :-
-    integer(M),
-	integer(N),
-	M =< N,
-	between(M, N, Vs).
- 
-% finally we define list comprehension
-% prototype is Vs <- {Var, Dec, Pred} where
-% Var is the list of variables to output
-% Dec is the list of intervals of the variables
-% Pred is the list of predicates
-Vs <- {Var & Dec & Pred} :-
-	findall(Var,  maplist(call, [Dec, Pred]), Vs).
-
-%
-% misc.
-%
-qachina :-
-	% working_directory(_, '/media/D/qachina'),
-	% consult('test_web.pl'),
-	server(8000).
-	%thread_create(shell('cd /media/D/qachina; ./start.bat'),_,[detached(true)]).
-
-is_leap_year(Year) :-
-	R4 is Year mod 4,
-	R100 is Year mod 100,
-	R400 is Year mod 400,
-	( (R4 = 0, R100 \= 0); R400 = 0 ).
-
-utf8(Str) :-
-	phrase(utf8_codes(Str), X),
-	print(X), nl.
-
-fac(N,F) :-
-	N is 0, F is 1;
-    N > 0, M is N - 1, fac(M,G), F is N*G.
-
-fib(0, 0) :- !.
-fib(1, 1) :- !.
-fib(N, X) :- N1 is N-1, N2 is N-2, fib(N1, X1), fib(N2, X2), X is X1+X2.
-
-bits(X) :- format('~2r~n', [X]).
-
-sum([],0).
-sum([H|T],X) :- sum(T,Y), X is H + Y.
-
-product([],1).
-product([H|T],X) :- product(T,Y), X is H * Y.
-
-combLen(N, CN, Cnt) :-
-	N >= CN,
-	X1 is N-CN+1, numlist(X1,N,X2), product(X2,X),
-	numlist(1,CN,Y2), product(Y2,Y),
-	Cnt is X / Y.
-
-sys_info :-
-	current_prolog_flag(version_data, swi(Major, Minor, Patch, _)),
-	format('swi-prolog version: ~w.~w.~w~n',[Major,Minor,Patch]).
-
-dbg_mon :-
-    prolog_ide(debug_monitor).
 
 % :- initialization
 % 	working_directory(_, '/media/D/qachina').
