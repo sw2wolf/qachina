@@ -7,6 +7,7 @@
 (add-to-list 'auto-mode-alist '("\\.sls$" . scheme-mode))
 (add-to-list 'auto-mode-alist '("\\.sld$" . scheme-mode))
 (add-to-list 'auto-mode-alist '("\\.scm$" . scheme-mode))
+(add-to-list 'auto-mode-alist '("\\.rkt$" . scheme-mode))
 
 ;; (autoload 'balanced-toggle "balanced" "Toggle balanced ``mode''" t)
 ;; (autoload 'balanced-on "balanced" "Turn on balanced ``mode''" t)
