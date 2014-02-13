@@ -1,5 +1,43 @@
 
 ;;;;;;
+(for-each
+    (lambda(i)
+      (let ((thread (call-with-new-thread
+                     (lambda ()
+                       (sleep (+ (random 10) 2))
+                       (format #t "woke ~a: ~a\n" (current-thread) i)))))
+        (format #t "created ~a: ~a\n" thread i)))
+    (iota 5))
+
+(use-modules (system foreign)) ; to handle the C pointer 
+
+(define* (bv->string/partly bv #:optional (start 0) 
+                                          (end #f) 
+                                          (size 1) 
+                                          (encoding "utf-8")) 
+ (let ((len (if end (* size (- end start)) 
+                    (- (bytevector-length bv) (* size start)))) 
+       (addr (+ (pointer-address (bytevector->pointer bv)) 
+                (* size start)))) 
+ (pointer->string (make-pointer addr) len encoding))) 
+
+;;(define bv (string->utf8 "我了个去啊")) 
+;; NOTE: Chinese character needs size==3 
+(bv->string/partly bv 2 4 3) 
+==> "个去" 
+
+;; And for common latin character whose size==1 
+;;(define bv2 (string->utf8 "hello world")) 
+(bv->string/partly bv 0 5) 
+==> "hello"
+
+;;;;;;
+;guile
+;autogen == autoreconf -i --force --verbose
+;./configure --prefix=/home/sw2wolf/guile/ BDW_GC_LIBS="-L/usr/local/lib -lgc-threaded"
+
+;;;;;;
+;petite
 >(library-list)
 ((rnrs) (chezscheme) (scheme) (rnrs conditions) (rnrs files)
  (rnrs base) (rnrs syntax-case) (rnrs exceptions)
@@ -12,22 +50,20 @@
  (rnrs records syntactic) (rnrs records procedural)
  (rnrs records inspection) (chezscheme csv7) (scheme csv7))
 
-;;;;;;
-;petite
 (case (machine-type)
    [(i3le ti3le) (load-shared-object "libc.so.6")]
    [(ppcosx tppcosx i3osx ti3osx) (load-shared-object "libc.dylib")]
    [else (load-shared-object "libc.so")])
 
-define close
+(define close
    (foreign-procedure "close" (integer-32)
      integer-32)) 
 
- (define dup
+(define dup
    (foreign-procedure "dup" (integer-32)
      integer-32)) 
 
- (define execl4
+(define execl4
    (let ([execl-help
           (foreign-procedure "execl"
             (string string string string integer-32)
@@ -35,63 +71,63 @@ define close
      (lambda (s1 s2 s3 s4)
        (execl-help s1 s2 s3 s4 0)))) 
 
- (define fork
+(define fork
    (foreign-procedure "fork" ()
      integer-32)) 
 
- (define kill
+(define kill
    (foreign-procedure "kill" (integer-32 integer-32)
      integer-32)) 
 
- (define listen
+(define listen
    (foreign-procedure "listen" (integer-32 integer-32)
      integer-32)) 
 
- (define tmpnam
+(define tmpnam
    (foreign-procedure "tmpnam" (integer-32)
      string)) 
 
- (define unlink
+(define unlink
    (foreign-procedure "unlink" (string)
      integer-32)) 
 
- ;;; routines defined in csocket.c 
+;;; routines defined in csocket.c 
 
- (define accept
+(define accept
    (foreign-procedure "do_accept" (integer-32)
      integer-32)) 
 
- (define bytes-ready?
+(define bytes-ready?
    (foreign-procedure "bytes_ready" (integer-32)
      boolean)) 
 
- (define bind
+(define bind
    (foreign-procedure "do_bind" (integer-32 string)
      integer-32)) 
 
- (define c-error
+(define c-error
    (foreign-procedure "get_error" ()
      string)) 
 
- (define c-read
+(define c-read
    (foreign-procedure "c_read" (integer-32 string integer-32)
      integer-32)) 
 
- (define c-write
+(define c-write
    (foreign-procedure "c_write" (integer-32 string integer-32)
      integer-32)) 
 
- (define connect
+(define connect
    (foreign-procedure "do_connect" (integer-32 string)
      integer-32)) 
 
- (define socket
+(define socket
    (foreign-procedure "do_socket" ()
      integer-32)) 
 
  ;;; higher-level routines 
 
- (define dodup
+(define dodup
   ; (dodup old new) closes old and dups new, then checks to
   ; make sure that resulting fd is the same as old
    (lambda (old new)
@@ -100,7 +136,7 @@ define close
        (errorf 'dodup
          "couldn't set up child process io for fd ~s" old)))) 
 
- (define dofork
+(define dofork
   ; (dofork child parent) forks a child process and invokes child
   ; without arguments and parent with the child's pid
    (lambda (child parent)
@@ -110,7 +146,7 @@ define close
          [(> pid 0) (parent pid)]
          [else (errorf 'fork (c-error))])))) 
 
- (define setup-server-socket
+(define setup-server-socket
   ; create a socket, bind it to name, and listen for connections
    (lambda (name)
      (let ([sock (check 'socket (socket))])
@@ -119,19 +155,19 @@ define close
        (check 'listen (listen sock 1))
        sock))) 
 
- (define setup-client-socket
+(define setup-client-socket
   ; create a socket and attempt to connect to server
    (lambda (name)
      (let ([sock (check 'socket (socket))])
        (check 'connect (connect sock name))
        sock))) 
 
- (define accept-socket
+(define accept-socket
   ; accept a connection
    (lambda (sock)
      (check 'accept (accept sock)))) 
 
- (define check
+(define check
   ; raise an exception if status x is negative, using c-error to
   ; obtain the operating-system's error message
    (lambda (who x)
@@ -139,14 +175,13 @@ define close
          (errorf who (c-error))
          x))) 
 
- (define terminate-process
+(define terminate-process
   ; kill the process identified by pid
    (lambda (pid)
      (define sigterm 15)
      (kill pid sigterm)
      (void)))
 
-;;;;;;
 (catch #t (lambda () (/ 1 0)) (lambda (key . args) (display "ehhhhh")))
 
 (define libc-obj (dynamic-link "libc.so"))
@@ -158,12 +193,7 @@ libc-obj
 libc-obj
 ⇒ #<dynamic-object "libc.so" (unlinked)>
 
-;;;;;;
-;guile
-;autogen == autoreconf -i --force --verbose
-;./configure --prefix=/home/sw2wolf/guile/ BDW_GC_LIBS="-L/usr/local/lib -lgc-threaded"
-
-;;;;;;
+;;;
 #!/usr/local/bin/petite --script 
 
 (for-each 

@@ -6,6 +6,7 @@
 
 (activate-readline)
 
+(load "/media/D/qachina/db/doc/scheme/money-guile.scm")
 ; (set! %load-path
 ; 	  (append %load-path
 ;       		  (list "/home/<USER>/.local/share/guile/site/2.0")))

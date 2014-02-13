@@ -1,5 +1,33 @@
 
 ;;;;;;
+
+;QuickLisp
+;升级所有安装了的lisp库
+(ql:update-all-dists)
+
+;升级quicklisp本身
+(ql:update-client)
+
+(ql:update-dist "quicklisp")
+
+;Install and configure SLIME
+(ql:quicklisp "quicklisp-slime-helper")
+
+(ql:system-apropos "vector")
+(ql-dist:uninstall (ql-dist:release "babel"))
+
+(ql:where-is-system "cl-ppcre")
+
+;:dist-url can be used to specify the initial dist version to use at installation time. Valid URLs can be obtained from an existing Quicklisp installation by evaluating one of the new functions (ql:dist-url "quicklisp") or (ql:available-dist-versions "quicklisp")
+
+;:client-url can be used to specify the initial client version to use at installation time. Valid URLs can be obtained from an existing Quicklisp installation by evaluating one of the new functions (ql:client-url) or (ql:available-client-versions)
+
+;;;;;;
+sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
+      --eval '(quicklisp-quickstart:install :path "ql-test/")' \
+      --eval '(ql:quickload "cl-ppcre")'
+
+;;;;;;
 ;the headers exchanged between Drakma and the HTTP server should be shown, for illustration purposes. This can be achieved like so: 
 (setf drakma:*header-stream* *standard-output*)
 

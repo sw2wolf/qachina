@@ -229,7 +229,10 @@ seed() ->
 pick_num(0, _, Acc) -> Acc;
 pick_num(N, From, Acc) ->
     OneNum = lists:nth(random:uniform(length(From)), From),
-    timer:sleep(6),
+    %timer:sleep(1000),
+	receive
+    after 1000 -> ok %% in milliseconds
+	end,
     pick_num(N-1, From--[OneNum], [OneNum | Acc]).
 
 hit_check({NumFst, HitFst}, {NumSnd, HitSnd}) ->

@@ -4,8 +4,37 @@
 (use-modules (ice-9 format))
 
 ;(if #f #f) is the simplest way to get the special "unspecified" value, the same one that is returned by many other functions like 'for-each' that don't have anything to return.
+(define (sd word)
+  (system (string-append "sdcv -n " word)))
+
+(define (qachina)
+  (make-thread (system "cd /media/D/qachina; ./start.bat")))
+
+(define (sh cmd) (system cmd))
+
+(define (fib n)
+   (fib-iter 1 0 n))
+
+(define (fib-iter a b count)
+   (if (= count 0)
+       b
+       (fib-iter (+ a b) a (- count 1))))
+
+(define (fac n)
+   (fact-iter 1 1 n))
+
+(define (fact-iter product counter max-count)
+   (if (> counter max-count)
+       product
+       (fact-iter (* counter product)
+                  (+ counter 1)
+                  max-count)))
+
 (define (print x) (if (not (eq? x (if #f #f))) (write x)))
 
+;
+;investment
+;
 (define SXF 0.0015) ;手续费
 (define YHS 0.001)  ;印花费
 (define GHF 1.0)    ;过户费
@@ -55,8 +84,23 @@
 			 ) (iota count))
 		))) #t)
 
+;; (define (hitnum-saved term)
+;;   (let ((ret nil))
+;;     (with-input-from-file +ssq-hit-num+
+;; 	  (lambda (h)
+;; 	  (let loop ((line (read-line h 'concat)))
+;; 		(cond ((not (eof-object? line))
+;;          (if (string-match "blue" line)
+;;            (display line))
+;;          (loop (read-line h 'concat)))))))))
+
+;; (call-with-output-file +ssq-hit-num+
+;;   (lambda (h)
+;;     (pretty-print proto h)))
+
 (define (hit-ssq term hitNum)
   (let ((hitNumLst (str2lst hitNum)) (hitR 0) (hitB 0) (num '()) (hitH 0))
+	;(when (not (hitnum-saved? term)) (save-hitnum term hitNum))
 	(set! hitH (open-file +ssq-hit-num+ "a"))
 	(display (string-append term " " hitNum "\n") hitH)
 	(close-port hitH)
@@ -102,31 +146,3 @@
 
 (define (his) (system (string-append "tail " +ssq-hit-num+)))
 
-;
-; helpers
-;
-(define (sd word)
-  (system (string-append "sdcv -n " word)))
-
-(define (qachina)
-  (make-thread (system "cd /media/D/qachina; ./start.bat")))
-
-(define (sh cmd) (system cmd))
-
-(define (fib n)
-   (fib-iter 1 0 n))
-
-(define (fib-iter a b count)
-   (if (= count 0)
-       b
-       (fib-iter (+ a b) a (- count 1))))
-
-(define (fac n)
-   (fact-iter 1 1 n))
-
-(define (fact-iter product counter max-count)
-   (if (> counter max-count)
-       product
-       (fact-iter (* counter product)
-                  (+ counter 1)
-                  max-count)))
