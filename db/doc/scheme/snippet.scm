@@ -1,5 +1,62 @@
 
 ;;;;;;
+(use-modules ((alpha)
+              ; Optionally specify item(s) to use
+              :select (name)
+              ; Optionally attach a 'module alias' to distinguish items
+              :renamer (symbol-prefix-proc 'alpha:)) )
+
+(define (module-available? module-name)
+  (catch #t
+    (lambda () (resolve-interface module-name) #t)
+    (lambda (key . args) #f)))
+
+;;;;;;
+(make-string 1 #\nul) => "\x00"
+
+;;;;;;
+;; use string-tokenize with an appropriate character set
+(use-modules (srfi srfi-13) (srfi srfi-14))
+(define fields (string-tokenize line (string->charset "+-")))
+(define fields (string-tokenize line (string->charset ":")))
+(define fields (string-tokenize line))
+
+;;;;;;
+;Expanding Tildes in Filenames
+(define expand-user
+  (let ((rx (make-regexp "^\\~([^/]+)?")))
+    (lambda (filename)
+      (let ((m (regexp-exec rx filename)))
+        (if m
+          (string-append
+           (if (match:substring m 1)
+             (passwd:dir (getpwnam (match:substring m 1)))
+             (or (getenv "HOME") (getenv "LOGDIR")
+                 (passwd:dir (getpwuid (cuserid))) ""))
+           (substring filename (match:end m)))
+          filename)))))
+
+;; use catch to trap errors
+(catch 'system-error ; the type of error thrown
+  (lambda () (set! port (open-file filename mode))) ; thunk to try
+  (lambda (key . args)  ; exception handler
+    (let ((fmt (cadr args))
+          (msg&path (caddr args)))
+      (format (current-error-port) fmt (car msg&path) (cadr msg&path))
+      (newline))))
+
+;Removing the Last Line of a File(let ((p (open-file file "r+")))
+(let ((pos 0))
+    (let loop ((line (read-line p)))
+      (cond ((eof-object? (peek-char p))
+             (seek p 0 SEEK_SET)
+             (truncate-file p pos)
+             (close p))
+            (else
+             (set! pos (ftell p))
+             (loop (read-line p)))))))
+
+;;;;;;
 (for-each
     (lambda(i)
       (let ((thread (call-with-new-thread

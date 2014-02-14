@@ -1,5 +1,13 @@
 
 ;;;;;;
+(nth-value 2 (function-lambda-expression #'append)) => append
+
+(defun my-foo () )
+MY-FOO
+(nth-value 2 (function-lambda-expression #'my-foo))
+MY-FOO
+
+;;;;;;
 
 ;QuickLisp
 ;升级所有安装了的lisp库
@@ -1427,11 +1435,6 @@ chosen, resignal the error."
 (typep x '(cons (eql :foo)))
 or
 (and (consp x) (eq :foo (car x)))
-
-(defun my-foo () )
-MY-FOO
-(nth-value 2 (function-lambda-expression #'my-foo))
-MY-FOO
 
 (loop for s in *screen-list*
       nconc (delete-if 'window-hidden-p (copy-list (group-windows (screen-current-group s)))))

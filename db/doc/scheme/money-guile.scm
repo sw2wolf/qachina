@@ -84,26 +84,24 @@
 			 ) (iota count))
 		))) #t)
 
-;; (define (hitnum-saved term)
-;;   (let ((ret nil))
-;;     (with-input-from-file +ssq-hit-num+
-;; 	  (lambda (h)
-;; 	  (let loop ((line (read-line h 'concat)))
-;; 		(cond ((not (eof-object? line))
-;;          (if (string-match "blue" line)
-;;            (display line))
-;;          (loop (read-line h 'concat)))))))))
+(define (hitnum-saved? term)
+   (call/cc
+	(lambda (k)
+	  (call-with-input-file +ssq-hit-num+
+		(lambda (port)
+		  (do ((line (read-line port) (read-line port))) ((eof-object? line))
+			(if (string=? term (string-take line 5)) (k #t)))
+		  )) #f)))
 
-;; (call-with-output-file +ssq-hit-num+
-;;   (lambda (h)
-;;     (pretty-print proto h)))
+;(define port (open path (logior O_WRONLY O_APPEND O_CREAT)))
 
 (define (hit-ssq term hitNum)
   (let ((hitNumLst (str2lst hitNum)) (hitR 0) (hitB 0) (num '()) (hitH 0))
-	;(when (not (hitnum-saved? term)) (save-hitnum term hitNum))
-	(set! hitH (open-file +ssq-hit-num+ "a"))
-	(display (string-append term " " hitNum "\n") hitH)
-	(close-port hitH)
+	(if (not (hitnum-saved? term))
+		(begin
+		  (set! hitH (open-file +ssq-hit-num+ "a"))
+		  (display (string-append term " " hitNum "\n") hitH)
+		  (close-port hitH)))
 	(call-with-input-file +ssq-num+
 	  (lambda (h)
 		(do ((line (read-line h) (read-line h))) ((eof-object? line))
@@ -115,12 +113,35 @@
 			  (set! hitB 0))
 		  (format #t "~s   (~d ~d)   ~s~%" line hitR hitB (hitDesc hitR hitB)))))))
 
+(define (good-red)
+  (let ((tab (make-hash-table 33)) (res '()) (nums) (sort-res))
+	;(dotimes (i 33) (hash-set! tab i 0))
+    (call-with-input-file +ssq-num+
+	  (lambda (port)
+		(do ((line (read-line port) (read-line port))) ((eof-object? line))
+		  ;(set! nums (butlast (str2lst (substring line 6))))
+		  ;(dolist (n nums) 
+          ;   (set! tab (assoc-set! tab n (+ 1 (assoc-ref tab n)))))
+		)))
+	(sort tab
+	 (lambda (left right)
+	   (> (cdr left) (cdr right))) )
+
+	(hash-for-each
+	 (lambda (key value)
+	   (print key)) tab)
+    ;(maphash #'(lambda (k v) (push (cons k v) res)) tab)
+    ;(setq sort-res (sort res #'> :key #'cdr))
+    ;(sort (subseq (mapcar #'car sort-res) 0 21) #'<)))
+))
+
 (define (pickNums count from)
   (let ((res 0))
-	(sort (map (lambda(c)
-		   (set! res (list-ref from (random (length from))))
-		   (set! from (delete res from))
-		   res) (iota count)) <)))
+	(sort
+	 (map (lambda (c)
+			(set! res (list-ref from (random (length from))))
+			(set! from (delete res from))
+			res) (iota count)) <)))
 
 (define (str2lst str)
   (map (lambda(c) (string->number c)) (string-split str #\space)))
