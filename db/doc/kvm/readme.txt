@@ -1,3 +1,37 @@
+
+######
+How to convert VirtualBox VDI image to Qemu-KVM .QCOW image
+Convert the VirtualBox image to a raw image format using the following command:
+$VBoxManage clonehd "image.vdi" "image.img" --format RAW
+
+Convert convert the raw image to a qcow image using the following command:
+$qemu-img convert -f raw -O qcow2 image.img image.qcow
+
+Install:
+qemu -m 192 -hda winxp.qcow2 -cdrom winxp.iso -boot d
+
+Test your new image image.qcow:
+$sudo /usr/local/etc/rc.d/kqemu onestart
+$kvm -m 512 -usbdevice tablet -hda image.qcow
+
+Options
+-full-screen    start in full screen
+-vnc display    start a VNC server on display
+-no-frame       open SDL window without a frame and window decorations
+-alt-grab       use Ctrl-Alt-Shift to grab mouse (instead of Ctrl-Alt)
+-M machine      select emulated machine (-M ? for list)
+-cpu cpu        select CPU (-cpu ? for list)
+-smp n          set the number of CPUs to 'n' [default=1]
+-cdrom file     use 'file' as IDE cdrom image (cdrom is ide1 master)
+-no-fd-bootchk  disable boot signature checking for floppy disks
+-no-acpi        disable ACPI
+-localtime      set the real time clock to local time [default=utc]
+
+- kqemu still works in the 0.11 branch, but is disabled by default now so
+  you'll have to pass -enable-kqemu (or -kernel-kqemu as with the previous
+  versions) if you want to use it.
+
+######
 sudo apt-get install gcc libsdl1.2-dev zlib1g-dev libasound2-dev linux-kernel-headers pkg-config libgnutls-dev
 
 ./configure --prefix=/usr/local --audio-drv-list="alsa oss" --enable-mixemu
@@ -25,3 +59,4 @@ fi
 xset -dpms # 关闭 DPMS。 
 xset s 1800 600
 rdesktop localhost:3389 -u sw2wolf -p 123 -g 1440x880 -D -K -r sound:remote
+

@@ -1,5 +1,9 @@
 
 ;;;;;;
+
+;that's because *default-pathname-defaults* is not the same in  the two threads. you can set *swank-bindings* in ~/.swank.lisp to set *default-pathname-defaults* to the default you want for swank, or use  M-x slime-sync-package-and-default-directory or M-x slime-set-default-directory
+
+;;;;;;
 (nth-value 2 (function-lambda-expression #'append)) => append
 
 (defun my-foo () )
