@@ -114,16 +114,16 @@
 		  (format #t "~s   (~d ~d)   ~s~%" line hitR hitB (hitDesc hitR hitB)))))))
 
 (define (good-red)
-  (let ((tab (make-hash-table 33)) (res '()) (nums) (sort-res))
-	;(dotimes (i 33) (hash-set! tab i 0))
-    (call-with-input-file +ssq-num+
+  (let ((tab (make-hash-table 33)) (nums '()))
+	(for-each (lambda (i) (hash-set! tab i 0)) *RED-NUMS*)
+    (call-with-input-file +ssq-hit-num+
 	  (lambda (port)
 		(do ((line (read-line port) (read-line port))) ((eof-object? line))
-		  ;(set! nums (butlast (str2lst (substring line 6))))
-		  ;(dolist (n nums) 
-          ;   (set! tab (assoc-set! tab n (+ 1 (assoc-ref tab n)))))
+		  (set! nums (butlast (str2lst (substring line 6)) 1))
+		  (for-each (lambda (n)
+					  (hash-set! tab n (1+ (hash-ref tab n)))) nums)
 		)))
-	(sort tab
+	(sort (hash-map->list cons tab)
 	 (lambda (left right)
 	   (> (cdr left) (cdr right))) )
 

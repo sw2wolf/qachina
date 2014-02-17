@@ -40,55 +40,6 @@ sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
       --eval '(ql:quickload "cl-ppcre")'
 
 ;;;;;;
-;the headers exchanged between Drakma and the HTTP server should be shown, for illustration purposes. This can be achieved like so: 
-(setf drakma:*header-stream* *standard-output*)
-
-;For non-textual content types, a vector of octets is returned. 
-(drakma:http-request "https://api.github.com/repos/edicl/drakma/git/tags/tag-does-not-exist" :external-format :utf-8)
-
-(cl-ppcre:scan-to-strings "(?s)You have.*your data."
-                            (drakma:http-request "https://www.fortify.net/cgi/ssl_2.pl"))
-
-;Some servers adapt their behavior according to the Browser that is used. Drakma can claim to be i.e. MS Internet Explorer. 
-? (cl-ppcre:scan-to-strings "<h4>.*" (drakma:http-request "http://whatsmyuseragent.com/" :user-agent :explorer))
-
-;Drakma can send parameters in a POST request and knows how to deal with cookies. Note how Drakma sends the cookie back in the second request. 
-? (let ((cookie-jar (make-instance 'drakma:cookie-jar)))
-    (drakma:http-request "http://www.phpsecurepages.com/test/test.php"
-                         :method :post
-                         :parameters '(("entered_login" . "test")
-                                       ("entered_password" . "test"))
-                         :cookie-jar cookie-jar)
-    (drakma:http-request "http://www.phpsecurepages.com/test/test2.php"
-                         :cookie-jar cookie-jar)
-    (drakma:cookie-jar-cookies cookie-jar))
-
-;Drakma can use a connection to a server for multiple requests. 
-(let ((stream (nth-value 4 (drakma:http-request "http://www.lispworks.com/" :close nil))))
-    (nth-value 2 (drakma:http-request "http://www.lispworks.com/success-stories/index.html" :stream stream)))
-
-(let ((x (drakma:http-request
-	   "http://paizo.com/campaigns/RedHandOfDoom/discussion"
-	   :connection-timeout nil)))
-            (closure-html:parse x (cxml-dom:make-dom-builder)))
-
-(gzip-stream:gunzip-sequence (drakma:http-request
-		 "http://paizo.com/threads/rzs2prcq?Deadlands-Reloaded-Interest-Check"
-		 :connection-timeout nil :additional-headers '((:accept-encoding .
-		 "gzip"))))
-
-(with-open-file (file "/home/simkoc/test.pdf"
-    :direction :io
-    :if-does-not-exist :create
-    :if-exists :supersede
-    :element-type '(unsigned-byte 8))
-    (let ((input (drakma:http-request "http://www.fractalconcept.com/ex.pdf"
-        :want-stream t)))
-    (while (read-byte input nil nil) ;set eof-error-p and eof-value to nil
-        (write-byte it file))
-        (close input)))
-
-;;;;;;
 (in-package #:smarkup)
 
 ;;; quote macro reader
