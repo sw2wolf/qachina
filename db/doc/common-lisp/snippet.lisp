@@ -29,6 +29,7 @@ MY-FOO
 (ql-dist:uninstall (ql-dist:release "babel"))
 
 (ql:where-is-system "cl-ppcre")
+(ql:register-local-projects)
 
 ;:dist-url can be used to specify the initial dist version to use at installation time. Valid URLs can be obtained from an existing Quicklisp installation by evaluating one of the new functions (ql:dist-url "quicklisp") or (ql:available-dist-versions "quicklisp")
 
