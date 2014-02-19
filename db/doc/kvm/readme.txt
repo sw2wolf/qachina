@@ -14,6 +14,8 @@ Test your new image image.qcow:
 $sudo /usr/local/etc/rc.d/kqemu onestart
 $kvm -m 512 -usbdevice tablet -hda image.qcow
 
+$qemu --enable-kvm /images/winXP-32-virtio.qcow2 -m 2000 -vnc :10 -usbdevice tablet -net nic,model=rtl8139 -net tap -usbdevice host:1483:c007
+
 Options
 -full-screen    start in full screen
 -vnc display    start a VNC server on display

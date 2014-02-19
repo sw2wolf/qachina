@@ -56,11 +56,11 @@
 	  (condition-case e (slime-connect "127.0.0.1" 4005)
 		(file-error (slime))))))
 
-;; (defun jump-run-clisp ()
-;;    (interactive)
-;;    (if (get-buffer "*CLISP*")
-;; 	  (switch-to-buffer-other-window "*CLISP*")
-;; 	 (async-shell-command "~/bin/cl" "*CLISP*")))
+(defun jump-run-clisp ()
+   (interactive)
+   (if (get-buffer "*CLISP*")
+	  (switch-to-buffer-other-window "*CLISP*")
+	 (async-shell-command "~/bin/cl" "*CLISP*")))
 
 ;(file-error (call-interactively 'run-lisp))))))
 ;(unless (slime-connected-p) (save-excursion (slime)))
@@ -136,7 +136,8 @@
 (global-set-key (kbd "<f6>") 'jump-run-lisp)
 ;(global-set-key (kbd "<f7>") 'imaxima)
 
-(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
+(global-set-key (kbd "<f8>") 'jump-run-clisp)
+;(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
 ;(global-set-key (kbd "<f8>") 'jump-run-prolog)
 ;(global-set-key (kbd "<f8>") 'jump-run-husk)
 ;(global-set-key (kbd "<f8>") 'jump-run-chez)
