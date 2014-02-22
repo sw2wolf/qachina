@@ -1,5 +1,13 @@
 
 ;;;;;;
+;See: http://www.cliki.net/infix
+
+CL-USER 17 > '#I(a*(8*b^^2+1)+ 4*b*c*(4*b^^2+1) )
+(+ (* A (+ (* 8 (EXPT B 2)) 1)) (* 4 B C (+ (* 4 (EXPT B 2)) 1)))
+
+;' is the usual quote. #I( some-infix-expression ) is the reader macro.
+
+;;;;;;
 
 ;that's because *default-pathname-defaults* is not the same in  the two threads. you can set *swank-bindings* in ~/.swank.lisp to set *default-pathname-defaults* to the default you want for swank, or use  M-x slime-sync-package-and-default-directory or M-x slime-set-default-directory
 
@@ -36,9 +44,11 @@ MY-FOO
 ;:client-url can be used to specify the initial client version to use at installation time. Valid URLs can be obtained from an existing Quicklisp installation by evaluating one of the new functions (ql:client-url) or (ql:available-client-versions)
 
 ;;;;;;
-sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
+$sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
       --eval '(quicklisp-quickstart:install :path "ql-test/")' \
       --eval '(ql:quickload "cl-ppcre")'
+
+$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
 
 ;;;;;;
 (in-package #:smarkup)

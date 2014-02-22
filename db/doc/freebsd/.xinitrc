@@ -35,22 +35,23 @@ xmodmap ~/.Xmodmap
 #fcitx &
 
 case $1 in
-	# clisp)
-	# 	#export MPD=YES
-	#     #/usr/local/etc/rc.d/musicpd onestart
-	# 	exec $HOME/bin/stumpwm-clisp-norc
-    #     ;;
-    # sbcl)
-	# 	#sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
-    #     exec $HOME/bin/stumpwm-sbcl
-	# 	;;
-	# xmonad)
-	# 	exec xmonad
-	# 	;;
-    dwm)
-        xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex run
-        #xterm -e gdb --quiet -nx -x ~/script.gdb
+	clisp)
+		#export MPD=YES
+	    #/usr/local/etc/rc.d/musicpd onestart
+		exec $HOME/bin/stumpwm-clisp-norc
+        ;;
+    sbcl)
+		#sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
+        exec $HOME/bin/stumpwm-sbcl
 		;;
+	qemu)
+		/usr/local/etc/rc.d/kqemu onestart
+		exec $HOME/bin/dwm
+		;;
+    # dwm)
+    #     xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex run
+    #     #xterm -e gdb --quiet -nx -x ~/script.gdb
+	# 	;;
     *)
 		exec $HOME/bin/dwm
 		;;
