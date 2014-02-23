@@ -1,11 +1,38 @@
-------
+
+;;;;;;
+sudo service powerd onestart
+sysctl dev.cpu.0.freq: 1000
+sysctl dev.cpu.0.freq_levels => dev.cpu.0.freq_levels: 1900/25000 1800/22782 1000/9420
+sysctl hw.acpi.thermal*
+
+1 保证acpi，cpufreq内核模块正常工作 
+2 在/etc/rc.conf增加：powerd_enable="YES"，来启动powerd 
+3 在/etc/sysctl.conf增加：debug.cpufreq.lowest=400，设置cpu频率调节最小不低于400M，此值将影响dev.cpu.%d.freq_levels; 
+而powerd使用了此值来调节cpu频率 
+总之，上述步骤保证了在powerd工作时，cpu的最小频率大于400M。
+
+2 cpu降频支持
+ 需要内核有(默认的内核已经支持)
+ device cpufreq
+ 编辑/etc/rc.conf 加入下面二行，是为了在启动时自动启动powerd进程
+ #vi /etc/rc.conf
+ powerd_enable="YES"  #表示开机自动启动powerd进程
+ powerd_flags="-a adaptive -b adaptive -n adaptive"  #表示在有外接电源时，电池时，当外接电源的状态未知的情况都自动调节cpu频率(-a表示AC,即外接电源，-b表示电池,-n表示当AC的状态未知的情况,adaptive表示自动调节).
+
+用下面的命令分别查看cpu的当前频率、温度、风扇速度.你会看到风扇一直在转.
+ #sysctl -a | grep dev.cpu.0.freq
+ #sysctl -a | grep temperature
+ #sysctl -a | grep fan_speed
+
+;;;;;;
 mplayer -cache 2048 -cache-min 10 `youtube-dl.py -gf5 -- XCnK3B7Ftow`
-------
+
+;;;;;;
 If the passwd databases become out of synch, repairing it, you could try:
 
 # pwd_mkdb -p /etc/master.passwd
 
-------
+;;;;;;
 Mount the .iso that you want to copy to your memorystick.
 mdconfig -a -t vnode -f FreeBSD-9.2-RELEASE-amd64-bootonly.iso -u 0
 mount -t cd9660 /dev/md0 /media

@@ -1,11 +1,12 @@
 xterm -geometry 159x28+0+390
 /usr/local/bin/gmrun
+texmacs
 -----------------------------------------------------------
 wine "c:/Program Files/eweiqi/LiveBaduk.exe"
 -----------------------------------------------------------
 VBoxManage startvm winxp
 VBoxManage controlvm winxp poweroff
-#VBoxManage clonehd --format raw windows.vdi windows.raw
+rdesktop -u *** -p 123 -g 1440x880 -D -K localhost:3389
 -----------------------------------------------------------
 emacs -geometry 178x36+0+363
 evince
