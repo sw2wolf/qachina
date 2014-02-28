@@ -2,8 +2,11 @@
 (use-modules (ice-9 rdelim))
 (use-modules (ice-9 threads))
 (use-modules (ice-9 format))
+(use-modules (ice-9 pretty-print))
 
 ;(if #f #f) is the simplest way to get the special "unspecified" value, the same one that is returned by many other functions like 'for-each' that don't have anything to return.
+(define pp pretty-print)
+
 (define (sd word)
   (system (string-append "sdcv -n " word)))
 
@@ -102,6 +105,10 @@
 		  (set! hitH (open-file +ssq-hit-num+ "a"))
 		  (display (string-append term " " hitNum "\n") hitH)
 		  (close-port hitH)))
+
+	(format #t "Good red hit: ~d~%"
+			(length (intersection (list-head hitNumLst 6) (good-red))))
+
 	(call-with-input-file +ssq-num+
 	  (lambda (h)
 		(do ((line (read-line h) (read-line h))) ((eof-object? line))
@@ -123,17 +130,12 @@
 		  (for-each (lambda (n)
 					  (hash-set! tab n (1+ (hash-ref tab n)))) nums)
 		)))
-	(sort (hash-map->list cons tab)
-	 (lambda (left right)
-	   (> (cdr left) (cdr right))) )
 
-	(hash-for-each
-	 (lambda (key value)
-	   (print key)) tab)
-    ;(maphash #'(lambda (k v) (push (cons k v) res)) tab)
-    ;(setq sort-res (sort res #'> :key #'cdr))
-    ;(sort (subseq (mapcar #'car sort-res) 0 21) #'<)))
-))
+	(sort
+	 (map (lambda (e) (car e))
+		 (list-head (sort (hash-map->list cons tab)
+						  (lambda (left right)
+							(> (cdr left) (cdr right)))) 21)) <)))
 
 (define (pickNums count from)
   (let ((res 0))
@@ -144,7 +146,7 @@
 			res) (iota count)) <)))
 
 (define (str2lst str)
-  (map (lambda(c) (string->number c)) (string-split str #\space)))
+  (map (lambda(c) (string->number c)) (string-tokenize str)))
 
 (define (lst2str lst)
   (let ((res ""))

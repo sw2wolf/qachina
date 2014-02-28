@@ -1,5 +1,10 @@
 
 ;;;;;;
+(concatenate 'vector #(1 2 3) #(4 5 6))    ==> #(1 2 3 4 5 6)
+(subseq #(1 2 3 4 5 6) 3)   ==> #(4 5 6)
+(subseq #(1 2 3 4 5 6) 3 5) ==> #(4 5)
+
+;;;;;;
 ;See: http://www.cliki.net/infix
 
 CL-USER 17 > '#I(a*(8*b^^2+1)+ 4*b*c*(4*b^^2+1) )
@@ -49,6 +54,7 @@ $sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
       --eval '(ql:quickload "cl-ppcre")'
 
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
+sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"
 
 ;;;;;;
 (in-package #:smarkup)

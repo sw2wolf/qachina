@@ -1,5 +1,9 @@
 
 ;;;;;;
+#!/bin/sh
+xrandr --output LVDS1 --mode 1280x800 --pos 1440x100 --rotate normal --output DP1 --off --output VGA1 --mode 1440x900 --pos 0x0 --rotate normal
+
+;;;;;;
 sudo service powerd onestart
 sysctl dev.cpu.0.freq: 1000
 sysctl dev.cpu.0.freq_levels => dev.cpu.0.freq_levels: 1900/25000 1800/22782 1000/9420

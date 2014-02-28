@@ -1,3 +1,2 @@
-cd ~/test/dwm-dbg
-file dwm
-run
+file $HOME/test/dwm-dbg/dwm
+cont

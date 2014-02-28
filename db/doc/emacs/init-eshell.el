@@ -16,8 +16,9 @@
   ;(insert "hs ''")
   ;(insert "erl.sh 'user_default:'")
   ;(insert "clisp.sh '()'")
-  ;(insert "sb.sh '()'")
-  (insert "ccl.sh '(m:)'")
+  ;(insert "ccl.sh '(m:)'")
+  ;(insert "sb.sh '(m:)'")
+  (insert "guile.sh '()'")
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 

@@ -21,6 +21,9 @@ static const Rule rules[] = {
 	/* class      instance    title     tags mask     isfloating   monitor */
 	/* { "Opera",    NULL,       NULL,     0,            True,        -1 }, */
     /* { "Emacs",    NULL,       NULL,     0,            True,        -1 }, */
+    /* {"Gimp", NULL, NULL, 0, True, -1}, */
+	/* {"VirtualBox", NULL, NULL, 0, True, -1}, */
+	/* {"QEMU", NULL, NULL, 0, True, -1}, */
 	{ "Wine",     NULL,       NULL,     1 << 1,       True,        -1 },
 };
 
@@ -118,9 +121,8 @@ static Button buttons[] = {
 	{ ClkClientWin,    MODKEY,         Button1,        movemouse,      {0} },
 //	{ ClkClientWin,    MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,    MODKEY,         Button3,        resizemouse,    {0} },
-    //{ ClkClientWin,    0,              Button1,        view,           {0} },
-	{ ClkTagBar,       0,              Button1,        view,           {0} },
-//{ ClkTagBar,         0,              Button3,        toggleview,     {0} },
+//	{ ClkTagBar,       0,              Button1,        view,           {0} },
+//  { ClkTagBar,       0,              Button3,        toggleview,     {0} },
 //	{ ClkTagBar,       MODKEY,         Button1,        tag,            {0} },
 //	{ ClkTagBar,       MODKEY,         Button3,        toggletag,      {0} },
 };
@@ -149,9 +151,46 @@ runorraise(const Arg *arg) {
 	spawn(arg);
 }
 
-/* void self_restart(const Arg *arg) { */
-/* 	const char *p = "/usr/local/bin/dwm"; */
-/* 	execv(p, (char * const []) {p, NULL}); */
+/* void */
+/* restart(const Arg * arg) */
+/* { */
+/* 	if (arg->v) { */
+/* 		execvp(((char **) arg->v)[0], (char **) arg->v); */
+/* 	} else { */
+/* 		execlp("dwm", "dwm", NULL); */
+/* 	} */
+/* } */
+
+/* void */
+/* togglelayout(const Arg * arg) */
+/* { */
+/* 	Arg a; */
+
+/* 	if (selmon->lt[selmon->sellt] == &layouts[0]) { */
+/* 		a.v = arg->v; */
+/* 	} else { */
+/* 		a.v = &layouts[0]; */
+/* 	} */
+/* 	setlayout(&a); */
+/* } */
+
+/*
+ * This is all I have to do to lock the screen.  See http://woozle.org/~neale/src/xss/ 
+ */
+/* void */
+/* screensave(const Arg * arg) */
+/* { */
+/* 	XActivateScreenSaver(dpy); */
+/* } */
+
+/* void */
+/* multimedia(const Arg * arg) */
+/* { */
+/* 	Arg a; */
+
+/* 	a.v = (const char *[]) { */
+/* 	"mm", (char *) arg->v, NULL}; */
+/* 	spawn(&a); */
 /* } */
 
 /* *******

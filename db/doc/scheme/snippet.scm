@@ -607,7 +607,7 @@ guile> (is-a? v1 <2d-vector>)
 
 ;;  guile 能使用 syntax-case 系统吗？
 ;;  能。它在 guile 的 ice-9 模块里。
-;; (use-syntax (ice-9 syncase))
+(use-syntax (ice-9 syncase))
 ;;  之后就能使用 syntax-case 了。
 
 ;;  在 Guile 怎样调试 Scheme 程序？
@@ -618,38 +618,38 @@ guile> (is-a? v1 <2d-vector>)
 ;;  如果想要更方便的设置断点，可以使用 guile-debugger。可以在这里下载:
 ;; http://www.ossau.uklinux.net/guile/index.html
 ;;  在程序里使用
-;; (use-modules (ossau breakpoints))
+(use-modules (ossau breakpoints))
 ;;  就能设置断点了。
 
 ;;  guile 提供怎样的帮助系统？
-;;  (help)
+(help)
 ;;  通用的帮助系统。
-;;  (apropos "thread")
+(apropos "thread")
 ;;  显示当前系统里含有 "thread" 字样的函数 或者变量，和它们的位置。
-;;  (source apropos)
+(source apropos)
 ;;  显示 apropos 函数的源代码。
 
 ;;  怎样使用 Guile 的面向对象系统 GOOPS?
 ;;  在 Guile 里使用 goops 模块就行了。
-;; (use-modules (oop goops))
+(use-modules (oop goops))
 
 ;;  比如，我们来重载一个加法操作符 "+":
-;; (define-method (+ (x <string>) (y <string>))
-;;   (string-append x y))
-;; (+ 1 2)
-;; (+ "abc" "de")
+(define-method (+ (x <string>) (y <string>))
+  (string-append x y))
+(+ 1 2)
+(+ "abc" "de")
 
 ;;  怎样统计函数运行的时间？
-;; (ice-9 time)
-;; (use-modules (ice-9 time))
-;; (time (sleep 3))
+(ice-9 time)
+(use-modules (ice-9 time))
+(time (sleep 3))
 
 ;;  怎样让 Guile 具有 expect 的功能？
-;; (use-modules (ice-9 expect))
+(use-modules (ice-9 expect))
 
 ;;  怎样方便的显示信息，就跟 C 的 printf 那样？
 ;;  使用 format 就行了。先加载 format 模块。
-;; (use-modules (ice-9 format))
+(use-modules (ice-9 format))
 
 ;;  然后使用 format
 ;; format destination format-string args ...
@@ -658,64 +658,82 @@ guile> (is-a? v1 <2d-vector>)
 ;;  格式化串里常用字符的含义：
 ;;  ~~
 ;;  一个 ~ 符号。
+
 ;;  ~%
 ;;  换行符。
+
 ;;  ~t
 ;;  一个 TAB.
+
 ;;  ~a
 ;;  像 display 那样输出 arg。
+
 ;;  ~s
 ;;  像 write 那样输出 arg。
+
 ;;  ~y
 ;;  漂亮的打印 arg.
+
 ;;  ~d
 ;;  decimal 整数。
+
 ;;  ~x
 ;;  hexadecimal 整数。
+
 ;;  ~o
 ;;  octal 整数。
+
 ;;  ~b
 ;;  binary 整数。
+
 ;;  ~r
 ;;  数字读音输出。比如 10 被输出为 "ten"。如果使用 ~:r 就会输 出序数词。如果使用 ~@r 就会输出大写罗马数字。~:@r 输出罗 马序数词。
+
 ;;  ~f
 ;;  浮点数。比如 1.23
+
 ;;  ~e
 ;;  以科学计数法输出浮点数。比如 1.34E+0.
+
 ;;  ~g
 ;;  选择 ~f 和 ~e 中较短的一个作为输出。
+
 ;;  ~$
-;;  只输出两位小数。适合用于输出钱的数目。看看它的名字就知 道。
+;;  只输出两位小数。适合用于输出钱的数目。看看它的名字就知道。
+
 ;;  ~c
 ;;  输出 char.
+
 ;;  ~? ~k
 ;;  把 arg 作为一个格式串。接下来的参数必须是一个 list 包含格式串里的 value.
+
 ;;  ~!
 ;;  flush.
+
 ;;  ~#\newline
 ;;  续行
+
 ;;  ~(
 ;;  大小写转换开始。如果是 ~( 就是全部小写。如果是 ~@(，转 换成 capitcalize，如果是 ~:@( 转换成全部大写。
 ;;  ~)
 ;;  大小写转换结束。
 
 ;;  如何让 guile 的命令行支持 readline?
-;; (use-modules (ice-9 readline))
-;; (activate-readline)
+(use-modules (ice-9 readline))
+(activate-readline)
 
 ;;  如何“重载”函数名？
-
 ;;  如果你不想用 OOP 但是想根据参数个数来重载函数名，可以用 case-lambda。它在 SRFI-16 里。你可以这样使用：
-;; (use-modules (srfi srfi-16))
+(use-modules (srfi srfi-16))
 
-;; (define foo (case-lambda
-;;               ((x) #t)
-;;               ((x y) (+ x y))
-;;               (z
-;;                 (apply * z))))
-;; (foo 'bar)
-;; (foo 2 4)
-;; (foo 3 3 3)
+(define foo (case-lambda
+              ((x) #t)
+              ((x y) (+ x y))
+              (z
+                (apply * z))))
+(foo 'bar)
+(foo 2 4)
+(foo 3 3 3)
 
 ;;  如何方便的操作 string?
 ;;  SRFI-13 有很多方便的操作 string 的函数。 比如：
@@ -757,71 +775,73 @@ guile> (is-a? v1 <2d-vector>)
 ;;  作用正好跟 string-filter 相反。
 
 ;;  比如：
-;; (define (p1 x)
-;;   (char-upper-case? x))
+(define (p1 x)
+  (char-upper-case? x))
 
-;; (string-filter "kiHck!shAit*hLaLaldsjfOha" p1)
+(string-filter "kiHck!shAit*hLaLaldsjfOha" p1)
 
 ;;  结果是 "HALLO".
-;; string-tokenize s [token_char start end]
+;string-tokenize s [token_char start end]
 
 ;;  把一个string切分成几个，用 token_char 作为分割。如果没有 token_char 就用空白作为分割。比如：
-;; (string-tokenize "ha kick flip")
+(string-tokenize "ha kick flip")
 
 ;;  结果是 ("ha" "kick" "flip").
+
 ;;  如何方便的操纵 list?
-
 ;;  SRFI-1 里有很多函数用来操作 list.
+
 ;;  怎样用 string 作为 port?
-
 ;;  SRFI-6 提供了 string port 的支持。
-
 ;;  open-input-string, open-output-string and get-output-string
-;;  怎样定义 record？
 
+;;  怎样定义 record？
 ;;  SRFI-9 提供 define-record-type. 这跟 Scheme 48 的 record一样。
 
 ;;  比如：
-;; guile> (use-modules (srfi srfi-9))
-;; guile> (define-record-type :foo (make-foo x) foo?
-;;                            (x get-x) (y get-y set-y!))
-;; guile> (define f (make-foo 1))
-;; guile> f
-;; #<:foo x: 1 y: #f>
-;; guile> (get-x f)
-;; 1
-;; guile> (set-y! f 2)
-;; 2
-;; guile> (get-y f)
-;; 2
-;; guile> f
-;; #<:foo x: 1 y: 2>
-;; guile> (foo? f)
-;; #t
-;; guile> (foo? 1)
-;; #f
+guile> (use-modules (srfi srfi-9))
+guile> (define-record-type :foo (make-foo x) foo?
+                           (x get-x) (y get-y set-y!))
+guile> (define f (make-foo 1))
+guile> f
+#<:foo x: 1 y: #f>
+guile> (get-x f)
+1
+guile> (set-y! f 2)
+2
+guile> (get-y f)
+2
+guile> f
+#<:foo x: 1 y: 2>
+guile> (foo? f)
+#t
+guile> (foo? 1)
+#f
+
 ;;  怎样进行同时的 list 赋值？
 
 ;;  SRFI-11 提供了 let-values.
-;; (use-modules (srfi srfi-11))
-;; (let-values (((x y) (values 1 2))
-;;              ((z f) (values 3 4)))
-;;    (+ x y z f))
+(use-modules (srfi srfi-11))
+(let-values (((x y) (values 1 2))
+             ((z f) (values 3 4)))
+   (+ x y z f))
+
 ;;  怎样把复杂的数据结构漂亮的显示出来？
 
 ;;  使用 (ice-9 pretty-print) 就行。比如：
-;; (use-modules (ice-9 pretty-print))
-;; (pretty-print '(define (foo) (lambda (x)
-;; (cond ((zero? x) #t) ((negative? x) -x) (else (if (= x 1) 2
-;; (* x x x)))))))
+(use-modules (ice-9 pretty-print))
+(pretty-print '(define (foo) (lambda (x)
+(cond ((zero? x) #t) ((negative? x) -x) (else (if (= x 1) 2
+(* x x x)))))))
 
 ;;  结果是：
-;;   (lambda (x)
-;;     (cond ((zero? x) #t)
-;;           ((negative? x) -x)
-;;           (else (if (= x 1) 2 (* x x x))))))
+  (lambda (x)
+    (cond ((zero? x) #t)
+          ((negative? x) -x)
+          (else (if (= x 1) 2 (* x x x))))))
+
 ;;  怎样使用 value histroy?
-;; (use-modules (ice-9 history))
+(use-modules (ice-9 history))
 ;; guile> 1
 ;; $1 = 1
 ;; guile> (+ $1 $1)
@@ -830,7 +850,7 @@ guile> (is-a? v1 <2d-vector>)
 ;; $3 = 4
 
 ;;  怎样在出错时自动显示 backtrace?
-;; (debug-enable 'backtrace)
+(debug-enable 'backtrace)
 
 ;;  怎样改变 guile 的 REPL?
 ;; Scheme Procedure: read-enable option-symbol
@@ -857,6 +877,7 @@ guile> (is-a? v1 <2d-vector>)
 ;;  Print
 ;; source          no      Print closures with source.
 ;; closure-hook    #f      Hook for printing closures.
+
 ;;  怎样改变 debugger 的行为？
 ;; stack           20000   Stack size limit (0 = no check).
 ;; debug           yes     Use the debugging evaluator.
@@ -874,35 +895,35 @@ guile> (is-a? v1 <2d-vector>)
 ;;  怎样从一个外部程序得到输入，就像 popen?
 
 ;;  使用 (ice-9 popen) module:
-;; (use-modules (ice-9 popen))
-;; (define p (open-input-pipe "ls -l"))
-;; (read-line p)
+(use-modules (ice-9 popen))
+(define p (open-input-pipe "ls -l"))
+(read-line p)
 
 ;;  guile 有没有方便的排序函数？
 ;;  试试这些：
-;; (define a '(2 3 45 5 6))
-;; (define b '(83 3 59 18 38))
+(define a '(2 3 45 5 6))
+(define b '(83 3 59 18 38))
 
-;; (sorted? a <)
+(sorted? a <)
 
-;; (define as (sort a <))
-;; (define bs (sort b <))
+(define as (sort a <))
+(define bs (sort b <))
 
-;; (merge as bs <)
+(merge as bs <)
 
-;; (sort! a <)
+(sort! a <)
 
-;; (stable-sort b <)
+(stable-sort b <)
 
-;; (define v1 '#(23 4 5 8 34 83 23 18 35))
+(define v1 '#(23 4 5 8 34 83 23 18 35))
 
-;; (sort v1 <)
+(sort v1 <)
 
-;; (restricted-vector-sort! v1 < 4 7)
+(restricted-vector-sort! v1 < 4 7)
 
 ;;  怎样深度 copy 一个对象？
 ;;  copy-tree.
 ;;  怎样把一个对象转换成 string?
 
 ;;  object->string
-;; (object->string fact1)
+(object->string fact1)

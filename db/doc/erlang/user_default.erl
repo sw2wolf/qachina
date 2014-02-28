@@ -231,7 +231,7 @@ pick_num(N, From, Acc) ->
     OneNum = lists:nth(random:uniform(length(From)), From),
     %timer:sleep(1000),
 	receive
-    after 1000 -> ok %% in milliseconds
+    after 500 -> ok %% in milliseconds
 	end,
     pick_num(N-1, From--[OneNum], [OneNum | Acc]).
 
