@@ -18,7 +18,7 @@
 (load "init-erc")
 (load "init-eshell")
 ;(load "init-w3m")
-;(load "init-mew")
+(load "init-mew")
 
 ;(load "init-ac")
 
@@ -80,7 +80,7 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(safe-local-variable-values (quote ((eval add-hook (quote write-file-hooks) (quote time-stamp)))))
+ '(safe-local-variable-values (quote ((Syntax . Common-Lisp) (eval add-hook (quote write-file-hooks) (quote time-stamp)))))
  '(scheme-program-name "guile -q -l /media/D/qachina/db/doc/scheme/money-guile.scm"))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.

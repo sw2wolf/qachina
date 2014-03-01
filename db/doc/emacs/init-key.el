@@ -65,16 +65,16 @@
 ;(file-error (call-interactively 'run-lisp))))))
 ;(unless (slime-connected-p) (save-excursion (slime)))
 
-;; (defun jump-run-mew ()
-;;   (interactive)
-;;   (if (get-buffer "+inbox")
-;; 	  (switch-to-buffer-other-window "+inbox")
-;; 	  (mew)))
-
-(defun jump-to-lambdabot ()
+(defun jump-run-mew ()
   (interactive)
-  (if (get-buffer "lambdabot")
-	  (switch-to-buffer-other-window "lambdabot")))
+  (if (get-buffer "+inbox")
+	  (switch-to-buffer-other-window "+inbox")
+	  (mew)))
+
+;; (defun jump-to-lambdabot ()
+;;   (interactive)
+;;   (if (get-buffer "lambdabot")
+;; 	  (switch-to-buffer-other-window "lambdabot")))
 
 (defun jump-run-shell ()
   (interactive)
@@ -91,11 +91,11 @@
 ;; 	  (switch-to-buffer "*CHEZ*")
 ;; 	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
 
-;; (defun jump-run-husk ()
-;;    (interactive)
-;;    (if (get-buffer "*HUSK*")
-;; 	  (switch-to-buffer "*HUSK*")
-;; 	 (async-shell-command "huski" "*HUSK*")))
+(defun jump-run-husk ()
+   (interactive)
+   (if (get-buffer "*HUSK*")
+	  (switch-to-buffer "*HUSK*")
+	 (async-shell-command "huski -i /media/D/qachina/db/doc/scheme/money-husk.scm" "*HUSK*")))
 
 ;; (remove-if-not (lambda (buff)
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
@@ -126,9 +126,9 @@
 ;; 								(backward-char 1)))
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
-;(global-set-key (kbd "<f5>") 'jump-run-mew)
+(global-set-key (kbd "<f5>") 'jump-run-mew)
 
-(global-set-key (kbd "<f5>") 'jump-to-lambdabot)
+;(global-set-key (kbd "<f5>") 'jump-to-lambdabot)
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-haskell)))
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-caml "ocaml")))
 
@@ -139,8 +139,8 @@
 ;(global-set-key (kbd "<f8>") 'jump-run-clisp)
 ;(global-set-key (kbd "<f7>") 'imaxima)
 
+(global-set-key (kbd "<f7>") 'jump-run-husk)
 (global-set-key (kbd "<f8>") 'run-scheme)
-;(global-set-key (kbd "<f8>") 'jump-run-husk)
 ;(global-set-key (kbd "<f8>") 'jump-run-chez)
 
 (global-set-key [(f9)] 'list-bookmarks)

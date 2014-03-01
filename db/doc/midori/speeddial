@@ -1,0 +1,24 @@
+[settings]
+columns=3
+rows=3
+
+[Dial 1]
+uri=http://quote.eastmoney.com/favor/default.html
+title=自选股 _ 股票行情 _ 东方财富网
+
+[Dial 2]
+uri=http://blog.hexun.com
+title=和讯博客-免费博客，中国最优秀的个人门户
+
+[Dial 3]
+uri=http://www.google.com.hk
+title=Google
+
+[Dial 4]
+uri=http://www.baidu.com
+title=百度一下，你就知道
+
+[Dial 5]
+uri=http://mail.163.com
+title=My EMail
+

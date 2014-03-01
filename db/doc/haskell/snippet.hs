@@ -1,5 +1,8 @@
 
 ------
+--git log -p ..origin/master
+
+------
 import Data.Time
 
 time op = 
