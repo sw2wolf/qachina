@@ -8,9 +8,6 @@ setenv MD /media/D/qachina/db/doc
 #setenv GOARCH 386
 #setenv GOROOT $HOME/go
 #setenv EVILVTE_CONF /home/sw2wolf/evilvte-config.h
-setenv LDFLAGS -L/usr/local/lib
-setenv CFLAGS  -I/usr/local/include
-setenv CPPFLAGS  -I/usr/local/include
 
 # for gnu prolog
 # setenv LOCALSZ 16384 #32768  #control stack (environments and choice-points)
@@ -22,5 +19,5 @@ setenv CPPFLAGS  -I/usr/local/include
 # A righteous umask
 umask 22
 
-set path = (. /sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin  $HOME/bin $HOME/clisp/bin $HOME/ocaml/bin $HOME/ghc/bin $HOME/.cabal/bin)
+set path = (. /sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin  $HOME/bin $HOME/clisp/bin $HOME/.cabal/bin)
 #setenv PYTHONSTARTUP /media/D/www/qachina/db/doc/python/python_ini.py

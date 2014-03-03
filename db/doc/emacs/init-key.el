@@ -56,11 +56,11 @@
 	  (condition-case e (slime-connect "127.0.0.1" 4005)
 		(file-error (slime))))))
 
-;; (defun jump-run-clisp ()
-;;    (interactive)
-;;    (if (get-buffer "*CLISP*")
-;; 	  (switch-to-buffer-other-window "*CLISP*")
-;; 	 (async-shell-command "~/bin/cl" "*CLISP*")))
+(defun jump-run-clisp ()
+   (interactive)
+   (if (get-buffer "*CLISP*")
+	  (switch-to-buffer-other-window "*CLISP*")
+	 (async-shell-command "~/bin/cl" "*CLISP*")))
 
 ;(file-error (call-interactively 'run-lisp))))))
 ;(unless (slime-connected-p) (save-excursion (slime)))
@@ -85,17 +85,17 @@
   ;(set-process-query-on-exit-flag proc nil))
 )
 
-;; (defun jump-run-chez ()
-;;    (interactive)
-;;    (if (get-buffer "*CHEZ*")
-;; 	  (switch-to-buffer "*CHEZ*")
-;; 	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
-
-(defun jump-run-husk ()
+(defun jump-run-chez ()
    (interactive)
-   (if (get-buffer "*HUSK*")
-	  (switch-to-buffer "*HUSK*")
-	 (async-shell-command "huski -i /media/D/qachina/db/doc/scheme/money-husk.scm" "*HUSK*")))
+   (if (get-buffer "*CHEZ*")
+	  (switch-to-buffer "*CHEZ*")
+	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
+
+;; (defun jump-run-husk ()
+;;    (interactive)
+;;    (if (get-buffer "*HUSK*")
+;; 	  (switch-to-buffer "*HUSK*")
+;; 	 (async-shell-command "huski -i /media/D/qachina/db/doc/scheme/money-husk.scm" "*HUSK*")))
 
 ;; (remove-if-not (lambda (buff)
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
@@ -136,12 +136,13 @@
 ;(global-set-key (kbd "<f6>") 'jump-run-prolog)
 
 (global-set-key (kbd "<f6>") 'jump-run-lisp)
-;(global-set-key (kbd "<f8>") 'jump-run-clisp)
 ;(global-set-key (kbd "<f7>") 'imaxima)
 
-(global-set-key (kbd "<f7>") 'jump-run-husk)
-(global-set-key (kbd "<f8>") 'run-scheme)
-;(global-set-key (kbd "<f8>") 'jump-run-chez)
+;(global-set-key (kbd "<f7>") 'jump-run-chez)
+;(global-set-key (kbd "<f7>") 'jump-run-husk)
+(global-set-key (kbd "<f7>") 'run-scheme)
+
+(global-set-key (kbd "<f8>") 'jump-run-clisp)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

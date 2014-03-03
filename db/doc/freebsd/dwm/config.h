@@ -19,7 +19,6 @@ static const char *tags[] = { "1", "2", "3" };
 
 static const Rule rules[] = {
 	/* class      instance    title     tags mask     isfloating   monitor */
-	/* { "Opera",    NULL,       NULL,     0,            True,        -1 }, */
     /* { "Emacs",    NULL,       NULL,     0,            True,        -1 }, */
     /* {"Gimp", NULL, NULL, 0, True, -1}, */
 	/* {"VirtualBox", NULL, NULL, 0, True, -1}, */
@@ -56,7 +55,9 @@ static const char *dmenu[] = { "/home/sw2wolf/bin/dmenu.sh", NULL };
 static const char *sdcv[] =  { "/home/sw2wolf/bin/sdcv.sh", NULL };
 static const char *eval[] = { "/home/sw2wolf/bin/clisp.sh", NULL };
 
-static const char *opera[] = { "opera", NULL, NULL, NULL, "Opera"};
+static const char *www[] = { "opera", NULL, NULL, NULL, "Opera"};
+/* { "midori", NULL, NULL, NULL, "Midori"}; */
+
 static const char *emacs[] = { "emacs", NULL, NULL, NULL, "Emacs"};
 static const char *winxp[] = { "VBoxManage", "startvm", "winxp", NULL, "VirtualBox"};
 
@@ -64,9 +65,7 @@ static const char *winxp[] = { "VBoxManage", "startvm", "winxp", NULL, "VirtualB
 
 static Key keys[] = {
 	/* modifier     key        function        argument */
-	/* { MODKEY,    XK_w,      spawn,          {.v = opera } }, */
-	/* { MODKEY,    XK_e,      spawn,          {.v = emacs } }, */
-    { MODKEY,       XK_w,      runorraise,     {.v = opera } },
+    { MODKEY,       XK_w,      runorraise,     {.v = www } },
 	{ MODKEY,       XK_e,      runorraise,     {.v = emacs } },
 
     { MODKEY,       XK_m,      runorraise,     {.v = winxp } },
