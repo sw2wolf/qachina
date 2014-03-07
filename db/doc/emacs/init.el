@@ -31,8 +31,10 @@
 
 (load "init-haskell")
 (load "init-ocaml")
+
 ;(load "init-ruby")
 ;(load "init-forth")
+(load "init-lua")
 
 ;(load "init-git")
 ;(load "init-sqlite")
