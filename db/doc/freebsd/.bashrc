@@ -10,4 +10,4 @@ export ERL_HOME=/home/sw2wolf/erlang
 # A righteous umask
 umask 22
 
-PATH=".:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/home/sw2wolf/bin:/home/sw2wolf/clisp/bin:/home/sw2wolf/erlang/bin:/home/sw2wolf/maxima/bin:/home/sw2wolf/sbcl/bin:/home/sw2wolf/tcc/bin"; export PATH;
+PATH=".:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/home/sw2wolf/bin:/home/sw2wolf/clisp/bin:/home/sw2wolf/erlang/bin:/home/sw2wolf/maxima/bin:/home/sw2wolf/sbcl/bin:/home/sw2wolf/tcc/bin:/home/sw2wolf/luakit/bin"; export PATH;
