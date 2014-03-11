@@ -46,12 +46,17 @@ require "window"
 -- ("$XDG_CONFIG_HOME/luakit/webview.lua" or "/etc/xdg/luakit/webview.lua")
 require "webview"
 
+-- stop some links opening in new windows
 webview.init_funcs.window_decision = function (view, w)
     view:add_signal("new-window-decision", function (v, uri, reason)
         w:new_tab(uri)
         return true
     end)
 end
+
+-- webview.init_funcs.set_win_trans = function (view, w)
+--     view.transparent = true
+-- end
 
 -- webview.init_funcs.set_dark_about_blank = function (view, w)
 --     view:add_signal("navigation-request", function (_, uri)
@@ -142,6 +147,16 @@ require "downloads"
 require "downloads_chrome"
 
 downloads.default_dir = os.getenv("HOME") .. "/download"
+
+downloads.add_signal("download-location", function (uri, file)
+    if not file or file == "" then
+        file = (string.match(uri, "/([^/]+)$")
+            or string.match(uri, "^%w+://(.+)")
+            or string.gsub(uri, "/", "_")
+            or "untitled")
+    end
+    return downloads.default_dir .. "/" .. file
+end)
 
 -- Example using xdg-open for opening downloads / showing download folders
 --downloads.add_signal("open-file", function (file, mime)

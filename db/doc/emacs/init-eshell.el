@@ -22,12 +22,6 @@
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 
-;; (defun eshell/eval2 ()
-;;   (interactive)
-;;   (insert "erl.sh 'io:format(\"~p~n\", [])'")
-;;   (backward-char 3)
-;; )
-
 ;; (setq eshell-prompt-function
 ;;       (lambda ()
 ;; 	(concat "" (user-login-name) "@" (system-name) " "
@@ -56,7 +50,6 @@
 
   (define-key eshell-mode-map [(control l)] 'eshell/clear)
   (define-key eshell-mode-map [(control e)] 'eshell/eval1)
-  ;(define-key eshell-mode-map [(control t)] 'eshell/eval2)
 ))
 
 (defalias 'img (lambda(img)
