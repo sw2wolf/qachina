@@ -143,6 +143,7 @@
 	 (map (lambda (c)
 			(set! res (list-ref from (random (length from))))
 			(set! from (delete res from))
+			(usleep 500000)
 			res) (iota count)) <)))
 
 (define (str2lst str)

@@ -1,5 +1,11 @@
 
 ;;;;;;
+(call/cc (lambda (k) 
+            (with-exception-handler (lambda (e) 
+                                      (k "got it")) 
+              (lambda () (raise "boom!"))))) 
+
+;;;;;;
 (iota 6) ; 0 1 2 3 4 5
 (use-modules (srfi srfi-1))
 (iota 6 1 0.1) ; 1.0 1.1 1.2 1.3 1.4 1.5

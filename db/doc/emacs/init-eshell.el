@@ -10,7 +10,6 @@
 
 (defun eshell/eval1 ()
   (interactive)
-  ;(insert "guile.sh '()'")
   ;(insert "pl.sh ''")
   ;(insert "hs ''")
   ;(insert "ml ''")
@@ -18,7 +17,8 @@
   ;(insert "guile.sh '()'")
   ;(insert "clisp.sh '()'")
   ;(insert "ccl.sh '(m:)'")
-  (insert "sb.sh '(m:)'")
+  ;(insert "sb.sh '(m:)'")
+  (insert "guile.sh '()'")
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 

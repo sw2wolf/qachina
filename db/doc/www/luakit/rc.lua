@@ -75,27 +75,41 @@ require "modes"
 -- ("$XDG_CONFIG_HOME/luakit/binds.lua" or "/etc/xdg/luakit/binds.lua")
 require "binds"
 
-local key, buf, but = lousy.bind.key, lousy.bind.buf, lousy.bind.but
+--local key, buf, but = lousy.bind.key, lousy.bind.buf, lousy.bind.but
 --local cmd, any = lousy.bind.cmd, lousy.bind.any
 
 qq_js = [=[
 (function () {
-    if (!document.body)
-        return;
-    (function(d,j) {
-		j = d.createElement(&#39;script&#39;);
+    (function(q) {q ? q.toggle() : (function (d,j) {
+        j = d.createElement("script");
 		j.async = true;
-		j.src = &#39;//ime.qq.com/fcgi-bin/getjs&#39;;
-		j.setAttribute(&#39;ime-cfg&#39;,&#39;lt=2&#39;);
-		d = d.getElementsByTagName(&#39;head&#39;)[0];
-		d.insertBefore(j,d.firstChild)
-	}) (document)
-})()
+		j.src = "//ime.qq.com/fcgi-bin/getjs";
+		j.setAttribute("ime-cfg","lt=2");
+		d = d.getElementsByTagName("head")[0];
+		d.insertBefore(j,d.firstChild);
+    }) (document) }) (window.QQWebIME)
+}) ()
 ]=]
 
+test_js = [=[
+(function () {
+    alert("used to test JavaScript");
+}) ()
+]=]
+
+local key = lousy.bind.key
 add_binds("insert", {
     key({"Control"}, "i", "Enter QQ input",
-        function (w) w.view:eval_js(luakit.uri_decode(qq_js)) end),
+        function (w) w.view:eval_js(qq_js) end),
+})
+
+local cmd = lousy.bind.cmd
+add_cmds({
+    cmd("qqime", function (w)
+        w.view:eval_js(test_js)
+		--w.view:eval_js("alert(\"QQ-IME\");")
+        --w:navigate("luakit://history/")
+    end),
 })
 
 ----------------------------------
