@@ -603,8 +603,9 @@ window.methods = {
         view = view or w.view
         -- Treat a blank last tab as an empty notebook (if blank_last=true)
         if blank_last ~= false and w.tabs:count() == 1 then
-            if not view:loading() and view.uri == "about:blank" then return end
-			w:new_tab("luakit://bookmarks/", false)
+		   if not view:loading() and view.uri == "about:blank" then return end
+		   w:new_tab("file:///home/sw2wolf/home.html", false)
+			-- w:new_tab("luakit://bookmarks/", false)
 			-- w:new_tab("about:blank", false)
             w.has_blank = true
         end
