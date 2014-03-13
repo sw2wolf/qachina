@@ -1,14 +1,15 @@
 -- Global variables for luakit
 globals = {
-    homepage = "luakit://bookmarks/",
+    -- homepage = "luakit://bookmarks/",
     -- homepage            = "http://luakit.org/",
- -- homepage            = "http://github.com/mason-larobina/luakit",
+    -- homepage            = "http://github.com/mason-larobina/luakit",
+    homepage = "file:///home/sw2wolf/home.html",
     scroll_step         = 40,
     zoom_step           = 0.1,
     max_cmd_history     = 100,
     max_srch_history    = 100,
  -- http_proxy          = "http://example.com:3128",
-    default_window_size = "1440x538", --"800x600",
+    default_window_size = "1440x538",
 
  -- Disables loading of hostnames from /etc/hosts (for large host files)
  -- load_etc_hosts      = false,
