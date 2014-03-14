@@ -1,7 +1,7 @@
 (defpackage #:money
     (:nicknames #:m)
     (:use :cl)
-    (:export :win_ssq :hit_ssq :his :sh
+    (:export :win-ssq :hit-ssq :his :sh
              :winG :stopLoss :div618))
 
 (in-package :money)
@@ -198,7 +198,7 @@ the process with the next item (~})."
         (setq sort-res (sort res #'> :key #'cdr))
         (sort (subseq (mapcar #'car sort-res) 0 21) #'<)))
 
-(defun win_ssq (nums no-red no-blue)
+(defun win-ssq (nums no-red no-blue)
     (let* ((res) (resRed) (no-red-lst (str2lst no-red))
            ;(yesGRed (good-red)) ;(set-difference (good-red) no-red-lst))
 		   (yesRed (set-difference (range 33) no-red-lst))
@@ -243,10 +243,10 @@ the process with the next item (~})."
     (with-open-file (f +ssq-hit-num+ :direction :output :if-does-not-exist :create :if-exists :append)
         (write-line (concatenate 'string term " " hitNum) f)))
 
-(defun hit_ssq (term hitNum)
+(defun hit-ssq (term hitNum)
     (let ((hit-num (str2lst hitNum)) (hit-red 0) (hit-blue 0) (num))
         (when (not (hitnum-saved? term)) (save-hitnum term hitNum))
-        (format t "Good Red Hit:~D~%" (length (intersection (butlast hit-num) (butlast (good-red) ))))
+        (format t "Good Red Hit:~D~%" (length (intersection (butlast hit-num) (butlast (.good-red) ))))
         (with-open-file (f +ssq-num+ :direction :input)
             (loop :for line = (read-line f nil)
                  :until (null line)
