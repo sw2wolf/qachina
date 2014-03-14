@@ -119,7 +119,15 @@
 
 ; > @wn @src @where @undo @unmtl @pl @package
 ;@djinn turn a type into its corresponding expression
-(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
+;(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
+(global-set-key (kbd "<f3>") '(lambda ()
+								(interactive)
+								(insert "/msg candide compliment ")))
+;cc printf("%d\n",3);
+;expand #define WHILE while ( \n #define DO ) { \n #define WEND } \n  int i = 5; WHILE --i DO puts("hi"); WEND
+;man fork
+;google [number of results] query
+
 ;; (global-set-key (kbd "<f3>") '(lambda () 
 ;; 								(interactive)
 ;; 								(insert "/msg rudybot ()")

@@ -1,0 +1,25 @@
+[dwb]
+setenv CFLAGS -I/usr/local/include
+gmake PREFIX=~/dwb install GTK=3
+
+[luakit]
+gmake USE_LUAJIT=1 PREFIX=~/luakit
+
+[netsurf]
+.libcss
+setenv CFLAGS "-I../libparserutils/include -I../libwapcaplet/include"
+
+.libparserutils
+setenv CFLAGS "-I/usr/local/include"
+
+.libdom
+setenv CFLAGS "-I../libparserutils/include -I../libwapcaplet/include -I../libhubbub/include -I/usr/local/include"
+
+gmake install PREFIX=~/netsurf
+
+
+setenv PKG_CONFIG_PATH ~/netsurf/lib/pkgconfig
+cd libdom/include/dom
+ln -s ../../bindings/ .
+
+gmake install CFLAGS="-I. -I /usr/local/include -I./libwapcaplet/include -I./libcss/include  -I./libdom/include -I./libhubbub/include -I./utils -std=gnu99" PREFIX=~/netsurf
