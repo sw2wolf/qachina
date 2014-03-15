@@ -22,4 +22,4 @@ setenv PKG_CONFIG_PATH ~/netsurf/lib/pkgconfig
 cd libdom/include/dom
 ln -s ../../bindings/ .
 
-gmake install CFLAGS="-I. -I /usr/local/include -I./libwapcaplet/include -I./libcss/include  -I./libdom/include -I./libhubbub/include -I./utils -std=gnu99" PREFIX=~/netsurf
+gmake install CFLAGS="-I/usr/include -I/usr/local/include -I/usr/local/include/gdk-pixbuf-2.0 -I/usr/local/include/glib-2.0 -I/usr/local/include/cairo -I/usr/local/include/gtk-2.0 -I/usr/local/include/pango-1.0 -I/usr/local/include/atk-1.0 -I/home/sw2wolf/netsurf/include -I. -std=gnu99" PREFIX=~/netsurf > ~/error.txt
