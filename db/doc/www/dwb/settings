@@ -1,5 +1,5 @@
 [default]
-startpage=
+startpage=file:///home/sw2wolf/home.html
 save-session=false
 ssl-strict=false
 ssl-use-system-ca-file=true
@@ -53,7 +53,7 @@ status-allowed-color=#00ff00
 editable=false
 default-encoding=
 default-width=1440
-default-height=360
+default-height=538
 default-font-size=12
 default-monospace-font-size=10
 minimum-logical-font-size=5

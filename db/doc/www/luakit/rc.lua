@@ -91,26 +91,36 @@ qq_js = [=[
 }) ()
 ]=]
 
-test_js = [=[
-(function () {
-    alert("used to test JavaScript");
-}) ()
-]=]
-
 local key = lousy.bind.key
+
 add_binds("insert", {
     key({"Control"}, "i", "Enter QQ input",
         function (w) w.view:eval_js(qq_js) end),
 })
 
-local cmd = lousy.bind.cmd
-add_cmds({
-    cmd("qqime", function (w)
-        w.view:eval_js(test_js)
-		--w.view:eval_js("alert(\"QQ-IME\");")
-        --w:navigate("luakit://history/")
-    end),
+add_binds("normal", {
+	key({}, "x", "hide/show status bar", function (w)
+		   if true == w.sbar.hidden then
+			  w.sbar.ebox:show() w.sbar.hidden = false
+		   else
+			  w.sbar.ebox:hide() w.sbar.hidden = true
+		   end end),
 })
+
+-- test_js = [=[
+-- (function () {
+--     alert("used to test JavaScript");
+-- }) ()
+-- ]=]
+
+-- local cmd = lousy.bind.cmd
+-- add_cmds({
+--     cmd("qqime", function (w)
+--         w.view:eval_js(test_js)
+-- 		--w.view:eval_js("alert(\"QQ-IME\");")
+--         --w:navigate("luakit://history/")
+--     end),
+-- })
 
 ----------------------------------
 -- Optional user script loading --

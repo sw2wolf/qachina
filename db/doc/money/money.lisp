@@ -246,7 +246,7 @@ the process with the next item (~})."
 (defun hit-ssq (term hitNum)
     (let ((hit-num (str2lst hitNum)) (hit-red 0) (hit-blue 0) (num))
         (when (not (hitnum-saved? term)) (save-hitnum term hitNum))
-        (format t "Good Red Hit:~D~%" (length (intersection (butlast hit-num) (butlast (.good-red) ))))
+        (format t "Good Red Hit:~D~%" (length (intersection (butlast hit-num) (butlast (good-red)))))
         (with-open-file (f +ssq-num+ :direction :input)
             (loop :for line = (read-line f nil)
                  :until (null line)

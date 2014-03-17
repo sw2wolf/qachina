@@ -1,3 +1,29 @@
+
+]:exja (function(){var e=document.querySelector("[rel='next']");if(e){location=e.href;}else{var f=document.getElementsByTagName("a");var i=f.length;while((e=f[--i])){if(e.text.search(/(\b(next|more|newer)\b|^(>|>>|»|→)$|^(>|>>|»|→)|(>|>>|»|→)$)/i)>-1){location=e.href; break;}}}})();
+
+[:exja (function(){var e=document.querySelector("[rel='prev']");if(e){location=e.href;}else{var f=document.getElementsByTagName("a");var i=f.length;while((e=f[--i])){if(e.text.search(/(\b(prev|previous|older)\b|^(<|<<|«|←)$|^(<|<<|«|←)|(<|<<|«|←)$)/i)>-1){location=e.href;break;}}}})();
+
+tt:exja (function(){var e=document.createElement('script');e.setAttribute('language','javascript');e.setAttribute('src','//bitly.com/bookmarklet/load.js');document.body.appendChild(e);void(0);})();
+
+
+Control e:scroll_down;;
+Control y:scroll_up;;
+gt:focus_next;;
+gT:focus_prev;;
+X:set auto-load-images true;;
+x:set auto-load-images false;;
+p:set user-stylesheet-uri file:///home/paradigm/.config/dwb/customstylesheet.css;;
+P:set user-stylesheet-uri file://;;
+
+q         : quit
+Control j : back
+Control k : forward
+J         : focus_prev
+K         : focus_next
+b         : hints_background
+x         : close_tab
+X         : undo
+
 //!javascript
 
 function qqwebime() {
