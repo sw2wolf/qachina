@@ -31,7 +31,7 @@ handle SIGPIPE noprint pass
 
 # Convenience command.
 define rake
-        shell rake $arg0
+   shell rake $arg0
 end
 
 # Break on breakpoint() function.
@@ -102,17 +102,17 @@ $1 = 15
 $2 = 0x96c6008 "Hello 170287977"
 
 (gdb) print (unsigned int)atoi("-1")
-$3 = 4294967295
+$2 = 0xffffffff
 
 (gdb) print (unsigned int)atoi("4294967295")
-$4 = 2147483647
+$3 = 0x7fffffff
 
 -----------------------------------------------------------
 (gdb) print 1 + 2
 $1 = 3
 
 (gbd) print (int) 2147483648
-$2 = -2147483648
+$2 = 0x47483648
 
 (gdb) print &i
 $5 = (int *) 0x7fff5fbff584

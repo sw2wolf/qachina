@@ -144,12 +144,12 @@
 ;(global-set-key (kbd "<f6>") 'jump-run-prolog)
 
 (global-set-key (kbd "<f6>") 'jump-run-lisp)
-;(global-set-key (kbd "<f7>") 'imaxima)
-(global-set-key (kbd "<f8>") 'jump-run-clisp)
+;(global-set-key (kbd "<f6>") 'imaxima)
+;(global-set-key (kbd "<f6>") 'jump-run-clisp)
 
 ;(global-set-key (kbd "<f8>") 'jump-run-chez)
 ;(global-set-key (kbd "<f8>") 'jump-run-husk)
-;(global-set-key (kbd "<f8>") 'run-scheme)
+(global-set-key (kbd "<f8>") 'run-scheme)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)
