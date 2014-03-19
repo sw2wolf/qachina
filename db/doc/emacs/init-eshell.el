@@ -8,7 +8,7 @@
   (let ((inhibit-read-only t))
     (erase-buffer)))
 
-(defun eshell/eval1 ()
+(defun eshell/eval ()
   (interactive)
   ;(insert "pl.sh ''")
   ;(insert "hs ''")
@@ -48,12 +48,13 @@
   (define-key eshell-mode-map [(control u)] 'eshell-kill-input) ;删除已输入命令
 
   (define-key eshell-mode-map [(control l)] 'eshell/clear)
-  (define-key eshell-mode-map [(control e)] 'eshell/eval1)
+  (define-key eshell-mode-map [(control e)] 'eshell/eval)
 ))
 
-(defalias 'img (lambda(img)
-				 (propertize "Image" (quote display) 
-							 (create-image (expand-file-name img)))))
+(defalias 'img
+  (lambda(img)
+	(propertize "Image" (quote display)
+				(create-image (expand-file-name img)))))
 
 ;
 ; misc.
