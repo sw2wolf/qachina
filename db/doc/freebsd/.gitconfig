@@ -2,5 +2,4 @@
 	name = sw2wolf
 	email = czsq888@163.com
 [core] 
-    editor = emacs
     pager =
