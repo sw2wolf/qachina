@@ -10,10 +10,6 @@ rdesktop -u *** -p 123 -g 1440x880 -D -K localhost:3389
 emacs -geometry 178x36+0+363
 evince
 texmacs
----
-dwb
-luakit
-opera
 -----------------------------------------------------------
 #sudo /usr/local/etc/rc.d/musicpd onestart
 nvidia-settings

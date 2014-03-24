@@ -1,11 +1,10 @@
-(add-to-list 'load-path "~/RnD/w3m")
+(add-to-list 'load-path "~/w3m/share/emacs/site-lisp/w3m")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;              w3m mode
 ;;;
-(require 'w3m)
-;(require 'w3m-load)
-;(require 'mime-w3m)
+(require 'w3m-load)
+
 (autoload 'w3m "w3m" "interface for w3m on emacs" t) 
 
 (setq w3m-icon-directory "~/RnD/w3m/icons")
@@ -70,8 +69,7 @@
 
 (setq w3m-command-arguments '("-cookie" "-F"))          ;;使用cookies和框架
 
-(setq w3m-home-page "http://www.google.com.hk")
-
+(setq w3m-home-page "http://www.baidu.com")
 
 (eval-after-load "mm-decode" 
 '(progn 
@@ -82,7 +80,6 @@
 	  mm-inline-text-html-with-w3m-keymap nil
       mm-w3m-safe-url-regexp nil)
 
-(add-hook 'w3m-fontify-after-hook 'remove-w3m-output-garbages)
 (defun remove-w3m-output-garbages ()
 "去掉w3m输出的垃圾."
     (interactive)
@@ -92,6 +89,7 @@
             (replace-match " "))
         (set-buffer-multibyte t))
     (set-buffer-modified-p nil))
+(add-hook 'w3m-fontify-after-hook 'remove-w3m-output-garbages)
 
 (defun my-w3m-rename-buffer (url)
   "Renames the current buffer to be the current URL"

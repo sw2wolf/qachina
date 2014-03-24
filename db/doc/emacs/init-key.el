@@ -26,14 +26,15 @@
 (global-set-key (kbd "M-j") (lambda () (interactive) (join-line -1)))
 ;(global-set-key "\C-x\C-m" 'execute-extended-command)
 
-;; (defun edit-current-file-as-root ()
-;;   "Edit the file that is associated with the current buffer as root"
-;;   (interactive)
-;;   (if (buffer-file-name)
-;;       (progn
-;;         (setq file (concat "/sudo:root@localhost:" (buffer-file-name)))
-;;         (find-file file))
-;;     (message "Current buffer does not have an associated file.")))
+;C-x C-f /sudo::/filename
+(defun edit-current-file-as-root ()
+  "Edit the file that is associated with the current buffer as root"
+  (interactive)
+  (if (buffer-file-name)
+      (progn
+        (setq file (concat "/sudo:root@localhost:" (buffer-file-name)))
+        (find-file file))
+    (message "Current buffer does not have an associated file.")))
 
 ;; (defun jump-run-prolog ()
 ;;   (interactive)
@@ -41,11 +42,11 @@
 ;; 	  (switch-to-buffer-other-window "*prolog*")
 ;; 	  (run-prolog 'swi)))
 
-(defun jump-run-erlang ()
-  (interactive)
-  (if (get-buffer "*erlang*")
-	  (switch-to-buffer "*erlang*")
-	  (run-erlang)))
+;; (defun jump-run-erlang ()
+;;   (interactive)
+;;   (if (get-buffer "*erlang*")
+;; 	  (switch-to-buffer "*erlang*")
+;; 	  (run-erlang)))
 
 (defun jump-run-lisp ()
   (interactive)
@@ -85,11 +86,11 @@
   ;(set-process-query-on-exit-flag proc nil))
 )
 
-(defun jump-run-chez ()
-   (interactive)
-   (if (get-buffer "*CHEZ*")
-	  (switch-to-buffer "*CHEZ*")
-	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
+;; (defun jump-run-chez ()
+;;    (interactive)
+;;    (if (get-buffer "*CHEZ*")
+;; 	  (switch-to-buffer "*CHEZ*")
+;; 	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
 
 ;; (remove-if-not (lambda (buff)
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
@@ -136,6 +137,8 @@
 (global-set-key (kbd "<f6>") 'jump-run-lisp)
 ;(global-set-key (kbd "<f6>") 'imaxima)
 ;(global-set-key (kbd "<f6>") 'jump-run-clisp)
+
+(global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 
 ;(global-set-key (kbd "<f8>") 'jump-run-chez)
 (global-set-key (kbd "<f8>") 'run-scheme)

@@ -7,7 +7,11 @@ export MD=/media/D/qachina/db/doc
 export ERL_HOME=/home/sw2wolf/erlang
 #export PYTHONSTARTUP=/media/D/www/qachina/db/doc/python/python_ini.py
 
+#if DBUS_SESSION_BUS_ADDRESS is unset dbus will set it to autolaunch,
+#if it isn't set to autolaunch dbus will not be started automatically
+export DBUS_SESSION_BUS_ADDRESS="foo:"
+
 # A righteous umask
 umask 22
 
-PATH=".:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/home/sw2wolf/bin:/home/sw2wolf/clisp/bin:/home/sw2wolf/erlang/bin:/home/sw2wolf/maxima/bin:/home/sw2wolf/tcc/bin:/home/sw2wolf/dwb/bin"; export PATH;
+PATH=".:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/home/sw2wolf/bin:/home/sw2wolf/clisp/bin:/home/sw2wolf/maxima/bin:/home/sw2wolf/dwb/bin"; export PATH;

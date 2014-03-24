@@ -149,17 +149,9 @@
    ("\\.py$" . python-mode)
    ("\\.idl$" . idl-mode)))
 
-;;默认链接网络浏览器打开
-(setq browse-url-generic-program (executable-find "dwb"))
-(setq browse-url-browser-function 'browse-url-generic)
-(global-set-key "\C-c\C-g" 'browse-url-at-point)
-
 ;; (require 'grep)
 ;; (grep-apply-setting 'grep-command "grep -nH -R -e  ")
 
-;
-;
-;
 (defun good-colors ()
   (progn
 	 (set-background-color "Black")

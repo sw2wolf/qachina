@@ -9,44 +9,52 @@
 
 (require 'cl)
 
-;(load "init-package")
 (load "init-base")
 (load "init-key")
 
-(load "init-dict")
-
-(load "init-erc")
 (load "init-eshell")
-;(load "init-w3m")
+
+(load "init-dict")
+(load "init-erc")
+
+(load "init-w3m")
 (load "init-mew")
 
 ;(load "init-ac")
 
-(load "init-slime")
 (load "init-scheme")
-(load "init-clojure")
 
-(load "init-erlang")
-(load "init-prolog")
+;(load "init-slime")
+;(load "init-clojure")
 
-(load "init-haskell")
-(load "init-ocaml")
+;(load "init-erlang")
+;(load "init-prolog")
+
+;(load "init-haskell")
+;(load "init-ocaml")
 
 ;(load "init-ruby")
 ;(load "init-forth")
-(load "init-lua")
+;(load "init-lua")
 
 ;(load "init-git")
 ;(load "init-sqlite")
 
 ;(load "init-emms")
 ;(load "init-radio")
-(load "init-maxima")
+;(load "init-maxima")
+
+;(load "init-package")
 
 (setq shell-file-name "/usr/local/bin/bash")
 
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
+;;默认链接网络浏览器打开
+(setq browse-url-generic-program (executable-find "dwb"))
+(setq browse-url-browser-function 'browse-url-generic)
+(global-set-key "\C-c\C-g" 'browse-url-at-point)
 
 ;; ------------------------------------------------------------ [ ispell ]
 (eval-after-load "ispell"

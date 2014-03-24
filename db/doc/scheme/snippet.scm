@@ -1,9 +1,10 @@
 
 ;;;;;;
-(call/cc (lambda (k) 
-            (with-exception-handler (lambda (e) 
-                                      (k "got it")) 
-              (lambda () (raise "boom!"))))) 
+(call/cc
+  (lambda (k) 
+	(with-exception-handler
+	   (lambda (e) (k "got it"))
+       (lambda () (raise "boom!")))))
 
 ;;;;;;
 (iota 6) ; 0 1 2 3 4 5
