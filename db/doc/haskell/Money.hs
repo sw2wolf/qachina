@@ -3,7 +3,7 @@
 module Money (
     winG, winQ, div618, stopLoss
     ,win_ssq, hit_ssq, his
-    ,qachina, combLen
+    ,qachina, combLen, fibs, sieves
     )
 where
 import System.Random
@@ -43,16 +43,20 @@ catchAny = Exception.catch
 
 -- 菲波纳契数列
 --fibs = 0 : 1 : [ a + b | (a, b) <- zip fibs (tail fibs)]
--- fibs :: forall a. Num a => Int -> [a]
--- fibs n = take n $ fibgen 1 1
 
--- fibgen :: forall a. Num a => a -> a -> [a]
--- fibgen n1 n2 = n1 : fibgen n2 (n1+n2) 
+fibs :: forall a. Num a => Int -> [a]
+fibs n = take n $ fibgen 1 1
+
+fibgen :: forall a. Num a => a -> a -> [a]
+fibgen n1 n2 = n1 : fibgen n2 (n1+n2) 
 
 --求解素数的一个无限数列方法：
--- sieve :: forall a. Integral a => [a] -> [a]
--- sieve [] = sieve [2..]
--- sieve (x:xs) = x : sieve (filter (\y -> y `rem` x /= 0) xs)
+sieves :: forall a. Integral a => Int -> [a]
+sieves n = take n $ sieve []
+
+sieve :: forall a. Integral a => [a] -> [a]
+sieve [] = sieve [2..]
+sieve (x:xs) = x : sieve (filter (\y -> y `rem` x /= 0) xs)
 
 --排列组合 same as Data.List.subsequences
 -- combination :: [a] -> [[a]]
@@ -161,8 +165,6 @@ dayByNTDay sDayStr nDay = do {
 
 betterSeed :: IO Int
 betterSeed = alloca $ \p -> do
-    --h <- openBinaryFile "/dev/urandom" ReadMode
-    --hClose h
     withBinaryFile "/dev/urandom" ReadMode $ \h ->
         hGetBuf h p $ sizeOf (undefined :: Int)
     peek p
@@ -175,26 +177,29 @@ win_ssq count noRed noBlue = do
     let noRedLst =  map (\x -> read x::Int) $ words noRed
         noBlueLst = map (\x -> read x::Int) $ words noBlue
 
-    gRed <- goodRed
+    --xRed <- goodRed
 
     _ <- setStdGen <$> (mkStdGen <$> betterSeed)
     okBlue <- pickNums ([1..16] \\ noBlueLst) count []
     result <- pickSSQ count
-              (gRed \\ noRedLst)
+              [1..33] --(gRed \\ noRedLst)
               ([1..33] \\ noRedLst)
               okBlue []
-    forM_ result (\x -> print x)
+    --forM_ result (\x -> print x)
     writeFile ssqNum $ ints2str result
 
 pickSSQ :: Int -> [Int] -> [Int] -> [Int] -> [[Int]] -> IO [[Int]]
 pickSSQ 0 _ _ _ acc = return acc
-pickSSQ 1 gRed _ okBlue acc = do
-    red <- sort <$> pickNums gRed 6 []
-    return $ reverse $ (red ++ [okBlue!!0]) : acc
-pickSSQ count gRed yesRed okBlue acc = do
+pickSSQ 1 xRed _ okBlue acc = do
+    red <- sort <$> pickNums xRed 6 []
+    let one = red ++ [okBlue!!0]
+    print one
+    return $ reverse $ one : acc
+pickSSQ count xRed yesRed okBlue acc = do
     red <- sort <$> pickNums yesRed 6 []
-    pickSSQ (count-1) gRed yesRed okBlue $ 
-        (red ++ [okBlue!!(count-1)]) : acc
+    let one = red ++ [okBlue!!(count-1)]
+    print one
+    pickSSQ (count-1) xRed yesRed okBlue $ one:acc
 
 pick :: [a] -> IO a
 pick xs = randomRIO (0, length xs - 1) >>= return . (xs !!)
@@ -204,7 +209,7 @@ pickNums _ 0 acc = return acc
 pickNums from count acc = do
   x <- pick from
   --'threadDelay 1000000' should wait one second
-  threadDelay 100000
+  threadDelay 1000000
   pickNums (from \\ [x]) (count-1) (x:acc)
 
 ints2str :: [[Int]] -> String

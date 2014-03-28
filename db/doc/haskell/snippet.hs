@@ -1,5 +1,19 @@
 
 ------
+parMap :: (b -> a) -> [b] -> IO [a]
+parMap f xs = do
+  outs <- replicateM t newEmptyMVar
+  ins  <- replicateM t newEmptyMVar
+  sequence_ [forkIO (worker i o) | (i,o) <- zip ins outs]
+  forkIO $ sequence_ [putMVar i (f x) | (i,x) <- zip (cycle ins) xs]
+  sequence' [takeMVar o | (o,_) <- zip (cycle outs) xs]
+
+worker :: MVar a -> MVar a -> IO b
+worker imv omv = forever $ do 
+  ex <- takeMVar imv 
+  ex `seq` putMVar omv ex
+
+------
 --git log -p ..origin/master
 
 ------
@@ -24,8 +38,6 @@ time op =
 :set -XScopedTypeVariables
 :set -XOverloadedStrings
 
-------
---git log -p
 ------
 :set -fbreak-on-exception
 :trace functionName
@@ -213,7 +225,9 @@ retryOnTimeout action = catch action $ \ (_ :: HttpException) -> do
 
 ------
 .Data.Map.Map is a balanced binary tree internally, so its time complexity for lookups is O(log n). I believe it's a "persistent" data structure, meaning it's implemented such that mutative operations yield a new copy with only the relevant parts of the structure updated.
+
 .Data.HashMap.Map is a Data.IntMap.IntMap internally, which in turn is implemented as Patricia tree; its time complexity for lookups is O(min(n, W)) where W is the number of bits in an integer. It is also "persistent."
+
 .Data.HashTable.HashTable is an actual hash table, with time complexity O(1) for lookups. However, it is a mutable data structure -- operations are done in-place -- so you're stuck in the IO monad if you want to use it.
 
 ------
@@ -256,6 +270,8 @@ $cabal install aeson --constraint="hashable==1.2.0.7" -v
 
 --to build a cabal package packagename: 
 $ cabal install --ghc-options=-package const-math-ghc-plugin -fplugin ConstMath.Plugin packagename
+
+$ cabal install network --configure-option --host=i386-unknown-mingw32
 
 $cabal unpack parconc-examples
 $cabal install --only-dependencies

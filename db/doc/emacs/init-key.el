@@ -86,11 +86,11 @@
   ;(set-process-query-on-exit-flag proc nil))
 )
 
-;; (defun jump-run-chez ()
-;;    (interactive)
-;;    (if (get-buffer "*CHEZ*")
-;; 	  (switch-to-buffer "*CHEZ*")
-;; 	 (async-shell-command "petite /media/D/qachina/db/doc/scheme/money-petite.scm" "*CHEZ*")))
+(defun jump-run-husk ()
+   (interactive)
+   (if (get-buffer "*HUSK*")
+	  (switch-to-buffer "*HUSK*")
+	 (async-shell-command "huski -i /media/D/qachina/db/doc/scheme/money-husk.scm" "*HUSK*")))
 
 ;; (remove-if-not (lambda (buff)
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
@@ -114,15 +114,15 @@
 
 ; > @wn @src @where @undo @unmtl @pl @package
 ;@djinn turn a type into its corresponding expression
-;(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
+(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
 
 ;cc printf("%d\n",3);
 ;expand #define WHILE while ( \n #define DO ) { \n #define WEND } \n  int i = 5; WHILE --i DO puts("hi"); WEND
 ;man fork
 ;google [number of results] query
-(global-set-key (kbd "<f3>") '(lambda ()
-								(interactive)
-								(insert "/msg candide man ")))
+;; (global-set-key (kbd "<f3>") '(lambda ()
+;; 								(interactive)
+;; 								(insert "/msg candide man ")))
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
 (global-set-key (kbd "<f5>") 'jump-run-mew)
@@ -140,8 +140,8 @@
 
 (global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 
-;(global-set-key (kbd "<f8>") 'jump-run-chez)
-(global-set-key (kbd "<f8>") 'run-scheme)
+(global-set-key (kbd "<f8>") 'jump-run-husk)
+;(global-set-key (kbd "<f8>") 'run-scheme)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)
