@@ -1,10 +1,10 @@
-#export LDFLAGS=-L/usr/local/lib
-#export CFLAGS=-I/usr/local/include
+export LDFLAGS=-L/usr/local/lib
+export CFLAGS=-I/usr/local/include
 #export CPPFLAGS=-I/usr/local/include
 #export GNUMAKE=gmake
 
 export MD=/media/D/qachina/db/doc
-export ERL_HOME=/home/sw2wolf/erlang
+export ERL_HOME=$HOME/erlang
 #export PYTHONSTARTUP=/media/D/www/qachina/db/doc/python/python_ini.py
 
 #if DBUS_SESSION_BUS_ADDRESS is unset dbus will set it to autolaunch,
@@ -14,4 +14,5 @@ export DBUS_SESSION_BUS_ADDRESS="foo:"
 # A righteous umask
 umask 22
 
-PATH=".:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/home/sw2wolf/bin:/home/sw2wolf/clisp/bin:/home/sw2wolf/maxima/bin:/home/sw2wolf/dwb/bin"; export PATH;
+PATH=".:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:$HOME/bin:$HOME/.cabal/bin:$HOME/dwb/bin"
+export PATH
