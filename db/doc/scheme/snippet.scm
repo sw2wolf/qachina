@@ -1,5 +1,10 @@
 
 ;;;;;;
+(setlocale LC_ALL "") 
+(set-port-encoding! (current-input-port) "utf-8") 
+(set-port-encoding! (current-output-port) "utf-8") 
+
+;;;;;;
 (call/cc
   (lambda (k) 
 	(with-exception-handler

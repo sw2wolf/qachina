@@ -86,11 +86,11 @@
   ;(set-process-query-on-exit-flag proc nil))
 )
 
-(defun jump-run-husk ()
-   (interactive)
-   (if (get-buffer "*HUSK*")
-	  (switch-to-buffer "*HUSK*")
-	 (async-shell-command "huski -i /media/D/qachina/db/doc/scheme/money-husk.scm" "*HUSK*")))
+;; (defun jump-run-husk ()
+;;    (interactive)
+;;    (if (get-buffer "*HUSK*")
+;; 	  (switch-to-buffer "*HUSK*")
+;; 	 (async-shell-command "huski -i /media/D/qachina/db/doc/scheme/money-husk.scm" "*HUSK*")))
 
 ;; (remove-if-not (lambda (buff)
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
@@ -141,8 +141,8 @@
 
 (global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 
-(global-set-key (kbd "<f8>") 'jump-run-husk)
-;(global-set-key (kbd "<f8>") 'run-scheme)
+;(global-set-key (kbd "<f8>") 'jump-run-husk)
+(global-set-key (kbd "<f8>") 'run-scheme)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

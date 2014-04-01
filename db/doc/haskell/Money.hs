@@ -177,12 +177,12 @@ win_ssq count noRed noBlue = do
     let noRedLst =  map (\x -> read x::Int) $ words noRed
         noBlueLst = map (\x -> read x::Int) $ words noBlue
 
-    --xRed <- goodRed
+    gRed <- goodRed
 
     _ <- setStdGen <$> (mkStdGen <$> betterSeed)
     okBlue <- pickNums ([1..16] \\ noBlueLst) count []
     result <- pickSSQ count
-              [1..33] --(gRed \\ noRedLst)
+              gRed --(gRed \\ noRedLst)
               ([1..33] \\ noRedLst)
               okBlue []
     --forM_ result (\x -> print x)

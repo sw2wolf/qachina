@@ -138,7 +138,7 @@
 	 (map (lambda (e) (car e))
 		 (list-head (sort (hash-map->list cons tab)
 						  (lambda (left right)
-							(> (cdr left) (cdr right)))) 21)) <)))
+							(> (cdr left) (cdr right)))) 18)) <)))
 
 (define (pickNums count from)
   (let ((res 0))
