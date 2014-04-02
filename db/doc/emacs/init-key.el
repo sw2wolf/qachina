@@ -116,13 +116,11 @@
 ;@djinn turn a type into its corresponding expression
 (global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
 
-;cc printf("%d\n",3);
-;expand #define WHILE while ( \n #define DO ) { \n #define WEND } \n  int i = 5; WHILE --i DO puts("hi"); WEND
-;man fork
-;google [number of results] query
+;TeXbot: !l $\sqrt{x-1}-1$
+
 ;; (global-set-key (kbd "<f3>") '(lambda ()
 ;; 								(interactive)
-;; 								(insert "/msg candide man ")))
+;; 								(insert "/msg rudybot ()") (backward-char 1)))
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
 (global-set-key (kbd "<f5>") 'jump-run-mew)

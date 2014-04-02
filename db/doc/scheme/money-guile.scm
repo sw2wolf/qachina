@@ -75,6 +75,7 @@
 
 (define (win-ssq count noRed noBlue)
   (let ((yesRed (set-difference *RED-NUMS* (str2lst noRed)))
+		(xRed (good-red))
 		(okBlue (pickNums count (set-difference *BLUE-NUMS* (str2lst noBlue))))
 		(num '()) (red1 '()))
 	(seed->random-state (current-time))
@@ -82,7 +83,7 @@
 	  (lambda(h)
 		(map (lambda(n)
 			   (if (= n (- count 1))
-				   (set! red1 (pickNums 6 *RED-NUMS*))
+				   (set! red1 (pickNums 6 xRed))
 				   (set! red1 (pickNums 6 yesRed)))
 			   (set! num (lst2str (append red1 (list (list-ref okBlue n)))))
 			   (display num) (newline)
