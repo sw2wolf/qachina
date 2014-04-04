@@ -37,6 +37,13 @@
     #+sbcl (sb-ext:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*)
     #+clozure (ccl:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*))
 
+;; (defun msleep (msec)
+;;   (let ((units (* INTERNAL-TIME-UNITS-PER-SECOND (/ msec 1000))))
+;; 	(loop with beg = (get-internal-real-time)
+;; 		 until (>= (- (get-internal-real-time) beg) units))))
+
+(defun msleep (msecs) (sleep (/ msecs 1000)))
+
 ;; (defun my-getenv (name &optional default)
 ;; #+CMU
 ;;     (let ((x (assoc name ext:*environment-list* :test #'string=)))
@@ -175,7 +182,7 @@ the process with the next item (~})."
         (dotimes (i nums) 
             (setq n (nth (random (length from)) from))
             (setq from (remove n from))
-			(sleep 0.1)
+			(msleep 300)
             (push n res))
     res))
 

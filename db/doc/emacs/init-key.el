@@ -69,7 +69,7 @@
 (defun jump-run-mew ()
   (interactive)
   (if (get-buffer "+inbox")
-	  (switch-to-buffer-other-window "+inbox")
+	  (switch-to-buffer "+inbox")
 	  (mew)))
 
 ;; (defun jump-to-lambdabot ()
@@ -135,7 +135,7 @@
 ;(global-set-key (kbd "<f6>") 'jump-run-lisp)
 ;(global-set-key (kbd "<f6>") 'imaxima)
 ;(global-set-key (kbd "<f6>") 'jump-run-clisp)
-(global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "gs.sh > tmp.c")))
+(global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "gs.sh > tmp.")))
 
 (global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 

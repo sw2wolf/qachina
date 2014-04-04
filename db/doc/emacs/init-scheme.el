@@ -29,7 +29,7 @@
 ; geiser
 ;
 ;; (load "~/test/geiser/build/elisp/geiser-load")
-(add-to-list 'auto-mode-alist '("\\.rkt$" . geiser-mode))
+;; (add-to-list 'auto-mode-alist '("\\.rkt$" . geiser-mode))
 ;; (setq geiser-repl-startup-time 100)
 ;; (setq geiser-repl-query-on-kill-p nil)
 ;; (setq geiser-repl-history-filename "~/.emacs.d/geiser-history")

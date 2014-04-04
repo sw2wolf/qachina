@@ -1,5 +1,8 @@
 
 ------
+> let (+) :: Int -> Int -> Int; (+) = (-); infixr + in 5 + 3 + 2
+4
+------
 parMap :: (b -> a) -> [b] -> IO [a]
 parMap f xs = do
   outs <- replicateM t newEmptyMVar
@@ -183,6 +186,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
 @ty (?f >=> ?g)
 (Monad m, ?f::a -> m b, ?g::b -> m c) => a -> m c
+
+ghc -O2 -main-is StudentTest StudentTest.lhs -prof \
+    -package-db=.cabal-sandbox/x86_64-osx-ghc-7.6.2-packages.conf.d
+
+runghc Setup.lhs configure --enable-library-profiling \
+--package-db=/HasBayes/.cabal-sandbox/x86_64-osx-ghc-7.6.2-packages.conf.d \
+--libdir=/HasBayes/.cabal-sandbox/lib
 
 ------
 ghci> let double :: Int -> Int; double x = x + x

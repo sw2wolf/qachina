@@ -14,10 +14,10 @@
   ;(insert "ml ''")
   ;(insert "erl.sh 'user_default:'")
   ;(insert "ccl.sh '(m:)'")
-  ;(insert "sb.sh '(m:)'") 
   ;(insert "clisp.sh '(m:)'")
   ;(insert "hs ''")
-  (insert "guile.sh '()'")
+  ;(insert "guile.sh '()'")
+  (insert "sb.sh '(m:)'") 
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 
