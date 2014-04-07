@@ -48,14 +48,14 @@
 ;; 	  (switch-to-buffer "*erlang*")
 ;; 	  (run-erlang)))
 
-;; (defun jump-run-lisp ()
-;;   (interactive)
-;;   (let ((repl (find-if (lambda (buff)
-;; 			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))))
-;;   (if repl
-;; 	  (switch-to-buffer-other-window (buffer-name repl))
-;; 	  (condition-case e (slime-connect "127.0.0.1" 4005)
-;; 		(file-error (slime))))))
+(defun jump-run-lisp ()
+  (interactive)
+  (let ((repl (find-if (lambda (buff)
+			 (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))))
+  (if repl
+	  (switch-to-buffer-other-window (buffer-name repl))
+	  (condition-case e (slime-connect "127.0.0.1" 4005)
+		(file-error (slime))))))
 
 ;; (defun jump-run-clisp ()
 ;;    (interactive)
@@ -86,12 +86,6 @@
   ;(set-process-query-on-exit-flag proc nil))
 )
 
-;; (defun jump-run-husk ()
-;;    (interactive)
-;;    (if (get-buffer "*HUSK*")
-;; 	  (switch-to-buffer "*HUSK*")
-;; 	 (async-shell-command "huski -i /media/D/qachina/db/doc/scheme/money-husk.scm" "*HUSK*")))
-
 ;; (remove-if-not (lambda (buff)
 ;; 				 (string-match "\\.p[lm]$" (buffer-name buff))) (buffer-list))
 ;; (some (lambda (buff) (string-match "^*slime-repl" (buffer-name buff))) (buffer-list))
@@ -114,13 +108,13 @@
 
 ; > @wn @src @where @undo @unmtl @pl @package
 ;@djinn turn a type into its corresponding expression
-(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
+;(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
 
 ;TeXbot: !l $\sqrt{x-1}-1$
 
-;; (global-set-key (kbd "<f3>") '(lambda ()
-;; 								(interactive)
-;; 								(insert "/msg rudybot ()") (backward-char 1)))
+(global-set-key (kbd "<f3>") '(lambda ()
+								(interactive)
+								(insert "/msg rudybot ()") (backward-char 1)))
 
 (global-set-key (kbd "<f4>") 'jump-run-shell)
 (global-set-key (kbd "<f5>") 'jump-run-mew)
@@ -131,16 +125,14 @@
 
 ;(global-set-key (kbd "<f6>") 'jump-run-erlang)
 ;(global-set-key (kbd "<f6>") 'jump-run-prolog)
-
-;(global-set-key (kbd "<f6>") 'jump-run-lisp)
-;(global-set-key (kbd "<f6>") 'imaxima)
-;(global-set-key (kbd "<f6>") 'jump-run-clisp)
+;(global-set-key (kbd "<f6>") 'run-scheme)
 (global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "gs.sh > tmp.")))
 
 (global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 
-;(global-set-key (kbd "<f8>") 'jump-run-husk)
-(global-set-key (kbd "<f8>") 'run-scheme)
+;(global-set-key (kbd "<f8>") 'imaxima)
+;(global-set-key (kbd "<f8>") 'jump-run-clisp)
+(global-set-key (kbd "<f8>") 'jump-run-lisp)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

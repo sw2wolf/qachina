@@ -1,5 +1,15 @@
 
 ;;;;;;
+;; Lists are a very central type, so there is a wide variety of functionality for
+;; them, a few examples:
+(mapcar #'1+ '(1 2 3))             ; => '(2 3 4)
+(mapcar #'+ '(1 2 3) '(10 20 30))  ; => '(11 22 33)
+(remove-if-not #'evenp '(1 2 3 4)) ; => '(2 4)
+(every #'evenp '(1 2 3 4))         ; => nil
+(some #'oddp '(1 2 3 4))           ; => T
+(butlast '(subject verb object))   ; => (SUBJECT VERB)
+
+;;;;;;
 (concatenate 'vector #(1 2 3) #(4 5 6))    ==> #(1 2 3 4 5 6)
 (subseq #(1 2 3 4 5 6) 3)   ==> #(4 5 6)
 (subseq #(1 2 3 4 5 6) 3 5) ==> #(4 5)

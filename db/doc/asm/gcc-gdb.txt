@@ -1,5 +1,9 @@
 
------
+;;;;;
+git fetch origin
+git diff HEAD origin/master ChangeLog
+
+;;;;;
 ~/.gdbinit
 1.
 def  redirect 

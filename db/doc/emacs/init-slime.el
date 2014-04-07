@@ -52,3 +52,9 @@
 ;; (defun slime-repl-setup-initial-packages ()
 ;;   (slime-repl-set-package :money))
 ;; (add-hook 'slime-connected-hook 'slime-repl-setup-initial-packages t)
+
+;; To make SLIME connect to your lisp whenever you open a lisp file
+;; (add-hook 'slime-mode-hook
+;; 		  (lambda ()
+;; 			(unless (slime-connected-p)
+;; 			  (save-excursion (slime)))))

@@ -37,12 +37,12 @@
     #+sbcl (sb-ext:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*)
     #+clozure (ccl:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*))
 
-;; (defun msleep (msec)
-;;   (let ((units (* INTERNAL-TIME-UNITS-PER-SECOND (/ msec 1000))))
-;; 	(loop with beg = (get-internal-real-time)
-;; 		 until (>= (- (get-internal-real-time) beg) units))))
-
 (defun msleep (msecs) (sleep (/ msecs 1000)))
+
+(defun delay (msec)
+  (let ((units (* INTERNAL-TIME-UNITS-PER-SECOND (/ msec 1000))))
+	(loop with beg = (get-internal-real-time)
+		 until (>= (- (get-internal-real-time) beg) units))))
 
 ;; (defun my-getenv (name &optional default)
 ;; #+CMU
@@ -133,9 +133,9 @@ THING is a string or a symbol.")
 #|
    Stock Exchange
 |#
-(defconstant SXF 0.0015) ;手续费
-(defconstant YHS 0.001)  ;印花费
-(defconstant GHF 1.0)    ;过户费
+(defparameter SXF 0.0015) ;手续费
+(defparameter YHS 0.001)  ;印花费
+(defparameter GHF 1.0)    ;过户费
 
 (defun winG (qty pb ps)
 "算股票盈利"
@@ -182,7 +182,8 @@ the process with the next item (~})."
         (dotimes (i nums) 
             (setq n (nth (random (length from)) from))
             (setq from (remove n from))
-			(msleep 300)
+			;(msleep 300)
+			(delay 500)
             (push n res))
     res))
 
@@ -207,8 +208,8 @@ the process with the next item (~})."
 
 (defun win-ssq (nums no-red no-blue)
     (let* ((res) (resRed) (no-red-lst (str2lst no-red))
-		   (allRed (range 33))
-		   (yesRed (set-difference allRed no-red-lst))
+		   (xRed (set-difference (good-red) no-red-lst))
+		   (yesRed (set-difference (range 33) no-red-lst))
            (okBlue (pick-num (set-difference (range 16) (str2lst no-blue)) nums)))
         (assert (>= nums 1) (nums) "注数必须>=1")
         (setf *random-state* (make-random-state t))
@@ -216,7 +217,7 @@ the process with the next item (~})."
             (dotimes (i nums)
                 (setf resRed (sort
 				    (if (= i (1- nums))
-						(pick-num allRed 6)
+						(pick-num xRed 6)
 						(pick-num yesRed 6))
 				  #'>))
                 (setf res (lst2str (reverse (cons (nth i okBlue) resRed))))
