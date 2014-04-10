@@ -16,3 +16,5 @@
 ; disable dubugger same as '--disable-debugger' commmand line option
 ;(defun debug-ignore (c h) (declare (ignore h)) (print c) (abort))
 ;(setf *debugger-hook* #'debug-ignore)
+
+;(sb-ext:set-sbcl-source-location "/path/to/sbcl-source/")

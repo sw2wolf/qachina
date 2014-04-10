@@ -1,4 +1,37 @@
 
+-----
+{-# OPTIONS_GHC -Wall                      #-}
+{-# OPTIONS_GHC -fno-warn-name-shadowing   #-}
+{-# OPTIONS_GHC -fno-warn-type-defaults    #-}
+{-# OPTIONS_GHC -fno-warn-unused-do-bind   #-}
+{-# OPTIONS_GHC -fno-warn-missing-methods  #-}
+{-# OPTIONS_GHC -fno-warn-orphans          #-}
+{-# LANGUAGE NoMonomorphismRestriction     #-}
+
+-----
+{-# LANGUAGE BangPatterns #-}
+import System.Random.MWC (createSystemRandom, uniformR, GenIO)
+import Data.Int (Int64)
+import Data.Bits (setBit)
+import Control.Monad (replicateM, replicateM_)
+
+makeMask :: Int -> GenIO -> IO [Int64]
+makeMask p g = replicateM 50 $ singleMask p g
+
+singleMask :: Int -> GenIO -> IO Int64
+singleMask p g = go 0 [1..39]
+  where
+     go :: Int64# -> [Int] -> IO Int64
+     go !a []     = return a
+     go !a (x:xs) = do c <- uniformR (1,10000) g
+                       go (if c <= p then setBit a x else a) xs
+
+app :: GenIO -> IO ()
+app g = replicateM_ 10000 $ (makeMask 10 g >>= print)
+
+main :: IO ()
+main = createSystemRandom >>= app
+
 ------
 > let (+) :: Int -> Int -> Int; (+) = (-); infixr + in 5 + 3 + 2
 4
@@ -18,6 +51,7 @@ worker imv omv = forever $ do
 
 ------
 --git log -p ..origin/master
+--git show 'HEAD@{1}..HEAD'
 
 ------
 import Data.Time

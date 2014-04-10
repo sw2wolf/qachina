@@ -182,7 +182,7 @@ win_ssq count noRed noBlue = do
     _ <- setStdGen <$> (mkStdGen <$> betterSeed)
     okBlue <- pickNums ([1..16] \\ noBlueLst) count []
     result <- pickSSQ count
-              gRed --(gRed \\ noRedLst)
+              (gRed \\ noRedLst)
               ([1..33] \\ noRedLst)
               okBlue []
     --forM_ result (\x -> print x)
@@ -208,8 +208,7 @@ pickNums :: [Int] -> Int -> [Int] -> IO [Int]
 pickNums _ 0 acc = return acc
 pickNums from count acc = do
   x <- pick from
-  --'threadDelay 1000000' should wait one second
-  threadDelay 1000000
+  threadDelay 1000000 -- 1 second
   pickNums (from \\ [x]) (count-1) (x:acc)
 
 ints2str :: [[Int]] -> String

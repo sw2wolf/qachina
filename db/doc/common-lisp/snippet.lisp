@@ -1,5 +1,9 @@
 
-;;;;;;
+;;;;;
+;how can i test if a keyword parameter is passed to a function, even if	its value is nil?
+;&key (argname default argname-passed-p) and then check argname-passed-p
+
+;;;;;
 ;; Lists are a very central type, so there is a wide variety of functionality for
 ;; them, a few examples:
 (mapcar #'1+ '(1 2 3))             ; => '(2 3 4)
@@ -34,8 +38,10 @@ MY-FOO
 (nth-value 2 (function-lambda-expression #'my-foo))
 MY-FOO
 
-;;;;;;
+(dolist (*default-pathname-defaults* *load-path*)
+  (when (ignore-errors (load file)) (return)))
 
+;;;;;;
 ;QuickLisp
 ;升级所有安装了的lisp库
 (ql:update-all-dists)

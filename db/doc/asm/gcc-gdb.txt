@@ -1,7 +1,26 @@
 
 ;;;;;
+int kbhit()
+{
+    struct timeval tv;
+    fd_set fds;
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds); //STDIN_FILENO is 0
+    select(STDIN_FILENO+1, &fds, NULL, NULL, &tv);
+    return FD_ISSET(STDIN_FILENO, &fds);
+}
+
+;;;;;
 git fetch origin
 git diff HEAD origin/master ChangeLog
+
+;You can use -rN:M parameter with diff command which specifies the revisions you want to compare. Just provide revision from which your working copy was checked out (you can omit M as it defaults to working copy) and you should get what you need.
+
+;If you don't remember the original revision number try to run svn status -v and first column should show it.
+
+;More info svn help diff...
 
 ;;;;;
 ~/.gdbinit

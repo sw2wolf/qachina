@@ -30,7 +30,7 @@
 ;(load "init-erlang")
 ;(load "init-prolog")
 
-;(load "init-haskell")
+(load "init-haskell")
 (load "init-ocaml")
 
 ;(load "init-ruby")
