@@ -1001,6 +1001,8 @@ DOUBLE-FLOAT
             second)))
 
 (reduce #'max index-value-list :key #'car :initial-value -1)
+(reduce #'expt '(2 3 2) :from-end t) => 512
+(time (reduce #'+ (make-list 100000 :initial-element 1)))
 
 (loop with buf = (make-array +buffer-length+ :element-type 'octet)
       for pos = (read-sequence buf file)
@@ -1028,6 +1030,7 @@ DOUBLE-FLOAT
 
 (nth-value 0 (read-from-string "qqq"))
 
+;clhs ~d
 (format nil "~12d" 1000000)    ==> "     1000000"
 (format nil "~12,'0d" 1000000) ==> "000001000000"
 
@@ -1523,9 +1526,6 @@ clisp -K full -x "(load \"asdf.lisp\") (load \"stumpwm.asd\") (load \"/usr/share
 (defparameter *primes* (map-into 
     (make-array 100 :element-type 'fixnum :adjustable t :fill-pointer 0)
     #'identity '(2 3)))
-
-
-(time (reduce #'+ (make-list 100000 :initial-element 1)))
 
 (format s "~VR" 16 13) => D
 (format s "~2,'0x" 13) => 0D

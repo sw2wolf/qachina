@@ -3,3 +3,5 @@
 	email = czsq888@163.com
 [core] 
     pager =
+[push]
+	default = simple
