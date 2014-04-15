@@ -1,7 +1,21 @@
 
 ;;;;;
-;how can i test if a keyword parameter is passed to a function, even if	its value is nil?
-;&key (argname default argname-passed-p) and then check argname-passed-p
+(subtypep 'double-float 'number) => T
+(subtypep '(vector double-float 100) '(array number *)) => ?
+
+(class-of #2A((3 3 3 3 3) (3 3 3 3 3) (3 3 3 3 3))) => #<BUILT-IN-CLASS SIMPLE-ARRAY>
+(type-of #2A((3 3 3 3 3) (3 3 3 3 3) (3 3 3 3 3))) => (SIMPLE-ARRAY T (3 5))
+
+(class-of #(3 3 3 3 3)) => #<BUILT-IN-CLASS SIMPLE-VECTOR>
+(type-of #(3 3 3 3 3)) => (SIMPLE-VECTOR 5)
+
+;;;;;
+;Common Lisp中的成员方法也与其他语言的不同，除了一个主方法外，还可以定义三种不同类型的辅助方法，分别是:before、:after和:around，从字面上很容易理解前两种，:before在主方法之前执行，:after在主方法之后执行，那么:around在哪执行呢？答案是在所有方法之前，也可以看成在:before之前执行。关于这个:around辅助方法还有一个很重要的性质，就是一般使用它时都得在其函数体最后加一句(call-next-method)
+
+;另外一点就是各种方法执行的顺序问题了，总体说来是:around=>:before=>主方法=>:after，然后对含有多层继承关系的:around、:before和主方法来说，特化程度最相关的先执行，然后次相关，最后是最不相关的，通俗说来就是先执行当前对象所属类型的，然后依次向上执行基类的，如果同一层有多个基类，则按照类定义时基类列写的顺序来执行。对于:after来说采取与前三者相反的方法即可。
+
+;;;;;
+;how can i test if a keyword parameter is passed to a function, even if	its value is nil;&key (argname default argname-passed-p) and then check argname-passed-p
 
 ;;;;;
 ;; Lists are a very central type, so there is a wide variety of functionality for
@@ -70,7 +84,7 @@ $sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
       --eval '(ql:quickload "cl-ppcre")'
 
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
-sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"
+$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"
 
 ;;;;;;
 (in-package #:smarkup)
@@ -1067,6 +1081,28 @@ DOUBLE-FLOAT
   "A 2-element array consisting of the character codes for a CRLF sequence.")
 
 ;;;;;;
+(defstruct (dyn-tuple
+	    (:include tuple)
+	    (:constructor make-dyn-tuple (descriptor contents))
+	    (:predicate dyn-tuple?)
+	    (:print-function print-dyn-tuple)
+	    (:copier nil))
+  "A class of functional tuples represented as vectors with dynamically-
+reordered key vectors.  This is the default implementation of tuples in FSet."
+  ;; A `Tuple-Desc'.
+  descriptor
+  ;; A vector of value chunks (vectors) (all these vectors being simple).
+  contents)
+
+(defstruct (tuple-key
+	    (:constructor make-tuple-key (name default-fn number))
+	    (:predicate tuple-key?)
+	    (:print-function print-tuple-key))
+  name		; a symbol
+  default-fn	; default function for tuples with no explicit entry for this key
+		;   (called with one argument, the tuple), or nil
+  number)	; used for lookup and sorting
+
 (defstruct (distributed-identifier
             (:conc-name did/)
             (:constructor %make-distributed-identifier (domain repository class numeric-id))

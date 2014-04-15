@@ -22,16 +22,17 @@
 
 ;(load "init-ac")
 
-(load "init-scheme")
-
 (load "init-slime")
+(load "init-maxima")
+
+(load "init-scheme")
 ;(load "init-clojure")
 
 ;(load "init-erlang")
 ;(load "init-prolog")
 
 (load "init-haskell")
-(load "init-ocaml")
+;(load "init-ocaml")
 
 ;(load "init-ruby")
 ;(load "init-forth")
@@ -42,7 +43,6 @@
 
 ;(load "init-emms")
 ;(load "init-radio")
-(load "init-maxima")
 
 ;(load "init-package")
 

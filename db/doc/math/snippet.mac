@@ -1,4 +1,42 @@
 
+;;;;;
+/* Maxima has the function break which lets you insert breakpoints. */
+/* See ? break. */
+
+/* Also, Maxima does have its own debugger. */
+debugmode(true);
+
+/* Suppose that you think the problem is in a condition like */
+while min(x,y,z) > t0 do ...
+
+/* You can insert a function call to test the condition like so: */
+while_test(x,y,z,t0) := min(x,y,z) > t0;
+trace(while_test);
+
+/* Then, in your code, put */
+while while_test(x,t,z,t0) do ....
+
+;;;;;
+(%i6) f(x):=diff(x^2,x);
+(%i7) to_lisp();
+MAXIMA> (symbol-plist '$f)
+(MPROPS (NIL MEXPR ((LAMBDA) ((MLIST) $X) (($DIFF) ((MEXPT) $X 2) $X))))
+
+;;;;;
+;./configure --prefix=/home/sw2wolf/maxima-sbcl/ --enable-sbcl --with-sbcl=/usr/local/bin/sbcl
+
+;;;;;
+/* Time and date in a formatted string */
+timedate();
+"2012-08-27 20:26:23+10:00"
+ 
+/* Time in seconds elapsed since 1900/1/1 0:0:0 */
+absolute_real_time();
+ 
+/* Time in seconds since Maxima was started */
+elapsed_real_time();
+elapsed_run_time();
+
 ;;;;;;
 block([ans], loop, if (ans: read("Really quit ? (y, n)")) = 'y
                    then quit()

@@ -291,11 +291,13 @@ echo "$result" | egrep -A 1000 -e "^\(gdb\)" | egrep -B 1000 -e "^\(gdb\)"
 set logging on
 bt
 set logging off
+
 -----------------------------------------------------------------------------
 $pkg-config --cflags xft
 -D_THREAD_SAFE -I/usr/local/include/freetype2 -I/usr/local/include  
 $pkg-config --libs xft
 -L/usr/local/lib -lXft  
+
 -----------------------------------------------------------------------------
 So write it out to a file instead:
 (gdb) p creat("/tmp/somefile.dat", 0777)
@@ -303,4 +305,92 @@ $26 = 37
 (gdb) p write(37, s, len)
 $27 = 168
 (gdb) p close(37)
+
 -----------------------------------------------------------------------------
+在终端执行cat /proc/cpuinfo命令，找到flags部分，如果其中输出有VMX或SVM，即表明支持虚拟化技术。
+cat /proc/cpuinfo | grep vmx       ##(for Intel CPU)
+or 
+cat /proc/cpuinfo | grep svm       ##（for AMD CPU）
+
+三、Linux显示的flags部分解释：
+fpu – Onboard FPU
+vme – Virtual Mode Extensions
+de – Debugging Extensions
+pse – Page Size Extensions
+tsc – Time Stamp Counter
+msr – Model-Specific Registers
+pae – Physical Address Extensions
+mce – Machine Check Architecture
+cx8 – CMPXCHG8 instruction
+apic – Onboard APIC
+sep – SYSENTER/SYSEXIT
+mtrr – Memory Type Range Registers
+pge – Page Global Enable
+mca – Machine Check Architecture
+cmov – CMOV instructions (plus FCMOVcc, FCOMI with FPU)
+pat – Page Attribute Table
+pse36 – 36-bit PSEs
+pn – Processor serial number
+clflush – CLFLUSH instruction
+dts – Debug Store
+acpi – ACPI via MSR
+mmx – Multimedia Extensions
+fxsr – FXSAVE/FXRSTOR, CR4.OSFXSR
+sse – SSE
+sse2 – SSE2
+ss – CPU self snoop
+ht – Hyper-Threading
+tm – Automatic clock control
+ia64 – IA-64 processor
+pbe – Pending Break Enable
+syscall – SYSCALL/SYSRET
+mp – MP Capable
+nx – Execute Disable
+mmxext – AMD MMX extensions
+fxsr_opt – FXSAVE/FXRSTOR optimizations
+pdpe1gb – GB pages
+rdtscp – RDTSCP
+lm – Long Mode (x86-64)
+3dnowext – AMD 3DNow! extensions
+3dnow – 3DNow!
+k8 – Opteron, Athlon64
+k7 – Athlon
+constant_tsc – TSC ticks at a constant rate
+up – smp kernel running on up
+pebs – Precise-Event Based Sampling
+bts – Branch Trace Store
+nonstop_tsc – TSC does not stop in C states
+pni – SSE-3
+pclmulqdq – PCLMULQDQ instruction
+dtes64 – 64-bit Debug Store
+monitor – Monitor/Mwait support
+ds_cpl – CPL Qual. Debug Store
+vmx – Hardware virtualization //intel的虚拟化技术VT技术
+smx – Safer mode
+est – Enhanced SpeedStep
+tm2 – Thermal Monitor 2
+ssse3 – Supplemental SSE-3
+cid – Context ID
+fma – Fused multiply-add
+cx16 – CMPXCHG16B
+xptr – Send Task Priority Messages
+pdcm – Performance Capabilities
+dca – Direct Cache Access
+sse4_1 – SSE-4.1
+sse4_2 – SSE-4.2
+x2apic – x2APIC
+aes – AES instructions
+xsave – XSAVE/XRSTOR/XSETBV/XGETBV
+avx – Advanced Vector Extensions
+hypervisor – Running on a hypervisor
+lahf_lm – LAHF/SAHF in long mode
+cmp_legacy – If yes HyperThreading not valid
+svm – Secure virtual machine //AMD的虚拟化技术AMD-V
+extapic – Extended APIC space
+cr8legacy – CR8 in 32-bit mode
+abm – Advanced bit manipulation
+sse4a – SSE-4A
+ibs – Instruction Based Sampling
+sse5 – SSE-5
+skinit – SKINIT/STGI instructions
+wdt – Watchdog timer

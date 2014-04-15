@@ -1,0 +1,11 @@
+file_search_maxima:append(["~/qepmax-master/###.{mac,mc}"],file_search_maxima);
+file_search_lisp:append(["~/qepmax-master/###.{lisp,lsp}"],file_search_lisp);
+qepcad_installed_dir:"~/qesource";
+
+set_plot_option([gnuplot_pm3d,true]);
+
+/* setup_autoload tells Maxima to load the specified file (specfun.mac) if any of the functions (ultraspherical, assoc_legendre_p) are called but not yet defined. Thus you needn't remember to load the file before calling the functions. The statement showtime: all tells Maxima to set the showtime variable. */
+setup_autoload ("specfun.mac", ultraspherical, assoc_legendre_p);
+showtime:all;
+
+print("*** My very own personal maxima-init.mac has been loaded. ***");
