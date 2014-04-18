@@ -1,5 +1,27 @@
 
 ;;;;;
+(require 'cffi)
+
+(load "glx/constants.lisp")
+
+(defvar *glx-dpy* nil)
+
+; For XOpenDisplay() and XFlush() only
+(define-foreign-library xlib
+  (t (:default "libX11")))
+(use-foreign-library xlib)
+
+;;;; library.lisp
+
+(in-package #:libsass)
+
+(define-foreign-library libsass
+  (:unix (:or "libsass.so.0" "libsass.so"))
+  (t (:default "libsass")))
+
+(use-foreign-library libsass)
+
+;;;;;
 (subtypep 'double-float 'number) => T
 (subtypep '(vector double-float 100) '(array number *)) => ?
 
@@ -15,7 +37,8 @@
 ;另外一点就是各种方法执行的顺序问题了，总体说来是:around=>:before=>主方法=>:after，然后对含有多层继承关系的:around、:before和主方法来说，特化程度最相关的先执行，然后次相关，最后是最不相关的，通俗说来就是先执行当前对象所属类型的，然后依次向上执行基类的，如果同一层有多个基类，则按照类定义时基类列写的顺序来执行。对于:after来说采取与前三者相反的方法即可。
 
 ;;;;;
-;how can i test if a keyword parameter is passed to a function, even if	its value is nil;&key (argname default argname-passed-p) and then check argname-passed-p
+;how can i test if a keyword parameter is passed to a function, even if	its value is nil
+... &key (argname default argname-passed-p) ;and then check argname-passed-p
 
 ;;;;;
 ;; Lists are a very central type, so there is a wide variety of functionality for
@@ -33,18 +56,11 @@
 (subseq #(1 2 3 4 5 6) 3 5) ==> #(4 5)
 
 ;;;;;;
-;See: http://www.cliki.net/infix
-
-CL-USER 17 > '#I(a*(8*b^^2+1)+ 4*b*c*(4*b^^2+1) )
-(+ (* A (+ (* 8 (EXPT B 2)) 1)) (* 4 B C (+ (* 4 (EXPT B 2)) 1)))
-
-;' is the usual quote. #I( some-infix-expression ) is the reader macro.
-
-;;;;;;
+;get the absolute pathname of the current directory
+(truename *default-pathname-defaults*)
 
 ;that's because *default-pathname-defaults* is not the same in  the two threads. you can set *swank-bindings* in ~/.swank.lisp to set *default-pathname-defaults* to the default you want for swank, or use  M-x slime-sync-package-and-default-directory or M-x slime-set-default-directory
 
-;;;;;;
 (nth-value 2 (function-lambda-expression #'append)) => append
 
 (defun my-foo () )
@@ -135,18 +151,6 @@ $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no
 (defun partition (n list)
   (loop for v on list by #'(lambda (l) (nthcdr n l))
         collect (loop repeat n for x in v collect x)))
-
-;;;;;;
-(require 'cffi)
-
-(load "glx/constants.lisp")
-
-(defvar *glx-dpy* nil)
-
-; For XOpenDisplay() and XFlush() only
-(define-foreign-library xlib
-  (t (:default "libX11")))
-(use-foreign-library xlib)
 
 ;;;;;;
 (defun ^^ (base power)

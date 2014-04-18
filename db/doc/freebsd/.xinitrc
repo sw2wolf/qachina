@@ -23,8 +23,8 @@ xsetroot -cursor_name left_ptr
 xsetroot -solid black
 #setxkbmap -option terminate:ctrl_alt_bksp 
 
-export LANG=zh_CN.UTF-8
 export LC_ALL=zh_CN.UTF-8
+export LANG=zh_CN.UTF-8
 
 xmodmap ~/.Xmodmap
 #mixer vol 95 pcm 95

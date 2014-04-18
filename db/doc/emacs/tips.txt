@@ -1,0 +1,5 @@
+<aidalgol> fsbot: dk C-x RET f
+<fsbot> set-buffer-file-coding-system is an interactive compiled Lisp function
+
+;C-x RET C-\ , then choose an input method.
+

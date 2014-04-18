@@ -1,5 +1,8 @@
 
 ;;;;;
+readchar(?\*standard\-input\*);
+
+;;;;;
 /* Maxima has the function break which lets you insert breakpoints. */
 /* See ? break. */
 
