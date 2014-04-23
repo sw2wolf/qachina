@@ -1,5 +1,18 @@
 
 ;;;;;
+;; For conses, equal is defined recursively as the two cars being equal and the two cdrs being equal.
+
+;; Two arrays are equal only if they are eq, with one exception: strings and bit vectors are compared element-by-element (using eql).
+
+;; vector creates an array, but it's not a string or bit vector. Since the two arrays are not eq, they aren't equal.
+
+;; If you want a comparison predicate that treats arrays as equivalent if they have all the same elements, use equalp
+
+;;;;;
+;Always use EQL for identity comparison, unless you can prove that EQ will be correct.
+(eq (* 2 most-positive-fixnum) (* 2 most-positive-fixnum)) => ?
+
+;;;;;
 (require 'cffi)
 
 (load "glx/constants.lisp")

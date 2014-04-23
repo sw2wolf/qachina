@@ -1,5 +1,26 @@
 
 ;;;;;
+draw2d(
+     xaxis =true,
+     xaxis_type=solid,
+     yaxis =true,
+     yaxis_type=solid,
+     user_preamble="set grid front",
+     region(x^2+y^2<1 ,x,-1.5,1.5,y,-1.5,1.5));
+
+;;;;;
+f(x,y,[options]) := block([coerce_to],
+               coerce_to:assoc('coerce_to,options,'float),
+               [x,y]:map(coerce_to,[x,y]),
+               ...);
+
+Then:
+
+f(1,2);
+f(1,2, coerce_to='bfloat); 
+f(1,2, coerce_to='rat);
+
+;;;;;
 readchar(?\*standard\-input\*);
 
 ;;;;;

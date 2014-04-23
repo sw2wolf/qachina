@@ -12,6 +12,8 @@ int kbhit()
     return FD_ISSET(STDIN_FILENO, &fds);
 }
 
+ps -aux -eo pid,lstart,args | grep -i emacs | grep -v grep
+
 ;;;;;
 git fetch origin
 git diff HEAD origin/master ChangeLog
