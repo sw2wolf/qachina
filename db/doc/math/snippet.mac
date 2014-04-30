@@ -1,5 +1,11 @@
 
 ;;;;;
+draw2d(terminal=pdfcairo,line_width=2.25,color=black,
+       dimensions=[1200,800],
+       file_name="Test.pdf",line_type=dashes,
+       explicit(sin(x),x,1,3)
+);
+
 draw2d(
      xaxis =true,
      xaxis_type=solid,
@@ -7,6 +13,23 @@ draw2d(
      yaxis_type=solid,
      user_preamble="set grid front",
      region(x^2+y^2<1 ,x,-1.5,1.5,y,-1.5,1.5));
+
+for i:1 thru length(terminals) do
+    draw2d(
+        line_type=solid,key="solid",
+        explicit(sin(x),x,0,6),
+        line_type=dots,key="dots",
+        explicit(sin(2*x),x,0,6),
+        line_type=dashes,key="dashes",
+        explicit(sin(3*x),x,0,6),
+        line_type=short_dashes,key="short_dashes",
+        explicit(sin(4*x),x,0,6),
+        line_type=short_long_dashes,key="short_long_dashes",
+        explicit(sin(5*x),x,0,6),
+        line_type=short_short_long_dashes,key="short_short_long_dashes",
+        explicit(sin(6*x),x,0,6),
+        terminal=terminals[i],file_name=terminals[i]
+    );
 
 ;;;;;
 f(x,y,[options]) := block([coerce_to],

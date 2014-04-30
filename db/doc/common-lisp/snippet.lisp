@@ -1,5 +1,34 @@
 
 ;;;;;
+(let* 
+       ;; Get random bytes
+      ((proc-var (sb-ext:run-program "head" '("-c" "10" "/dev/urandom")
+                                     :search t
+       ;; let SBCL figure out the storage type. This is what solved the problem.
+                                     :output :stream))
+       ;; Obtain the streams from the process object.
+       (output (process-output proc-var))
+       (err (process-error proc-var)))
+  (values
+   ;;return both stdout and stderr, just for polish.
+   ;; do a byte read and turn it into a vector.
+   (concatenate 'vector
+                ;; A byte with value 0 is *not* value nil. Yay for Lisp!
+                (loop for byte = (read-byte output nil)
+                   while byte
+                   collect byte))
+   ;; repeat for stderr
+   (concatenate 'vector
+                (loop for byte = (read-byte err nil)
+                   while byte
+                   collect byte))))
+
+;;;;;
+(defun stringlistp (v) (every #'stringp v))
+(deftype stringlist-type ()
+	   (and list (satisfies stringlistp)))
+
+;;;;;
 ;; For conses, equal is defined recursively as the two cars being equal and the two cdrs being equal.
 
 ;; Two arrays are equal only if they are eq, with one exception: strings and bit vectors are compared element-by-element (using eql).
@@ -340,15 +369,18 @@ Error: The condition #<STREAM-READ-TIMEOUT 2067574C> occurred
        (setf *config* (load-config-file))))))
 
 ;If any error occurs during load-config-file, I can either fix up the file and choose the try-again restart, or give up and use an abort restart.
-;;;;
+
+;;;;;
 (deftype octet-vector (length)
   `(simple-array (unsigned-byte 8) (,length)))
+
 ;optional arguments to defmacro with no initialization form default to nil, the default value in deftype is the symbol *.
 (deftype octet-vector (&optional length)
   `(simple-array (unsigned-byte 8) (,length)))
 
 ;Now, in a type context, a plain octet-vector expands into (simple-array (unsigned-byte 8) (*)), or a one-dimensional octet array of indeterminate length, and (octet-vector 32) expands into (simple-array (unsigned-byte 8) (32)).
-;;;
+
+;;;;;
 ;convert an integer to a list of bits
 (defun list-of-bits (integer)
   (let ((bits '()))
@@ -373,7 +405,8 @@ Error: The condition #<STREAM-READ-TIMEOUT 2067574C> occurred
   (let ((bits '()))
     (dotimes (position (integer-length integer) bits)
       (push (ldb (byte 1 position) integer) bits))))
-;;;
+
+;;;;;
 (let ((store (persistent-store/open pathname))
        id
        vid
@@ -1549,6 +1582,14 @@ Hello World!
 					  #-sbcl ":0.0"
 					  :pointer)
 #.(SB-SYS:INT-SAP #X00650FD0)
+
+(cffi:load-foreign-library #+darwin "/usr/lib/libm.dylib"
+			   #-darwin "/usr/lib/libm.so")
+;;
+;; With this other statement, we import the C function sin(),
+;; which operates on IEEE doubles.
+;;
+(cffi:defcfun ("sin" c-sin) :double :double)
 
 ;somefile.lisp
 (set-macro-character #\] (get-macro-character #\)))

@@ -1,4 +1,4 @@
-#!/bin/zsh -f
+#!/bin/sh
 A=(
 ./configure
 --with-ffcall --with-libffcall-prefix=/usr
@@ -15,6 +15,7 @@ A=(
 --with-module=i18n
 --with-module=zlib
 --cbc build-dir
---prefix=/home/tunes/local
+--with-threads=POSIX_THREADS
+--prefix=/home/sw2wolf/clisp
 )
 $A

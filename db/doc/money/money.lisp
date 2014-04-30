@@ -204,21 +204,23 @@ the process with the next item (~})."
                     ))
         (maphash #'(lambda (k v) (push (cons k v) res)) tab)
         (setq sort-res (sort res #'> :key #'cdr))
-        (sort (subseq (mapcar #'car sort-res) 0 19) #'<)))
+        (sort (subseq (mapcar #'car sort-res) 0 21) #'<)))
 
 (defun win-ssq (nums no-red no-blue)
     (let* ((res) (resRed) (no-red-lst (str2lst no-red))
 		   (gRed (good-red))
 		   (yesRed (set-difference gRed no-red-lst))
-		   (xRed (set-difference (range 33) no-red-lst))
-           (okBlue (pick-num (set-difference (range 16) (str2lst no-blue)) nums)))
+           (okBlue))
         (assert (>= nums 1) (nums) "注数必须>=1")
+		
         (setf *random-state* (make-random-state t))
+		
+		(setf okBlue (pick-num (set-difference (range 16) (str2lst no-blue)) nums))
         (with-open-file (out +ssq-num+ :direction :output :if-exists :supersede)
             (dotimes (i nums)
                 (setf resRed (sort
 				    (if (= i (1- nums))
-						(pick-num xRed 6)
+						(pick-num gRed 6)
 						(pick-num yesRed 6))
 				  #'>))
                 (setf res (lst2str (reverse (cons (nth i okBlue) resRed))))
