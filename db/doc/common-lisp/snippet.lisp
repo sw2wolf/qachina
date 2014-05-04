@@ -1,5 +1,73 @@
 
 ;;;;;
+;Which puts all cached files in asdf/cache/.
+(setf asdf::*user-cache* (list (merge-pathnames #p"asdf/" (truename *default-pathname-defaults*)) "cache" :IMPLEMENTATION))
+
+res =   si_safe_eval(3, c_string_to_object("\
+    (progn\
+      (ext:set-limit 'ext:lisp-stack (expt 2 18))\
+      (handler-case (load \"src/loader\") (t (e) (format t \"error: ~a~%\" e))))\
+"), Cnil, OBJNULL);
+;; Notice the added (ext:set-limit 'ext:lisp-stack (expt 2 18)). This tells ECL to give us a 256K lisp stack (as opposed to the default 32k). Also note that I’m setting this top-level in my progn, instead of setting it in src/loader.lisp. This is important, as ECL seems to ignore this directive when run from within a loaded file.
+
+;;;;;
+(defun utf-8-string-encode (string)
+  "Encodes the supplied STRING to an UTF-8 octets vector which it returns."
+  (let ((v (make-array (+ 5 (length string)) ; Best case but we might grow
+                       :element-type '(unsigned-byte 8)
+                       :adjustable t
+                       :fill-pointer 0)))
+    (with-open-stream (s (ext:make-sequence-output-stream
+                          v :external-format :utf-8))
+      (loop
+         for c across string
+         do
+           (write-char c s)
+           (let ((d (array-dimension v 0)))
+             (when (< (- d (fill-pointer v)) 5)
+               (adjust-array v (* 2 d))))))
+    v))
+
+(defun utf-8-string-decode (bytes)
+  "Decodes the UTF-8 octets vector BYTES to string which it returns.
+Invalid sequence octets are imported as LATIN-1 characters."
+  (macrolet ((add-char (c)
+               `(vector-push-extend ,c string 1024)))
+    (with-open-stream (s (ext:make-sequence-input-stream
+                          bytes :external-format :utf-8))
+      (loop
+         with string = (make-array 1024
+                                   :element-type 'character
+                                   :adjustable t
+                                   :fill-pointer 0)
+         for c of-type character =
+           (handler-bind
+               ((ext:stream-decoding-error
+                 #'(lambda (e)
+                     (mapc #'(lambda (o)
+                               ;; Assume LATIN-1 and import
+                               (add-char (code-char o)))
+                           (ext:character-decoding-error-octets e))
+                     (invoke-restart 'continue)))
+                (end-of-file
+                 #'(lambda (e)
+                     (declare (ignore e))
+                     (loop-finish))))
+             (read-char s))
+         do (add-char c)
+         finally (return string)))))
+
+;;;;;
+(defun timings (function)
+  (let ((real-base (get-internal-real-time))
+        (run-base (get-internal-run-time)))
+    (funcall function)
+    (values (/ (- (get-internal-real-time) real-base) internal-time-units-per-second)
+            (/ (- (get-internal-run-time) run-base) internal-time-units-per-second))))
+ 
+(timings (lambda () (reduce #'+ (make-list 100000 :initial-element 1))))
+
+;;;;;
 (let* 
        ;; Get random bytes
       ((proc-var (sb-ext:run-program "head" '("-c" "10" "/dev/urandom")

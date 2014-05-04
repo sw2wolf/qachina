@@ -1,6 +1,9 @@
-;default-input-method
-;C-x RET C-\ , then choose an input method.
-;
+;; default-input-method
+;; C-x RET C-\ , then choose an input method.
+
+;; fsbot: dk C-x RET f
+;; <fsbot> set-buffer-file-coding-system is an interactive compiled Lisp function
+
 (add-to-list 'load-path "~/.emacs.d/")
 
 ;disable logging to *Messages*
@@ -8,6 +11,10 @@
 (setq messages-buffer-max-lines nil)
 
 (require 'cl)
+
+(when (> emacs-major-version 22)
+  (with-no-warnings
+	(byte-compile-disable-warning 'cl-functions)))
 
 (load "init-base")
 (load "init-key")
@@ -63,7 +70,7 @@
      ;; ConsiderCamelCaseToBeCorrect
      (setq ispell-extra-args '("-C"))))
 
-(setq initial-frame-alist '((top . 0) (left . 0) (width . 1024) (height . 768)))
+;(setq initial-frame-alist '((top . 0) (left . 0) (width . 1024) (height . 768)))
 (add-hook 'after-init-hook '(lambda ()
 							  ;(server-start)
 							  (split-window-horizontally)

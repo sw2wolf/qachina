@@ -24,6 +24,11 @@ git config -l
 ;If you don't remember the original revision number try to run svn status -v and first column should show it.
 
 ;More info svn help diff...
+To see which files were modified by a particular revision, run the
+following command, replacing NNNNNN with the revision number, on a
+machine with Subversion installed:
+
+# svn diff -cNNNNNN --summarize svn://svn.freebsd.org/base
 
 ;;;;;
 ~/.gdbinit
