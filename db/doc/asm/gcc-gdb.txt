@@ -18,6 +18,7 @@ ps -aux -eo pid,lstart,args | grep -i emacs | grep -v grep
 git fetch origin
 git diff HEAD origin/master ChangeLog
 git config -l
+git show 'HEAD@{1}..HEAD'
 
 ;You can use -rN:M parameter with diff command which specifies the revisions you want to compare. Just provide revision from which your working copy was checked out (you can omit M as it defaults to working copy) and you should get what you need.
 

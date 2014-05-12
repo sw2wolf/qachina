@@ -128,7 +128,7 @@
 ;(global-set-key (kbd "<f6>") 'jump-run-erlang)
 ;(global-set-key (kbd "<f6>") 'jump-run-prolog)
 ;(global-set-key (kbd "<f6>") 'run-scheme)
-(global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "gs.sh > tmp.")))
+(global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "gitshow.sh > tmp.")))
 
 (global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 

@@ -562,8 +562,9 @@ You can extend this to an ode solver--use horner to evaluate the Taylor polynomi
  (%i4) area: %pi * radius^2;
  (%o4) 121π 
 
-(%i5) y: 3*x^2+5*x+7;
+ (%i5) y: 3*x^2+5*x+7;
  (%o5) 3*x^2+5*x+7
+
  (%i6) solve(y=1,x);
  (%o6) [x=−47 √i+5 6 ,x= 47  √i+5 6 ]
 
@@ -573,6 +574,7 @@ You can extend this to an ode solver--use horner to evaluate the Taylor polynomi
  (%o7) y(x):=x2
  (%i8) y(4);
  (%o8) 16
+ 
 解方程使用solve命令。
  (%i9) solve(y(x)=3, x);
  (%o9) [x=−3 √,x=3 √]
@@ -601,6 +603,7 @@ ev还可以用于定义局部变量。下面的例子a,b,c,d都是局部变量�
 数列求和:
  (%i17) sum(k^3,k,1,10);
  (%o17) 3025
+
 在表达示前加上'将会列出相应的表达式子，而不会进行求值。
  (%i17) 'sum(k^3,k,1,10);
  (%o17) ∑ k=1 10 k 3

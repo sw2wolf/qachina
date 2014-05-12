@@ -4,6 +4,8 @@
 ;; fsbot: dk C-x RET f
 ;; <fsbot> set-buffer-file-coding-system is an interactive compiled Lisp function
 
+;; M-x grep RET C-a C-k grep -nH THREADPROC_SIGNATURE *.d RET
+
 (add-to-list 'load-path "~/.emacs.d/")
 
 ;disable logging to *Messages*
@@ -38,7 +40,7 @@
 ;(load "init-erlang")
 ;(load "init-prolog")
 
-(load "init-haskell")
+;(load "init-haskell")
 ;(load "init-ocaml")
 
 ;(load "init-ruby")

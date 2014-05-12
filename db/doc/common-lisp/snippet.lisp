@@ -1,5 +1,64 @@
 
 ;;;;;
+(ignore-errors
+  (with-open-file (r "/dev/urandom" :element-type '(unsigned-byte 32)
+                                    :direction :input :if-does-not-exist :error)
+	(let ((a (make-array '(8) :element-type '(unsigned-byte 32))))
+        (assert (= 8 (read-sequence a r)))
+        a)))
+
+(let* ;; Get random bytes
+      ((proc-var (sb-ext:run-program "head" '("-c" "10" "/dev/urandom")
+                                     :search t
+       ;; let SBCL figure out the storage type. This is what solved the problem.
+                                     :output :stream))
+       ;; Obtain the streams from the process object.
+       (output (process-output proc-var))
+       (err (process-error proc-var)))
+  (values
+   ;;return both stdout and stderr, just for polish.
+   ;; do a byte read and turn it into a vector.
+   (concatenate 'vector
+                ;; A byte with value 0 is *not* value nil. Yay for Lisp!
+                (loop for byte = (read-byte output nil)
+                   while byte
+                   collect byte))
+   ;; repeat for stderr
+   (concatenate 'vector
+                (loop for byte = (read-byte err nil)
+                   while byte
+                   collect byte))))
+
+;;;;;
+;; Ensure the interface provided for named-readtables remains somewhat intact.
+ (let ((*readtable* (copy-readtable)))
+   (make-dispatch-macro-character #\@)
+   (set-dispatch-macro-character #\@ #\a 'read-at-a)
+   (set-dispatch-macro-character #\@ #\$ 'read-at-dollar)
+   (set-dispatch-macro-character #\@ #\* #'sb-impl::sharp-star)
+   ;; Enter exactly one character in the Unicode range because
+   ;; iteratation order is arbitrary and assert would be fragile.
+   ;; ASCII characters are naturally ordered by code.
+   (set-dispatch-macro-character #\@ (code-char #x2010) 'read-blah)
+   (let ((rt (copy-readtable *readtable*)))
+     ;; Don't want to assert about all the standard noise,
+     ;; and also don't want to kill the ability to write #\char
+     (set-syntax-from-char #\# #\a rt)
+     (assert (equal (sb-impl::dispatch-tables rt nil)
+                    `((#\@ (#\A . read-at-a)
+                           (#\* . ,#'sb-impl::sharp-star)
+                           (#\$ . read-at-dollar)
+                           (#\hyphen . read-blah))))))
+   ;; this removes one entry rather than entering NIL in the hashtable
+   (set-dispatch-macro-character #\@ (code-char #x2010) nil)
+   (let ((rt (copy-readtable *readtable*)))
+     (set-syntax-from-char #\# #\a rt)
+     (assert (equal (sb-impl::dispatch-tables rt nil)
+                    `((#\@ (#\A . read-at-a)
+                           (#\* . ,#'sb-impl::sharp-star)
+                           (#\$ . read-at-dollar))))))))
+
+;;;;;
 ;Which puts all cached files in asdf/cache/.
 (setf asdf::*user-cache* (list (merge-pathnames #p"asdf/" (truename *default-pathname-defaults*)) "cache" :IMPLEMENTATION))
 
@@ -66,30 +125,6 @@ Invalid sequence octets are imported as LATIN-1 characters."
             (/ (- (get-internal-run-time) run-base) internal-time-units-per-second))))
  
 (timings (lambda () (reduce #'+ (make-list 100000 :initial-element 1))))
-
-;;;;;
-(let* 
-       ;; Get random bytes
-      ((proc-var (sb-ext:run-program "head" '("-c" "10" "/dev/urandom")
-                                     :search t
-       ;; let SBCL figure out the storage type. This is what solved the problem.
-                                     :output :stream))
-       ;; Obtain the streams from the process object.
-       (output (process-output proc-var))
-       (err (process-error proc-var)))
-  (values
-   ;;return both stdout and stderr, just for polish.
-   ;; do a byte read and turn it into a vector.
-   (concatenate 'vector
-                ;; A byte with value 0 is *not* value nil. Yay for Lisp!
-                (loop for byte = (read-byte output nil)
-                   while byte
-                   collect byte))
-   ;; repeat for stderr
-   (concatenate 'vector
-                (loop for byte = (read-byte err nil)
-                   while byte
-                   collect byte))))
 
 ;;;;;
 (defun stringlistp (v) (every #'stringp v))
@@ -1076,6 +1111,27 @@ CL-USER> (-> 10 (+ 20) (+ 40) (/ 10))
  (t
   (error "Bad config value ~S; must be a string or NIL" new-value)))
 
+(defun switch-to-double-floats (x)
+  (typecase x
+    (double-float x)
+    (float (coerce x 'double-float))
+    (null x)
+    (list (loop for (x . cdr) on x
+                collect (switch-to-double-floats x) into result
+                until (atom cdr)
+                finally (return (append result (switch-to-double-floats cdr)))))
+    (t x)))
+
+(defun prin1-to-string-for-emacs (object package)
+   (with-standard-io-syntax
+     (let ((*print-case* :downcase)
+           (*print-readably* nil)
+           (*print-pretty* nil)
+           (*package* package)
+          ;; Emacs has only double floats.
+           (*read-default-float-format* 'double-float))
+      (prin1-to-string (switch-to-double-floats object)))))
+
 (defun parse-date (string)
     "Parse a date string in the form YYYY-MM-DD and return the
     year, month, and day as multiple values."
@@ -1234,7 +1290,9 @@ reordered key vectors.  This is the default implementation of tuples in FSet."
   (class nil     :read-only t :type (or null keyword))
   (numeric-id 0  :read-only t :type non-negative-integer))
 
-(defstruct (mystruct (:type list)) f1 f2 f3)
+(defstruct (exp (:type list)
+                (:constructor mkexp (lhs op rhs)))
+  op lhs rhs)
 
 (defstruct node 
     (board            (empty-board))  
