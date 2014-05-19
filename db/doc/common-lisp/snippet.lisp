@@ -1,5 +1,28 @@
 
 ;;;;;
+":";if test -z "$LISP"; then
+":";  if test "$USER" = evalwhen; then LISP=ecl
+":";  elif test "$(arch 2>/dev/null)" = ppc; then LISP=clozure
+":";  else LISP=sbcl
+":";  fi; fi
+":";if test "$LISP" = clisp; then exec clisp -q $0
+":";elif test "$LISP" = clozure; then exec ccl -b -Q -l $0
+":";elif test "$LISP" = ecl; then exec ecl -shell $0
+":";elif test "$LISP" = sbcl; then exec sbcl --script $0
+":";fi
+
+(defvar *lisp-keywords* '())
+
+(defun define-with-lisp-indent-number (n syms)
+  (dolist (sym syms)
+    (let* ((x (symbol-name sym))
+           (c (assoc x *lisp-keywords* :test #'string-equal)))
+      (unless c
+        (push (setq c (cons x nil)) *lisp-keywords*))
+      (setf (cdr c) n))))
+;...
+
+;;;;;
 (define-stumpwm-type :password (input prompt)
   (let ((history *input-history*)
         (arg (argument-pop input))
@@ -330,6 +353,8 @@ $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no
   (loop for v on list by #'(lambda (l) (nthcdr n l))
         collect (loop repeat n for x in v collect x)))
 
+(loop for i from 0 to 10 count i) => 11
+
 ;;;;;;
 (defun ^^ (base power)
   (declare (optimize (debug 0) (safety 0) (speed 3))
@@ -439,6 +464,7 @@ exec ccl -e '(set-dispatch-macro-character #\# #\!
 (ccl:quit 0)
 
 ;;;;;;
+;;ldb returns an integer in which the bits with weights 2^(s-1) through 2^0 are the same as those in integer with weights 2^(p+s-1) through 2^p, and all other bits zero; s is (byte-size bytespec) and p is (byte-position bytespec).
 (ldb (byte 64 0) -1)         ;=> 18446744073709551615
 (mask-field (byte 64 0) -1)  ;=> 18446744073709551615
 (- (expt 2 64) 1)            ;=> 18446744073709551616

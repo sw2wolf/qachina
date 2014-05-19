@@ -7,7 +7,7 @@
 %-export([winG/3, winQ/3, div618/2, stopLoss/3, sd/1, sh/1, qachina/0]).
 %-export([help/0, r/0]).
 
--compile([native, {hipe, [o3]}]).
+%%-compile([native, {hipe, [o3]}]).
 %% -compile({inline,[pi/0]}).
 
 %% pi() -> 3.1416.
@@ -108,11 +108,12 @@ win_ssq(Count, NoRed, NoBlue) ->
     put(result,undefined),
     put(random_seed, seed()),
 	NoRedLst = str2ints(NoRed),
+	GRed = good_red(),
     pick_ssq_nums(
-        Count,
-	    good_red() -- NoRedLst,
-        lists:seq(1,33) -- NoRedLst,
-        pick_num(Count, lists:seq(1,16)--str2ints(NoBlue), [])
+      Count,
+	  GRed,
+	  GRed -- NoRedLst,   %lists:seq(1,33) -- NoRedLst
+      pick_num(Count, lists:seq(1,16)--str2ints(NoBlue), [])
     ),
     file:write_file(ssqNum(), get(result)).
 

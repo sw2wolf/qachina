@@ -42,11 +42,11 @@
 ;; 	  (switch-to-buffer-other-window "*prolog*")
 ;; 	  (run-prolog 'swi)))
 
-;; (defun jump-run-erlang ()
-;;   (interactive)
-;;   (if (get-buffer "*erlang*")
-;; 	  (switch-to-buffer "*erlang*")
-;; 	  (run-erlang)))
+(defun jump-run-erlang ()
+  (interactive)
+  (if (get-buffer "*erlang*")
+	  (switch-to-buffer "*erlang*")
+	  (run-erlang)))
 
 (defun jump-run-lisp ()
   (interactive)
@@ -125,16 +125,16 @@
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-haskell)))
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-caml "ocaml")))
 
-;(global-set-key (kbd "<f6>") 'jump-run-erlang)
-;(global-set-key (kbd "<f6>") 'jump-run-prolog)
-;(global-set-key (kbd "<f6>") 'run-scheme)
-(global-set-key (kbd "<f6>") '(lambda () (interactive) (insert "gitshow.sh > tmp.")))
+;(global-set-key (kbd "<f6>") 'imaxima)
+;(global-set-key (kbd "<f6>") 'jump-run-clisp)
+(global-set-key (kbd "<f6>") 'jump-run-lisp)
 
-(global-set-key (kbd "<f7>") 'edit-current-file-as-root)
+(global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "gitdiff.sh > tmp.")))
+;(global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 
-;(global-set-key (kbd "<f8>") 'imaxima)
-;(global-set-key (kbd "<f8>") 'jump-run-clisp)
-(global-set-key (kbd "<f8>") 'jump-run-lisp)
+(global-set-key (kbd "<f8>") 'jump-run-erlang)
+;(global-set-key (kbd "<f8>") 'jump-run-prolog)
+;(global-set-key (kbd "<f8>") 'run-scheme)
 
 (global-set-key [(f9)] 'list-bookmarks)
 (global-set-key [(f10)] 'bookmark-set)

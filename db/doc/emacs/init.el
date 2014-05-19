@@ -18,6 +18,7 @@
   (with-no-warnings
 	(byte-compile-disable-warning 'cl-functions)))
 
+;(load "init-elp")
 (load "init-base")
 (load "init-key")
 
@@ -26,7 +27,7 @@
 (load "init-dict")
 (load "init-erc")
 
-(load "init-w3m")
+(load "init-w3m") ;will slow down loading mew
 (load "init-mew")
 
 ;(load "init-ac")
@@ -37,7 +38,7 @@
 (load "init-scheme")
 ;(load "init-clojure")
 
-;(load "init-erlang")
+(load "init-erlang")
 ;(load "init-prolog")
 
 ;(load "init-haskell")

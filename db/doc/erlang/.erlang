@@ -4,7 +4,8 @@
 code:load_abs("/media/D/qachina/db/doc/erlang/user_default").
 
 code:add_patha(".").
-code:add_pathz("/home/sw2wolf/RnD/yaws/ebin").
+
+%code:add_pathz("/home/sw2wolf/RnD/yaws/ebin").
 
 %code:add_pathz("/home/sw2wolf/RnD/cowboy/ebin").
 %code:add_pathz("/home/sw2wolf/RnD/cowboy/deps/ranch/ebin/").
