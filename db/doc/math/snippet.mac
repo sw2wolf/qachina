@@ -1,5 +1,42 @@
 
 ;;;;;
+( infix ("==", 80 , 80),
+  numequalp(x,y) := ev((x=y) or equal(x,y), pred),
+  "=="(a, b) := numequalp(a,b)  /* "=="(a,b) := is(equal(a,b))$ */
+)$
+
+0== 10.0^-324 ;
+>> true
+
+1 ==1.0;
+>> true
+
+0 ==0.0;
+>> true
+
+declare(F,oddfun); => F(-A) = -F(A)
+declare(F,outative); => F(3*A) = 3 F(A)
+declare(n,integer); => sin(n*%pi) = 0
+
+;;;;;
+/* For one function: */
+
+f(x,A,w) := A*sin(w*x)$
+parametersList: [ [p1=1, p2=2], [p1=3, p2=4] ]$
+functionList: makelist( ev(f(x,p1,p2), p), p, parametersList);
+plot2d( functionList, [x, 0, 7]);
+
+/* For several functions, each to be plotted with a different set of parameters: */
+
+f(x,A,w) := A*sin(w*x)$
+g(x,A,w) := A*cos(w*x)$
+parametersList: [ [p1=1, p2=2], [p1=3, p2=4] ]$
+functionList: makelist( ev([f(x,p1,p2),g(x,p1,p2)], p), p, parametersList);
+/* functionList looks like : [[f1,g1], [f2,g2],...]  */
+/* Use flatten() to get : [f1,g1,f2,g2,...] */
+plot2d( flatten(flist), [x, 0, 7]);
+
+;;;;;
 draw2d(terminal=pdfcairo,line_width=2.25,color=black,
        dimensions=[1200,800],
        file_name="Test.pdf",line_type=dashes,

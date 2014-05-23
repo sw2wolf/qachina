@@ -106,12 +106,13 @@
 ;⋆:#x22c6 ≅:#x2245
 ;(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert #x3bb)))
 
-; > @wn @src @where @undo @unmtl @pl @package
+;; (global-set-key (kbd "<f3>") '(lambda ()
+;; 								(interactive)
+;; 								(insert "/msg rudybot pi ") (backward-char 1)))
+
+; > @ty @wn @src @where @undo @unmtl @pl @package
 ;@djinn turn a type into its corresponding expression
-;(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot @ty ")))
-(global-set-key (kbd "<f3>") '(lambda ()
-								(interactive)
-								(insert "/msg rudybot pi ") (backward-char 1)))
+(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot pi")))
 
 ;$\sqrt{x-1}-1$
 ;; (global-set-key (kbd "<f3>")

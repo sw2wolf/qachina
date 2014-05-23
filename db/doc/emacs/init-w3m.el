@@ -1,4 +1,4 @@
-(add-to-list 'load-path "~/w3m/share/emacs/site-lisp/w3m")
+(add-to-list 'load-path (expand-file-name "~/w3m/share/emacs/site-lisp/w3m"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;              w3m mode
@@ -104,6 +104,7 @@
 ;; (define-key w3m-mode-map (kbd "<") 'w3m-previous-buffer)
 ;; (define-key w3m-mode-map (kbd ">") 'w3m-next-buffer)
 
+(standard-display-ascii ?\222 [?'])
 (standard-display-ascii ?\225 [?+])
 (standard-display-ascii ?\227 [?-])
-(standard-display-ascii ?\222 [?'])
+(standard-display-ascii ?\240 [? ])

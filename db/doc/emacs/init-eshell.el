@@ -15,11 +15,11 @@
   ;(insert "clisp.sh '(m:)'")
   ;(insert "guile.sh '()'")
   ;(insert "hs ''")
-  ;(insert "ccl.sh '(m:)'")
+  ;(insert "erl.sh 'user_default:'")
   ;(insert "sb.sh '(m:)'")
   ;(insert "ecl.sh '(m:)'")
-  (insert "erl.sh 'user_default:'")
-  (backward-char 1) ;(goto-char (- (point) 2))
+  (insert "ccl.sh '(m:)'")
+  (backward-char 2) ;(goto-char (- (point) 2))
 )
 
 ;; (setq eshell-prompt-function

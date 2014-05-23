@@ -15,11 +15,13 @@ int kbhit()
 ps -aux -eo pid,lstart,args | grep -i emacs | grep -v grep
 
 ;;;;;
+;git
 git fetch origin
 git diff HEAD origin/master ChangeLog
 git config -l
 git show 'HEAD@{1}..HEAD'
 
+;svn
 ;You can use -rN:M parameter with diff command which specifies the revisions you want to compare. Just provide revision from which your working copy was checked out (you can omit M as it defaults to working copy) and you should get what you need.
 
 ;If you don't remember the original revision number try to run svn status -v and first column should show it.
@@ -30,6 +32,13 @@ following command, replacing NNNNNN with the revision number, on a
 machine with Subversion installed:
 
 # svn diff -cNNNNNN --summarize svn://svn.freebsd.org/base
+
+svn revert some-file
+will effectively discard any local changes to some-file and replace it with the repository version.
+
+The option "tf" ("theirs full") will overwrite a local file with the repository version, which is generally appropriate when binary files change.
+
+find . -name 'foo*' -exec mv {} dir/ \;
 
 ;;;;;
 ~/.gdbinit

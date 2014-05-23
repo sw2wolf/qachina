@@ -1,5 +1,13 @@
 
 ;;;;;
+shell> ccl --no-init # or "ccl64", or m-x slime, or whatever you do to start Clozure CL
+Welcome to whatever version this is!
+? (ccl:rebuild-ccl :full t)
+
+(let ((abc 1)) (declare (special abc)) (princ (symbol-value 'abc))) => 1
+(let ((abc 1)) (princ (symbol-value 'abc))) => Error: Unbound variable: ABC
+
+;;;;;
 ":";if test -z "$LISP"; then
 ":";  if test "$USER" = evalwhen; then LISP=ecl
 ":";  elif test "$(arch 2>/dev/null)" = ppc; then LISP=clozure
