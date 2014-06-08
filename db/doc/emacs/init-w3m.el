@@ -80,16 +80,28 @@
 	  mm-inline-text-html-with-w3m-keymap nil
       mm-w3m-safe-url-regexp nil)
 
-(defun remove-w3m-output-garbages ()
-"去掉w3m输出的垃圾."
-    (interactive)
-    (let ((buffer-read-only))
-        (setf (point) (point-min))
-        (while (re-search-forward "[\200-\240]" nil t)
-            (replace-match " "))
-        (set-buffer-multibyte t))
-    (set-buffer-modified-p nil))
-(add-hook 'w3m-fontify-after-hook 'remove-w3m-output-garbages)
+;; (defun remove-w3m-output-garbages ()
+;; "去掉w3m输出的垃圾."
+;;     (interactive)
+;;     (let ((buffer-read-only))
+;;         (setf (point) (point-min))
+;;         (while (re-search-forward "[\200-\240]" nil t)
+;;             (replace-match " "))
+;;         (set-buffer-multibyte t))
+;;     (set-buffer-modified-p nil))
+;; (add-hook 'w3m-fontify-after-hook 'remove-w3m-output-garbages)
+
+(add-hook
+ 'w3m-fontify-after-hook
+ (lambda nil
+   (let ((inhibit-read-only t))
+     (save-excursion
+	   (goto-char (point-min))
+	   (while (re-search-forward "[\200-\240]" nil t)
+		 (replace-match " "))))))
+
+;; (while (re-search-forward " +$" nil t)
+;;   (delete-region (match-beginning 0) (match-end 0)))
 
 (defun my-w3m-rename-buffer (url)
   "Renames the current buffer to be the current URL"

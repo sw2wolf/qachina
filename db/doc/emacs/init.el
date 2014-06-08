@@ -38,7 +38,7 @@
 (load "init-scheme")
 ;(load "init-clojure")
 
-;(load "init-erlang")
+(load "init-erlang")
 ;(load "init-prolog")
 
 ;(load "init-haskell")

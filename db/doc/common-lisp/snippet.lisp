@@ -1,5 +1,33 @@
 
 ;;;;;
+(defmethod initialize-instance ((self subclass) &key
+								(prototype nil prototypep) &allow-other-keys)
+  (call-next-method)
+  (when prototypep
+	(setf (slot-value self 'slot1)
+		  (slot-value prototype 'slot1) … ))
+  self)
+(make-instance'subclass :prototype example-object)
+
+;;;;;
+(princ (apply #'mapcar #'+ '((1 2) (3 4) (5 6)))) => (9 12)
+
+(error 'simple-reader-package-error
+	   :package package-designator
+       :stream stream
+       :format-control "Package ~A does not exist."
+       :format-arguments (list package-designator))
+
+;;;;;
+(defun (setf user-balance) (amount account sub-account)
+  (let ((bank (get-value 'users account :bank))
+        (key (values (intern (string-upcase sub-account) "KEYWORD"))))
+    (setf (getf (balance bank) key) amount)))
+
+(setf (getf (balance (get-value 'users account :bank))
+			(intern (string-upcase sub-account) "KEYWORD")) amount)
+
+;;;;;
 shell> ccl --no-init # or "ccl64", or m-x slime, or whatever you do to start Clozure CL
 Welcome to whatever version this is!
 ? (ccl:rebuild-ccl :full t)
@@ -309,6 +337,7 @@ $sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
       --eval '(ql:quickload "cl-ppcre")'
 
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
+$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="ccl -n -Q -K utf-8"
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"
 
 ;;;;;;

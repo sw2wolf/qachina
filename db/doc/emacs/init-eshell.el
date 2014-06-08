@@ -16,9 +16,9 @@
   ;(insert "guile.sh '()'")
   ;(insert "hs ''")
   ;(insert "erl.sh 'user_default:'")
-  ;(insert "sb.sh '(m:)'")
   ;(insert "ecl.sh '(m:)'")
-  (insert "ccl.sh '(m:)'")
+  ;(insert "ccl.sh '(m:)'")
+  (insert "sb.sh '(m:)'")
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 
@@ -56,6 +56,8 @@
   (lambda(img)
 	(propertize "Image" (quote display)
 				(create-image (expand-file-name img)))))
+
+;(add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
 
 ;
 ; misc.

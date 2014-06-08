@@ -7,7 +7,7 @@
 %-export([winG/3, winQ/3, div618/2, stopLoss/3, sd/1, sh/1, qachina/0]).
 %-export([help/0, r/0]).
 
-%%-compile([native, {hipe, [o3]}]).
+-compile([native, {hipe, [o3]}]).
 %% -compile({inline,[pi/0]}).
 
 %% pi() -> 3.1416.
@@ -106,7 +106,8 @@ div618(P1, P2) ->
 %---------------------------------------------------------------------
 win_ssq(Count, NoRed, NoBlue) ->
     put(result,undefined),
-    put(random_seed, seed()),
+    %% put(random_seed, seed()),
+	random:seed(now()),
 	NoRedLst = str2ints(NoRed),
 	GRed = good_red(),
     pick_ssq_nums(
@@ -121,9 +122,9 @@ pick_ssq_nums(0, _, _, _) -> ok;
 pick_ssq_nums(Count, GRed, YesRed, OkBlue) ->
 	if
 		Count == 1 ->
-			Red6 = lists:sort( pick_num(6, GRed, []) );
+			Red6 = lists:sort( pick_num(6, YesRed, []) );
 	    true ->
-			Red6 = lists:sort( pick_num(6, YesRed, []) )
+			Red6 = lists:sort( pick_num(6, GRed, []) )
 	end,
     Result = lists:append(Red6, [lists:nth(Count,OkBlue)]),
     ResStr = lists:append(string:strip(
@@ -213,19 +214,19 @@ str2ints(Str) ->
 
 %% pretty good seed, but non portable
 %   <<A:32, B:32, C:32>> = crypto:rand_bytes(12)
-seed() ->
-    case (catch list_to_binary(
-           os:cmd("dd if=/dev/urandom bs=12 count=1 2>/dev/null"))) of
-        <<X:32, Y:32, Z:32>> ->
-            {X, Y, Z};
-        _ ->
-            {_,_,X} = erlang:now(),
-            {H,M,S} = time(),
-            H1 = H * X rem 32767,
-            M1 = M * X rem 32767,
-            S1 = S * X rem 32767,
-            {H1,M1,S1}
-    end.
+%% seed() ->
+%%     case (catch list_to_binary(
+%%            os:cmd("dd if=/dev/urandom bs=12 count=1 2>/dev/null"))) of
+%%         <<X:32, Y:32, Z:32>> ->
+%%             {X, Y, Z};
+%%         _ ->
+%%             {_,_,X} = erlang:now(),
+%%             {H,M,S} = time(),
+%%             H1 = H * X rem 32767,
+%%             M1 = M * X rem 32767,
+%%             S1 = S * X rem 32767,
+%%             {H1,M1,S1}
+%%     end.
 
 pick_num(0, _, Acc) -> Acc;
 pick_num(N, From, Acc) ->
