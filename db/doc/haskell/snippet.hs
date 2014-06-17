@@ -1,5 +1,11 @@
 
 -----
+import Data.Bits               ((.&.), (.|.), shiftL, shiftR, xor)
+import Data.Int                (Int8, Int16, Int32, Int64)
+import Data.IORef              (atomicModifyIORef, newIORef)
+import Data.Ratio              ((%), numerator)
+
+-----
 {-# OPTIONS_GHC -Wall                      #-}
 {-# OPTIONS_GHC -fno-warn-name-shadowing   #-}
 {-# OPTIONS_GHC -fno-warn-type-defaults    #-}

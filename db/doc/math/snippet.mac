@@ -1,5 +1,33 @@
 
-;;;;;
+/*****/
+(%i1) load(unwind_protect)$
+
+(%i2) george(x) := block([ctx : apply('supcontext, [gensym("c")])],
+  declare(x,complex),
+  unwind_protect(conjugate(x)+x,killcontext(ctx)))$
+
+/* Inside function george, x is complex: */
+
+(%i4) george(x);
+(%o4) conjugate(x)+x
+
+/* But outside, x is real: */
+
+(%i5) ev(%,nouns);
+(%o5) 2*x
+
+(%i6) conjugate(x)+x;
+(%o6) 2*x
+
+/* The /share function unwind_protect does not autoload and it is not documented. This function is a Maxima interface to the CL function described here: http://clhs.lisp.se/Body/s_unwind.htm. If anything goes wrong in the body of the function george, unwind_protect will kill the context before exiting the function. Without using unwind_protect,  an error before exit would cause the new context to exist after the error. */
+
+/*****/
+mratcoef(f,x,n) := (map(lambda([%x,%n], f:ratcoef(f,%x,%n)),x,n), f)$
+
+/* If you want the coefficient in E of x^n*z^0  I suggest */
+ratsubst(0,z,ratcoef(E,x,n))
+
+/*****/
 ( infix ("==", 80 , 80),
   numequalp(x,y) := ev((x=y) or equal(x,y), pred),
   "=="(a, b) := numequalp(a,b)  /* "=="(a,b) := is(equal(a,b))$ */
@@ -18,7 +46,7 @@ declare(F,oddfun); => F(-A) = -F(A)
 declare(F,outative); => F(3*A) = 3 F(A)
 declare(n,integer); => sin(n*%pi) = 0
 
-;;;;;
+/*****/
 /* For one function: */
 
 f(x,A,w) := A*sin(w*x)$
@@ -36,7 +64,7 @@ functionList: makelist( ev([f(x,p1,p2),g(x,p1,p2)], p), p, parametersList);
 /* Use flatten() to get : [f1,g1,f2,g2,...] */
 plot2d( flatten(flist), [x, 0, 7]);
 
-;;;;;
+/*****/
 draw2d(terminal=pdfcairo,line_width=2.25,color=black,
        dimensions=[1200,800],
        file_name="Test.pdf",line_type=dashes,
@@ -68,7 +96,7 @@ for i:1 thru length(terminals) do
         terminal=terminals[i],file_name=terminals[i]
     );
 
-;;;;;
+/*****/
 f(x,y,[options]) := block([coerce_to],
                coerce_to:assoc('coerce_to,options,'float),
                [x,y]:map(coerce_to,[x,y]),
@@ -80,10 +108,10 @@ f(1,2);
 f(1,2, coerce_to='bfloat); 
 f(1,2, coerce_to='rat);
 
-;;;;;
+/*****/
 readchar(?\*standard\-input\*);
 
-;;;;;
+/*****/
 /* Maxima has the function break which lets you insert breakpoints. */
 /* See ? break. */
 
@@ -100,16 +128,16 @@ trace(while_test);
 /* Then, in your code, put */
 while while_test(x,t,z,t0) do ....
 
-;;;;;
+/*****/
 (%i6) f(x):=diff(x^2,x);
 (%i7) to_lisp();
 MAXIMA> (symbol-plist '$f)
 (MPROPS (NIL MEXPR ((LAMBDA) ((MLIST) $X) (($DIFF) ((MEXPT) $X 2) $X))))
 
-;;;;;
+/*****/
 ;./configure --prefix=/home/sw2wolf/maxima-sbcl/ --enable-sbcl --with-sbcl=/usr/local/bin/sbcl
 
-;;;;;
+/*****/
 /* Time and date in a formatted string */
 timedate();
 "2012-08-27 20:26:23+10:00"
@@ -121,13 +149,13 @@ absolute_real_time();
 elapsed_real_time();
 elapsed_run_time();
 
-;;;;;;
+/*****/
 block([ans], loop, if (ans: read("Really quit ? (y, n)")) = 'y
                    then quit()
                    elseif ans = 'n then (print("Nice choice!"), 'done)
                    else (print("I dont' understand..."), go(loop)));
 
-;;;;;;
+/*****/
 ".."(a, b) := makelist(i, i, a, b)$
 infix("..")$
  
@@ -137,19 +165,20 @@ sublist(1 .. 10000, perfectp);
 /* [6, 28, 496, 8128] */
 
 (%i18) make_array(fixnum,4,3,8);
-(%o18) {Array:  #3A(((0 0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0))
+(%o18) {Array:  #3A(
+    ((0 0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0))
     ((0 0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0))
     ((0 0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0))
     ((0 0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0)))}
 
-Or bind results of Lisp invocations like this:
+/* Or bind results of Lisp invocations like this: */
 
 (%i21) :lisp (msetq $foo (make-array '(4 3 8)));
 
-;;;;;;
-leapyearp(year) := is(mod(year,  4) = 0 and (mod(year,  100) # 0 or mod(year,  400) = 0))$
+/*****/
+leapyearp(year) := is(mod(year,4) = 0 and (mod(year,100) # 0 or mod(year,400) = 0))$
 
-;;;;;;
+/*****/
 collatz(n) := block([L], L: [n], while n > 1 do
 (n: if evenp(n) then n/2 else 3*n + 1, L: endcons(n, L)), L)$
  
@@ -166,14 +195,14 @@ length(%);             /* 112 */
 collatz_length(27);    /* 112 */
 collatz_max(100000);   /* [77031, 351] */
 
-;;;;;;
+/*****/
 a: [sin, cos, lambda([x], x^3)]$
 b: [asin, acos, lambda([x], x^(1/3))]$
 compose(f, g) := buildq([f, g], lambda([x], f(g(x))))$
 map(lambda([fun], fun(x)), map(compose, a, b));
 [x, x, x]
 
-;;;;;;
+/*****/
 a: makelist(i, i, 1, 20);
 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
  
@@ -183,7 +212,7 @@ sublist(a, evenp);
 sublist(a, lambda([n], mod(n, 3) = 0));
 [3, 6, 9, 12, 15, 18]
 
-;;;;;;
+/*****/
 plot3d(atan(-x^2+y^3/4),[x,-4,4],[y,-4,4],[grid,50,50],[gnuplot_pm3d,true]);
 
 /* Two solutions */
@@ -198,7 +227,7 @@ draw3d(xu_grid=30, yv_grid=60, surface_hide=true,
                       cos(theta),
                       theta, 0, %pi, phi, 0, 2 * %pi))$
                   
-;;;;;;
+/*****/
 weekday(year, month, day) := block([m: month, y: year, k],
    if m < 3 then (m: m + 12, y: y - 1),
    k: 1 + remainder(day + quotient((m + 1)*26, 10) + y + quotient(y, 4)
@@ -210,12 +239,12 @@ sublist(makelist(i, i, 2008, 2121),
         lambda([y], weekday(y, 12, 25) = 'sunday));
 /* [2011, 2016, 2022, 2033, 2039, 2044, 2050, 2061, 2067, 2072, 2078, 2089, 2095, 2101, 2107, 2112, 2118] */
 
-;;;;;;
+/*****/
 ".."(a, b) := if a < b then makelist(i, i, a, b) else makelist(i, i, a, b, -1)$
 (%i37) infix("..")$
 (%i38) a: sublist(1 .. 1000, primep);
 
-;;;;;;
+/*****/
 doors(n) := block([v: makelist(i, i, 1, n)],
    for i from 2 thru n do
       for j from i step i while j <= n do v[j]: -v[j],
@@ -227,7 +256,7 @@ doors(100);
 /* Note: ?plusp is a Lisp function. Maxima has nonnegintegerp, which is equivalent,
 but it needs load(linearalgebra)$ first. */
 
-;;;;;;
+/*****/
 linsolve( [ 3*x + 4*y = 7, 2*x + a*y = 13], [x,y]); 
                                7 a - 52        25 
 (D11)                     [x = --------, y = -------] 
@@ -241,7 +270,7 @@ C13) eq1: x^2 + 3*x*y + y^2 = 0$
 (C14) eq2: 3*x + y = 1$ 
 (C15) solve([eq1, eq2]);
 
-;;;;;;
+/*****/
 /* ...Perform some symbolic calculation... */
 qq: integrate(x^4*log(x),x)$
 
@@ -268,11 +297,11 @@ $fun
 /* functions, like EXPT$ instead of EXPT, which you'll want to either define */
 /* or substitute. */
 
-;;;;;;
+/*****/
 fpprec:1000;
 (%i23) bfloat(%pi);
 
-;;;;;;
+/*****/
 /* display2d is a boolean controlling the formatting of displayed equations: */
 (%i1) display2d;
 (%o1)                                TRUE
@@ -314,7 +343,7 @@ fpprec:1000;
       2      3
  + 3 x  y + x
  
-;;;;;;
+/*****/
 /* An example maxima-init.lisp that re-enables the Lisp debugger: */
 (setf *debugger-hook* nil)
 (format t "*** My personal maxima-init.lisp has been loaded ***~%")
@@ -325,7 +354,7 @@ print("*** My very own personal maxima-init.mac has been loaded. ***");
 
 /* The print/format statements are useful for debugging. They can be removed once the init files are established to be working. */
 
-;;;;;;
+/*****/
 /* The Lisp debugger can be re-enabled by setting the *debugger-hook* variable in Lisp to nil, i.e., */
 (setf *debugger-hook* nil)
 
@@ -333,13 +362,13 @@ print("*** My very own personal maxima-init.mac has been loaded. ***");
 (setf *debugger-hook* #'maxima-lisp-debugger)
 
 
-;;;;;;
+/*****/
 /* A Lisp symbol which begins with a dollar sign $ corresponds to a Maxima symbol without the dollar sign.  */
 /* A Maxima symbol which begins with a question mark ? corresponds to a Lisp symbol without the question mark. For example, the Maxima symbol foo corresponds to the Lisp symbol $foo, while the Maxima symbol ?foo corresponds to the Lisp symbol foo */
 /* Note that ?foo is written without a space between ? and foo; otherwise it might be mistaken for describe ("foo"). */
 /* Hyphen -, asterisk *, or other special characters in Lisp symbols must be escaped by backslash \ where they appear in Maxima code. For example, the Lisp identifier *foo-bar* is written ?\*foo\-bar\* in Maxima." */
  
-;;;;;;
+/*****/
 map(lambda([s], every('ratnump,s)),[[1,2,1/3],["a",1/2,3]]);
 => [true,false]
 
@@ -352,7 +381,7 @@ for i : r1 thru r2 while ok do (
          if rel = 'bool then ok : false,
          mf : e)))
 
-;;;;;;
+/*****/
 /* Maxima 可以求解很多种类的常微分方程。 */
 /*  对于可以给出闭式解的一阶和二阶常微分方程，Maxima 会试图求出其精确解。 */
 /*  下面给出三个简单的例子。  */
@@ -378,7 +407,6 @@ for i : r1 thru r2 while ok do (
 /*  量的初值，dval是因变量一阶导数的初值。 */
 
  (%i7) 	 ic1(sol1,x=0,y=1); 
-
  (%i8) 	 ic2(sol2,x=0,y=1,'diff(y,x)=-1); 
 
  /* 3 边值问题  */
@@ -414,78 +442,58 @@ for i : r1 thru r2 while ok do (
 
 /* 说明 desolve 函数提供的初值必须是x=0 处的。 ic1 不能用来直接求解 desolve 函数的结果。必须要人为的处理一下结果的形式。 */
 
-;;;;;;
+/*****/
 EXPTDISPFLAG:FALSE; 
-使得tex(x^(-2))的输出是$x^{-2}$而不是$1\over x^2$. 
+/* 使得tex(x^(-2))的输出是$x^{-2}$而不是$1\over x^2$.  */
 
 SQRTDISPFLAG:FALSE;
-变量以1/2为指数而不是开根号出现? 
+/* 变量以1/2为指数而不是开根号出现?  */
 
 DISPLAY_FORMAT_INTERNAL : true;
 
-block 
-
+block
 block([x,y],arg1,arg2...); 
-
-用来将一堆命令堆在一起， 顺序执行， 中间用逗号隔开， 返回最后一个值， 其中方括号的内容表示是本地变量。 
-
-和（。。。）的区别就在于block中[x]可以被认出是本地量， 如果不加block这几个字， 也能顺序执行。 
-
-多数是用block来写一个子程序或函数， 如 
+/* 用来将一堆命令堆在一起， 顺序执行， 中间用逗号隔开， 返回最后一个值， 其中方括号的内容表示是本地变量。 和（...）的区别就在于block中[x]可以被认出是本地量， 如果不加block这几个字， 也能顺序执行。多数是用block来写一个子程序或函数， 如  */
 
 f(x):block([x],x+3); 
 
-ev 
-
-在ev环境中一步一步地往下做, 输出的是最后的结果, 例 
+ev
+/* 在ev环境中一步一步地往下做, 输出的是最后的结果, 例  */
 
 (%i22) ev(x:1/3,float); 
-
 (%o22) 0.33333333333333 
 
 radcan 
+/* 化简得比较彻底一点. 基本上就是把小数化成分数, 把指数, 对数中的东西化简.  */
 
-化简得比较彻底一点. 基本上就是把小数化成分数, 把指数, 对数中的东西化简. 
-
-小心: 
-
+/* 小心:  */
 (%i832) RADCAN(1.E-38); 
-
-RAT replaced 0.0 by 0//1 = 0.0 
-
+/* RAT replaced 0.0 by 0//1 = 0.0  */
 (%o832) 0 
+/* 会把比较小的量变成0.  */
 
-会把比较小的量变成0. 
-
-变 量的含义: 
+/* 变量的含义:  */
 
 numer 
 
-将含有特殊数字的字符转换成数字, 如果numer为false(默认), 就不转换了. 
+/* 将含有特殊数字的字符转换成数字, 如果numer为false(默认), 就不转换了.  */
 
 (%i113) NUMER; 
-
-
 (%o113) FALSE 
 
 (%i114) %pi; 
-
-
 (%o114) %PI 
 
 (%i115) NUMER:true; 
-
-
 (%o115) TRUE 
 
 (%i116) %pi; 
-
 (%o116) 3.141592653589793
 
-;;;;;;
-dimension.mac 用来做量纲分析的, 还有一个pdf的说明文件; 
-physconst.mac 存了很多物理常数在里边; 
-units.mac 用来做单位转换的;
+/*****/
+/* dimension.mac 用来做量纲分析的, 还有一个pdf的说明文件;  */
+/* physconst.mac 存了很多物理常数在里边;  */
+/* units.mac 用来做单位转换的; */
 
 load(physconst)$
 
@@ -497,15 +505,15 @@ load(recur);
 (%i2) char(T(N+1)-2*T(N),1,T,N,1,[T(0)=0]);
 (\%o2) T\left(N\right)=2^{N}-1
 
-;;;;;;
-f(x):=(modedeclare(x,fixnum),x*x)$
+/*****/
+f(x) := (modedeclare(x,fixnum),x*x)$
 (%i11) compile(f)$
 (%i12) f(2^30);
 
-Maxima encountered a Lisp error:
- The value 1073741824 is not of the expected type FIXNUM.
+/* Maxima encountered a Lisp error: */
+/*  The value 1073741824 is not of the expected type FIXNUM. */
  
-;;;;;;
+/*****/
 f(x,n) := block([s : 0],
     for i : 0 thru n-1 do (
        s : s + rectform(1/(x + i))),
@@ -517,14 +525,16 @@ f(x,n) := block([s : 0],
     s)$
 
 (%i5) showtime : all$
-Evaluation took 0.0000 seconds (0.0000 elapsed)
-(%i6) f(0.5+%i,10^4);
-Evaluation took 0.5540 seconds (0.6320 elapsed)
-(\%o6) 9.262102028387256-1.564840517816298\,i
-(%i7) g(0.5+%i,10^4)$
-Evaluation took 80.8230 seconds (80.9960 elapsed)
+/* Evaluation took 0.0000 seconds (0.0000 elapsed) */
 
-;;;;;;
+(%i6) f(0.5+%i,10^4);
+/* Evaluation took 0.5540 seconds (0.6320 elapsed) */
+(\%o6) 9.262102028387256-1.564840517816298\,i
+
+(%i7) g(0.5+%i,10^4)$
+/* Evaluation took 80.8230 seconds (80.9960 elapsed) */
+
+/*****/
 /* Generating the first few terms of a Taylor series solution to an ode can be done with a few lines of Maxima. Likely this isn't the fastest method, but it's  straightforward (Picard method more or less) */
 
 (%i1) taylorode(f, x, y, xo, yo, n) := block([yy, k : 1,listarith : true],
@@ -535,23 +545,23 @@ Evaluation took 80.8230 seconds (80.9960 elapsed)
       k : k + 1),
   map("=", y, yy))$
 
-Solve y'  = y, y(0) =1
+/* Solve y' = y, y(0) =1 */
 
   (%i2) taylorode([y],x, [y],0,[1],5);
   (%o2)/T/ [y=1+x+x^2/2+x^3/6+x^4/24+...]
 
-Solve y' = x * y, y(0) = 1
+/* Solve y' = x * y, y(0) = 1 */
 
-  (%i3) taylorode([x*y],x, [y],0,[1],8);
+  (%i3) taylorode([x*y],x,[y],0,[1],8);
   (%o3)/T/ [y=1+x^2/2+x^4/8+x^6/48+...]
 
-Solve y' = -z, z' = y, y(0) = 1, z(0) = 0
+/* Solve y' = -z, z' = y, y(0) = 1, z(0) = 0 */
 
   (%i4) taylorode([-z,y],x, [y,z], 0,[1,0],8);
   taylor: assumed to be zero: 0+...
   (%o4)/T/ [y=1-x^2/2+x^4/24-x^6/720+...,z=x-x^3/6+x^5/120-x^7/5040+...]
 
-Solve y' = y^2 + x * sqrt(1+y)/(1+x^2) + cos(y);
+/* Solve y' = y^2 + x * sqrt(1+y)/(1+x^2) + cos(y); */
 
   (%i5) de : y^2 + x * sqrt(1+y)/(1+x^2) + cos(y);
   (%o5) cos(y)+(x*sqrt(y+1))/(x^2+1)+y^2
@@ -559,15 +569,15 @@ Solve y' = y^2 + x * sqrt(1+y)/(1+x^2) + cos(y);
   (%i6) taylorode([de],x, [y], 0, [0],18);
   (%o6)/T/ [y=x+x^2/2+x^3/3-(3*x^4)/32+x^5/48+(355*x^6)/2304+(6829*x^7)/80640-(22627*x^8)/368640-(34207*x^9)/1451520+(7328227*x^10)/103219200+(419054659*x^11)/10218700800-(1967178467*x^12)/44590694400-(6211722199*x^13)/245248819200+(1155380308451*x^14)/27467867750400+(20988560747087*x^15)/765176315904000-(3678327181425647*x^16)/114266329841664000-(6452454141930451*x^17)/291379141096243200+...]
 
-And  a check:
+/* And a check: */
 
   (%i7) subst(%, 'diff(y,x)-de);
   (%o7)/T/ -(5689558840403423*x^17)/10969567664799744+...
 
 
-You can extend this to an ode solver--use horner to evaluate the Taylor polynomials, ...
+/* You can extend this to an ode solver--use horner to evaluate the Taylor polynomials, ... */
 
-;;;;;;
+/*****/
 /* Installing tex-texmflocal: 1.9 */
 /* Installing teTeX-texmf: 3.0_9 */
 /* Installing teTeX-base: 3.0_25 */
@@ -583,8 +593,8 @@ You can extend this to an ode solver--use horner to evaluate the Taylor polynomi
 /*   way (such as TEXINPUTS, TEXMF, TEXMFCNF, and so on), */
 /*   they may prevent teTeX from working. */
 
-;;;;;;
-首先，它可以做为一个计算器使用。
+/*****/
+/* 首先，它可以做为一个计算器使用。 */
  (%i1) 1+2*3+4/5+6^7;
  (%o1) 1399719
  
@@ -593,7 +603,7 @@ You can extend this to an ode solver--use horner to evaluate the Taylor polynomi
  (%i2) float(%o1);
  (%o2) 279943.8
 
-命名，使用label，名字和表达式之间用:分隔。
+/* 命名，使用label，名字和表达式之间用:分隔。 */
  (%i3) radius: 11;
  (%o3) 11
  (%i4) area: %pi * radius^2;
@@ -605,25 +615,25 @@ You can extend this to an ode solver--use horner to evaluate the Taylor polynomi
  (%i6) solve(y=1,x);
  (%o6) [x=−47 √i+5 6 ,x= 47  √i+5 6 ]
 
-不单变量可以命名，表达式也可以，(%i5)是命名，不是函数定义。
-函数定义的语法是:=
+/* 不单变量可以命名，表达式也可以，(%i5)是命名，不是函数定义。 */
+/* 函数定义的语法是:= */
  (%i7) y(x) := x^2;
  (%o7) y(x):=x2
  (%i8) y(4);
  (%o8) 16
  
-解方程使用solve命令。
+/* 解方程使用solve命令。 */
  (%i9) solve(y(x)=3, x);
  (%o9) [x=−3 √,x=3 √]
 
-另外一个重要的命令是ev，ev可以强制使用数值输出，还可以定义局部变量。
+/* 另外一个重要的命令是ev，ev可以强制使用数值输出，还可以定义局部变量。 */
  (%i10) exp(5/3);
  (%o10) e5/3
 
  (%i11) ev(exp(5/3), float);
  (%o11) 5.29449005047003
 
-ev是evaluate的缩写，float参数表示使用浮点数输出，还有另一个参数numer，float是numer的一种类型，使用float不会对numerval的变量求值。
+/* ev是evaluate的缩写，float参数表示使用浮点数输出，还有另一个参数numer，float是numer的一种类型，使用float不会对numerval的变量求值。 */
  (%i12) numerval(b,5);
  (%o12) [b]
  (%i13) a:3;
@@ -633,14 +643,14 @@ ev是evaluate的缩写，float参数表示使用浮点数输出，还有另一�
  (%i15) ev(a*b, numer);
  (%o15) 15
 
-ev还可以用于定义局部变量。下面的例子a,b,c,d都是局部变量。
+/* ev还可以用于定义局部变量。下面的例子a,b,c,d都是局部变量。 */
  (%i16) ev(solve(a*x^2+b*x+c=d,x),a=3,b=4,c=5,d=6);
  (%o16) [x=−7 √−2 3 ,x= 7 √−2 3 ] 
 
-数列求和:
+/* 数列求和: */
  (%i17) sum(k^3,k,1,10);
  (%o17) 3025
 
-在表达示前加上'将会列出相应的表达式子，而不会进行求值。
+/* 在表达示前加上'将会列出相应的表达式子，而不会进行求值。 */
  (%i17) 'sum(k^3,k,1,10);
  (%o17) ∑ k=1 10 k 3

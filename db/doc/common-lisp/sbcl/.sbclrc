@@ -10,6 +10,8 @@
 ;(ql:quickload :money)
 ;(in-package :money)
 
+;(setf sb-impl::*default-external-format* :utf-8)
+
 ;(asdf:operate 'asdf:load-op :myapp)
 ;(myapp:start-myapp)
 
