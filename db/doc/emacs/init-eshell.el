@@ -18,7 +18,8 @@
   ;(insert "erl.sh 'user_default:'")
   ;(insert "ecl.sh '(m:)'")
   ;(insert "sb.sh '(m:)'")
-  (insert "ccl.sh '(m:)'")
+  ;(insert "ccl.sh '(m:)'")
+  (insert "max.sh ':lisp (m:)'")
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 
