@@ -7,7 +7,7 @@
 	(setf (slot-value self 'slot1)
 		  (slot-value prototype 'slot1) … ))
   self)
-(make-instance'subclass :prototype example-object)
+(make-instance 'subclass :prototype example-object)
 
 ;;;;;
 (princ (apply #'mapcar #'+ '((1 2) (3 4) (5 6)))) => (9 12)
@@ -28,7 +28,7 @@
 			(intern (string-upcase sub-account) "KEYWORD")) amount)
 
 ;;;;;
-shell> ccl --no-init # or "ccl64", or m-x slime, or whatever you do to start Clozure CL
+$ ccl --no-init # or "ccl64", or m-x slime, or whatever you do to start Clozure CL
 Welcome to whatever version this is!
 ? (ccl:rebuild-ccl :full t)
 
@@ -1178,6 +1178,9 @@ CL-USER> (-> 10 (+ 20) (+ 40) (/ 10))
 
 (cl-ppcre:split ": " line :limit 2)
 (cl-ppcre:scan-to-strings "((a+)(b))" "cccaaaabx") 会得到 "aaaab" 和 #("aaaab" "aaaa" "b"), 第一个是匹配的串,第二个是 capture 到的串组.
+
+(setf (values match position) 
+      (cl-ppcre::scan-to-strings ".*(\\d).png" "sample1.png"))
 
 (defun game-from-name (name)
     (find name *games* :test #'string-equal :key  #'name))

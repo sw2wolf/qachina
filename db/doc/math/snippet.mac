@@ -1,5 +1,18 @@
 
 /*****/
+./configure --prefix=/home/sw2wolf/maxima/ --enable-ccl --with-ccl=~/ccl/fx86cl
+
+file_search_maxima:append(file_search_maxima,["/home/zy/maxima/###.{mac,mc}"]);
+
+/*****/
+find_root(x^2=2^x,x,-1,1) => -0.7666...
+
+plot2d([2^x,x^2],[x,0,6],[plot_format,gnuplot]);
+
+(%i114) %solve(map('log, 2^x = x^2),x);
+(%o114) %union([x=2])
+
+/*****/
 (%i1) load(unwind_protect)$
 
 (%i2) george(x) := block([ctx : apply('supcontext, [gensym("c")])],
@@ -133,9 +146,6 @@ while while_test(x,t,z,t0) do ....
 (%i7) to_lisp();
 MAXIMA> (symbol-plist '$f)
 (MPROPS (NIL MEXPR ((LAMBDA) ((MLIST) $X) (($DIFF) ((MEXPT) $X 2) $X))))
-
-/*****/
-;./configure --prefix=/home/sw2wolf/maxima-sbcl/ --enable-sbcl --with-sbcl=/usr/local/bin/sbcl
 
 /*****/
 /* Time and date in a formatted string */

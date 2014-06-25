@@ -72,10 +72,9 @@
 	  (switch-to-buffer "+inbox")
 	  (mew)))
 
-;; (defun jump-to-lambdabot ()
-;;   (interactive)
-;;   (if (get-buffer "lambdabot")
-;; 	  (switch-to-buffer-other-window "lambdabot")))
+(defun git-diff ()
+  (interactive)
+  (insert "gitdiff.sh > tmp."))
 
 (defun jump-run-shell ()
   (interactive)
@@ -100,40 +99,30 @@
 (require 'thingatpt)
 (global-set-key (kbd "<f1>") 'forward-whitespace)
 (global-set-key (kbd "<f2>") 'find-file-at-point)
-;(global-set-key (kbd "<f3>") 'describe-char)
 
+;(global-set-key (kbd "<f3>") 'describe-char)
 ;√:#x221a π:#x3c0 λ:#x3bb ∑:#x2211 ⊥:#x22a5 ≅:#x2245 ≠:#x2260 ☺:#x263a
 ;⋆:#x22c6 ≅:#x2245
 ;(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert #x3bb)))
 
-;; (global-set-key (kbd "<f3>") '(lambda ()
-;; 								(interactive)
-;; 								(insert "/msg rudybot pi ") (backward-char 1)))
-
-; > @ty @wn @src @where @undo @unmtl @pl @package
-;@djinn turn a type into its corresponding expression
-(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert "/msg lambdabot pi")))
-
-;$\sqrt{x-1}-1$
-;; (global-set-key (kbd "<f3>")
-;; 				'(lambda ()
-;; 				   (interactive) (insert "/msg TeXbot !l $e^{\pi\cdot i}+1$")))
-
+(global-set-key (kbd "<f3>") 'jump-run-shell)
 (global-set-key (kbd "<f4>") 'jump-run-shell)
 (global-set-key (kbd "<f5>") 'jump-run-mew)
 
-;(global-set-key (kbd "<f5>") 'jump-to-lambdabot)
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-haskell)))
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-caml "ocaml")))
 
 ;(global-set-key (kbd "<f6>") 'imaxima)
 ;(global-set-key (kbd "<f6>") 'jump-run-clisp)
-(global-set-key (kbd "<f6>") 'jump-run-lisp)
+;(global-set-key (kbd "<f6>") 'jump-run-lisp)
 
-(global-set-key (kbd "<f7>") '(lambda () (interactive) (insert "gitdiff.sh > tmp.")))
+(global-set-key (kbd "<f6>") 'git-diff)
+(global-set-key (kbd "<f7>") 'git-diff)
+(global-set-key (kbd "<f8>") 'git-diff)
+
 ;(global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 
-(global-set-key (kbd "<f8>") 'jump-run-erlang)
+;(global-set-key (kbd "<f8>") 'jump-run-erlang)
 ;(global-set-key (kbd "<f8>") 'jump-run-prolog)
 ;(global-set-key (kbd "<f8>") 'run-scheme)
 
@@ -146,6 +135,20 @@
 ;;     (x-send-client-message nil 0 nil "_NET_WM_STATE" 32 '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
 ;;     (x-send-client-message nil 0 nil "_NET_WM_STATE" 32 '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0)))
 ;(global-set-key [(f12)] 'desktop-save)
+
+;; (global-set-key (kbd "<f3>") '(lambda ()
+;; 								(interactive)
+;; 								(insert "/msg rudybot pi ") (backward-char 1)))
+
+;$\sqrt{x-1}-1$
+;; (global-set-key (kbd "<f3>")
+;; 				'(lambda ()
+;; 				   (interactive) (insert "/msg TeXbot !l $e^{\pi\cdot i}+1$")))
+
+; > @ty @wn @src @where @undo @unmtl @pl @package
+;@djinn turn a type into its corresponding expression
+(global-set-key (kbd "C-c C-v") '(lambda () (interactive) (insert "/msg lambdabot pi")))
+
 
 (require 'ibuffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)

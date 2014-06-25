@@ -27,7 +27,7 @@
 
 -include("records.hrl").
 
--import(calendar, [date_to_gregorian_days/3, gregorian_days_to_date/1, day_of_the_week/1]).
+%% -import(calendar, [date_to_gregorian_days/3, gregorian_days_to_date/1, day_of_the_week/1]).
 
 -ifdef(Debug).
 -define(DEBUG(Fmt, Args), io:format(Fmt, Args)).  
@@ -112,19 +112,19 @@ win_ssq(Count, NoRed, NoBlue) ->
 	GRed = good_red(),
     pick_ssq_nums(
       Count,
-	  GRed,
+	  GRed -- [1,33],
 	  GRed -- NoRedLst,   %lists:seq(1,33) -- NoRedLst
       pick_num(Count, lists:seq(1,16)--str2ints(NoBlue), [])
     ),
     file:write_file(ssqNum(), get(result)).
 
 pick_ssq_nums(0, _, _, _) -> ok;
-pick_ssq_nums(Count, GRed, YesRed, OkBlue) ->
+pick_ssq_nums(Count, XRed, YesRed, OkBlue) ->
 	if
 		Count == 1 ->
 			Red6 = lists:sort( pick_num(6, YesRed, []) );
 	    true ->
-			Red6 = lists:sort( pick_num(6, GRed, []) )
+			Red6 = lists:sort( pick_num(6, XRed, []) )
 	end,
     Result = lists:append(Red6, [lists:nth(Count,OkBlue)]),
     ResStr = lists:append(string:strip(
@@ -136,7 +136,7 @@ pick_ssq_nums(Count, GRed, YesRed, OkBlue) ->
         _ ->
             put(result, get(result) ++ ResStr)
     end,
-    pick_ssq_nums(Count-1, GRed, YesRed, OkBlue).
+    pick_ssq_nums(Count-1, XRed, YesRed, OkBlue).
 
 good_red() ->
     {ok,Bin} = file:read_file(ssqHitNum()),

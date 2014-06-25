@@ -86,6 +86,8 @@
    (unless (y-or-n-p "Print buffer? ")
      (error "Cancelled")))
 
+(blink-cursor-mode -1)
+
 ;(require 'dired+)
 ;(put 'dired-find-alternate-file 'disabled nil)  ;enable `a' command
 

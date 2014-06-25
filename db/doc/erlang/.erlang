@@ -7,12 +7,6 @@ code:add_patha(".").
 
 %code:add_pathz("/home/sw2wolf/RnD/yaws/ebin").
 
-%code:add_pathz("/home/sw2wolf/RnD/cowboy/ebin").
-%code:add_pathz("/home/sw2wolf/RnD/cowboy/deps/ranch/ebin/").
-
-%code:add_pathz("/home/sw2wolf/erlang/cean-2.0/ebin").
-%code:add_pathz("/home/sw2wolf/erlang/ibrowse-2.2.0-17/ebin").
-
 %io:format("Welcome to Erlang World~n").
 %io:format("Memory: ~p~n", [erlang:memory(total)]).
 %io:format("Process Count: ~p~n",[erlang:system_info(process_count)]).
