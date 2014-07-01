@@ -1,5 +1,18 @@
 
 -----
+import Control.Monad.Random
+
+randomPref :: Integer -> Double
+randomPref seed = evalRand (getRandomR (0.0, 1.0)) g where
+    g = mkStdGen (fromIntegral seed)
+
+-----
+import Data.Complex
+
+> 2 ** (1 :+ 3)
+<lambdabot>  (-0.9739888359315625) :+ 1.746810163549743
+
+-----
 $ ghc -ddump-deriv Main.hs
 -- -ddump-deriv -dsuppress-idinfo -dsuppress-coercions -dsuppress-type-applications -dsuppress-uniques -dsuppress-module-prefixes
 
@@ -298,44 +311,11 @@ sequence [id, (+2), (*2), (^2), (2^)] 5
 [5,7,10,25,32]
 
 ------
-$ghci -i "$HOME/.xmonad/lib" ~/.xmonad/xmonad.hs
-
-$ghc -e 'System.Directory.getAppUserDataDirectory "xmonad"'
-
-$ghc --info | egrep 'split|Host'
-,("Host platform","i386-unknown-freebsd")
-,("Object splitting supported","YES")
-
--- The full output of log.txt is available here. It contains the GHC Core (which looks a bit like Haskell), then the C-- (which looks a bit like C) and finally the assembly code (which looks exactly like assembly).
-ghc -c -O2 InnerLoop.hs -ddump-simpl -ddump-cmm -ddump-asm > log.txt
-
-$cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
-
-$cabal install mighttpd2 --ghc-options=-fllvm
---Mighttpd2 supports HTTPS (HTTP over SSL/TLS) experimentally. To use it, type:
-$cabal install --flags="tls" mighttpd2
-
-$cabal install hashable --constraint "unix==2.6.0.1" --constraint "bytestring==0.10.0.2"
---dry-run
-$cabal install --enable-library-profiling
-$cabal install aeson --constraint="hashable==1.2.0.7" -v
-
---to build a cabal package packagename: 
-$ cabal install --ghc-options=-package const-math-ghc-plugin -fplugin ConstMath.Plugin packagename
-
-$ cabal install network --configure-option --host=i386-unknown-mingw32
-
-$cabal unpack parconc-examples
-$cabal install --only-dependencies
-$cabal configure
-$cabal build
-
----------
 foreign import ccall "sin" c_sin :: CDouble -> CDouble
 
 ---------
 flip runContT return $ callCC $
-                  \exit -> forever $ do x < - getLine; when (x == "end") (exit ())
+         \exit -> forever $ do x < - getLine; when (x == "end") (exit ())
 
 ---------
 import System
@@ -587,3 +567,37 @@ better  = unlines . map linemanager . lines
          case (take 13 l, drop 13 l) of
             ("<interactive>", xs) -> "YOUR SCRIPT DOESNT MAKE SENSE!\n" ++ tail xs
             _                     -> l
+
+-----
+$ghci -i "$HOME/.xmonad/lib" ~/.xmonad/xmonad.hs
+
+$ghc -e 'System.Directory.getAppUserDataDirectory "xmonad"'
+
+$ghc --info | egrep 'split|Host'
+,("Host platform","i386-unknown-freebsd")
+,("Object splitting supported","YES")
+
+-- The full output of log.txt is available here. It contains the GHC Core (which looks a bit like Haskell), then the C-- (which looks a bit like C) and finally the assembly code (which looks exactly like assembly).
+ghc -c -O2 InnerLoop.hs -ddump-simpl -ddump-cmm -ddump-asm > log.txt
+
+$cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
+
+$cabal install mighttpd2 --ghc-options=-fllvm
+--Mighttpd2 supports HTTPS (HTTP over SSL/TLS) experimentally. To use it, type:
+$cabal install --flags="tls" mighttpd2
+
+$cabal install hashable --constraint "unix==2.6.0.1" --constraint "bytestring==0.10.0.2"
+--dry-run
+$cabal install --enable-library-profiling
+$cabal install aeson --constraint="hashable==1.2.0.7" -v
+
+--to build a cabal package packagename: 
+$ cabal install --ghc-options=-package const-math-ghc-plugin -fplugin ConstMath.Plugin packagename
+$ cabal install -O2 --ghc-options='-threaded -with-rtsopts="-N"'
+
+$ cabal install network --configure-option --host=i386-unknown-mingw32
+
+$cabal unpack parconc-examples
+$cabal install --only-dependencies
+$cabal configure
+$cabal build

@@ -15,12 +15,17 @@
   ;(insert "ml ''")
   ;(insert "clisp.sh '(m:)'")
   ;(insert "guile.sh '()'")
-  ;(insert "erl.sh 'user_default:'")
   ;(insert "ecl.sh '(m:)'")
   ;(insert "sb.sh '(m:)'")
   ;(insert "ccl.sh '(m:)'")
   (insert "max.sh ':lisp (m:)'")
   (backward-char 2) ;(goto-char (- (point) 2))
+)
+
+(defun eshell/erlang ()
+  (interactive)
+  (insert "erl.sh 'user_default:'")
+  (backward-char 1)
 )
 
 ;; (setq eshell-prompt-function
@@ -40,23 +45,36 @@
     ;; (add-to-list 'eshell-output-filter-functions 
     ;;              'eshell-postoutput-scroll-to-bottom)
 
-  (define-key eshell-mode-map [(control p)] 'eshell-previous-matching-input-from-input)
-  (define-key eshell-mode-map [(control n)] 'eshell-next-matching-input-from-input)
+  ;(define-key eshell-mode-map [(control p)] 'eshell-previous-matching-input-from-input)
+  ;(define-key eshell-mode-map [(control n)] 'eshell-next-matching-input-from-input)
  
-  (define-key eshell-mode-map [up] 'previous-line)
-  (define-key eshell-mode-map [down] 'next-line)
+  ;(define-key eshell-mode-map [up] 'previous-line)
+  ;(define-key eshell-mode-map [down] 'next-line)
  
-  (define-key eshell-mode-map [home] 'eshell-bol)
-  (define-key eshell-mode-map [(control u)] 'eshell-kill-input) ;删除已输入命令
+  ;(define-key eshell-mode-map [home] 'eshell-bol)
 
-  (define-key eshell-mode-map [(control l)] 'eshell/clear)
-  (define-key eshell-mode-map [(control e)] 'eshell/eval)
+  ;(define-key eshell-mode-map [(control u)] 'eshell-kill-input) ;删除已输入命令
+  ;(define-key eshell-mode-map [(control l)] 'eshell/clear)
+  ;(define-key eshell-mode-map [(control e)] 'eshell/eval)
+  ;(define-key eshell-mode-map [(control b)] 'eshell/erlang)
+
+  ;(local-set-key (kbd "C-p") 'eshell-previous-matching-input-from-input)
+  ;(local-set-key (kbd "C-n") 'eshell-next-matching-input-from-input)
+  (local-set-key (kbd "<up>") 'previous-line)
+  (local-set-key (kbd "<down>") 'next-line)
+
+  (local-set-key (kbd "C-l") 'eshell/clear)
+  (local-set-key (kbd "C-e") 'eshell/eval)
+  (local-set-key (kbd "C-c e") 'eshell/erlang)
 ))
 
 (defalias 'img
   (lambda(img)
 	(propertize "Image" (quote display)
 				(create-image (expand-file-name img)))))
+
+;; (require 'em-alias)
+;; (add-to-list 'eshell-command-aliases-list (list "ls" "ls -l"))
 
 ;(add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
 

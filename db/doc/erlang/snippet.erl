@@ -1,8 +1,5 @@
 
 %%%%%
-./configure --prefix=/home/sw2wolf/erlang/ --enable-silent-rules --enable-hipe --without-javac
-
-%%%%%
 SchedId      = erlang:system_info(scheduler_id),
 SchedNum     = erlang:system_info(schedulers),
 ProcCount    = erlang:system_info(process_count),
@@ -539,3 +536,7 @@ get_app_dir() ->
 	AppDir ->
 	    AppDir
     end.
+
+
+%%%%%
+./configure --prefix=/home/sw2wolf/erlang/ --enable-silent-rules --enable-hipe --without-javac

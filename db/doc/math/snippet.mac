@@ -1,8 +1,10 @@
 
 /*****/
-./configure --prefix=/home/sw2wolf/maxima/ --enable-ccl --with-ccl=~/ccl/fx86cl
+%in:: ​let('integrate(delta(u)*fn(u), u, minf, inf), fn(0));
+%out:: integrate(delta(u)*fn(u),u,-inf,inf) --> fn(0)
 
-file_search_maxima:append(file_search_maxima,["/home/zy/maxima/###.{mac,mc}"]);
+%in:: letsimp('integrate(delta(u)*fn(u), u, minf, inf));​
+%out:: fn(0)
 
 /*****/
 find_root(x^2=2^x,x,-1,1) => -0.7666...
@@ -664,3 +666,8 @@ f(x,n) := block([s : 0],
 /* 在表达示前加上'将会列出相应的表达式子，而不会进行求值。 */
  (%i17) 'sum(k^3,k,1,10);
  (%o17) ∑ k=1 10 k 3
+
+/*****/
+./configure --prefix=/home/sw2wolf/maxima/ --enable-ccl --with-ccl=~/ccl/fx86cl
+
+file_search_maxima:append(file_search_maxima,["/home/zy/maxima/###.{mac,mc}"]);
