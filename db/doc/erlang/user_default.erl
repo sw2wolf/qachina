@@ -122,9 +122,9 @@ pick_ssq_nums(0, _, _, _) -> ok;
 pick_ssq_nums(Count, XRed, YesRed, OkBlue) ->
 	if
 		Count == 1 ->
-			Red6 = lists:sort( pick_num(6, YesRed, []) );
+			Red6 = lists:sort( pick_num(6, XRed, []) );
 	    true ->
-			Red6 = lists:sort( pick_num(6, XRed, []) )
+			Red6 = lists:sort( pick_num(6, YesRed, []) )
 	end,
     Result = lists:append(Red6, [lists:nth(Count,OkBlue)]),
     ResStr = lists:append(string:strip(

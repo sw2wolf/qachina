@@ -22,9 +22,15 @@
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 
-(defun eshell/erlang ()
+;; (defun eshell/erlang ()
+;;   (interactive)
+;;   (insert "erl.sh 'user_default:'")
+;;   (backward-char 1)
+;; )
+
+(defun eshell/maxima ()
   (interactive)
-  (insert "erl.sh 'user_default:'")
+  (insert "max.sh ''")
   (backward-char 1)
 )
 
@@ -48,8 +54,8 @@
   ;(define-key eshell-mode-map [(control p)] 'eshell-previous-matching-input-from-input)
   ;(define-key eshell-mode-map [(control n)] 'eshell-next-matching-input-from-input)
  
-  ;(define-key eshell-mode-map [up] 'previous-line)
-  ;(define-key eshell-mode-map [down] 'next-line)
+  (define-key eshell-mode-map [up] 'previous-line)
+  (define-key eshell-mode-map [down] 'next-line)
  
   ;(define-key eshell-mode-map [home] 'eshell-bol)
 
@@ -60,12 +66,13 @@
 
   ;(local-set-key (kbd "C-p") 'eshell-previous-matching-input-from-input)
   ;(local-set-key (kbd "C-n") 'eshell-next-matching-input-from-input)
-  (local-set-key (kbd "<up>") 'previous-line)
-  (local-set-key (kbd "<down>") 'next-line)
+  ;(local-set-key (kbd "<up>") 'previous-line)
+  ;(local-set-key (kbd "<down>") 'next-line)
 
   (local-set-key (kbd "C-l") 'eshell/clear)
   (local-set-key (kbd "C-e") 'eshell/eval)
-  (local-set-key (kbd "C-c e") 'eshell/erlang)
+  (local-set-key (kbd "C-c e") 'eshell/maxima)
+  ;(local-set-key (kbd "C-c e") 'eshell/erlang)
 ))
 
 (defalias 'img

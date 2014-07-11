@@ -122,7 +122,7 @@
 
 ;(global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 
-;(global-set-key (kbd "<f8>") 'jump-run-erlang)
+(global-set-key (kbd "<f8>") 'jump-run-erlang)
 ;(global-set-key (kbd "<f8>") 'jump-run-prolog)
 ;(global-set-key (kbd "<f8>") 'run-scheme)
 

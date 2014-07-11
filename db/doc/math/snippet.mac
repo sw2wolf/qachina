@@ -1,5 +1,15 @@
 
 /*****/
+(%i20) taylor(eps*log(eps*%e^(1/eps)-eps),eps,0,2);
+(%o20)/T/ 1+(log(eps)+...)*eps+...+(-eps+...)*%e^(-1/eps)+(-eps/2+...)*(%e^(-1/eps))^2+...
+
+(%i21) args(%);
+(%o21) [eps*log(eps)+1,-eps*%e^(-1/eps),-(eps*%e^(-2/eps))/2]
+
+(%i22) subst(eps=0.1,%);
+(%o22) [0.76974149070059,-4.539992976248485*10^-6,-1.030576811219279*10^-10]
+    
+/*****/
 %in:: ​let('integrate(delta(u)*fn(u), u, minf, inf), fn(0));
 %out:: integrate(delta(u)*fn(u),u,-inf,inf) --> fn(0)
 
@@ -666,6 +676,8 @@ f(x,n) := block([s : 0],
 /* 在表达示前加上'将会列出相应的表达式子，而不会进行求值。 */
  (%i17) 'sum(k^3,k,1,10);
  (%o17) ∑ k=1 10 k 3
+
+assume(k>0);assume(n>0);sum(a^n,n,0,k),simpsum; => (a^(k+1)-1)/(a-1)
 
 /*****/
 ./configure --prefix=/home/sw2wolf/maxima/ --enable-ccl --with-ccl=~/ccl/fx86cl
