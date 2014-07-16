@@ -105,9 +105,8 @@
 ;⋆:#x22c6 ≅:#x2245
 ;(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert #x3bb)))
 
-(global-set-key (kbd "<f3>") 'jump-run-shell)
-(global-set-key (kbd "<f4>") 'jump-run-shell)
-(global-set-key (kbd "<f5>") 'jump-run-mew)
+(global-set-key (kbd "<f3>") 'git-diff)
+(global-set-key (kbd "<f4>") 'git-diff)
 
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-haskell)))
 ;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-caml "ocaml")))
@@ -116,13 +115,14 @@
 ;(global-set-key (kbd "<f6>") 'jump-run-clisp)
 ;(global-set-key (kbd "<f6>") 'jump-run-lisp)
 
-(global-set-key (kbd "<f6>") 'git-diff)
-(global-set-key (kbd "<f7>") 'git-diff)
-(global-set-key (kbd "<f8>") 'git-diff)
+(global-set-key (kbd "<f5>") 'jump-run-shell)
+(global-set-key (kbd "<f6>") 'jump-run-shell)
+(global-set-key (kbd "<f7>") 'jump-run-shell)
+(global-set-key (kbd "<f8>") 'jump-run-shell)
 
 ;(global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 
-(global-set-key (kbd "<f8>") 'jump-run-erlang)
+;(global-set-key (kbd "<f8>") 'jump-run-erlang)
 ;(global-set-key (kbd "<f8>") 'jump-run-prolog)
 ;(global-set-key (kbd "<f8>") 'run-scheme)
 
@@ -147,8 +147,8 @@
 
 ; > @ty @wn @src @where @undo @unmtl @pl @package
 ;@djinn turn a type into its corresponding expression
-(global-set-key (kbd "C-c C-v") '(lambda () (interactive) (insert "/msg lambdabot pi")))
-
+(global-set-key (kbd "C-c v") '(lambda () (interactive) (insert "/msg lambdabot pi")))
+(global-set-key (kbd "C-c m") 'jump-run-mew)
 
 (require 'ibuffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
