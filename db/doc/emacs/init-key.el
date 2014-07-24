@@ -36,17 +36,17 @@
         (find-file file))
     (message "Current buffer does not have an associated file.")))
 
-;; (defun jump-run-prolog ()
-;;   (interactive)
-;;   (if (get-buffer "*prolog*")
-;; 	  (switch-to-buffer-other-window "*prolog*")
-;; 	  (run-prolog 'swi)))
-
-(defun jump-run-erlang ()
+(defun jump-run-prolog ()
   (interactive)
-  (if (get-buffer "*erlang*")
-	  (switch-to-buffer "*erlang*")
-	  (run-erlang)))
+  (if (get-buffer "*prolog*")
+	  (switch-to-buffer-other-window "*prolog*")
+	  (run-prolog 'swi)))
+
+;; (defun jump-run-erlang ()
+;;   (interactive)
+;;   (if (get-buffer "*erlang*")
+;; 	  (switch-to-buffer "*erlang*")
+;; 	  (run-erlang)))
 
 (defun jump-run-lisp ()
   (interactive)
@@ -118,7 +118,8 @@
 (global-set-key (kbd "<f5>") 'jump-run-shell)
 (global-set-key (kbd "<f6>") 'jump-run-shell)
 (global-set-key (kbd "<f7>") 'jump-run-shell)
-(global-set-key (kbd "<f8>") 'jump-run-shell)
+
+(global-set-key (kbd "<f8>") 'jump-run-prolog)
 
 ;(global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 
@@ -126,8 +127,8 @@
 ;(global-set-key (kbd "<f8>") 'jump-run-prolog)
 ;(global-set-key (kbd "<f8>") 'run-scheme)
 
-(global-set-key [(f9)] 'list-bookmarks)
-(global-set-key [(f10)] 'bookmark-set)
+;(global-set-key [(f9)] 'list-bookmarks)
+;(global-set-key [(f10)] 'bookmark-set)
 
 ;; (global-set-key [f11] 'my-maximized) 
 ;; (defun my-maximized () 
@@ -149,6 +150,9 @@
 ;@djinn turn a type into its corresponding expression
 (global-set-key (kbd "C-c v") '(lambda () (interactive) (insert "/msg lambdabot pi")))
 (global-set-key (kbd "C-c m") 'jump-run-mew)
+
+(global-set-key (kbd "C-c g") 'list-bookmarks)
+(global-set-key (kbd "C-c h") 'bookmark-set)
 
 (require 'ibuffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)

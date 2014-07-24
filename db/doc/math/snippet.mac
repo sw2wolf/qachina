@@ -374,6 +374,8 @@ fpprec:1000;
 set_plot_option([gnuplot_pm3d,true]);
 print("*** My very own personal maxima-init.mac has been loaded. ***");
 
+set_plot_option([gnuplot_default_term_command, "set term pop"]);
+
 /* The print/format statements are useful for debugging. They can be removed once the init files are established to be working. */
 
 /*****/
@@ -680,6 +682,6 @@ f(x,n) := block([s : 0],
 assume(k>0);assume(n>0);sum(a^n,n,0,k),simpsum; => (a^(k+1)-1)/(a-1)
 
 /*****/
-./configure --prefix=/home/sw2wolf/maxima/ --enable-ccl --with-ccl=~/ccl/fx86cl
+./configure --prefix=/home/sw2wolf/maxima/ --enable-ccl --with-ccl=/home/sw2wolf/ccl/fx86cl
 
 file_search_maxima:append(file_search_maxima,["/home/zy/maxima/###.{mac,mc}"]);

@@ -1101,3 +1101,14 @@ scheme(A) :-
 
 % To find all people of group 100, use: 
 ?- findall(User, in_table(H, [user(User), gid(100)], _), Users).
+
+%%%
+?- pack_property(P, version(V)). 
+P = real, 
+V = '1.0.4' ; 
+...
+
+?- pack_install('https://github.com/edisonm/refactor.git').
+
+%%%
+%./configure CFLAGS="-D__FREEBSD__ -I/usr/local/include" LDFLAGS=-L/usr/local/lib --prefix=/home/sw2wolf/swi/ --enable-gmp

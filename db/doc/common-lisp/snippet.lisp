@@ -771,14 +771,7 @@ exit
 
 ;sbcl --script $HOME/bin/sbcl-daemon.lisp $name $port
 
-;;;
-;clisp
-;./configure --with-threads=POSIX_THREADS ;--with-jitc=lightning 
-(setq custom:*default-file-encoding*
-      (ext:make-encoding :charset 'charset:iso-8859-1
-                         :line-terminator :unix))
-;#<ENCODING CHARSET:ISO-8859-1 :UNIX>
-
+;;;;;
 (deftype octet () '(unsigned-byte 8))
  
 (with-open-file (in #P"~/tmp/misc/wang.dos"
@@ -1879,3 +1872,14 @@ clisp -K full -x "(load \"asdf.lisp\") (load \"stumpwm.asd\") (load \"/usr/share
 (defpackage :key-param ...)
 (defpackage #:key-param ...)
 ;here #: is a reader macro to create uninterned symbols; and this way is the preferred one, because you don't create unneeded keywords in the process.
+
+;;;;;
+;clisp
+;./configure --with-threads=POSIX_THREADS ;--with-jitc=lightning 
+(setq custom:*default-file-encoding*
+      (ext:make-encoding :charset 'charset:iso-8859-1
+                         :line-terminator :unix))
+;#<ENCODING CHARSET:ISO-8859-1 :UNIX>
+
+;ecl
+;./configure CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib --prefix=/home/sw2wolf/ecl/
