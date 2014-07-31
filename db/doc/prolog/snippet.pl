@@ -1,5 +1,10 @@
 
 %%%
+?- write_canonical(m1 : w1 > w2).
+>(:(m1,w1),w2)
+%to check precedence when not sure.
+
+%%%
 ?- d(sin(x^2)+5,x,Y).
 Y = cos(x ^ 2) * (1 * 2 * x ^ 1) + 0
 

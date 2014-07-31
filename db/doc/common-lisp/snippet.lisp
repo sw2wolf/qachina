@@ -1,5 +1,27 @@
 
 ;;;;;
+Macro:
+
+CL-USER 8 > (macro-function 'bar)
+NIL
+
+CL-USER 9 > (macro-function 'lambda)
+#<Function LAMBDA 41100B7E94>
+Function:
+
+CL-USER 15 > (and (fboundp '+)
+                  (not (macro-function '+))
+                  (not (special-operator-p '+)))
+T
+
+CL-USER> (setf (symbol-function '&) (symbol-function 'funcall))
+#<FUNCTION FUNCALL>
+CL-USER> (& 'list 1 2 3)
+(1 2 3)
+CL-USER> (& 'cons 'x 'y)
+(X . Y)
+
+;;;;;
 (defmethod initialize-instance ((self subclass) &key
 								(prototype nil prototypep) &allow-other-keys)
   (call-next-method)
@@ -330,15 +352,6 @@ MY-FOO
 ;:dist-url can be used to specify the initial dist version to use at installation time. Valid URLs can be obtained from an existing Quicklisp installation by evaluating one of the new functions (ql:dist-url "quicklisp") or (ql:available-dist-versions "quicklisp")
 
 ;:client-url can be used to specify the initial client version to use at installation time. Valid URLs can be obtained from an existing Quicklisp installation by evaluating one of the new functions (ql:client-url) or (ql:available-client-versions)
-
-;;;;;;
-$sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
-      --eval '(quicklisp-quickstart:install :path "ql-test/")' \
-      --eval '(ql:quickload "cl-ppcre")'
-
-$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
-$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="ccl -n -Q -K utf-8"
-$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"
 
 ;;;;;;
 (in-package #:smarkup)
@@ -1883,3 +1896,11 @@ clisp -K full -x "(load \"asdf.lisp\") (load \"stumpwm.asd\") (load \"/usr/share
 
 ;ecl
 ;./configure CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib --prefix=/home/sw2wolf/ecl/
+
+$sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
+      --eval '(quicklisp-quickstart:install :path "ql-test/")' \
+      --eval '(ql:quickload "cl-ppcre")'
+
+$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
+$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="ccl -n -Q -K utf-8"
+$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"

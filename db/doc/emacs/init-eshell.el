@@ -15,10 +15,9 @@
   ;(insert "ml ''")
   ;(insert "clisp.sh '(m:)'")
   ;(insert "guile.sh '()'")
+  ;(insert "ccl.sh '(m:)'") 
   ;(insert "ecl.sh '(m:)'")
-  ;(insert "sb.sh '(m:)'")
-  ;(insert "ccl.sh '(m:)'")
-  (insert "max.sh ':lisp (m:)'")
+  (insert "sb.sh '(m:)'")
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 
@@ -28,10 +27,10 @@
 ;;   (backward-char 1)
 ;; )
 
-(defun eshell/maxima ()
+(defun eshell/other ()
   (interactive)
-  (insert "max.sh ''")
-  (backward-char 1)
+  (insert "max.sh ':lisp (m:)'")
+  (backward-char 2)
 )
 
 ;; (setq eshell-prompt-function
@@ -71,7 +70,7 @@
 
   (local-set-key (kbd "C-l") 'eshell/clear)
   (local-set-key (kbd "C-e") 'eshell/eval)
-  (local-set-key (kbd "C-c e") 'eshell/maxima)
+  (local-set-key (kbd "C-c e") 'eshell/other)
   ;(local-set-key (kbd "C-c e") 'eshell/erlang)
 ))
 
