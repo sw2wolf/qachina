@@ -12,7 +12,7 @@ $cmd has -t $session
 
 if [ $? != 0 ]; then
   $cmd new -d -n work -s $session "csh"
-  $cmd splitw -h -p 55 -t $session "csh"
+  $cmd splitw -h -p 60 -t $session "xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex cont"
   $cmd select-pane -t 1
   #$cmd selectw -t $session:0
 fi

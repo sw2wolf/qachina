@@ -19,8 +19,6 @@
 /*****/
 find_root(x^2=2^x,x,-1,1) => -0.7666...
 
-plot2d([2^x,x^2],[x,0,6],[plot_format,gnuplot]);
-
 (%i114) %solve(map('log, 2^x = x^2),x);
 (%o114) %union([x=2])
 
@@ -72,6 +70,10 @@ declare(F,outative); => F(3*A) = 3 F(A)
 declare(n,integer); => sin(n*%pi) = 0
 
 /*****/
+plot2d([2^x,x^2],[x,0,6],[plot_format,gnuplot]);
+plot2d([discrete, makelist([x,sin(x)],x,-5,5,0.25)], [style, linespoints])$
+plot2d([sin(x)], [x,-5,5], [style, linespoints], [adapt_depth, 1], [nticks, 5])$
+
 /* For one function: */
 
 f(x,A,w) := A*sin(w*x)$

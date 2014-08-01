@@ -29,8 +29,9 @@
 
 (defun eshell/other ()
   (interactive)
-  (insert "max.sh ':lisp (m:)'")
-  (backward-char 2)
+  ;(insert "max.sh ':lisp (m:)'")
+  (insert "max.sh ''")
+  (backward-char 1)
 )
 
 ;; (setq eshell-prompt-function

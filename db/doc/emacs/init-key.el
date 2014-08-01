@@ -118,8 +118,7 @@
 (global-set-key (kbd "<f5>") 'jump-run-shell)
 (global-set-key (kbd "<f6>") 'jump-run-shell)
 (global-set-key (kbd "<f7>") 'jump-run-shell)
-
-(global-set-key (kbd "<f8>") 'jump-run-prolog)
+(global-set-key (kbd "<f8>") 'jump-run-shell)
 
 ;(global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 
