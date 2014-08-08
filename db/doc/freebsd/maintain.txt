@@ -396,3 +396,16 @@ make makesum
 # ifconfig re0 inet 192.168.2.33/24 add
 删除：
 # ifconfig re0 inet 192.168.2.33/24 -alias
+
+#####
+$ gpart show
+=>       63  312581745  ada0  MBR  (149G)
+         63   41945652     1  ntfs  (20G)
+   41945715   46235070     2  !12  (22G)
+   88180785  224395227     3  freebsd  [active]  (107G)
+  312576012       5796        - free -  (2.9M)
+
+=>        0  224395227  ada0s3  BSD  (107G)
+          0  216006656       1  freebsd-ufs  (103G)
+  216006656    8388570       2  freebsd-swap  (4G)
+  224395226          1          - free -  (512B)

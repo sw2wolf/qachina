@@ -1,5 +1,19 @@
 
 /*****/
+(%i5) declare(n,constant)$
+(%i6) f : lambda([n],n^2)$    
+(%i7) f(5);
+(%o7) 25
+
+/*****/
+:lisp (defun $position(a b) (position a b :test #'alike1))
+
+(%i7) ?alike1(a^2,ratsimp(a^2));
+(%o7)                                true
+(%i8) ?equal(a^2,ratsimp(a^2));
+(%o8)                                false
+
+/*****/
 (%i20) taylor(eps*log(eps*%e^(1/eps)-eps),eps,0,2);
 (%o20)/T/ 1+(log(eps)+...)*eps+...+(-eps+...)*%e^(-1/eps)+(-eps/2+...)*(%e^(-1/eps))^2+...
 
@@ -73,6 +87,8 @@ declare(n,integer); => sin(n*%pi) = 0
 plot2d([2^x,x^2],[x,0,6],[plot_format,gnuplot]);
 plot2d([discrete, makelist([x,sin(x)],x,-5,5,0.25)], [style, linespoints])$
 plot2d([sin(x)], [x,-5,5], [style, linespoints], [adapt_depth, 1], [nticks, 5])$
+plot2d([sin(x),[discrete, [[%pi,0]]]],[x,0,2*%pi],[style,lines,points],[point_type,plus],[color,blue,black],[legend,false]);
+
 
 /* For one function: */
 

@@ -12,6 +12,9 @@
 ;(fset 'message 'ignore)
 (setq messages-buffer-max-lines nil)
 
+;disable checking of git ...
+(setq vc-handled-backends nil)
+
 (require 'cl)
 
 (when (> emacs-major-version 22)

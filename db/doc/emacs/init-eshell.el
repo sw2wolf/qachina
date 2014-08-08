@@ -9,15 +9,14 @@
     (erase-buffer)))
 
 (defun eshell/eval ()
-  (interactive)
-  ;(insert "pl.sh ''")
+  (interactive) 
   ;(insert "hs ''")
   ;(insert "ml ''")
   ;(insert "clisp.sh '(m:)'")
   ;(insert "guile.sh '()'")
-  ;(insert "ccl.sh '(m:)'") 
   ;(insert "ecl.sh '(m:)'")
-  (insert "sb.sh '(m:)'")
+  ;(insert "sb.sh '(m:)'")
+  (insert "ccl.sh '(m:)'") 
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 
@@ -30,7 +29,8 @@
 (defun eshell/other ()
   (interactive)
   ;(insert "max.sh ':lisp (m:)'")
-  (insert "max.sh ''")
+  ;(insert "max.sh ''")
+  (insert "pl.sh ''")
   (backward-char 1)
 )
 
