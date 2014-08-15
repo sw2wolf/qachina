@@ -10,7 +10,6 @@
 
 (defun eshell/eval ()
   (interactive) 
-  ;(insert "hs ''")
   ;(insert "ml ''")
   ;(insert "clisp.sh '(m:)'")
   ;(insert "guile.sh '()'")
@@ -20,16 +19,12 @@
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 
-;; (defun eshell/erlang ()
-;;   (interactive)
-;;   (insert "erl.sh 'user_default:'")
-;;   (backward-char 1)
-;; )
-
 (defun eshell/other ()
   (interactive)
   ;(insert "max.sh ':lisp (m:)'")
   ;(insert "max.sh ''")
+  ;(insert "hs ''")
+  ;(insert "erl.sh 'user_default:'")
   (insert "pl.sh ''")
   (backward-char 1)
 )

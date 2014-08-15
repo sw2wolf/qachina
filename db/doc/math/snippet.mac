@@ -1,5 +1,11 @@
 
 /*****/
+(%i1) sqrt(sqrt(2) + 1)*sqrt(sqrt(2) - 1);                         
+(%o1) sqrt(sqrt(2)-1)*sqrt(sqrt(2)+1)                              
+(%i2) rootscontract(%);                                            
+(%o2) 1
+    
+/*****/
 (%i5) declare(n,constant)$
 (%i6) f : lambda([n],n^2)$    
 (%i7) f(5);

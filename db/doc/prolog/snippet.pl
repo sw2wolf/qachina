@@ -1,5 +1,24 @@
 
 %%%
+list_clause(List, Clause) :-
+    phrase(clause_(Clause), List).
+
+clause_(Fact)         --> [X,are,Y], { Fact =.. [Y,X] }.
+clause_(Head :- Body) --> [everyone,who,is,B,is,A],
+    { Head =.. [A,X], Body =.. [B,X] }.
+
+?-  list_clause([men,are,stupid], Clause).
+Clause = stupid(men).
+
+?- list_clause([everyone,who,is,stupid,is,tall], Clause).
+Clause = tall(_G2763):-stupid(_G2763).
+I leave the remaining example as an easy exercise.
+
+You can use assertz/2 to assert such clauses dynamically:
+
+?- List = <your list>, list_clause(List, Clause), assertz(Clause).
+
+%%%
 ?- write_canonical(m1 : w1 > w2).
 >(:(m1,w1),w2)
 %to check precedence when not sure.
