@@ -22,10 +22,10 @@
 (defun eshell/other ()
   (interactive)
   ;(insert "max.sh ':lisp (m:)'")
-  ;(insert "max.sh ''")
   ;(insert "hs ''")
   ;(insert "erl.sh 'user_default:'")
-  (insert "pl.sh ''")
+  ;(insert "pl.sh ''")
+  (insert "max.sh ''")
   (backward-char 1)
 )
 

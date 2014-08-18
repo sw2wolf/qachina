@@ -148,7 +148,7 @@
 ;@djinn turn a type into its corresponding expression
 (global-set-key (kbd "C-c v") '(lambda () (interactive) (insert "/msg lambdabot pi")))
 (global-set-key (kbd "C-c m") 'jump-run-mew)
-(global-set-key (kbd "C-c p") 'jump-run-prolog)
+;(global-set-key (kbd "C-c p") 'jump-run-prolog)
 
 (global-set-key (kbd "C-c g") 'list-bookmarks)
 (global-set-key (kbd "C-c h") 'bookmark-set)
