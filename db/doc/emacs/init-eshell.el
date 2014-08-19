@@ -10,11 +10,8 @@
 
 (defun eshell/eval ()
   (interactive) 
-  ;(insert "ml ''")
   ;(insert "clisp.sh '(m:)'")
-  ;(insert "guile.sh '()'")
   ;(insert "ecl.sh '(m:)'")
-  ;(insert "sb.sh '(m:)'")
   (insert "ccl.sh '(m:)'") 
   (backward-char 2) ;(goto-char (- (point) 2))
 )
@@ -22,11 +19,10 @@
 (defun eshell/other ()
   (interactive)
   ;(insert "max.sh ':lisp (m:)'")
-  ;(insert "hs ''")
+  ;(insert "max.sh ''")
   ;(insert "erl.sh 'user_default:'")
-  ;(insert "pl.sh ''")
-  (insert "max.sh ''")
-  (backward-char 1)
+  (insert "sb.sh '(m:)'")
+  (backward-char 2)
 )
 
 ;; (setq eshell-prompt-function

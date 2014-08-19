@@ -1,7 +1,8 @@
-(add-to-list 'load-path "~/erlang/lib/erlang/lib/tools-2.6.15/emacs/")
+;(add-to-list 'load-path "~/erlang/lib/erlang/lib/tools-2.6.15/emacs/")
+(add-to-list 'load-path "~/.emacs.d/erlang/")
 
-;; (setq erlang-root-dir "/usr/local/otp")
-;; (setq exec-path (cons "/usr/local/otp/bin" exec-path))
+;; (setq erlang-root-dir "~/erlang")
+;; (setq exec-path (cons "~/erlang/bin" exec-path))
 
 (require 'erlang-start)
 

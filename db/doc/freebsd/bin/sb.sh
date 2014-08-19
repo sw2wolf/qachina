@@ -2,7 +2,7 @@
 
 MONEY=$MD/money/money.lisp
 if test $# -eq 1; then
-  sbcl --noinform --non-interactive --no-userinit --load $MONEY --eval "$1"
+  sbcl --noinform --non-interactive --no-userinit --no-sysinit --load $MONEY --eval "$1"
   exit 0
 fi
 
@@ -11,6 +11,6 @@ expr=`zenity --width 350 --entry --text "Please input a CL expression" \
 
 if [ $? -eq 0 ]
 then
-  res=$(sbcl --noinform --non-interactive --no-userinit --load $MONEY --eval "$expr")
+  res=$(sbcl $OPTIONS --load $MONEY --eval "$expr")
   zenity --info --text="$res"
 fi
