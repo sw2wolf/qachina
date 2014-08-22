@@ -1,5 +1,41 @@
 
 /*****/
+There is one complication: some functions have both "noun" and "verb" forms, thus:
+
+integrate(f(x),x) => 'integrate(f(x),x)
+
+The first "integrate" is a verb, meaning "perform this integration". The second one is a noun, meaning "this is an integration". So:
+
+     ex: integrate(f(x),x,0,1)$
+     f(x) := x^3$
+     ev(ex) => 'integrate(x^3,x,0,1)
+
+The reason for this is that it is often useful to keep the formal calculation unevaluated. To force nouns back to verbs, use ev(...,nouns)
+
+     ev(ex,nouns) => 1/4
+
+/*****/
+(%i1) f(x)(y);
+(%o1)                               f(x)(y)
+(%i2) [op(%), args(%)];
+(%o2)                             [f(x), [y]]
+(%i3) f(x)(y)(z);
+(%o3)                             f(x)(y)(z)
+(%i4) [op(%), args(%)];
+(%o4)                           [f(x)(y), [z]]
+(%i5) op (first (%));
+(%o5)                                f(x)
+(%i6) %o1, f(x) := buildq ([x], lambda ([u], x*u));
+(%o6)                                 x y
+(%i7) apply (f(x)(y), [z]);
+(%o7)                             f(x)(y)(z)
+(%i8) is (%o3 = %o7);
+(%o8)                                true
+(%i9) :lisp $%o7
+  
+((MQAPPLY SIMP) ((MQAPPLY SIMP) (($F SIMP) $X) $Y) $Z)
+  
+/*****/
 (%i1) sqrt(sqrt(2) + 1)*sqrt(sqrt(2) - 1);                         
 (%o1) sqrt(sqrt(2)-1)*sqrt(sqrt(2)+1)                              
 (%i2) rootscontract(%);                                            

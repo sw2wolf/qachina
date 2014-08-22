@@ -1135,6 +1135,7 @@ V = '1.0.4' ;
 ?- pack_install('https://github.com/edisonm/refactor.git').
 
 %%%
+% git clone https://github.com/SWI-Prolog/swipl-devel
 % prepare
 % cd src
 % ./configure CFLAGS="-D__FREEBSD__ -I/usr/local/include" LDFLAGS=-L/usr/local/lib --prefix=/home/sw2wolf/swi/ --enable-gmp

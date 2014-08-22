@@ -12,7 +12,8 @@
   (interactive) 
   ;(insert "clisp.sh '(m:)'")
   ;(insert "ecl.sh '(m:)'")
-  (insert "ccl.sh '(m:)'") 
+  ;(insert "ccl.sh '(m:)'") 
+  (insert "sb.sh '(m:)'")
   (backward-char 2) ;(goto-char (- (point) 2))
 )
 
@@ -20,9 +21,8 @@
   (interactive)
   ;(insert "max.sh ':lisp (m:)'")
   ;(insert "max.sh ''")
-  ;(insert "erl.sh 'user_default:'")
-  (insert "sb.sh '(m:)'")
-  (backward-char 2)
+  (insert "pl.sh ''")
+  (backward-char 1)
 )
 
 ;; (setq eshell-prompt-function

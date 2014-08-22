@@ -1,5 +1,15 @@
 
 ;;;;;
+(defun fact-cps (n &optional (k #'values))
+  (if (zerop n) 
+      (funcall k 1)
+      (fact-cps (- n 1)
+                (lambda (v)
+                  (funcall k (* v n))))))
+
+(fact-cps 10) ; ==> 3628800
+
+;;;;;
 Macro:
 
 CL-USER 8 > (macro-function 'bar)
