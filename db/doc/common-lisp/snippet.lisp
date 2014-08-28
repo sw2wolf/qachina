@@ -1,5 +1,31 @@
 
 ;;;;;
+(destructuring-bind ((_SNIPPET
+                          (_TITLE . title)
+                          (_DESCRIPTION . description)
+                          _RESOURCE-ID (_VIDEO-ID . video-id)))
+    entry
+    (declare (ignore  _SNIPPET _TITLE _DESCRIPTION _RESOURCE-ID _VIDEO-ID))
+    (list video-id title description))
+
+CL-USER 23 > (loop for ((a b nil c) nil d) in '(((1 2 3 4) 5 6)
+                                                ((1 2 3 4) 5 6))
+                   collect (list a b c d))
+((1 2 4 6) (1 2 4 6))
+;NIL is used as the wildcard variable.
+
+;You can reuse the LOOP macro:
+(defmacro match-bind (pattern object &body body)
+  `(loop with ,pattern = ,object
+         while nil
+         finally (return (progn ,@body))))
+
+CL-USER 37 > (match-bind ((a b nil c) nil d)
+                 '((1 2 3 4) 5 6)
+               (list a b c d))
+(1 2 4 6)
+
+;;;;;
 (defun fact-cps (n &optional (k #'values))
   (if (zerop n) 
       (funcall k 1)
@@ -1330,6 +1356,8 @@ DOUBLE-FLOAT
 =>  #2A((3 3 3 3 3) (3 3 3 3 3) (3 3 3 3 3))
 
 (make-array *max-buffer-size* :element-type '(unsigned-byte 8) :initial-element 0)
+;upgraded-array-element-type
+;if (u-a-e-t your-type) is T, it's probably not optimized.
 
 (nth-value 0 (read-from-string "qqq"))
 
@@ -1897,6 +1925,10 @@ clisp -K full -x "(load \"asdf.lisp\") (load \"stumpwm.asd\") (load \"/usr/share
 ;here #: is a reader macro to create uninterned symbols; and this way is the preferred one, because you don't create unneeded keywords in the process.
 
 ;;;;;
+;ccl
+;svn up
+(rebuild-ccl :full t)
+
 ;clisp
 ;./configure --with-threads=POSIX_THREADS ;--with-jitc=lightning 
 (setq custom:*default-file-encoding*
@@ -1907,6 +1939,7 @@ clisp -K full -x "(load \"asdf.lisp\") (load \"stumpwm.asd\") (load \"/usr/share
 ;ecl
 ;./configure CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib --prefix=/home/sw2wolf/ecl/
 
+;sbcl
 $sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
       --eval '(quicklisp-quickstart:install :path "ql-test/")' \
       --eval '(ql:quickload "cl-ppcre")'
@@ -1914,3 +1947,8 @@ $sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="ccl -n -Q -K utf-8"
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"
+
+;;;;;
+;   emacs
+;;;;;
+M-x apropos-variable RET eshell.*message RET

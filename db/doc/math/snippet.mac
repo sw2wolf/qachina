@@ -1,5 +1,20 @@
 
 /*****/
+load(stats)$
+xdata: makelist(i,i,1,50)$
+ydata: m*log(xdata) + b + random_normal(0,1,length(xdata)), m=5, b=-10$
+data: transpose(matrix(log(xdata),ydata)), numer$
+fit: linear_regression(data);
+
+f(x,y,z):=acos(z/sqrt(x**2+y**2+z**2));
+load(vect);
+load(lrats)$
+express(grad(f(x,y,z))), diff;
+fullratsubst([x=r*sin(theta)*cos(phi),y=r*sin(theta)*sin(phi), 
+z=r*cos(theta)], %);
+trigsimp(%);
+
+/*****/
 There is one complication: some functions have both "noun" and "verb" forms, thus:
 
 integrate(f(x),x) => 'integrate(f(x),x)

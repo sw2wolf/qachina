@@ -1,2 +1,6 @@
 #!/bin/sh
+if test $# -eq 1; then
+	~/ccl/fx86cl -Q -K utf-8 -e "(progn $1 (ccl:quit))"
+	exit 0
+fi
 ~/ccl/fx86cl -Q -K utf-8

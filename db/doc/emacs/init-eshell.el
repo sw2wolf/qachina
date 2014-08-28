@@ -19,9 +19,9 @@
 
 (defun eshell/other ()
   (interactive)
+  ;(insert "pl.sh ''")
   ;(insert "max.sh ':lisp (m:)'")
-  ;(insert "max.sh ''")
-  (insert "pl.sh ''")
+  (insert "max.sh ''")
   (backward-char 1)
 )
 
@@ -29,6 +29,8 @@
 ;;       (lambda ()
 ;; 	(concat "" (user-login-name) "@" (system-name) " "
 ;; 		(eshell/pwd) "% ")))
+
+(setq eshell-banner-message "")
 
 (setq eshell-mode-hook nil)
 (add-hook 'eshell-mode-hook (lambda () 
