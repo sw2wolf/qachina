@@ -12,17 +12,17 @@
   (interactive) 
   ;(insert "clisp.sh '(m:)'")
   ;(insert "ecl.sh '(m:)'")
-  ;(insert "ccl.sh '(m:)'") 
-  (insert "sb.sh '(m:)'")
-  (backward-char 2) ;(goto-char (- (point) 2))
+  (insert "ccl.sh '(princ ())'") 
+  (backward-char 3) ;(goto-char (- (point) 2))
 )
 
 (defun eshell/other ()
   (interactive)
   ;(insert "pl.sh ''")
   ;(insert "max.sh ':lisp (m:)'")
-  (insert "max.sh ''")
-  (backward-char 1)
+  ;(insert "max.sh ''")
+  (insert "sb.sh '(m:)'")
+  (backward-char 2)
 )
 
 ;; (setq eshell-prompt-function

@@ -1948,7 +1948,14 @@ $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -mod
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="ccl -n -Q -K utf-8"
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"
 
-;;;;;
-;   emacs
-;;;;;
-M-x apropos-variable RET eshell.*message RET
+;emacs
+;M-x apropos-variable RET eshell.*message RET
+
+;slime
+;; "slime-call-defun". It is bound to "C-c C-y" and it inserts a call to the function defined around point into the REPL. 
+
+;; "C-c C-d C-a" runs "slime-apropos" to search for all "external" symbols whose names match the regular expression that is entered.
+
+;; "C-c C-d C-z" does a "slime-apropos" on all internal AND external symbols whose names match the regular expression that was entered.
+
+;; "C-c C-d C-p" shows a listing of all the external symbols in a specified package. When called with a prefix argument, the output includes internal symbols.

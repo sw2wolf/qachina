@@ -196,6 +196,18 @@ for i:1 thru length(terminals) do
         terminal=terminals[i],file_name=terminals[i]
     );
 
+plot3d(atan(-x^2+y^3/4),[x,-4,4],[y,-4,4],[grid,50,50],[gnuplot_pm3d,true]);
+
+/* Two solutions */
+plot3d(1, [theta, 0, %pi], [phi, 0, 2 * %pi],[transform_xy, spherical_to_xyz], [grid, 30, 60],[box, false], [legend, false])$
+ 
+load(draw)$
+draw3d(xu_grid=30, yv_grid=60, surface_hide=true,
+   parametric_surface(cos(phi)*sin(theta),
+                      sin(phi)*sin(theta),
+                      cos(theta),
+                      theta, 0, %pi, phi, 0, 2 * %pi))$
+                  
 /*****/
 f(x,y,[options]) := block([coerce_to],
                coerce_to:assoc('coerce_to,options,'float),
@@ -309,21 +321,6 @@ sublist(a, evenp);
 sublist(a, lambda([n], mod(n, 3) = 0));
 [3, 6, 9, 12, 15, 18]
 
-/*****/
-plot3d(atan(-x^2+y^3/4),[x,-4,4],[y,-4,4],[grid,50,50],[gnuplot_pm3d,true]);
-
-/* Two solutions */
-plot3d(1, [theta, 0, %pi], [phi, 0, 2 * %pi],
-[transform_xy, spherical_to_xyz], [grid, 30, 60],
-[box, false], [legend, false])$
- 
-load(draw)$
-draw3d(xu_grid=30, yv_grid=60, surface_hide=true,
-   parametric_surface(cos(phi)*sin(theta),
-                      sin(phi)*sin(theta),
-                      cos(theta),
-                      theta, 0, %pi, phi, 0, 2 * %pi))$
-                  
 /*****/
 weekday(year, month, day) := block([m: month, y: year, k],
    if m < 3 then (m: m + 12, y: y - 1),
@@ -450,6 +447,8 @@ set_plot_option([gnuplot_pm3d,true]);
 print("*** My very own personal maxima-init.mac has been loaded. ***");
 
 set_plot_option([gnuplot_default_term_command, "set term pop"]);
+
+set_plot_option ([gnuplot_ps_term_command, "set size 1.5, 1.5;set term postscript eps enhanced dashed 24"]);
 
 /* The print/format statements are useful for debugging. They can be removed once the init files are established to be working. */
 
