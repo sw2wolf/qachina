@@ -145,7 +145,7 @@ plot2d([2^x,x^2],[x,0,6],[plot_format,gnuplot]);
 plot2d([discrete, makelist([x,sin(x)],x,-5,5,0.25)], [style, linespoints])$
 plot2d([sin(x)], [x,-5,5], [style, linespoints], [adapt_depth, 1], [nticks, 5])$
 plot2d([sin(x),[discrete, [[%pi,0]]]],[x,0,2*%pi],[style,lines,points],[point_type,plus],[color,blue,black],[legend,false]);
-
+plot2d(sin(x),[x,0,10],[ps_file,"ps_test.ps"]);
 
 /* For one function: */
 

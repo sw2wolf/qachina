@@ -1,5 +1,49 @@
 
 ;;;;;
+(defun run-expired-timers ()
+  (let ((now (get-internal-real-time))
+	(timers *timer-list*)
+	(pending '())
+	(remaining '()))
+    (setf *timer-list*
+	  (dolist (timer timers (sort remaining #'< :key #'timer-time))
+	    (if (<= (timer-time timer) now)
+		  (progn
+		    (push timer pending)
+		    (when (timer-repeat timer)
+			  (schedule-timer timer (timer-repeat timer))
+			  (push timer remaining)))
+		  (push timer remaining))))
+	
+    (dolist (timer pending)
+      (apply (timer-function timer) (timer-args timer)))))
+
+(defmacro do-packed-tns ((tn component &optional result) &body body)
+  (with-unique-names (n-component tns more-tns outer inner)
+    `(prog* ((,n-component (component-info ,component))
+             (,tn       (ir2-component-normal-tns ,n-component))
+             (,tns      (ir2-component-restricted-tns ,n-component))
+             (,more-tns (ir2-component-wired-tns ,n-component)))
+       (when ,tn (go ,inner))
+       ,outer (when (eq ,tns :done) (return ,result))
+              (shiftf ,tn ,tns ,more-tns :done)
+              (unless ,tn (go ,outer))
+       ,inner (progn ,@body)
+              (if (setq ,tn (tn-next ,tn)) (go ,inner) (go ,outer)))))
+
+;;;;;
+;;;; build.lisp
+(require "asdf")
+(asdf:operate 'asdf:load-op "helloworld")
+(sb-ext:save-lisp-and-die "helloworld"
+                          :toplevel helloworld:start
+                          :executable t)
+
+;; Makefile:
+;; all:
+;;     sbcl --load build.lisp
+
+;;;;;
 (destructuring-bind ((_SNIPPET
                           (_TITLE . title)
                           (_DESCRIPTION . description)
@@ -1944,12 +1988,18 @@ $sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
       --eval '(quicklisp-quickstart:install :path "ql-test/")' \
       --eval '(ql:quickload "cl-ppcre")'
 
-$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="ccl -n -Q -K utf-8"
+$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"
 
 ;emacs
 ;M-x apropos-variable RET eshell.*message RET
+;M-x replace-string RET C-q C-m RET
+
+;; C-\
+;; Enable or disable use of the selected input method (toggle-input-method). 
+;; C-x <RET> C-\ method <RET>
+;; Select a new input method for the current buffer (set-input-method).
 
 ;slime
 ;; "slime-call-defun". It is bound to "C-c C-y" and it inserts a call to the function defined around point into the REPL. 

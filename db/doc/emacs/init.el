@@ -65,7 +65,8 @@
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
 ;;默认链接网络浏览器打开
-(setq browse-url-generic-program (executable-find "dwb"))
+;(setq browse-url-generic-program (executable-find "dwb"))
+(setq browse-url-generic-program (executable-find "opera"))
 (setq browse-url-browser-function 'browse-url-generic)
 (global-set-key "\C-c\C-g" 'browse-url-at-point)
 
