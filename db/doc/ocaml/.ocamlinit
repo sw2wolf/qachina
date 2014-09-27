@@ -1,6 +1,25 @@
+(* Added by OPAM. *)
+let () =
+  try Topdirs.dir_directory (Sys.getenv "OCAML_TOPLEVEL_PATH")
+  with Not_found -> ()
+;;
+
+let interactive = !Sys.interactive;;
+Sys.interactive := false;; (*Pretend to be in non-interactive mode*)
 #use "topfind";;
-#require "str";; 
-#require "unix";;
+Sys.interactive := interactive;; (*Return to regular interactive mode*)
+
+(* Toploop.use_silently Format.err_formatter (Filename.concat (Findlib.package_directory "batteries") "battop.ml");;
+*)
+
 #thread;;
 
+#require "str";; 
+#require "unix";;
+
 #use "/media/D/qachina/db/doc/ocaml/money.ml" ;;
+
+
+(*
+alias ocaml='rlwrap -H /home/nanda/.ocaml_history -D 2 -i -s 10000 ocaml'
+*)

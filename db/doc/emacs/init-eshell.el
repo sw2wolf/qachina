@@ -12,7 +12,8 @@
   (interactive) 
   ;(insert "clisp.sh '(m:)'")
   ;(insert "ecl.sh '(m:)'")
-  (insert "ccl.sh '(princ ())'") 
+  ;(insert "ccl.sh '(m:)'")
+  (insert "sb.sh '(princ ())'")
   (backward-char 3) ;(goto-char (- (point) 2))
 )
 
@@ -21,8 +22,8 @@
   ;(insert "pl.sh ''")
   ;(insert "max.sh ':lisp (m:)'")
   ;(insert "max.sh ''")
-  (insert "sb.sh '(m:)'")
-  (backward-char 2)
+  (insert "ml ''")
+  (backward-char 1)
 )
 
 ;; (setq eshell-prompt-function
@@ -41,8 +42,8 @@
     ;;       eshell-scroll-to-bottom-on-output t
     ;;       eshell-scroll-show-maximum-output t)
 
-    ;; (add-to-list 'eshell-output-filter-functions 
-    ;;              'eshell-postoutput-scroll-to-bottom)
+    (add-to-list 'eshell-output-filter-functions 
+                 'eshell-postoutput-scroll-to-bottom)
 
   ;(define-key eshell-mode-map [(control p)] 'eshell-previous-matching-input-from-input)
   ;(define-key eshell-mode-map [(control n)] 'eshell-next-matching-input-from-input)

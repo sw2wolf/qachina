@@ -196,7 +196,7 @@ let pick_num from count =
         if c = 0 then sortLst acc
         else (
           let one = List.nth l (Random.int (List.length l)) in
-		  mysleep(0.1);
+		  mysleep(0.5);
           pick (List.filter (fun x -> x <> one) l) (c-1) (one :: acc)
         )
 	in pick from count []
