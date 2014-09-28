@@ -36,11 +36,11 @@
         (find-file file))
     (message "Current buffer does not have an associated file.")))
 
-(defun jump-run-prolog ()
-  (interactive)
-  (if (get-buffer "*prolog*")
-	  (switch-to-buffer-other-window "*prolog*")
-	  (run-prolog 'swi)))
+;; (defun jump-run-prolog ()
+;;   (interactive)
+;;   (if (get-buffer "*prolog*")
+;; 	  (switch-to-buffer-other-window "*prolog*")
+;; 	  (run-prolog 'swi)))
 
 ;; (defun jump-run-erlang ()
 ;;   (interactive)
@@ -57,11 +57,11 @@
 	  (condition-case e (slime-connect "127.0.0.1" 4005)
 		(file-error (slime))))))
 
-;; (defun jump-run-clisp ()
-;;    (interactive)
-;;    (if (get-buffer "*CLISP*")
-;; 	  (switch-to-buffer-other-window "*CLISP*")
-;; 	 (async-shell-command "~/bin/cl" "*CLISP*")))
+(defun jump-run-clisp ()
+   (interactive)
+   (if (get-buffer "*CLISP*")
+	  (switch-to-buffer-other-window "*CLISP*")
+	 (async-shell-command "~/bin/ccl" "*CLISP*")))
 
 ;(file-error (call-interactively 'run-lisp))))))
 ;(unless (slime-connected-p) (save-excursion (slime)))
@@ -104,29 +104,23 @@
 ;√:#x221a π:#x3c0 λ:#x3bb ∑:#x2211 ⊥:#x22a5 ≅:#x2245 ≠:#x2260 ☺:#x263a
 ;⋆:#x22c6 ≅:#x2245
 ;(global-set-key (kbd "<f3>") '(lambda () (interactive) (insert #x3bb)))
+;(global-set-key (kbd "<f3>") 'edit-current-file-as-root)
 
 (global-set-key (kbd "<f3>") 'git-diff)
 (global-set-key (kbd "<f4>") 'git-diff)
 
-;(global-set-key (kbd "<f5>") '(lambda () (interactive) (run-haskell)))
-
-;(global-set-key (kbd "<f6>") 'imaxima)
-;(global-set-key (kbd "<f6>") 'jump-run-clisp)
-;(global-set-key (kbd "<f6>") 'jump-run-lisp)
-
 (global-set-key (kbd "<f5>") 'jump-run-shell)
 (global-set-key (kbd "<f6>") 'jump-run-shell)
 (global-set-key (kbd "<f7>") 'jump-run-shell)
-(global-set-key (kbd "<f8>") 'jump-run-shell)
-
-;(global-set-key (kbd "<f7>") 'edit-current-file-as-root)
 
 ;(global-set-key (kbd "<f8>") 'jump-run-erlang)
 ;(global-set-key (kbd "<f8>") 'run-scheme)
+;(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-haskell)))
 (global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
 
-;(global-set-key [(f9)] 'list-bookmarks)
-;(global-set-key [(f10)] 'bookmark-set)
+;(global-set-key (kbd "<f9>") 'imaxima)
+(global-set-key (kbd "<f9>") 'jump-run-clisp)
+;(global-set-key (kbd "<f9>") 'jump-run-lisp)
 
 ;; (global-set-key [f11] 'my-maximized) 
 ;; (defun my-maximized () 

@@ -1,2 +1,2 @@
 #!/bin/sh
-clisp -q -modern -ansi
+clisp -q -q -ansi -modern
