@@ -20,10 +20,11 @@
 (defun eshell/other ()
   (interactive)
   ;(insert "pl.sh ''")
+  ;(insert "ml ''") 
   ;(insert "max.sh ':lisp (m:)'")
-  ;(insert "max.sh ''")
-  (insert "ml ''")
-  (backward-char 1)
+  ;(insert "max.sh ''") 
+  (insert "sb.sh '(m:)'")
+  (backward-char 2)
 )
 
 ;; (setq eshell-prompt-function
