@@ -116,11 +116,11 @@
 ;(global-set-key (kbd "<f8>") 'jump-run-erlang)
 ;(global-set-key (kbd "<f8>") 'run-scheme)
 ;(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-haskell)))
-(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
+;(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
 
 ;(global-set-key (kbd "<f9>") 'imaxima)
 (global-set-key (kbd "<f9>") 'jump-run-clisp)
-;(global-set-key (kbd "<f9>") 'jump-run-lisp)
+(global-set-key (kbd "<f10>") 'jump-run-lisp)
 
 ;; (global-set-key [f11] 'my-maximized) 
 ;; (defun my-maximized () 

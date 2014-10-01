@@ -1,5 +1,9 @@
 
 ;;;;;
+(loop for (node neighbors) in graph
+       thereis (find (node-value node) neighbors :key #'node-value))
+
+;;;;;
 (defun run-expired-timers ()
   (let ((now (get-internal-real-time))
 	(timers *timer-list*)
