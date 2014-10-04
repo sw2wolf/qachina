@@ -1,5 +1,27 @@
 
 /*****/
+ptermp (e) := symbolp(e) or (numberp(e) and e > 0)
+  or ((op(e) = "+" or op(e) = "*") and every (ptermp, args(e)));
+matchdeclare (pterm, ptermp);
+matchdeclare (otherterm, all);
+defrule (r1, pterm + otherterm = 0, ratsimp (pterm/(-otherterm)) = 1);
+
+apply1 (a*x - b - c + d = 0, r1);
+
+                              a x + d
+                              ------- = 1
+                               c + b
+
+apply1 (a*x - (b + g) - 2*c + d*e*f = 0, r1);
+
+                            a x + d e f
+                            ----------- = 1
+                            g + 2 c + b
+                            
+/*****/
+load(sqdnst);
+sqrtdenest(sqrt(4+2*sqrt(3)));
+
 load(stats)$
 xdata: makelist(i,i,1,50)$
 ydata: m*log(xdata) + b + random_normal(0,1,length(xdata)), m=5, b=-10$
