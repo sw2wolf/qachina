@@ -11,9 +11,9 @@
 (defun eshell/eval ()
   (interactive) 
   ;(insert "clisp.sh '(m:)'")
-  ;(insert "ecl.sh '(m:)'")
   ;(insert "ccl.sh '(m:)'")
-  (insert "sb.sh '(princ ())'")
+  ;(insert "sb.sh '(princ ())'")
+  (insert "ecl.sh '(princ ())'")
   (backward-char 3) ;(goto-char (- (point) 2))
 )
 
@@ -23,7 +23,7 @@
   ;(insert "max.sh ':lisp (m:)'")
   ;(insert "max.sh ''") 
   ;(insert "ml ''")
-  (insert "sb.sh '(m:)'")
+  (insert "ecl.sh '(m:)'")
   (backward-char 2)
 )
 

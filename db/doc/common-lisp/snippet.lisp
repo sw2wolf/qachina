@@ -1,5 +1,18 @@
 
 ;;;;;
+(defun check-number (number function param-list)
+  (loop for params in param-list
+     always (apply function number (if (atom params)
+                                       (list params)
+                                       params))))
+
+(check-number 10 (lambda (n x) (zerop (mod n x))) '(2 5 3)) => NIL
+(check-number 10 (lambda (n x) (zerop (mod n x))) '(2 5)) => T
+
+;;;;;
+#:s
+;The last slot-name is an uninterned symbol. It is in no package. Thus you can't look it up in any way, if you haven't stored it somewhere.
+
 (loop for (node neighbors) in graph
        thereis (find (node-value node) neighbors :key #'node-value))
 
@@ -1996,9 +2009,14 @@ $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="ccl -n -Q -K utf-8"
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"
 
+;
 ;emacs
+;
 ;M-x apropos-variable RET eshell.*message RET
 ;M-x replace-string RET C-q C-m RET
+
+;C-u M-! [type shell command]
+;inserts output of shell command at point
 
 ;; C-\
 ;; Enable or disable use of the selected input method (toggle-input-method). 

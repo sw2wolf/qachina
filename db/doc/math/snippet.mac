@@ -1,5 +1,33 @@
 
 /*****/
+expr: sum(x[i], i, 1, n);
+                                    n
+                                   ====
+                                   \
+(%o76)                              >    x
+                                   /      i
+                                   ====
+                                   i = 1
+(%i77) :lisp $expr
+
+((%SUM SIMP) (($X SIMP ARRAY) $I) $I 1 $N)
+
+/* You need to tell ev to evaluate nouns */
+(%i77) ev(expr, n = 2, x[1] = 5, x[2] = 3, nouns);
+(%o77)                              x  + x
+                                     2    1
+
+/* and request an extra post-evaluation */
+(%i78) ev(expr, n = 2, x[1] = 5, x[2] = 3, nouns, eval);
+(%o78)                                 8
+
+/*****/
+A : {{1, 2}, {3, 4}, {}};
+a : {0.97};
+map (lambda ([x], union (x, a)), A);
+ => {{0.97}, {0.97, 1, 2}, {0.97, 3, 4}}
+ 
+/*****/
 ptermp (e) := symbolp(e) or (numberp(e) and e > 0)
   or ((op(e) = "+" or op(e) = "*") and every (ptermp, args(e)));
 matchdeclare (pterm, ptermp);
