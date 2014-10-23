@@ -1,5 +1,17 @@
 
 ;;;;;
+(setf (find-class 'class-name) (class-of some-instance))
+
+(subtypep 'double-float 'number) => T
+(subtypep '(vector double-float 100) '(array number *)) => ?
+
+(class-of #2A((3 3 3 3 3) (3 3 3 3 3) (3 3 3 3 3))) => #<BUILT-IN-CLASS SIMPLE-ARRAY>
+(type-of #2A((3 3 3 3 3) (3 3 3 3 3) (3 3 3 3 3))) => (SIMPLE-ARRAY T (3 5))
+
+(class-of #(3 3 3 3 3)) => #<BUILT-IN-CLASS SIMPLE-VECTOR>
+(type-of #(3 3 3 3 3)) => (SIMPLE-VECTOR 5)
+
+;;;;;
 (defun check-number (number function param-list)
   (loop for params in param-list
      always (apply function number (if (atom params)
@@ -378,16 +390,6 @@ Invalid sequence octets are imported as LATIN-1 characters."
 (use-foreign-library libsass)
 
 ;;;;;
-(subtypep 'double-float 'number) => T
-(subtypep '(vector double-float 100) '(array number *)) => ?
-
-(class-of #2A((3 3 3 3 3) (3 3 3 3 3) (3 3 3 3 3))) => #<BUILT-IN-CLASS SIMPLE-ARRAY>
-(type-of #2A((3 3 3 3 3) (3 3 3 3 3) (3 3 3 3 3))) => (SIMPLE-ARRAY T (3 5))
-
-(class-of #(3 3 3 3 3)) => #<BUILT-IN-CLASS SIMPLE-VECTOR>
-(type-of #(3 3 3 3 3)) => (SIMPLE-VECTOR 5)
-
-;;;;;
 ;Common Lisp中的成员方法也与其他语言的不同，除了一个主方法外，还可以定义三种不同类型的辅助方法，分别是:before、:after和:around，从字面上很容易理解前两种，:before在主方法之前执行，:after在主方法之后执行，那么:around在哪执行呢？答案是在所有方法之前，也可以看成在:before之前执行。关于这个:around辅助方法还有一个很重要的性质，就是一般使用它时都得在其函数体最后加一句(call-next-method)
 
 ;另外一点就是各种方法执行的顺序问题了，总体说来是:around=>:before=>主方法=>:after，然后对含有多层继承关系的:around、:before和主方法来说，特化程度最相关的先执行，然后次相关，最后是最不相关的，通俗说来就是先执行当前对象所属类型的，然后依次向上执行基类的，如果同一层有多个基类，则按照类定义时基类列写的顺序来执行。对于:after来说采取与前三者相反的方法即可。
@@ -604,12 +606,6 @@ exec ccl -e '(set-dispatch-macro-character #\# #\!
 (prin1 (alexandria:iota 20))
 (terpri)
  
-(defparameter *arguments* (subseq ccl:*command-line-argument-list* 
-                                  (1+ (or (position "--" ccl:*command-line-argument-list* :test 'string=) -1))))
-(prin1 *arguments*)
-(terpri)
-(ccl:quit 0)
-
 ;;;;;;
 ;;ldb returns an integer in which the bits with weights 2^(s-1) through 2^0 are the same as those in integer with weights 2^(p+s-1) through 2^p, and all other bits zero; s is (byte-size bytespec) and p is (byte-position bytespec).
 (ldb (byte 64 0) -1)         ;=> 18446744073709551615
@@ -1986,21 +1982,31 @@ clisp -K full -x "(load \"asdf.lisp\") (load \"stumpwm.asd\") (load \"/usr/share
 ;here #: is a reader macro to create uninterned symbols; and this way is the preferred one, because you don't create unneeded keywords in the process.
 
 ;;;;;
-;ccl
+;;  ccl
+;svn diff -r BASE:HEAD
 ;svn up
 (rebuild-ccl :full t)
 
-;clisp
+(defparameter *arguments* (subseq ccl:*command-line-argument-list* 
+                                  (1+ (or (position "--" ccl:*command-line-argument-list* :test 'string=) -1))))
+(prin1 *arguments*)
+(terpri)
+(ccl:quit 0)
+
+;If you set ccl:*save-source-locations* to nil before compiling your code, then source location information (and source code) will not be saved.
+
+
+;;  clisp
 ;./configure --with-threads=POSIX_THREADS ;--with-jitc=lightning 
 (setq custom:*default-file-encoding*
       (ext:make-encoding :charset 'charset:iso-8859-1
                          :line-terminator :unix))
 ;#<ENCODING CHARSET:ISO-8859-1 :UNIX>
 
-;ecl
+;;  ecl
 ;./configure CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib --prefix=/home/sw2wolf/ecl/
 
-;sbcl
+;;  sbcl
 $sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
       --eval '(quicklisp-quickstart:install :path "ql-test/")' \
       --eval '(ql:quickload "cl-ppcre")'

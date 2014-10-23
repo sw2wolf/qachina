@@ -1,5 +1,24 @@
 
 /*****/
+/* 函数属性设定  */
+
+/* 总的来说，maxima知道的关于特定函数的性质越多，越有助maxima更好的形式推导。  */
+
+ １）可加性：declare(f,additive)        形如：f(z+y+x)＝f(z)+f(y)＋f(x) 
+ ２）常数可移出性：declare (f, outative) 形如：f(a*x)＝a*f(x) 
+ ３）线性：declare (f, linear)         形如：f(a*x+b*y)＝a*f(x)+b*f(y) 
+ ４) 可乘性：declare(f, multiplicative)  形如：f(z*y*x)＝f(z)*f(y)*f(x) 
+ ５）反对称性：declare(f,antisymmetric)    形如：f(x,z,y)＝-f(x,y,z) 
+ ６）交换性：declare(f, commutative)     形如：f(x,z,y)＝f(x,y,z) 
+    对称性：declare(f, symmetric)     形如：f(x,z,y)＝f(x,y,z) 
+                注意所谓交换性和对称性是等价的。 
+ ７）左结合性：declare (f, lassociative)    形如：f(f(a,b),f(c,d))＝f(f(f(a,b),c),d) 
+ ８）右结合性：declare (f, rassociative) 形如：f(f(a,b),f(c,d))＝f(a,f(b,f(c,d))) 
+ ９）可连性：declare (f, nary)         形如：f(x,f(y,z))＝f(x,y,z) 
+ １０）偶函数：declare (f, evenfun)         形如：f(-x)＝f(x) 
+ １１）奇函数：declare (f, oddfun)         形如：f(-x)＝-f(x)
+ 
+/*****/
 expr: sum(x[i], i, 1, n);
                                     n
                                    ====
@@ -220,6 +239,12 @@ draw2d(terminal=pdfcairo,line_width=2.25,color=black,
        file_name="Test.pdf",line_type=dashes,
        explicit(sin(x),x,1,3)
 );
+
+/* Option 'user_preamble' is for fine-tuning your plots and to give support  */
+/* for those Gnuplot features not included in package draw. */
+draw2d(
+     explicit(y^2,y,-3,3),
+     user_preamble="set xtics nomirror");
 
 draw2d(
      xaxis =true,
