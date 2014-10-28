@@ -1,5 +1,15 @@
 
 ;;;;;
+(defparameter *data* (list :f1 1 :f2 2))
+
+;;; Case of string IS important
+;;; (intern "f1" :keyword) => :|f1|
+;;; (intern "F1" :keyword) => :F1
+
+(getf *data* (intern "F1" :keyword))
+;;; => 1
+
+;;;;;
 (setf (find-class 'class-name) (class-of some-instance))
 
 (subtypep 'double-float 'number) => T

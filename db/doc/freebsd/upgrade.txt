@@ -36,3 +36,11 @@ Finally, reboot into 9.1-RELEASE
 Summary
 
 On my Soekris 4801 which i can access only via console or network, the update went quite smoothly and i can report no issues as of now. Perfect!
+
+#####
+#clean up any packages that you're not using (installed as a dependency)
+$pkg autoremove
+
+#provides a list of your installed ports
+#this differs from pkg info in that it displays only the things you installed, no dependencies
+$pkg query -e '%a = 0' %o

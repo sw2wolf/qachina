@@ -1,5 +1,9 @@
 
 /*****/
+sqrt(x^2),domain=complex => sqrt(x^2)
+sqrt(x^2),domain=real => abs(x)
+
+/*****/
 /* 函数属性设定  */
 
 /* 总的来说，maxima知道的关于特定函数的性质越多，越有助maxima更好的形式推导。  */

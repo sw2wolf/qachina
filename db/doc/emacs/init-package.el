@@ -3,6 +3,7 @@
 ;; then enter the text in that file's own buffer.
 (require 'package)
 (add-to-list 'package-archives 
-    '("marmalade" .
-      "http://marmalade-repo.org/packages/"))
+    '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
+
+;("melpa" . "http://melpa.org/packages/")
