@@ -12,7 +12,7 @@
   (interactive) 
   ;(insert "clisp.sh '(m:)'")
   ;(insert "sb.sh '(princ ())'")
-  (insert "ccl.sh '(princ ())'")
+  (insert "ccl.sh \"(princ ())\"")
   (backward-char 3) ;(goto-char (- (point) 2))
 )
 

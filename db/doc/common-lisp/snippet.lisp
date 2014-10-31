@@ -1728,6 +1728,8 @@ chosen, resignal the error."
       nil))
 (asdf:system-relative-pathname 'my-system "files/data.txt")
 
+(declaim (notinline regex-replace-all))
+
 ;coverage
 (require :sb-cover)
 (declaim (optimize sb-cover:store-coverage-data))
@@ -2028,6 +2030,8 @@ $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no
 ;
 ;emacs
 ;
+;emacs -batch -L ./ -f batch-byte-compile ./*el
+
 ;M-x apropos-variable RET eshell.*message RET
 ;M-x replace-string RET C-q C-m RET
 

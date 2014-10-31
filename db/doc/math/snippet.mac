@@ -21,6 +21,12 @@ sqrt(x^2),domain=real => abs(x)
  ９）可连性：declare (f, nary)         形如：f(x,f(y,z))＝f(x,y,z) 
  １０）偶函数：declare (f, evenfun)         形如：f(-x)＝f(x) 
  １１）奇函数：declare (f, oddfun)         形如：f(-x)＝-f(x)
+
+/* 在默认用户目录下，寻找文件maxima-init.mac，如果没有则自行新建之. 在这个文件中可以进行一些个性化的初始化操作。  */
+maxima_userdir: "C:/Users/xyz/maxima/" $
+maxima_tempdir: "C:/Users/xyz/maxima/tmp" $
+file_search_maxima : append(["C:/Users/xyz/maxima/###.{mac,mc}"],file_search_maxima ) $
+file_search_lisp : append(["C:/Users/xyz/maxima/###.lisp"],file_search_lisp ) $
  
 /*****/
 expr: sum(x[i], i, 1, n);
