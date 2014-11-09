@@ -1,7 +1,19 @@
 
 /*****/
+/* When you define a function via :=, the function body is quoted (i.e., not evaluated). You can tell Maxima to evaluate an expression by using the quote-quote '' operator. */
+(%i1) display2d : false $
+(%i2) f(x) := ''(diff (tan(x), x, 7));
+(%o2) f(x):=64*sec(x)^2*tan(x)^6+1824*sec(x)^4*tan(x)^4+2880*sec(x)^6*tan(x)^2
+        +272*sec(x)^8
+(%i3) f(%pi / 4);
+(%o3) 34816
+
+/*****/
 sqrt(x^2),domain=complex => sqrt(x^2)
 sqrt(x^2),domain=real => abs(x)
+
+/* The function diff returns a function as its result. You can evaluate this function at a point by using the at function. */
+at(diff(tan(x),x,7),[x=%pi/4]);
 
 /*****/
 /* 函数属性设定  */

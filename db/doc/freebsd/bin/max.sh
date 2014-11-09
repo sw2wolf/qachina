@@ -1,6 +1,6 @@
 #!/bin/sh
 if test $# -eq 1; then
-	maxima --very-quiet -p $MD/money/money.lisp --batch-string="$1"
+	maxima --very-quiet -X '-n -Q' -p $MD/money/money.lisp --batch-string="$1;"
 	exit 0
 fi
 
@@ -9,6 +9,6 @@ expr=`zenity --width 350 --entry --text "Please input a CL expression" \
 
 if [ $? -eq 0 ]
 then
-res=$(maxima --very-quiet -p $MD/money/money.lisp --batch-string="$expr")
+res=$(maxima --very-quiet -X '-norc' -p $MD/money/money.lisp --batch-string="$expr;")
 zenity --info --text="$res"
 fi

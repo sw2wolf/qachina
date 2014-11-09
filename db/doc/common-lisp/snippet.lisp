@@ -1,5 +1,25 @@
 
 ;;;;;
+(let ((table (make-hash-table)))
+  (dotimes (x 5) 
+    (setf (gethash x table) (format nil "~R" x)))
+  (values 
+   (loop for value being each hash-value of table
+      collect value)
+   (loop for key being each hash-key of table
+      collect key)))
+;=> 
+; ("zero" "one" "two" "three" "four")
+; (0 1 2 3 4)
+
+(with-open-file (in file)
+  (loop for line = (read-line in nil nil)
+    while line
+    collect (map 'list #'digit-char-p line)))
+
+(map 'list #'digit-char-p "1 a 3") => (1 NIL NIL NIL 3)
+
+;;;;;
 (defparameter *data* (list :f1 1 :f2 2))
 
 ;;; Case of string IS important
