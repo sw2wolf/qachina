@@ -1,5 +1,14 @@
 
 /*****/
+(%i1) display2d:false$
+
+(%i2) eq: 7*c[2]*h^2+10*c[1]*h^2+7*c[0]*h^2+7*c[1]*h+10*c[0]*h+7*c[0]=33*h^2+8*h-14$
+
+(%i3) solve(makelist(ratcoef(lhs(eq),h,k)=ratcoef(rhs(eq),h,k),k,0,max(hipow(lhs(eq),h),hipow(rhs(eq),h))));
+
+(%o3) [[c[2] = 1,c[1] = 4,c[0] = -2]]
+
+/*****/
 /* When you define a function via :=, the function body is quoted (i.e., not evaluated). You can tell Maxima to evaluate an expression by using the quote-quote '' operator. */
 (%i1) display2d : false $
 (%i2) f(x) := ''(diff (tan(x), x, 7));

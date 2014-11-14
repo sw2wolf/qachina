@@ -1,5 +1,51 @@
 
 ;;;;;
+(if (not symbols) 0 (+
+  (parse-number:parse-number (symbol-name (first symbols)))
+  (apply #'.+ (rest symbols)))))
+
+(.+ '|5| '|3| '|3|) => 11
+
+(loop for x being the external-symbols of "CL" count 1)
+; => 1032
+(length (delete-duplicates (loop for x being the external-symbols of "CL" collect x)))
+; => 978
+
+(first (quicklisp-client:system-list))
+=> #<SYSTEM 1am / 1am-20141106-git / quicklisp 2014-11-06>
+
+(ql-dist:name (first (quicklisp-client:system-list)))
+=> "1am"
+
+;;;;;
+;You could do it with a circular list. Like so:
+(defun sin-mac (x series n plus-minus)
+  (cond ((zerop series) 0)
+        (t (funcall (car plus-minus)
+                    (/ (power x n) (factorial n))
+                    (sin-mac x (1- series) (+ n 2) (cdr plus-minus))))))
+
+(sin-mac x series 1 '#0=(+ - . #0#))
+
+;Or even better, wrap up the initial arguments using labels:
+(defun sin-mac (x series)
+  (labels ((recur (series n plus-minus)
+             (cond ((zerop series) 0)
+                   (t (funcall (car plus-minus)
+                               (/ (power x n) (factorial n))
+                               (recur (1- series) (+ n 2) (cdr plus-minus)))))))
+    (recur series 1 '#0=(+ - . #0#))))
+
+;CDR doesn't do anything special with the circularity, so you can CDR down that list indefinitely, but you will still only see the same 2  conses
+;side effectful pseudocode:
+(let ((a (make-cons)) (b (make-cons)))
+  (setf (car a) '+ 
+		(car b) '- 
+		(cdr a) b 
+		(cdr b) a)
+  a)
+
+;;;;;
 (let ((table (make-hash-table)))
   (dotimes (x 5) 
     (setf (gethash x table) (format nil "~R" x)))

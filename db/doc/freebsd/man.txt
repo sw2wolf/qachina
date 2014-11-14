@@ -184,3 +184,6 @@ $ qemu -cdrom /dev/acd0 -hda kwinxp.img -m 512 -boot d -no-kqemu -no-acpi -local
 
 If you are running a server without X, access your VM through VNC 
 $ qemu -cdrom /dev/acd0 -hda kwinxp.img -m 512 -boot d -kernel-kqemu -vnc :0 -localtime
+
+;makes mplayer attach a 'NET_WM_FULLSCREEN" property to the window
+$ mplayer -fstype fullscreen -fs <my-video.avi>
