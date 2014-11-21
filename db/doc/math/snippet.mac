@@ -265,6 +265,12 @@ functionList: makelist( ev([f(x,p1,p2),g(x,p1,p2)], p), p, parametersList);
 plot2d( flatten(flist), [x, 0, 7]);
 
 /*****/
+load("draw");
+f1: y=x*x;
+f2: y=x;
+f(t):=if t>0 then rhs(at(f1,x=t)) else rhs(at(f2,x=t));
+draw2d(explicit(f(t),t,-2,2));
+
 draw2d(terminal=pdfcairo,line_width=2.25,color=black,
        dimensions=[1200,800],
        file_name="Test.pdf",line_type=dashes,

@@ -1,5 +1,8 @@
 
 ;;;;;
+gdb -tui --args emacs -Q
+
+;;;;;
 int kbhit()
 {
     struct timeval tv;

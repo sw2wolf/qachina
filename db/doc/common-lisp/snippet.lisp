@@ -1,5 +1,9 @@
 
 ;;;;;
+;The name of the package is KEYWORD. Symbols are created (if necessary) and put into a package using INTERN.
+(intern (symbol-name 'width) "KEYWORD") => :WIDTH
+
+;;;;;
 (if (not symbols) 0 (+
   (parse-number:parse-number (symbol-name (first symbols)))
   (apply #'.+ (rest symbols)))))
