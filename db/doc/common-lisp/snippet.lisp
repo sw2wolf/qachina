@@ -1,5 +1,12 @@
 
 ;;;;;
+(eq (read-from-string "()")
+    (read-from-string "NIL"))
+T
+
+;In Common Lisp nil has multiple purposes: the symbol named NIL in the COMMON-LISP package, the empty list, the boolean (or generalized boolean) representing false, and the name of the empty type.
+
+;;;;;
 ;The name of the package is KEYWORD. Symbols are created (if necessary) and put into a package using INTERN.
 (intern (symbol-name 'width) "KEYWORD") => :WIDTH
 
