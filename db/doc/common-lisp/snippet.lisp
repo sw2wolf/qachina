@@ -1225,6 +1225,7 @@ CL-USER> (-> 10 (+ 20) (+ 40) (/ 10))
       finally (return content))
 
 (make-hash-table :test #'equal :size 4000)
+(make-hash-table :size s :test #'eql :rehash-threshold 0.9)
 
 (setq table (make-hash-table))
 (dotimes (i 10) (setf (gethash i table) i))

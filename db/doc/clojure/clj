@@ -5,9 +5,10 @@
 breakchars="(){}[],^%$#@\"\";:''|\\"
 MYCP="/media/D/qachina/db/doc/clojure/"
 
-CP="$HOME/clojure/clojure-1.5.1.jar:$MYCP:$CLASSPATH"
+CP="$HOME/test/clojure-1.6.0/clojure-1.6.0.jar:$MYCP:$CLASSPATH"
 
 cd "/media/D/qachina/db/doc/clojure"
 echo $CP
-rlwrap --remember -c -b "$breakchars" -f "$HOME"/.clj_completions \
-    java -cp $CP clojure.main -i ~/.clojurerc -r "$@"
+#rlwrap --remember -c -b "$breakchars" -f "$HOME"/.clj_completions \
+#    java -cp $CP clojure.main -i ~/.clojurerc -r "$@"
+java -cp $CP clojure.main -i ~/.clojurerc -r "$@"

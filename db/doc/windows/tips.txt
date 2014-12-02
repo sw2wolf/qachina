@@ -6,3 +6,16 @@
 .msconfig 
 
 
+2.
+ 首先制作一张能够启动电脑的U盘，之所以选择U盘这种介质是因为通用性强，对于破解其它电脑也可以适用。下面就是制作添加用户的exe文件了，这里需要做一个过度，因为目前还没有现成的程序可以完成，我们先写一个批处理文件，内容如下： 
+
+　　@net user zol 123456 /add 
+
+　　@net localgroup administrators hack /add 
+
+　　@exit 
+
+　　以上命令的意思是先建立一个名为zol用户，然后将其添加到管理员组，接下来使用BATEXE转换为exe，下载地址：http://active.zol.com.cn/security/BATEXE.rar，其中需要先转换为com文件，再将com文件转换为exe。最后把生成的文件重命名为magnify.exe，替换system32下的文件即可。 
+
+　　以后密码如果遗忘，直接按windows键+U，运行放大镜，建立一个新的管理员，然后按2次Ctrl+Alt+Del用新的账号和密码登录就可以了。不过这种方法最大的弊端就是只适用于遗忘密码，对于没做好前期准备的计算机来说行不通。
+
