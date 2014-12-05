@@ -1,5 +1,26 @@
 
 /*****/
+/* One could even make a subscripted function to capture all solutions: */
+
+foo (name, eqn) := block ([listconstvars:false, listdummyvars:false],
+  for i thru length (eqn)
+    do block ([expr : rhs (eqn[i])],
+      define (funmake (name[i], listofvars (expr)), expr)));
+
+solve (x^3-a*b*x^2-b*x^2-a*x^2/b-a*x^2+a*b^2*x+a^2*b*x+a^2*x/b+a^2*x+a*x-a^2*b-a^3, x);
+    => [x = a/b,x = a*b,x = b+a]
+
+foo (F, %);
+arrayinfo (F);
+=> [hashed, 1, [1], [2], [3]]
+
+listarray (F);
+=> [lambda([a,b],a/b),lambda([a,b],a*b),lambda([a,b],b+a)]
+
+F[2](7, u);
+=> 7*u
+
+/*****/
 (%i1) display2d:false$
 
 (%i2) eq: 7*c[2]*h^2+10*c[1]*h^2+7*c[0]*h^2+7*c[1]*h+10*c[0]*h+7*c[0]=33*h^2+8*h-14$
