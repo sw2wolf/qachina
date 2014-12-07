@@ -6,6 +6,8 @@ T
 
 ;In Common Lisp nil has multiple purposes: the symbol named NIL in the COMMON-LISP package, the empty list, the boolean (or generalized boolean) representing false, and the name of the empty type.
 
+;lWhile #:bla is an uninterned symbol, :bla is a symbol in the KEYWORD package.  They both have the same name, so the string they designate is the same.  The former avoids the creation of a symbol in the KEYWORD package.
+
 ;;;;;
 ;The name of the package is KEYWORD. Symbols are created (if necessary) and put into a package using INTERN.
 (intern (symbol-name 'width) "KEYWORD") => :WIDTH
@@ -148,6 +150,8 @@ T
               (if (setq ,tn (tn-next ,tn)) (go ,inner) (go ,outer)))))
 
 ;;;;;
+(save-lisp-and-die "/tmp/foo7" :executable t :purify t :compression 9)
+
 ;;;; build.lisp
 (require "asdf")
 (asdf:operate 'asdf:load-op "helloworld")
