@@ -1,5 +1,5 @@
 ;; setup load-path and autoloads
-(add-to-list 'load-path "~/RnD/slime")
+(add-to-list 'load-path "~/test/slime")
 (require 'slime-autoloads)
 
 ;; Set your lisp system and, optionally, some contribs

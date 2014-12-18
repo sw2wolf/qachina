@@ -601,3 +601,15 @@ $cabal unpack parconc-examples
 $cabal install --only-dependencies
 $cabal configure
 $cabal build
+
+-- ghc usages
+ghc -O2 -ddump-simpl
+
+--look at the generated assembly
+ghc -keep-tmp-files
+
+--compile with GHC's native code generator
+ghc -O2 -fexcess-precision
+
+--use the C backend to GHC
+ghc -O2 -fexcess-precision -fvia-C -optc-O2

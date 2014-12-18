@@ -2120,6 +2120,8 @@ $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no
 ;C-u M-! [type shell command]
 ;inserts output of shell command at point
 
+;To get the ‘é’ character, I usually just type 【Ctrl+x 8 ' e】 but I could also type 【Ctrl+x 8 Return】 LATIN SMALL LETTER E ACUTE or if I know the codepoint, 【Ctrl+x 8 Return】
+
 ;; C-\
 ;; Enable or disable use of the selected input method (toggle-input-method). 
 ;; C-x <RET> C-\ method <RET>
