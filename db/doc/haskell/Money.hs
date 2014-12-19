@@ -2,9 +2,9 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module Money (
     winG, winQ, div618, stopLoss
-    ,win_ssq, hit_ssq, his, goodRed
-    ,qachina, combLen, fibs, sieves
-    )
+   ,win_ssq, hit_ssq, his
+   ,qachina, combLen, fibs, sieves
+             )
 where
 import System.Random
 import System.IO
@@ -177,13 +177,13 @@ win_ssq count noRed noBlue = do
     let noRedLst =  map (\x -> read x::Int) $ words noRed
         noBlueLst = map (\x -> read x::Int) $ words noBlue
 
-    gRed <- goodRed
+    --gRed <- goodRed
 
     _ <- setStdGen <$> (mkStdGen <$> betterSeed)
     okBlue <- pickNums ([1..16] \\ noBlueLst) count []
     result <- pickSSQ count
-              (gRed \\ [1,33])
-              (gRed \\ noRedLst)
+              ([1..33] \\ [1,33])
+              ([1..33] \\ noRedLst)
               okBlue []
     --forM_ result (\x -> print x)
     writeFile ssqNum $ ints2str result
@@ -217,11 +217,11 @@ ints2str ints = concat $ intersperse "\n" strLst
         strLst = map (\x -> to_str x) ints
         to_str a = unwords $ map (\x -> show x) a 
 
-goodRed:: IO [Int]
-goodRed = do {
-    samp <- fmap (concat . str_ints_hit) $ readFile ssqHitNum;
-    return $ sort $ take 21 $ map (\(a,_) -> a) $ statis samp;
-}
+-- goodRed:: IO [Int]
+-- goodRed = do {
+--     samp <- fmap (concat . str_ints_hit) $ readFile ssqHitNum;
+--     return $ sort $ take 21 $ map (\(a,_) -> a) $ statis samp;
+-- }
 
 statis :: [Int] -> [(Int,Int)]
 statis samp = map (\(a,b) -> (b,a)) $ times4n
@@ -244,8 +244,8 @@ hit_ssq no hitNum = do
         then catchAny (appendFile ssqHitNum $ unwords $ [no] ++ map (\n -> show n) hitLst ++ ["\n"]) (\e -> fail $ "Unable save hit numbers" ++ show e)
         else return ()
 
-    gRed <- goodRed
-    printf "good red hit %d\n" ((hitRed gRed) :: Int)
+    --gRed <- goodRed
+    --printf "good red hit %d\n" ((hitRed gRed) :: Int)
 
     nums <- fmap str_ints_pick $ readFile ssqNum
     forM_ nums (\n -> do

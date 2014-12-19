@@ -569,16 +569,25 @@ better  = unlines . map linemanager . lines
             _                     -> l
 
 -----
-$ghci -i "$HOME/.xmonad/lib" ~/.xmonad/xmonad.hs
+ghci -i "$HOME/.xmonad/lib" ~/.xmonad/xmonad.hs
 
-$ghc -e 'System.Directory.getAppUserDataDirectory "xmonad"'
+ghc -e 'System.Directory.getAppUserDataDirectory "xmonad"'
 
-$ghc --info | egrep 'split|Host'
+ghc --info | egrep 'split|Host'
 ,("Host platform","i386-unknown-freebsd")
 ,("Object splitting supported","YES")
 
 -- The full output of log.txt is available here. It contains the GHC Core (which looks a bit like Haskell), then the C-- (which looks a bit like C) and finally the assembly code (which looks exactly like assembly).
 ghc -c -O2 InnerLoop.hs -ddump-simpl -ddump-cmm -ddump-asm > log.txt
+
+--look at the generated assembly
+ghc -keep-tmp-files
+
+--compile with GHC's native code generator
+ghc -O2 -fexcess-precision
+
+--use the C backend to GHC
+ghc -O2 -fexcess-precision -fvia-C -optc-O2
 
 $cabal install xmonad-contrib --with-ghc=/home/sw2wolf/ghc/bin/ghc --enable-split-objs
 
@@ -601,15 +610,3 @@ $cabal unpack parconc-examples
 $cabal install --only-dependencies
 $cabal configure
 $cabal build
-
--- ghc usages
-ghc -O2 -ddump-simpl
-
---look at the generated assembly
-ghc -keep-tmp-files
-
---compile with GHC's native code generator
-ghc -O2 -fexcess-precision
-
---use the C backend to GHC
-ghc -O2 -fexcess-precision -fvia-C -optc-O2
