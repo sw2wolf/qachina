@@ -1,0 +1,421 @@
+
+;;;;;
+gdb -tui --args emacs -Q
+
+;;;;;
+int kbhit()
+{
+    struct timeval tv;
+    fd_set fds;
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds); //STDIN_FILENO is 0
+    select(STDIN_FILENO+1, &fds, NULL, NULL, &tv);
+    return FD_ISSET(STDIN_FILENO, &fds);
+}
+
+ps -aux -eo pid,lstart,args | grep -i emacs | grep -v grep
+
+;;;;;
+;git
+git fetch origin
+git diff HEAD origin/master ChangeLog
+git config -l
+git show 'HEAD@{1}..HEAD'
+
+;Out of the last 1000 commits on the master branch (July 9th to Nov 24th, 2014), RMS has made only one of them:
+$ git log HEAD~1000..HEAD | grep Stallman
+Author: Richard M. Stallman
+
+;svn
+;You can use -rN:M parameter with diff command which specifies the revisions you want to compare. Just provide revision from which your working copy was checked out (you can omit M as it defaults to working copy) and you should get what you need.
+
+;If you don't remember the original revision number try to run svn status -v and first column should show it.
+
+;More info svn help diff...
+To see which files were modified by a particular revision, run the
+following command, replacing NNNNNN with the revision number, on a
+machine with Subversion installed:
+
+# svn diff -cNNNNNN --summarize svn://svn.freebsd.org/base
+
+svn revert some-file
+will effectively discard any local changes to some-file and replace it with the repository version.
+
+The option "tf" ("theirs full") will overwrite a local file with the repository version, which is generally appropriate when binary files change.
+
+find . -name 'foo*' -exec mv {} dir/ \;
+
+;;;;;
+~/.gdbinit
+1.
+def  redirect 
+call (void)close(1) 
+call (void)close(2) 
+call (int)open($arg0, 1) 
+call (int)open($arg0, 2) 
+end
+
+document redirect 
+redirect("argument"), this is used to switch stderr and stdout to gdb window.
+The argument is the name of gdb window.
+end
+
+(gdb) help redirect
+this is used to switch stderr and stdout to gdb window. 
+The argument is the name of gdb window.
+
+(gdb)redirect("/dev/ttyp3")
+$1=1 
+$2=2
+
+(gdb)call (int)fflush(0)
+
+2.
+# Ignore some signals.
+handle SIGUSR1 noprint pass
+handle SIGPIPE noprint pass
+
+# Convenience command.
+define rake
+   shell rake $arg0
+end
+
+# Break on breakpoint() function.
+break Passenger::breakpoint
+
+# Linux-only. Comment out when not on Linux.
+set print thread-events off
+
+3.
+# set to 1 to enable 64bits target by default (32bit is the default)
+set $64BITS = 1
+ 
+set confirm off
+set verbose off
+set prompt \033[31mgdb$ \033[0m
+ 
+set output-radix 0x10
+set input-radix 0x10
+ 
+# These make gdb never pause in its output
+set height 0
+set width 0
+ 
+# Display instructions in Intel format
+set disassembly-flavor intel
+
+-----------------------------------------------------------------------------
+/*
+gcc -o src src.S -Wall -g -nostdlib -Wa,-mmnemonic=intel,-msyntax=intel,-mnaked-reg -m32
+*/
+
+//buffer	resb 10000
+
+.global _start
+_start:
+	nop	//make ld happy
+
+_write:
+	mov eax, 4	//set syswrite
+	mov ebx, 1	//set stdout
+	lea ecx, str	//set text out
+	lea edx, strLen	//how much text out
+	int 0x80		//make the syscall
+
+_normEnd:
+	mov eax, 1	//ready syscall
+	mov ebx, 0	//no problem return code
+
+str: .string "hello\n"
+	 .equ strLen, 6
+
+-----------------------------------------------------------------------------
+.use GDB as C's REPL
+
+% gdb ./test
+(gdb) break main
+Breakpoint 1 at 0x8048452
+
+(gdb) run
+Starting program: /home/pcl/sandbox/test
+Breakpoint 1, 0x08048452 in main ()
+
+(gdb) set $a = malloc(1234)
+(gdb) call sprintf($a, "Hello %d", 12345*12345*12345)
+$1 = 15
+
+(gdb) print (char*)$a
+$2 = 0x96c6008 "Hello 170287977"
+
+(gdb) print (unsigned int)atoi("-1")
+$2 = 0xffffffff
+
+(gdb) print (unsigned int)atoi("4294967295")
+$3 = 0x7fffffff
+
+-----------------------------------------------------------
+(gdb) print 1 + 2
+$1 = 3
+
+(gbd) print (int) 2147483648
+$2 = 0x47483648
+
+(gdb) print &i
+$5 = (int *) 0x7fff5fbff584
+
+(gdb) print sizeof(int)
+$7 = 4
+(gdb) print sizeof(double)
+$8 = 8
+
+The flags indicate that I want to examine 4 values, formatted as hex numerals, one byte at a time.
+(gdb) x/4xb &i
+0x7fff5fbff584: 0x39    0x05    0x00    0x00
+
+(gdb) set var i = 0x12345678
+(gdb) x/4xb &i
+0x7fff5fbff584: 0x78    0x56    0x34    0x12
+
+-----------------------------------------------------------
+(gdb) ptype i
+type = int
+(gdb) ptype &i
+type = int *
+(gdb) ptype main
+type = int (void)
+
+-----------------------------------------------------------
+int a[] = {1,2,3};
+
+(gdb) print a
+$1 = {1, 2, 3}
+(gdb) ptype a
+type = int [3]
+
+(gdb) x/12xb &a
+0x7fff5fbff56c: 0x01  0x00  0x00  0x00  0x02  0x00  0x00  0x00
+0x7fff5fbff574: 0x03  0x00  0x00  0x00
+
+(gdb) print sizeof(a)
+$2 = 12
+
+(gdb) print a + 1
+$3 = (int *) 0x7fff5fbff570
+
+(gdb) x/4xb a + 1
+0x7fff5fbff570: 0x02  0x00  0x00  0x00
+
+(gdb) print a[0]
+$4 = 1
+(gdb) print *(a + 0)
+$5 = 1
+(gdb) print a[1]
+$6 = 2
+(gdb) print *(a + 1)
+$7 = 2
+(gdb) print a[2]
+$8 = 3
+(gdb) print *(a + 2)
+$9 = 3
+
+(gdb) x/4xb a
+0x7fff5fbff56c: 0x01  0x00  0x00  0x00
+(gdb) x/4xb &a
+0x7fff5fbff56c: 0x01  0x00  0x00  0x00
+
+(gdb) ptype &a
+type = int (*)[3]
+
+(gdb) print a + 1
+$10 = (int *) 0x7fff5fbff570
+(gdb) print &a + 1
+$11 = (int (*)[3]) 0x7fff5fbff578
+
+-----------------------------------------------------------
+启动gdb进行调试
+gdb-many-windows	切换单窗格/多窗格模式
+gdb-restore-windows	恢复窗格布局
+
+添加断点	gud-break	C-x C-a C-b 或 C-x <SPC>
+删除断点	gud-remove	C-x C-a C-d
+运行/继续程序	gud-go	无
+单步执行，无视函数	gud-next	C-x C-a C-n
+单步执行，进入函数	gud-step	C-x C-a C-s
+跳出当前函数	gud-finish	C-x C-a C-f
+运行到光标所在语句	gud-until	C-x C-a C-u
+继续运行程序	gud-cont	C-x C-a C-r
+
+(add-hook 'gdb-mode-hook '(lambda ()
+                            (define-key c-mode-base-map [(f5)] 'gud-go)
+                            (define-key c-mode-base-map [(f7)] 'gud-step)
+                            (define-key c-mode-base-map [(f8)] 'gud-next)))
+
+
+(defun quick-compile ()
+ "A quick compile funciton for C++"
+ (interactive)
+ (compile (concat "g++ " (buffer-name (current-buffer)) " -g -pg"))
+ )
+ ;;快捷键F9
+ (global-set-key [(f9)] 'quick-compile)
+
+
+從另一台電腦連上正在跑重要程式的工作站
+用ps和grep找出那個程式的pid
+用gdb attach它: gdb [program] [pid]
+在gdb內輸入: handle SIGHUP nopass 
+把當掉的windows重新開機，在gdb內輸入continue讓程式繼續執行
+你會看到gdb攔截到SIGHUP的訊息，再輸入continue就可以了
+
+
+#!/bin/sh
+export DISPLAY=tivf09:1.0; xterm -e gdb RIM_Oracle_Agent.binary
+如果你的程序在exec的时候还传入了参数，可以改成：
+#!/bin/sh
+export DISPLAY=tivf09:1.0; xterm -e gdb --args RIM_Oracle_Agent.binary $@ 
+
+-----------------------------------------------------------------------------
+echo "cont" > attach.gdb
+gdb attach $1 -x attach.gdb
+
+gdb attach $(pidof process_name) -ex cont
+
+-----------------------------------------------------------------------------
+% gdb httpd -c core
+(gdb) where
+it will (hopefully) print a stack backtrace of where the core dump occurred during processing.
+
+x/x 以十六进制输出
+x/d 以十进制输出
+x/c 以单字符输出
+x/i  反汇编 – 通常，我们会使用 x/10i $ip-20 来查看当前的汇编（$ip是指令寄存器）
+x/s 以字符串输出
+
+-----------------------------------------------------------------------------
+runstack.sh
+#!/bin/sh
+if test $# -ne 2; then
+   echo "Usage: `basename $0 .sh` <process-id> cmd" 1>&2
+   echo "For exampl: `basename $0 .sh` 1000 bt" 1>&2
+   exit 1
+fi
+if test ! -r /proc/$1; then
+   echo "Process $1 not found." 1>&2
+   exit 1
+fi
+result=""
+GDB=${GDB:-/usr/bin/gdb}
+# Run GDB, strip out unwanted noise.
+result=`$GDB --quiet -nx /proc/$1/exe $1 <<EOF 2>&1
+$2
+EOF`
+echo "$result" | egrep -A 1000 -e "^\(gdb\)" | egrep -B 1000 -e "^\(gdb\)"
+-----------------------------------------------------------------------------
+set logging on
+bt
+set logging off
+
+-----------------------------------------------------------------------------
+$pkg-config --cflags xft
+-D_THREAD_SAFE -I/usr/local/include/freetype2 -I/usr/local/include  
+$pkg-config --libs xft
+-L/usr/local/lib -lXft  
+
+-----------------------------------------------------------------------------
+So write it out to a file instead:
+(gdb) p creat("/tmp/somefile.dat", 0777)
+$26 = 37
+(gdb) p write(37, s, len)
+$27 = 168
+(gdb) p close(37)
+
+-----------------------------------------------------------------------------
+在终端执行cat /proc/cpuinfo命令，找到flags部分，如果其中输出有VMX或SVM，即表明支持虚拟化技术。
+cat /proc/cpuinfo | grep vmx       ##(for Intel CPU)
+or 
+cat /proc/cpuinfo | grep svm       ##（for AMD CPU）
+
+三、Linux显示的flags部分解释：
+fpu – Onboard FPU
+vme – Virtual Mode Extensions
+de – Debugging Extensions
+pse – Page Size Extensions
+tsc – Time Stamp Counter
+msr – Model-Specific Registers
+pae – Physical Address Extensions
+mce – Machine Check Architecture
+cx8 – CMPXCHG8 instruction
+apic – Onboard APIC
+sep – SYSENTER/SYSEXIT
+mtrr – Memory Type Range Registers
+pge – Page Global Enable
+mca – Machine Check Architecture
+cmov – CMOV instructions (plus FCMOVcc, FCOMI with FPU)
+pat – Page Attribute Table
+pse36 – 36-bit PSEs
+pn – Processor serial number
+clflush – CLFLUSH instruction
+dts – Debug Store
+acpi – ACPI via MSR
+mmx – Multimedia Extensions
+fxsr – FXSAVE/FXRSTOR, CR4.OSFXSR
+sse – SSE
+sse2 – SSE2
+ss – CPU self snoop
+ht – Hyper-Threading
+tm – Automatic clock control
+ia64 – IA-64 processor
+pbe – Pending Break Enable
+syscall – SYSCALL/SYSRET
+mp – MP Capable
+nx – Execute Disable
+mmxext – AMD MMX extensions
+fxsr_opt – FXSAVE/FXRSTOR optimizations
+pdpe1gb – GB pages
+rdtscp – RDTSCP
+lm – Long Mode (x86-64)
+3dnowext – AMD 3DNow! extensions
+3dnow – 3DNow!
+k8 – Opteron, Athlon64
+k7 – Athlon
+constant_tsc – TSC ticks at a constant rate
+up – smp kernel running on up
+pebs – Precise-Event Based Sampling
+bts – Branch Trace Store
+nonstop_tsc – TSC does not stop in C states
+pni – SSE-3
+pclmulqdq – PCLMULQDQ instruction
+dtes64 – 64-bit Debug Store
+monitor – Monitor/Mwait support
+ds_cpl – CPL Qual. Debug Store
+vmx – Hardware virtualization //intel的虚拟化技术VT技术
+smx – Safer mode
+est – Enhanced SpeedStep
+tm2 – Thermal Monitor 2
+ssse3 – Supplemental SSE-3
+cid – Context ID
+fma – Fused multiply-add
+cx16 – CMPXCHG16B
+xptr – Send Task Priority Messages
+pdcm – Performance Capabilities
+dca – Direct Cache Access
+sse4_1 – SSE-4.1
+sse4_2 – SSE-4.2
+x2apic – x2APIC
+aes – AES instructions
+xsave – XSAVE/XRSTOR/XSETBV/XGETBV
+avx – Advanced Vector Extensions
+hypervisor – Running on a hypervisor
+lahf_lm – LAHF/SAHF in long mode
+cmp_legacy – If yes HyperThreading not valid
+svm – Secure virtual machine //AMD的虚拟化技术AMD-V
+extapic – Extended APIC space
+cr8legacy – CR8 in 32-bit mode
+abm – Advanced bit manipulation
+sse4a – SSE-4A
+ibs – Instruction Based Sampling
+sse5 – SSE-5
+skinit – SKINIT/STGI instructions
+wdt – Watchdog timer

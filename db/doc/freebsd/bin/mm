@@ -1,0 +1,51 @@
+#!/bin/sh
+if test $# -ne 1; then
+	echo "Usage: `basename $0` cmd" 1>&2
+    echo "`basename $0` [S]tart"
+	echo "`basename $0` [V]olume"
+	echo "`basename $0` [L]ist"
+	exit 1
+fi
+
+cmd=$1
+case $cmd in
+	-s|-S)
+		sudo /usr/local/etc/rc.d/musicpd onestart;;
+	-v|-V)
+		mpc volume 100;;
+    -l|-L)
+		mpc ls | nl;;
+	*)
+		echo "invalid command"
+esac
+
+
+#mpc clear
+#mpc add "$1"
+#mpc play
+
+#mpc update [<path>]     Scans music directory for updates
+
+#mpc lsplaylists
+#mpc rm <playlist>
+
+#mpc clear
+#mpc load <playlist_name>
+#mpc play
+
+#mpc stats
+
+# mpc clear
+# mpc ls
+# mpc listall FolderName1 FolderName2 .. | mpc add
+# mpc save playlist
+# mpc load playlist
+# 清空当前播放列表
+# 列出文件夹
+# 显示名字为 FolderName1 FolderName2 文件夹下的所有音乐并添加到当前播放列表
+# 保存当前播放列表为 playlist
+# 读取播放列表 playlist
+
+# 也可以通过类似下面的命令来创建播放列表，萝卜青菜
+# $ cd ~/Music
+# $ find * -iname "*.mp3" | sort | grep Keyword > ~/.mpd/playlist/playlist.m3u

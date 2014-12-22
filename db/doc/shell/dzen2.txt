@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+# Toggles display of dzen window containing key mappings for xmonad
+# Adapted from http://snipt.net/doitian/show-xmonad-key-bindings/
+# Assumes that keys are defined in ~/.xmonad/lib/Keys.hs, one per line.
+
+if xwininfo -name "dzen slave"
+then
+    killall dzen2
+else
+    keysfile=~/.xmonad/lib/Keys.hs
+    fgColor="#0a0a05"
+    bgColor="#f6e6a7"
+    font="-*-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
+    (
+        echo "^fg($bgColor)^bg($fgColor) xmonad keys ^bg()^fg()"
+        xmonad_keys.rb $keysfile
+     ) | dzen2 -fg $fgColor -bg $bgColor -fn $font -x 624 -y 15 -l 11 -w 400 -p \
+-e 'onstart=uncollapse,scrollhome,grabkeys;enterslave=grabkeys;entertitle=uncollapse,grabkeys;key_Escape=ungrabkeys,exit;key_Next=scrolldown;key_Prior=scrollup'
+fi
+

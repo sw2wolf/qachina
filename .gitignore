@@ -1,0 +1,11 @@
+Makefile
+Makefile.in
+
+maxima.info*
+maxima_*.html
+
+/maxima.chm
+
+*.beam
+*.elc
+*.fasl

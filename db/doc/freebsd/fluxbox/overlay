@@ -1,0 +1,12 @@
+! The following line will prevent styles from setting the background.
+! background: none
+
+menu.frame.font: WenQuanYi Micro Hei-12:bold
+menu.title.font: Vera Sans YuanTi-9:bold
+
+toolbar.clock.font: WenQuanYi Micro Hei-13:bold
+toolbar.workspace.font: WenQuanYi Micro Hei-13:bold
+toolbar.iconbar.focused.font: WenQuanYi Micro Hei-13:bold
+toolbar.iconbar.unfocused.font: WenQuanYi Micro Hei-13:bold
+
+window.font: WenQuanYi Micro Hei-12:bold

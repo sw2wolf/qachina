@@ -1,0 +1,30 @@
+首先把 notify-send 替换掉, 取而代之的这个脚本: (notify-say)
+
+#!/bin/sh
+
+## pass by env ESPEAK_ARGS or define here
+espeak_args=${ESPEAK_ARGS:-"-a 150 -g 0.3 -p 55 -s 160 -b 1"}
+
+## read from a fifo pipe
+ttsf="/tmp/.${USER}.tts.fifo"
+
+ps -aux | grep -q "[Tt]ail -f $ttsf" || (test -p $ttsf || mkfifo $ttsf)
+ps -aux | grep -q '[Ee]speak' || (nohup tail -f $ttsf | espeak $espeak_args >/dev/null &)
+
+[ $# -eq 1 ] && [ "$1" = '-stop' ] && {
+     ps -aux | grep "[Tt]ail -f $ttsf" | awk '{print $2}' | xargs kill
+     #killall espeak
+     rm -f $ttsf
+     exit
+}
+
+echo $* > $ttsf 
+
+
+这样,系统中一直保留一个 espeak 实例, 通过向一个 FIFO PIPE 发送信息, espeak 会顺序朗读出来.
+在监控脚本中调用:
+
+$ notify-say "Network connection lost"
+## 改变参数 朗读中文
+
+$ESPEAK_ARGS="${ESPEAK_ARGS} -v zh" notify-say "请注意, 主文件系统满了." 

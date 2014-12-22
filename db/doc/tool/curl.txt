@@ -1,0 +1,4 @@
+curl -c cookies.txt http://localhost:8000/session -d "key=k&value=v"
+curl -b cookies.txt http://localhost:8000/session
+
+

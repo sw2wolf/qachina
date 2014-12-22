@@ -1,0 +1,6 @@
+#!/bin/sh
+if test $# -ne 1; then
+    ~/swi/bin/swipl -q -f $MD/prolog/money.pl
+else
+    ~/swi/bin/swipl -q -f $MD/prolog/money.pl -g "$1" -t halt
+fi

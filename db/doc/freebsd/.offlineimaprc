@@ -1,0 +1,20 @@
+[general]
+accounts = 163mail
+maxsyncaccounts = 3
+
+[Account 163mail]
+localrepository = Local
+remoterepository = Remote
+
+[Repository Local]
+type = Maildir
+localfolders = ~/Maildir
+
+[Repository Remote]
+type = POP
+remotehost = pop.163.com
+remoteuser = z_axis@163.com
+remotepass = zmath999
+ssl = yes
+maxconnections = 1
+realdelete = no

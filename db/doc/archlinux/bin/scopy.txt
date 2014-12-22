@@ -1,0 +1,1 @@
+scp todo.txt sw2wolf@freebsd.unix-center.net:/home/p/p/sw2wolf/todo.txt

@@ -1,0 +1,6 @@
+. drm.ko i915.ko
+They are driver modules. i915 is display driver for some intel
+graphics adapters, and drm is a common module for display drivers.
+drm is direct rendering manager, provides direct hardware access to
+drivers. http://dri.freedesktop.org/wiki/DRM/
+i915 supports a wide range of intel display adapters.

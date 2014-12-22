@@ -1,0 +1,62 @@
+在Archlinux中使用数码相机
+
+                    　　我们试着用这篇文档来说明如何设置Hotplug，以使普通用户组的用户也可以访问他们的USB接口数码相机。我们的目标是尽量是这篇文档简单，因此并不涉及到特殊情况。不过，这篇文档基本上是http://www.gphoto.org/doc/manual/permissions- usb.html的一个主要概述，需要更多信息的人们可以参考该站点。
+
+                    　　libgphoto2支持的数码相机列表可以在 http://www.gphoto.org/proj/libgphoto2/support.php找到。如果你的数码相机没有列在里面，你也许仍然可以在Linux下使用它，如果它可以象USB存储器那样使用的话。Wiki里面有另外一篇文档：USB闪盘，描述了操作过程。
+
+                    　　1、安装hotplug和libgphoto2包。检查你是否已经安装了所有必须的软件包：
+
+                    　　# pacman -Q hotplug libgphoto2
+
+                    　　如果Pacman埋怨其中或全部都没有安装（默认hotplug会已经安装，但是libgphoto2没有），安装缺少的包：
+
+                    　　# pacman -Sy hotplug
+
+                    　　或者
+
+                    　　# pacman -Sy libgphoto2
+
+                    　　2、配置hotplug：
+
+                    　　打开一个终端，使用root登录。
+
+                    　　使用下面的命令创建usbcam.usermap或者在原有文件末尾添加：
+
+                    　　# /usr/lib/libgphoto2/print-usb-usermap >> /etc/hotplug/usb/usbcam.usermap
+
+                    　　libgphoto2已经有一个很容易上手的hotplug脚本，复制它到相应的地方：
+
+                    　　# cp /usr/share/libgphoto2/2.1.4/linux-hotplug/usbcam.group /etc/hotplug/usb/usbcam
+
+                    　　你需要根据你当前的libgphoto版本改变相应的路径地址。
+
+                    　　用你最喜欢的文本编辑器，打开。如：
+
+                    　　# vi /etc/hotplug/usb/usbcam
+
+                    　　修改下面部分：
+
+                    　　GROUP=camera
+
+                    　　为：
+
+                    　　GROUP=users
+
+                    　　保存退出。你也可以不改变这个，直接创建camera组，并将允许访问数码相机的用户添加到该组也是可以的。
+
+                    　　3、改变该文件属性使之可以执行：
+
+                    　　# chmod +x /etc/hotplug/usb/usbcam
+
+                    　　检测你的设置：插上你的数码相机并打开电源开关，如已经插上的，关闭电源再打开。查看你系统中/proc/bus/usb下的内容
+
+                    　　# ls -lR /proc/bus/usb
+
+                    　　这里至少应该有一个不是root项的。在我的系统中，显示如下：
+
+                    　　.../proc/bus/usb/004:total 0-rw-r--r-- 1 root root 43 Apr 12 16:05 001-rw-r--r-- 1 root root 43 Apr 12 16:05 002-rw-r--r-- 1 root root 59 Apr 12 16:05 003-rw-r--r-- 1 root root 211 Apr 12 16:05 004-rw-rw---- 1 root users 57 Apr 12 17:58 007...
+
+
+                    　　注意最后一行。
+
+                    　　现在你可以使用gphoto2或者最新的gthumb从你的数码相机中下载图片了。好好乐一下吧

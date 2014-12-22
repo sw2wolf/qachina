@@ -1,0 +1,12 @@
+;(require 'sockets)
+
+;;; The following lines added by ql:add-to-init-file:
+#-quicklisp
+(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"
+                                       (user-homedir-pathname))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
+;(pushnew #p"/media/D/qachina/" asdf:*central-registry*)
+(pushnew #p"/media/D/qachina/db/doc/money/" asdf:*central-registry*)
+(ql:quickload :money)

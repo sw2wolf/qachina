@@ -1,0 +1,8 @@
+#!/bin/sh
+
+CCL_DEFAULT_DIRECTORY=~/ccl
+export CCL_DEFAULT_DIRECTORY
+
+breakchars="(){}[],^%$#@\"\";:''|\\"
+
+exec rlwrap --remember -c -b "$breakchars" -f "$HOME"/.ccl_completions ~/ccl/fx86cl "$@"

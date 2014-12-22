@@ -1,0 +1,21 @@
+# Example routing for Mighttpd 2
+
+# Domain lists
+[localhost www.example.com]
+
+# Entries are looked up in the specified order
+# All paths must end with "/"
+
+# A path to CGI scripts should be specified with "=>"
+#/~alice/cgi-bin/ => /media/D/www/qachina/cgi-bin/
+/cgi-bin/        => /media/D/www/qachina/cgi-bin/
+
+# A path to static files should be specified with "->"
+/         -> /media/D/www/qachina/
+
+# Reverse proxy rules should be specified with ">>"
+# /path >> host:port/path2
+# Either "host" or ":port" can be committed, but not both.
+#/app/cal/        >> example.net/calendar/
+# Yesod app in the same server
+#/app/wiki/       >> 127.0.0.1:3000/

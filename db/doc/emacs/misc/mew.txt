@@ -1,0 +1,99 @@
+在emacs中用 mew 命令接收邮件之后，Mew进入 summary-mode ，这时候常用命令如下： 
+ M-TAB 补齐收信人信息
+ Q 退出mew
+ i 收信
+ g 跳转邮箱
+ o 对邮件进行分类
+ d 把邮件标记为删除
+ * 作星号标记
+ u 清除标记
+ x 对所有标记进行处理
+ a 不带引用的回复，不建议使用
+ A 带引用的回复，推荐
+ f 转发邮件
+ y 保存邮件，会提示是保存整个邮件和是仅保存正文
+ SPACE 阅读邮件
+ ENTER 让阅读的邮件向上滚动一行
+ - 向下滚动一行
+ n 下一封邮件
+ p 前一封邮件
+ j 跳到某一封邮件
+ N 下一封带星号的邮件
+ P 上一封带星号的邮件
+ S 按某个指定项目对邮件排序
+ / 按指定条件搜索邮件，并进入虚拟模式
+ tt 进入虚拟模式，根据线索查看，普通模式下是不可以的
+
+ C 如果设置了多个邮箱，用此切换
+
+ C-cC-m 编辑新邮件，放入草稿中
+
+ C-cTAB 插入签名
+ C-cC-y 复制部分邮件，带引用前缀
+ C-cC-t 复制部分邮件，不带引用前缀
+ C-cC-a 把当前的发信人加入地址薄
+ C-uC-cC-a 比C-cC-a多加入昵称和名字，推荐
+
+w    撰写新邮件
+a    回复邮件，不带引用
+A    回复邮件，带引用
+f    转发邮件
+r    重新发送邮件
+
+SPC  阅读邮件
+y    保存文件（可以保存信件全文、信件正文、附件）
+
+C-c C-l    转换当前邮件的编码格式
+C-u C-c C-a    比 C-c C-a 多加入昵称和名字
+
+也可以直接使用 mew-send 命令来撰写新邮件，撰写新邮件的时候常用命令如下： 
+
+C-c C-q    不保存退出
+C-c a    准备插入附件
+mew-attach-copy    用复制方式加入附件
+mew-attach-link    用链接方式加入附件
+mew-attach-delete    删除附件
+C-c C-c    发送邮件
+C-c RET    保存邮件到发送队列
+
+注意，对附件的操作都要在 C-c C-a 命令之后。还有两个命令很重要： 
+
+C    如果设置了多个邮箱，用 C 命令切换
+Q    退出Mew
+
+如果使用Outlook(gmail则没有个问题)来接收mew发出的邮件，会发现不能识别中文附件名。下面的补丁可以解决这个问题。
+(defvar *mew-header-encoding-method* :rfc2047)
+(defun mew-header-insert (key value &optional no-fold)
+  (if (and value (stringp key))
+      (let ((beg (point)) params med parname parval)
+        (when (listp value)
+          (setq params (cdr value))
+          (setq value (car value)))
+        (insert key)
+        (insert " ")
+        (setq med (point))
+        (if (string-match "^[\t -~]*$" value)
+            (insert value)
+          (mew-header-encode-text value nil (length key)))
+        (dolist (par params)
+          (mew-set '(parname parval) par)
+          (insert ";")
+          (cond
+           ((string-match "^[-a-zA-Z0-9]+$" parval)
+            ) ;; do nothing
+           ((and (string= (mew-charset-guess-string parval) mew-us-ascii)
+                 (not (string-match "\"" parval)))
+            (setq parval (concat "\"" parval "\"")))
+           (t
+            (case *mew-header-encoding-method*
+              (:rfc2047
+               (when (loop for c across parval
+                        thereis (> c 255))
+                 (setq parval (concat "\"" (rfc2047-encode-string parval)
+                                      "\""))))
+              (t (setq parval (mew-param-encode parval))
+                 (setq parname (concat parname "*"))))))
+          (insert " " parname "=" parval))
+        (insert "\n")
+        (unless no-fold
+          (mew-header-fold-region beg (point) med)))))

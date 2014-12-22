@@ -1,0 +1,66 @@
+<!-- -*- Mode: Xml -*- -->
+<!-- This file is intentionnaly very basic. See http://ocsigen.org/ocsigenserver/manual/config
+     a more elaborate one, as well as for comments on the various options -->
+<!-- DO NOT MODIFY. This a generated file.
+     Additional configurations sit in conf.d/ -->
+<ocsigen>
+  <server>
+    <port>8000</port>
+    <logdir>/home/sw2wolf/RnD/ocaml/test/log/</logdir>    <!-- Where log files are to be written -->
+    <datadir>/home/sw2wolf/RnD/ocaml/test/data</datadir> <!-- Where data are (default: /var/lib/ocsigen) -->
+
+    <user>sw2wolf</user>
+    <group>sw2wolf</group>
+
+    <commandpipe>/home/sw2wolf/RnD/ocaml/test/ocsigenserver_command</commandpipe>
+    <!-- <mimefile>/etc/ocsigenserver/mime.types</mimefile> -->
+
+    <charset>utf-8</charset>
+
+    <findlib path="/usr/lib/ocaml"/>
+
+    <extension findlib-package="ocsigenserver.ext.staticmod"/>
+    <extension findlib-package="ocsigenserver.ext.cgimod">
+      <cgitimeout value="30"/>
+    </extension>
+
+    <!--
+    <findlib path="/usr/lib/ocaml"/>
+    <extension findlib-package="ocsigenserver.ext.ocsipersist-sqlite">
+      <database file="/var/lib/ocsigenserver/ocsidb"/>
+    </extension>
+    -->
+
+    <!-- You may want to use DBM instead of SQLite (if compiled). -->
+    <!--
+    <extension findlib-package="ocsigenserver.ext.ocsipersist-dbm">
+      <store dir="/var/lib/ocsigenserver"/>
+      <ocsidbm name="/usr/lib/ocaml/ocsigenserver/extensions/ocsidbm"/>
+    </extension>
+    -->
+
+    <!-- Inclusion of all external configuration files matching *.conf
+         from the directory 'dir' (in alphabetical order): -->
+    <extconf dir="/etc/ocsigenserver/conf.d" />
+
+    <host charset="utf-8" hostfilter="*">
+
+     
+      <site path="qachina">
+        <cgi regexp="cgi-bin/([^/]*)" dir="/media/D/www/qachina/cgi-bin/" script="\1">
+            <setenv var="PATH" val="/usr/bin:/usr/local/bin" />
+        </cgi>
+        <static dir="/media/D/www/qachina" />
+      </site>
+
+     <site path="ocsigenstuff">
+        <static dir="/srv/ocsigenserver/ocsigenstuff" />
+      </site>
+
+      <static dir="/srv/ocsigenserver" />
+
+    </host>
+
+  </server>
+
+</ocsigen>

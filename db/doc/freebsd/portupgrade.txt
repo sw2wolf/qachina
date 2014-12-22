@@ -1,0 +1,179 @@
+pkg_version -vIL=
+determine which package(s) need to be upgraded
+
+portupgrade 包含許多工具可以使用，列出常用的如下：
+
+1. portinstall - 安裝新套件。功能同 portupgrade 加上參數 -N。
+2. portupgrade - 升級舊有套件。
+3. portsclean - 清理套件。
+4. portsdb - 管理 ports tree 資料庫。
+5. portversion - 列出安裝套件與 ports tree 版本間的差別。
+6. pkg_deinstall - 移除套件。
+7. pkg_fetch - 下載 packages。
+8. pkgdb - 管理已安裝套件資料庫。 
+
+
+如何只抓取 tarball？
+# portinstall -F joe
+或者指定其分類亦可
+# portinstall -F editors/joe
+
+如何只抓取 packages？
+# portinstall -F -P joe
+
+如何安裝一個新的 port，並打包(package)起來？
+# portinstall -p joe
+
+如何安裝一個新的 port，並將其所有相依的 ports 也打包起來？
+# portinstall -p -r portupgrade
+
+如何安裝一個新的 port，並將舊版的 port (含設定檔)打包起來？
+# portinstall -b portupgrade
+
+如何在 build 之前，清理 ports 編輯期間所產生的暫存資料？
+# portinstall -c joe
+-c 這個參數是預設參數，一般不須要額外指定。
+
+如何在 install 之後，清理 ports 編輯期間所產生的暫存資料？
+# portinstall -C joe
+-C 這個參數是預設參數，一般不須要額外指定。
+
+如何在 build 之前，不清理 ports 編輯期間所產生的暫存資料？
+# portinstall -w joe
+
+如何在 install 之後，不清理 ports 編輯期間所產生的暫存資料？
+# portinstall -W joe
+
+如何清理 ports 編輯期間所產生的暫存資料，以及其相對應的 tarball？
+portsclean 指令無對單一套件做清理動作，它的對象是整個 ports tree。
+這個指令會清理整個 ports tree 的編輯期間的暫存檔，及其相對應的 tarball，因此時間會花比較久。
+# portsclean -C -D
+如果僅是想清理相對應的 tarball，則
+# portsclean -D
+
+如何在 fetch/build 之前，清理 ports 編輯期間所產生的暫存資料，以及其相對應的 tarball？
+# portsinstall -c -D joe
+由於 -c 是預設值，因此同等於
+# portsinstall -D joe
+
+如何移除已安裝的 ports？
+# pkg_deinstall joe
+
+如何一併移除所相依的 ports？
+# pkg_deinstall -r portupgrade
+
+如何重新安裝已安裝過的 ports？
+# portupgrade -f joe
+
+如何以關鍵字搜尋 ports？
+完整字串搜尋：
+# ports_glob joe
+
+關鍵字搜尋：
+# ports_glob "jo*"
+目前支援 '*'，尚不支援 '?'。
+
+如何升級已安裝的 ports？
+# portupgrade joe
+
+如果欲升級其所相依的套件，則：
+# portupgrade -r portupgrade
+
+如何升級已安裝的 ports，並排除升級/安裝某些 pattern 的套件？
+# portupgrade -rx portupgrade portupgrade
+
+會更新所有相依於 portupgrade 的套件，但不會更新 portupgrade 本身。
+
+如何在 build 之前，指定要跑的指令？
+# portinstall -B 'cvs update' 'portupgrade'
+# portupgrade -B 'cvs update' 'portupgrade'
+
+如何在 install 之後，指定要跑的指令？
+# portinstall -A 'portsclean -D' joe
+# portupgrade -A 'portsclean -D' joe
+
+如何查詢目前系統安裝了哪些套件？
+# pkg_glob -a
+或者指定查詢某名稱的套件
+# pkg_glob joe
+
+如何查詢系統有沒有安裝這個關鍵字的套件？
+# pkg_glob "joe*"
+
+如何查詢某個檔案是屬於哪個套件？
+# pkg_which /usr/local/bin/joe
+
+如何列出所有可以升級的 ports？
+
+# portversion
+# portversion -v
+若僅欲列出可升級的套件，則
+# portversion -v | grep -v "="
+
+如何指定編譯參數？
+若 ports collection 支援編譯的參數，
+# portinstall -m '-DLITE' vim
+或
+# portupgrade -m '-DLITE' vim
+不支援的話，則自行指定
+
+# portinstall -m 'CONFIGURE_ARGS+="--without-inetd"' pure-ftpd
+或
+# portupgrade -m 'CONFIGURE_ARGS+="--without-inetd"' pure-ftpd
+
+如何指定 make 的環境參數？
+# portinstall -M 'env CONFIGURE_ARGS+="--without-inetd"' pure-ftpd
+
+如何指定 ports 的安裝路徑？
+# portinstall -m 'PREFIX=/usr' joe
+或
+# portupgrade -m 'PREFIX=/usr' joe
+
+如何安裝 packages？
+此方法提供直接用 packages 安裝，而不是 ports。但若沒有符合的 packages 可裝，則改用 ports 安裝。
+# portinstall -P joe
+# portupgrade -P joe
+
+如何強制用 packages 安裝而不是 ports？
+此方法提供強制用 packages 安裝，即使沒有符合的 packages 也不會轉而用 ports 安裝。
+# portinstall -PP joe
+# portupgrade -PP joe
+
+如何更新 INDEX 對照表？
+重新建立完整的 INDEX，以其相對應的 INDEX databases。
+#portsdb -Uu
+#若欲減少運行時間，可不用重新建立完整的 INDEX，而僅建立 INDEX databases。此方法可能遇到的問題是，
+#ports tree 的資訊也許與現存的 INDEX 有所差異，而按照 INDEX 所建立的 databases 也會與 ports tree 有所差異，
+#而發生安裝/查詢套件時出現問題。
+# portsdb -u
+
+如何使用互動模式(interactive)？
+安裝/更新 glib 及其所相依的套件
+# portinstall -ri glib
+# portupgrade -ri glib
+#
+如何將過程儲存到一個檔案中？
+# portinstall -L joe
+#
+如何將過程模擬一遍，而不實作執行？
+# portinstall -n joe
+或
+# portupgrade -n joe
+
+如何將某個套件替代成另一個套件？
+用 print/ghostscript-afpl 換掉 ghostscript-gnu。
+# portupgrade -o print/ghostscript-afpl ghostscript-gnu
+
+如何不保留舊的 shared libraries？
+加上 -u 的參數，會移除該套件的舊有 shared libraries。
+# portinstall -u glib
+或
+# portupgrade -u glib
+
+若要清除所有已安裝套件中所重覆的 shared libraries，則
+# portsclean -L
+
+如何對所有的詢間都回答 yes？
+# portinstall -y php4
+或
+# portupgrade -y php4 

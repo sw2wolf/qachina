@@ -1,0 +1,7 @@
+Control w           :close_tab
+Control @Page_Up@   :focus_prev
+Control @Page_Down@ :focus_next
+@Home@ :scroll_top
+@End@ :scroll_bottom
+gh :home
+#Control i :exja (function(){var q = window.QQWebIME;q?q.toggle():(function (d,j){j=d.createElement("script");j.async = true;j.src="//ime.qq.com/fcgi-bin/getjs";j.setAttribute("ime-cfg","lt=2");d=d.getElementsByTagName("head")[0];d.insertBefore(j,d.firstChild);}(document));})();

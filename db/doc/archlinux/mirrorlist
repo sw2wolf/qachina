@@ -1,0 +1,6 @@
+#
+# Arch Linux repository mirrorlist
+#
+Server = http://mirrors.163.com/archlinux/$repo/os/i686
+Server = http://oss.ustc.edu.cn/archlinux/$repo/os/i686
+Server = http://mirror.bjtu.edu.cn/archlinux/$repo/os/i686

@@ -1,0 +1,411 @@
+
+;;;;;;
+#!/bin/sh
+xrandr --output LVDS1 --mode 1280x800 --pos 1440x100 --rotate normal --output DP1 --off --output VGA1 --mode 1440x900 --pos 0x0 --rotate normal
+
+;;;;;;
+sudo service powerd onestart
+sysctl dev.cpu.0.freq: 1000
+sysctl dev.cpu.0.freq_levels => dev.cpu.0.freq_levels: 1900/25000 1800/22782 1000/9420
+sysctl hw.acpi.thermal*
+
+1 保证acpi，cpufreq内核模块正常工作 
+2 在/etc/rc.conf增加：powerd_enable="YES"，来启动powerd 
+3 在/etc/sysctl.conf增加：debug.cpufreq.lowest=400，设置cpu频率调节最小不低于400M，此值将影响dev.cpu.%d.freq_levels; 
+而powerd使用了此值来调节cpu频率 
+总之，上述步骤保证了在powerd工作时，cpu的最小频率大于400M。
+
+2 cpu降频支持
+ 需要内核有(默认的内核已经支持)
+ device cpufreq
+ 编辑/etc/rc.conf 加入下面二行，是为了在启动时自动启动powerd进程
+ #vi /etc/rc.conf
+ powerd_enable="YES"  #表示开机自动启动powerd进程
+ powerd_flags="-a adaptive -b adaptive -n adaptive"  #表示在有外接电源时，电池时，当外接电源的状态未知的情况都自动调节cpu频率(-a表示AC,即外接电源，-b表示电池,-n表示当AC的状态未知的情况,adaptive表示自动调节).
+
+用下面的命令分别查看cpu的当前频率、温度、风扇速度.你会看到风扇一直在转.
+ #sysctl -a | grep dev.cpu.0.freq
+ #sysctl -a | grep temperature
+ #sysctl -a | grep fan_speed
+
+;;;;;;
+mplayer -cache 2048 -cache-min 10 `youtube-dl.py -gf5 -- XCnK3B7Ftow`
+
+;;;;;;
+If the passwd databases become out of synch, repairing it, you could try:
+
+# pwd_mkdb -p /etc/master.passwd
+
+;;;;;;
+Mount the .iso that you want to copy to your memorystick.
+mdconfig -a -t vnode -f FreeBSD-9.2-RELEASE-amd64-bootonly.iso -u 0
+mount -t cd9660 /dev/md0 /media
+  
+Unambiguously identify the device node of your USB memory stick. For example, you could plug it in while you are reading the console messages. If you see a lot of things happening for da0, then you can be sure that your memory stick is on /dev/da0. Don't simply do the following steps with /dev/da0, because this may destroy contents of another USB disk (if connected).
+  
+Format the memory stick /dev/daX. Here X is the index of the identified stick. Issue the following commands all as root, replacing X with the actual device index -- be careful, don't do this with a device that you did not identify like said above.
+Code:
+# delete the old partitions of the memory stick and destroy the old partition scheme
+gpart show daX
+gpart delete -i 3 daX
+gpart delete -i 2 daX
+gpart delete -i 1 daX
+gpart destroy daX
+
+# create a GPT partition scheme and partition it for being bootable
+gpart create -s gpt daX
+gpart add -s 128 -a 4k -t freebsd-boot daX
+gpart add -a 4k -t freebsd-ufs daX
+
+# Place the boodcode
+gpart bootcode -b /media/boot/pmbr -p /media/boot/gptboot -i 1 daX
+
+# Set the bootme attribute
+gpart set -a bootme -i 2 daX
+
+# Create a new UFS filesystem and mount it at /mnt
+newfs /dev/daXp2
+mount /dev/daXp2 /mnt 
+
+Copy over the content of the .iso mounted on /media to your memory stick mounted on /mnt. Issue the following command as user root: cp -pR /media/ /mnt/
+ Note, the cd9660 filesystem on FreeBSD does not advertise the Rock Ridge inode attributes to userland tools, and since for this reason, hard links on a .iso cannot be reliably identified anyway, no special care needs to be taken to maintain them here. cp copies them as separate files, which is the best solution in this case.
+  
+Unmount the .iso and the memory stick.
+umount /mnt
+umount /media; mdconfig -d -u 0
+
+------
+$cat /etc/make.conf
+FORCE_MAKE_JOBS=yes
+MAKE_JOBS_NUMBER=4
+MASTER_SITE_OVERRIDE=http://ftp.jaist.ac.jp/pub/FreeBSD/ports/distfiles/${DIST_SUBDIR}
+WITH_PKGNG=yes
+
+.if ${.CURDIR:M*/editors/vim}
+WITH_OPTIONS=YES
+.endif
+------
+
+# cd /usr/ports/ports-mgmt/pkg && make install clean
+# echo WITH_PKGNG=yes >> /etc/make.conf
+# pkg2ng
+ 
+You can now either continue to use ports with portmaster/portupgrade, as
+before or switch to using binary packages only.
+ 
+ 
+To use binary packages:
+ 
+1. Ensure your pkg(8) is up-to-date. 'pkg -v' should say at least
+   1.1.4_8. If it does not, first upgrade from ports.
+2. Remove any repository-specific configuration from
+   /usr/local/etc/pkg.conf, such as PACKAGESITE, MIRROR_TYPE, PUBKEY.
+   If this leaves your pkg.conf empty, just remove it.
+3. mkdir -p /usr/local/etc/pkg/repos
+4. Create the file /usr/local/etc/pkg/repos/FreeBSD.conf with:
+FreeBSD: {
+  url: "http://pkg.FreeBSD.org/${ABI}/latest",
+  mirror_type: "srv",
+  enabled: "yes"
+}
+
+* Note that pkg.FreeBSD.org does not have a browsable web page on it and
+does not have a DNS A record. This is intended as it is an SRV host.
+pkg(8) knows how to properly use it. You can use 'pkg search' to browse
+the available packages in the repository.
+ 
+Mirrors you may use instead of the global pkg.FreeBSD.org:
+ 
+    pkg.eu.FreeBSD.org
+    pkg.us-east.FreeBSD.org
+    pkg.us-west.FreeBSD.org
+ 
+Your system is now ready to use packages!
+------
+To start FreeBSD network service: 
+
+ # /etc/rc.d/netif start 
+
+ To stop FreeBSD network service: 
+
+ # /etc/rc.d/netif stop 
+
+ To restart FreeBSD network service: 
+
+ # /etc/rc.d/netif restart 
+
+ Manual method using ifconfig
+ To stop network card (NIC) on-fly: 
+
+ # ifconfig network-interface down 
+
+ To start network card (NIC) on fly: 
+
+ # ifconfig network-interface up 
+
+ (C) To list down network interface: 
+
+ # ifconfig -d 
+
+ (D) To list up network interface:
+------
+portmaster --check-depends
+portmaster --force-config <pkg name>
+------
+setxkbmap -layout 'us,ru' -option gpr:alt_shift_toggle, grp_led:caps
+------
+$sysctl -a|grep -i kern.hz
+kern.hz: 1000
+
+$sysctl kern.securelevel
+kern.securelevel: -1
+
+$sysctl -n kern.osrelease kern.ostype
+
+$sysctl dev.cpu.0.cx_supported
+dev.cpu.0.cx_supported: C1/0
+
+$sysctl dev.cpu.0.freq
+dev.cpu.0.freq: 2100
+
+#output of my kern.conf out of the running kernel:
+sysctl kern.conftxt
+
+strings -n3 /boot/kernel/kernel
+------
+telnet irc.freenode.net 6667
+Trying 218.100.43.174...
+Trying 86.65.39.15...
+------
+#!/bin/bash
+xrandr --auto --output HDMI1 --mode 1920x1200 --right-of VGA1 --primary
+xrandr --auto --output VGA1 --mode 1600x1200 --left-of HDMI1 --pos 3520x0
+-----
+xterm-256color  [06:20]
+xterm-color
+-----
+On Linux, it’s quite easy to set up virtual network interface:
+for i in `seq 200 230`; do sudo ifconfig eth0:$i 192.168.1.$i up ; done
+-----
+pwd_mkdb /etc/master.passwd fixed password DB.
+-----
+gpart destroy -F /dev/da0
+-----
+`nextboot -o '-v' -k kernel` to enable verbose booting during the next boot. 
+
+svn co svn://svn.freebsd.org/base/releng/9.1/ /usr/src/
+
+xwininfo -root | grep geometry =>  -geometry 1440x900+0+0
+
+objdump -sj .data /boot/kernel/kernel | tail -n 22
+
+-----
+grep powerd /etc/rc.conf
+powerd_enable="YES"
+powerd_flags="-a maximum -b adaptive -i 50 -r 90 -p 500"
+
+-----
+mount -t cd9660 /dev/`mdconfig -f cdimage.iso` /mnt
+tunefs -n enable -j enable /dev/adXsYa
+-----
+
+# pkgdb -fF
+
+After updating the local copy of the ports tree (I use the portsnap tool on my FreeBSD systems):
+
+# portsnap fetch update
+
+. . . update the portaudit database:
+
+# portaudit -Fda
+
+The -F actually updates the database, and the -d option prints out the creation date of the database. Once that is done, your system is ready to be checked for vulnerabilities. With -a, you get a listing of all known vulnerabilities on your system.
+
+# portupgrade -R xxx
+
+监控温度，当达到一定界限时，中断进程。
+#k8temp ---监控CPU温度
+......
+#pgrep -fl "make install clean" ---找到进程组ID
+#pkill -STOP -g 进程组ID ----编译程序暂停，等CPU温度降下来了，再继续
+......
+#pkill -CONT -g 进程组ID 
+
+重装所有package
+pkg_info | awk '{print $1}' > pkg_info.log
+pkg_delete -a -f
+升级系统后：
+pkg_add -r `cat pkg_info.log`
+
+pkg_version -vIL=
+
+portsclean
+# portsclean  -C （make clean）  
+清理临时的work目录,可以用在以前ports安装而没有清理时候 
+# portsclean  -D          
+# 删除distfiles中的文件
+# portsclean  -DD         
+# 删除目前安装的port没有使用的源代码文件
+
+#daily work
+
+用dmesg |grep attached 可以查看哪些设备没有被驱动，再用pciconf -lv看下具体信息。
+
+网络校时
+＃ntpdate time.windows.com
+ （time服务器地址time.nist.gov 、chime.utoronto.ca 、ntp.pipex.net 、time.windows.com）
+
+安装更新、源代码、Doc文档
+#csup -L 2 -h cvsup.freebsdchina.org /usr/share/examples/cvsup/standard-supfile
+#csup -L 2 -h cvsup.freebsdchina.org /usr/share/examples/cvsup/doc-sufile
+
+安装更新Ports Collection
+#portsnap fetch extract
+（以后更新执行portsnap fetch update就可以了。
+
+给bsd打补丁(自动打补丁只能用于默认内核)
+#freebsd-update fetch
+#freebsd-update install
+
+freebsd-update -s 'freebsd-updates.mirrors.163.com' fetch
+freebsd-update -s 'freebsd-updates.mirrors.163.com' install
+
+改变ports安装软件下载地址
+在/etc/make.conf中加入: 
+MASTER_SITE_BACKUP?=http://mirrors.163.com/FreeBSD/distfiles/${DIST_SUBDIR}/
+MASTER_SITE_OVERRIDE?=${MASTER_SITE_BACKUP}
+
+设置本地化（中文）
+登录分类法（管理员级设置）
+
+在/etc/login.conf加入： 
+chinese:Chinese Users Account:\
+        :charset=UTF-8:\
+        :lang=zh_CN.UTF-8:\
+        :tc=default:
+
+然后执行： 
+＃cap_mkdb /etc/login.conf
+
+然后： 
+＃pw user mod 用户名 -L chinese
+
+查看 
+＃pw user show 用户名
+XX:*:1001:1001:chinese:0:0:用户名:/home/用户名目录:/bin/sh
+su －用户名
+$ locale
+LANG=zh_CN.UTF-8
+LC_CTYPE="zh_CN.UTF-8"
+LC_COLLATE="zh_CN.UTF-8"
+LC_TIME="zh_CN.UTF-8"
+LC_NUMERIC="zh_CN.UTF-8"
+LC_MONETARY="zh_CN.UTF-8"
+LC_MESSAGES="zh_CN.UTF-8"
+LC_ALL=
+
+登录分类（用户级设置）
+
+在用户根目录文件.login_conf加入： 
+me:\
+        :lang=zh_CN.UTF-8:\                     #LANG 语言显示
+        :setenv=LC_ALL=zh_CN.UTF-8:\            #指定所有的 Locale
+        :setenv=LC_CTYPE=zh_CN.UTF-8:\          #字元定义 (包含字元分类与转换规则)
+        :setenv=LC_COLLATE=zh_CN.UTF-8:\        #字母順序与特殊字元比较
+        :setenv=LC_TIME=zh_CN.UTF-8:\           #时间格式
+        :setenv=LC_NUMERIC=zh_CN.UTF-8:\        #数字格式
+        :setenv=LC_MONETARY=zh_CN.UTF-8:\       #货币格式
+        :setenv=LC_MESSAGES=zh_CN.UTF-8:\       #信息显示 
+        :charset=UTF-8:\                        #
+        :xmodifiers="@im=fcitx":                #
+
+加载声卡驱动（我的声卡是板载alc665）
+在/boot/loader.conf 加入snd_ich_load=“YES” （注：9.0默认内核已经有了） 
+#echo 'snd_ich_load="YES"'>> /boot/loader.conf
+
+安装配置xorg
+#cd /usr/ports/x11/xorg && make BATCH=YES install clean
+
+生成xorg.conf.new配置文件并移动到/etc/X11/下 
+#Xorg -configure
+#mv xorg.conf.new /etc/X11/xorg.conf
+
+在/etc/rc.conf内加入hald_enable=“YES” 和 dbus_enable=“YES” 如果安装的是fvwm则不需要这一步 
+#echo 'hald_enable="YES"'>> /etc/rc.conf
+#echo 'dbus_enable="YES"'>> /etc/rc.conf
+
+安装文泉驿字库 
+#cd /usr/ports/x11-fonts/wqy &&make install clean
+
+在/etc/X11/xorg.conf里面的Section “Files”小节加入： 
+FontPath	"/usr/ports/lib/X11/fonts/wqy"
+(
+cd /usr/local/lib/X11/fonts/TTF
+fetch http://雅黑字体存放路径/msyh.ttf
+mkfontdir
+mkfontscale
+fc-cache  -fv
+)
+安装Linux二进制兼容模式（安装nvidia显卡驱动所必须的）
+#kldload linux
+#cd /usr/ports/emulators/linux_base-f10 && make BATCH=YES install distclean
+
+ 在/etc/rc.conf中增加 linux_enable=“YES” 
+#echo 'linux_enable="YES"'>> /etc/rc.conf
+
+ 参见http://cnsnap.cn.freebsd.org/doc/zh_CN.GB2312/books/handbook/linuxemu-lbc-install.html 
+安装nvidia显卡驱动（我的是7600gs）
+#cd /usr/ports/x11/nvidia-driver && make BATCH=YES install clean
+
+ 在/boot/loader.conf中加入nvidia_load=“YES” 
+#echo 'nvidia_load="YES"'>> /boot/loader.conf
+
+ 注意:使用nvidia驱动需要在/etc/rc.conf中加入 linux_enable=YES 
+安装nvidia显卡驱动自动配置工具
+#cd /usr/ports/x11/nvidia-xconfig/ && make install clean
+
+执行 
+#rehash
+#nvidia-xconfig --add-argb-glx-visuals
+#nvidia-xconfig --composite
+#nvidia-xconfig --depth=24
+
+上面三行是为了compiz-fusion所设置的，如果不装compiz-fusion执行nvidia-xconfig就可以了。 (会在/etc/X11下生成新的xorg.conf文件并把旧的xorg.conf备份为org.conf.backup)
+
+Add a user
+pw useradd -n username -s /usr/local/bin/bash -m -g initial_groupname -G additional_groupname
+
+Here "-n" means user name, "-m" means create and set up user home dir in /home/username. For a complete list, see
+pw useradd help
+Add an existing user to a group
+pw usermod username -G group1,group2
+
+For further reference, go to
+pw useradd help
+
+You need to check if user that you are logging in got 'login class' set to 'czech'.
+ This can be set by:# pw usermod your_user -L czech
+
+update the port distinfo file:
+make makesum
+
+给网卡配置IP:
+# ifconfig msk0 inet 192.168.2.33/24
+
+添加第二个IP:
+# ifconfig re0 inet 192.168.2.33/24 add
+删除：
+# ifconfig re0 inet 192.168.2.33/24 -alias
+
+#####
+$ gpart show
+=>       63  312581745  ada0  MBR  (149G)
+         63   41945652     1  ntfs  (20G)
+   41945715   46235070     2  !12  (22G)
+   88180785  224395227     3  freebsd  [active]  (107G)
+  312576012       5796        - free -  (2.9M)
+
+=>        0  224395227  ada0s3  BSD  (107G)
+          0  216006656       1  freebsd-ufs  (103G)
+  216006656    8388570       2  freebsd-swap  (4G)
+  224395226          1          - free -  (512B)

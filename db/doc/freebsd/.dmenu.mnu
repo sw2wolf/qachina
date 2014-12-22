@@ -1,0 +1,21 @@
+xterm -geometry 159x28+0+390
+/usr/local/bin/gmrun
+-----------------------------------------------------------
+wine "c:/Program Files/eweiqi/LiveBaduk.exe"
+-----------------------------------------------------------
+VBoxManage startvm winxp
+VBoxManage controlvm winxp poweroff
+rdesktop -u *** -p 123 -g 1440x880 -D -K localhost:3389
+-----------------------------------------------------------
+emacs -geometry 178x36+0+363
+evince
+texmacs
+-----------------------------------------------------------
+#sudo /usr/local/etc/rc.d/musicpd onestart
+nvidia-settings
+-----------------------------------------------------------
+scrot %Y%m%d-%H.%M.%S.png -t 280x175 -e 'mv $f $m ~'
+scrot %Y%m%d-%H.%M.%S.png -t 280x175 -d 5 -e 'mv $f $m ~'"
+-----------------------------------------------------------
+sudo shutdown -r now
+sudo shutdown -p now

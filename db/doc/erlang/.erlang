@@ -1,0 +1,13 @@
+%Note: You should not change the shell_default module, since this
+%implements the existing shell functions, but instead add your own
+%functions to user_default.erl. 
+code:load_abs("/media/D/qachina/db/doc/erlang/user_default").
+
+code:add_patha(".").
+
+%code:add_pathz("/home/sw2wolf/RnD/yaws/ebin").
+
+%io:format("Welcome to Erlang World~n").
+%io:format("Memory: ~p~n", [erlang:memory(total)]).
+%io:format("Process Count: ~p~n",[erlang:system_info(process_count)]).
+

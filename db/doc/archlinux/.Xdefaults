@@ -1,0 +1,59 @@
+!! rxvt-unicode configuration
+!! general setting
+
+!Rxvt.geometry:      179x30
+Rxvt.visualBell:    False
+Rxvt.termName:      rxvt
+
+!!color theme
+!- dark theme
+Rxvt.background:  black
+Rxvt.foreground:  white
+
+Rxvt.colorBD:     yellow
+Rxvt.colorIT:     magenta
+
+Rxvt.colorUL:        green
+Rxvt.underlineColor: cyan
+
+Rxvt.tintColor:      gray 
+Rxvt.cursorColor:    white
+
+Rxvt.shading:        100
+
+!! title
+
+Rxvt.title:  rxvt-unicode
+
+!! scrollBar
+
+Rxvt.scrollBar:              False
+Rxvt.scrollstyle:            next
+Rxvt.scrollBar_right:        True
+Rxvt.scrollBar_floating:     True
+Rxvt.scrollTtyOutput:        True
+Rxvt.scrollTtyKeypress:      True
+
+!! cursor
+Rxvt.cursorBlink:       False
+!Rxvt.pointerBlank:      True
+!Rxvt.externalBorder:    True
+
+ 
+!! coding
+Rxvt.multichar_encoding:    utf-8
+Rxvt.imLocale:              zh_CN.UTF-8
+
+!! set the artificial transparency 
+Rxvt.inheritPixmap:        True 
+Rxvt.saveLines:            10000
+Rxvt.preeditType:          Root
+Rxvt.borderLess:           False
+
+!! turn on URL browsing support
+URxvt.urlLauncher:      firefox
+URxvt.matcher.button:   1
+URxvt.perl-ext-common:  default,tabbed,matcher
+
+!! font
+URxvt.font: xft:simsun:pixelsize=16:antialias=true

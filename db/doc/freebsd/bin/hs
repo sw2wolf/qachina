@@ -1,0 +1,17 @@
+#!/bin/sh
+
+#money=$MD/haskell/Money.hs
+if test $# -ge 1; then
+	#ghc -ignore-dot-ghci -e "$*" $money
+	ghc -ignore-dot-ghci -e "import Money" -e "$*"
+    exit 0
+fi
+
+expr=`zenity --width 350 --entry --text "Please input a Haskell expression" \
+div618 stopLoss winG his winSSQ hitSSQ`
+
+if [ $? -eq 0 ]; then 
+    #res=$(ghc -ignore-dot-ghci -e "$expr" $money)
+	res=$(ghc -ignore-dot-ghci -e Money."$expr")
+    zenity --info --text="$res"
+fi

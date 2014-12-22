@@ -1,0 +1,7 @@
+/dev/sda1: UUID="0850148850147E9E" TYPE="ntfs" 
+/dev/sda3: UUID="176fc6d9-47c6-4a54-a0cc-18d30b36e55c" TYPE="ext4" 
+/dev/sda5: UUID="752ae3a4-d2ae-487a-8de5-a59a1ed2631f" TYPE="reiserfs" 
+/dev/sda6: UUID="e180196a-7965-4e01-a37b-a6215f3c158e" TYPE="reiserfs" 
+/dev/sda7: LABEL="M-PM-BM-<M-SM->M-m" UUID="642F-15B9" TYPE="vfat" 
+/dev/sda8: UUID="a632c50e-5ad8-4758-964b-b4cd6ce7ea6e" SEC_TYPE="ext2" TYPE="ext3" 
+/dev/sda9: TYPE="swap" UUID="1a6a6a47-74f2-4b35-af30-6a69303e4e73"

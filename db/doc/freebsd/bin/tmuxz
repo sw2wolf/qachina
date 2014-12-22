@@ -1,0 +1,26 @@
+#!/bin/sh
+
+cmd=$(which tmux)
+session=$USER@$HOSTNAME
+
+if [ -z $cmd ]; then
+  echo "You need to install tmux."
+  exit 1
+fi
+
+$cmd has -t $session
+
+if [ $? != 0 ]; then
+  $cmd new -d -n work -s $session "csh"
+  $cmd splitw -h -p 60 -t $session "xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex cont"
+  $cmd select-pane -t 1
+  #$cmd selectw -t $session:0
+fi
+
+$cmd att -t $session
+
+exit 0
+
+#xterm -geometry 159x25+0+438 -e "tmux -q has-session && exec tmux attach-session -d || exec tmux new-session -n$USER -s$USER@$HOSTNAME"
+
+

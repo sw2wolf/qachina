@@ -1,0 +1,3 @@
+breakchars="(){}[],^%$#@\"\";:''|\\"
+
+exec rlwrap --remember -c -b "$breakchars"  -f "$HOME"/.ml_completions ocaml -init ~/.ocamlinit "$@"

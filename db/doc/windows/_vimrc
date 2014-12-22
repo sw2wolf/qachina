@@ -1,0 +1,101 @@
+colorscheme torte
+"Toggle Menu and Toolbar scrollbar
+set guioptions-=m
+set guioptions-=T
+set guioptions-=r
+
+set nocompatible
+set history=400     "设置历史记录步数
+filetype plugin on   "开启文件类型判断插件
+filetype indent on
+set autoread     "当文件在外部被修改，自动更新该文件
+"set mouse=a     "激活鼠标的使用
+set paste
+set clipboard=unnamed
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+set smarttab
+
+set nobackup
+set noswapfile
+
+set cindent 
+set smartindent 
+
+set incsearch 
+set autoindent
+set hlsearch
+set showmatch
+set backspace=2
+set backspace=eol,start,indent
+set ruler
+set showcmd
+
+
+set mps+=<:>
+
+set dy=lastline
+
+syntax enable
+syntax on
+
+"filetype on
+filetype plugin on 
+filetype indent on
+
+set encoding=utf-8
+set fileencodings=utf-8,chinese,latin-1
+if has("win32")
+    set fileencoding=chinese
+else
+    set fileencoding=utf-8
+endif
+set termencoding=utf-8
+set history=50
+
+"解决菜单乱码
+"source $VIMRUNTIME/delmenu.vim
+"source $VIMRUNTIME/menu.vim
+"解决consle输出乱码
+language messages zh_CN.utf-8
+
+"set foldcolumn=2 
+"set foldmethod=indent 
+"set foldlevel=3
+
+au BufRead,BufNewFile *.asd set filetype=lisp
+
+"Change work dir to current dir
+autocmd BufEnter * cd %:p:h
+
+set sessionoptions+=resize,winpos
+"autocmd VIMEnter * :source ~/vim_session
+"autocmd VIMLeave * :mksession! C:/session.vim
+
+"autocmd FileType python setlocal et sta sw=4 sts=4
+"autocmd FileType python setlocal foldmethod=indent
+
+"  tab
+"map <S-Down> :tabnew<CR>
+"map <S-Left> :tabp<CR>
+"map <S-Right> :tabn<CR>
+
+map <S-Left> :b#<CR> :bd#<CR>
+
+"map <F12> :mksession! ~/vim_session <cr> " Quick write session with F12
+"map <F2> :source ~/vim_session <cr>     " And load session with F2
+au VimLeave * mksession! ~/vim_session
+au VimEnter * source ~/vim_session
+
+nmap <C-F7> :%!xxd -g 1<CR>
+nmap <S-F7> :%!xxd -r<CR>
+
+"let g:slimv_swank_cmd = '! xterm -e sbcl --load ~/.vim/slime/start-swank.lisp &'
+"let g:swank_log = 1
+"let g:slimv_browser_cmd = "opera"
+
+" debug VIM
+"set verbosefile=test.log
+"set verbose=20

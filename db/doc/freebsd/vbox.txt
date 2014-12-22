@@ -1,0 +1,72 @@
+FreeBSD 8.0通过VirtualBox 3.1.2安装Windows XP虚拟机
+  一直以来，在FreeBSD里都想虚拟一个Windows XP让儿子可以玩LEGO的设计，但总是有各种各样的问题。今天，发现VirtualBox到3.1.2了，想试试如何，首先安装VirtualBox，
+
+1, $cd /usr/ports/emulators/virtualbox-ose
+   $sudo make install clean
+
+2, 然后安装VirtualBox的内核模块，这个过程会在/boot/modules/下产生vboxdrv.ko,vboxnetadp.ko,vboxnetflt.ko几个内核模块
+
+   $cd /usr/ports/emulators/virtualbox-ose-kmod
+   $sudo make install clean
+
+3, 在/boot/loader.conf里添加
+   vboxdrv_load="YES"
+
+4, 在/etc/rc.conf里添加
+   vboxnet_enable="YES" #这会产生一个虚拟网卡vboxnet0,用ifconfig可以看到。
+
+5, 重启系统 （有可能FreeBSD内核需要升级，如果vboxdrv加载失败）
+        $sudo shutdown -r now
+
+6, 启动VirtualBox, 创建Windows XP的虚拟机
+      $VirtualBox
+
+7, 为虚拟机使用Bridge Adapter网络模式，网卡为系统当前帮定IP的网卡。
+
+8, 为虚拟机创建共享盘，指向当前用户目录的某个目录，比如 /home/hoo/share
+
+9, 安装Windows XP （啊，非常快，好像比物理机还快）
+
+10, 虚拟机启动后，安装Guest Additions，这一步可以通过网络下载VBoxGuestAdditions_3.1.2.iso（click虚拟机的菜单 Devices-->Install Guest Additions..,然后按提示做），挂载这个文件到虚拟机光驱，Windows XP启动后，就会自动安装了。
+
+11, 安装VBoxGuestAdditions后，虚拟机可以全屏方式工作，和FreeBSD的桌面分辨率一样（我以前一直都是只能工作在1024x768或800x600，现在是1280x800，而不用考虑Windows XP的分辨率）
+
+12, 配置Windows XP网络及防火墙，可以和FreeBSD互相ping通。
+
+13, 安装VBoxGuestAdditions后，在虚拟机里可以映射FreeBSD的共享盘，比如 Z:盘 映射到 \\vboxsvr\share （vboxsvr是virtualbox固定的名字，share是你在创建共享目录时取的共享名）
+
+14, 在自己bin目录下，比如我的 \home\hoo\bin，建立一个shell程序，可以直接启动windows XP,
+$vi bin\vwin
+   
+#!\bin\sh
+VBoxManage startvm winxp --type gui &
+
+$chmod +x bin\vwin
+$rehash
+   
+$vwin
+
+到此，虚拟的Windows XP已经完全可以正常工作了，全屏方式下，几乎感觉不到是虚拟机，包括速度。而且，虚拟的Windows XP和宿主FreeBSD里可以通过网络及共享盘进行方便的交互。以前，用NAT网络模式时是不可能的。
+
+
+---------------------------------------
+USB Support:
+============
+
+For USB support your user needs to be in the operator group and needs read
+and write permissions to the USB device.
+
+% pw groupmod operator -m jerry
+
+Add the following to /etc/devfs.rules (create if it doesn't exist):
+
+[system=10]
+add path 'usb/*' mode 0660 group operator
+
+To load these new rule add the following to /etc/rc.conf:
+
+devfs_system_ruleset="system"
+
+Then restart devfs to load the new rules:
+
+% /etc/rc.d/devfs restart

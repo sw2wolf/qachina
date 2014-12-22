@@ -1,0 +1,50 @@
+1.hunchentoot在处理客户端请求时，默认情况下会经过如下环节：
+
+    acceptor => request-dispatcher => request-handler
+
+    dispatcher函数唯一的参数是一个request对象，该函数要么返回一个request-handler，要
+    么返回nil。
+
+    默认情况下，*dispatch-table*里保存了若干dispatcher函数。有很多函数可以创建出
+    dispatcher，例如create-prefix-dispatcher。一般应用情况下，只需要针对这些创建
+    dispatcher的函数，写对应的request-handler函数即可。
+
+    request-handler函数无参数，返回值是字符串或者二进制数据，这些数据将被返回给客户
+    端。
+
+    每次客户端请求都会对应一个request对象，很多函数都要求传入request对象，但
+    hunchentoot也有全局*request*对象作为默认值，这个全局变量 应该标示当前处理的
+    request，所以也可不传入参数，直接使用该默认值。
+
+    返回给客户端的字符串，如果包含中文，最好将hunchent设置为utf8:
+
+        (setf *hunchentoot-default-external-format* 
+                  (flex:make-external-format :utf8 :eol-style :lf))
+
+2. Hunchentoot's session mechanism is used to make the future accessible to subsequent requests. The future is placed in a session value; the completion of the background calculation is determined by calling lparallel:fulfilledp. Once the computation is finished, the return value of the compute-and-display-response-page is determined using lparallel:force.
+
+(hunchentoot:define-easy-handler (something-that-takes-long :uri "/sttl")
+    (parameter)
+
+    ;; Get or start Hunchentoot session context
+    (hunchentoot:start-session)
+
+    (let ((job-running (hunchentoot:session-value :job)))
+        (cond
+            ;; Previously started job has finished
+            ((and job-running (lparallel:fulfilledp job-running))
+                (hunchentoot:delete-session-value :job)
+                (lparallel:force job-running))
+
+            ;; Previously started job still running
+            (job-running "Previous job still running")
+
+            ;; Start new job
+            ((eq (hunchentoot:request-method*) :post)
+                (setf (hunchentoot:session-value :job)
+                    (lparallel:future
+                        (compute-and-display-response-page parameter)))
+                        "The job has been started")
+            ;; Display job parameter form
+            (t (show-job-parameter-form)))))
+

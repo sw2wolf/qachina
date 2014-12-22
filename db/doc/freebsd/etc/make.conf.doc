@@ -1,0 +1,260 @@
+# --< optimizations :: BEGIN >-------------------------------------------------
+CPUTYPE=        athlon-mp
+KERNCONF=        SMP-LITE
+
+# default build settings for ports collection
+.if ${.CURDIR:M*/ports/*}
+  CFLAGS=        -O2 -fno-strict-aliasing -pipe -s # -funroll-loops -fomit-frame-pointer
+  CXXFLAGS=      -O2 -fno-strict-aliasing -pipe -s # -funroll-loops
+  WRKDIRPREFIX=  ${PORTSDIR}/obj
+.endif
+
+# default build settings for base system
+.if ${.CURDIR:M*/usr/src/*} || ${.CURDIR:M*/usr/obj/*}
+  CFLAGS+=        -O2 -fno-strict-aliasing -pipe -s
+  CXXFLAGS+=        -O2 -fno-strict-aliasing -pipe -s
+  COPTFLAGS=        -O2 -fno-strict-aliasing -pipe -s
+.endif
+
+# use ccache while building base system
+CC=/usr/local/libexec/ccache/world-cc
+CXX=/usr/local/libexec/ccache/world-c++
+# --< optimizations :: END >---------------------------------------------------
+
+
+# --< updating :: BEGIN >------------------------------------------------------
+SUP_UPDATE=        yes
+SUPHOST=        cvsup.pl.freebsd.org
+SUP=                /usr/bin/csup
+SUPFILE=        /usr/share/examples/cvsup/stable-supfile
+PORTSSUPFILE=        /usr/share/examples/cvsup/ports-supfile
+# --< updating :: END >--------------------------------------------------------
+
+
+# --< defauls ports knobs :: BEGIN >-------------------------------------------
+# optimizations
+  WITH_SSE= yes
+  WITH_3DNOW= yes
+  WITH_MMX= yes
+  WITH_THREADS= yes
+  WITHOUT_PROFILE= yes
+  WITHOUT_DEBUG= yes
+
+# X11
+  X_WINDOW_SYSTEM= xorg
+
+# audio
+  WITHOUT_ESD= yes
+  WITHOUT_ESOUND= yes
+  WITHOUT_ARTS= yes
+  WITHOUT_XMMS= yes
+  WITHOUT_DBUS= yes
+  WITHOUT_GSTREAMER= yes
+
+# toolkits
+WITHOUT_GTK= yes
+WITHOUT_QT= yes
+WITH_GTK2= yes
+
+# encoding
+WITH_UTF8= yes
+WITH_MULTIBYTE= yes
+WITH_UNICODE= yes
+WITH_NLS= yes
+WITH_I18N= yes
+
+# network/www
+WITHOUT_IPV6= yes
+WITHOUT_JAVA= yes
+WITHOUT_MOZILLA= yes
+WITHOUT_MOZILLA_PLUGIN= yes
+WITH_BROWSER= opera
+BROWSER= opera
+#WITHOUT_PLUGINWRAPPER=yes
+
+# spell check
+WITHOUT_GTKSPELL= yes
+WITHOUT_ASPELL= yes
+WITHOUT_ISPELL= yes
+
+# graphics
+WITH_JPEG= yes
+WITH_IMLIB2= yes
+WITH_GIMP= yes
+
+# fonts
+WITH_FREETYPE= yes
+WITH_FREETYPE2= yes
+WITH_XFT= yes
+
+# multimedia
+WITH_MPLAYER= yes
+WITH_MPD= yes
+WITHOUT_XINE= yes
+WITHOUT_XINERAMA= yes
+WITH_USB= yes
+WITH_DVD_DEVICE= /dev/acd0
+
+# print
+WITHOUT_PRINT= yes
+WITHOUT_CUPS= yes
+
+# other
+WITHOUT_GCONF= yes
+WITHOUT_EXAMPLES= yes
+WITHOUT_TEMPLATES= yes
+WITHOUT_NAUTILUS= yes
+WITHOUT_PERL= yes
+WITHOUT_PYTHON= yes
+# --< defauls ports knobs :: END >---------------------------------------------
+
+
+# --< specialized ports knobs :: BEGIN >---------------------------------------
+# /usr/ports/x11-toolkits/scintilla || /usr/ports/editors/scite
+.if ${.CURDIR:M*/ports/x11-toolkits/scintilla} || ${.CURDIR:M*/ports/editors/scite}
+WITH_GTK2= yes
+.endif
+
+# /usr/ports/graphics/gimp-devel
+.if ${.CURDIR:M*/ports/graphics/gimp-devel}
+WITHOUT_EXIF= yes
+WITHOUT_PRINT= yes
+WITHOUT_GNOMEPRINT= yes
+WITH_MP= yes
+.endif
+
+# /usr/ports/lang/perl5.8
+.if ${.CURDIR:M*/ports/lang/perl5.8}
+WITHOUT_PERL_64BITINT= yes
+WITH_THREADS= yes
+.endif
+
+# /usr/ports/lang/python
+.if ${.CURDIR:M*/ports/lang/python}
+WITHOUT_HUGE_STACK_SIZE= yes
+WITHOUT_IPV6= yes
+.endif
+
+# /usr/ports/sysutils/conky
+.if ${.CURDIR:M*/ports/sysutils/conky}
+WITH_XFT= yes
+WITHOUT_OWN_WINDOW= yes
+WITH_MPD= yes
+WITHOUT_SETI= yes
+.endif
+
+# /usr/ports/net-p2p/mldonkey-devel
+.if ${.CURDIR:M*/ports/net-p2p/mldonkey-devel}
+WITHOUT_GUI= yes
+WITH_THR_THREAD_MODEL= yes
+.endif
+
+# /usr/ports/graphics/ImageMagick
+.if ${.CURDIR:M*/ports/graphics/ImageMagick}
+PERL_THREADED= true
+WITH_IMAGEMAGICK_THREADS= yes
+WITH_IMAGEMAGICK_DOT= yes
+WITH_IMAGEMAGICK_SVG= yes
+.endif
+
+# /usr/ports/multimedia/mplayer
+.if ${.CURDIR:M*/ports/multimedia/mplayer}
+WITH_LANG= en,pl
+WITHOUT_GUI= yes
+WITHOUT_IPV6= yes
+WITHOUT_SKINS= yes
+WITHOUT_NVIDIA= yes
+WITHOUT_ARTS= yes
+WITH_AALIB= yes
+WITHOUT_ESOUND= yes
+WITHOUT_XMMS= yes
+WITHOUT_RTCPU= yes
+.endif
+
+# /usr/ports/www/opera
+.if ${.CURDIR:M*/ports/www/opera}
+WITH_SHARED= yes
+.endif
+
+# /usr/ports/x11-wm/fluxbox-devel
+.if ${.CURDIR:M*/ports/x11-wm/fluxbox-devel}
+WITH_IMLIB2= yes
+WITH_KDE= yes
+WITH_GNOME= yes
+WITHOUT_SLIT= yes
+.endif
+
+# /usr/ports/graphics/xpdf
+.if ${.CURDIR:M*/ports/graphics/xpdf}
+A4= yes
+.endif
+
+# /usr/ports/x11/rxvt-unicode
+.if ${.CURDIR:M*/ports/x11/rxvt-unicode}
+WITHOUT_UNICODE3= yes
+WITHOUT_MENUBAR= yes
+WITHOUT_RXVT_SCROLLBAR= yes
+WITHOUT_NEXT_SCROLLBAR= yes
+WITHOUT_XTERM_SCROLLBAR= yes
+WITHOUT_PLAIN_SCROLLBAR= yes
+WITHOUT_PERL= yes
+.endif
+
+# /usr/ports/textproc/ispell
+.if ${.CURDIR:M*/ports/textproc/ispell}
+ISPELL_PL= yes  
+.endif
+
+# /usr/ports/audio/cmus
+.if ${.CURDIR:M*/ports/audio/cmus}
+WITH_VORBIS= yes
+WITH_MODPLUG= yes
+WITH_TREMOR= yes
+WITH_MUSEPACK= yes
+WITH_LIBAO= yes
+.endif
+
+# /usr/ports/www/lighttpd
+.if ${.CURDIR:M*/ports/www/lighttpd}
+#WITH_OPENLDAP=yes
+#WITH_MYSQL=yes
+WITHOUT_IPV6=yes
+WITH_CML=yes
+.endif
+
+# /usr/ports/textproc/libxml2
+.if ${.CURDIR:M*/ports/textproc/libxml2}
+.undef WITH_THREADS
+.endif
+
+# /usr/ports/lang/php5
+.if ${.CURDIR:M*/ports/lang/php5}
+WITH_REDIRECT =yes
+WITH_DISCARD =yes
+WITH_MULTIBYTE =yes
+.endif
+
+# /usr/ports/irc/irssi-devel
+.if ${.CURDIR:M*/ports/irc/irssi-devel}
+WITHOUT_PERL= yes
+WITHOUT_IPV6= yes
+.endif
+
+# /usr/ports/x11/nvidia-driver
+.if ${.CURDIR:M*/ports/x11/nvidia-driver}
+WITHOUT_LINUX= yes
+WITH_ACPI= yes
+.endif
+# --< specialized ports knobs :: END >-----------------------------------------
+
+
+# GAMEs
+# .if${.CURDIR:M/usr/ports/games/*}
+#    PREFIX=/mnt/games/${PORTNAME}
+#    DATADIR=${PREFIX}/share
+# .endif
+
+
+# added by use.perl 2006-11-09 19:05:47
+PERL_VER=5.8.8
+PERL_VERSION=5.8.8

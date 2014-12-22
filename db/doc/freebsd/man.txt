@@ -1,0 +1,189 @@
+# vi /boot/device.hints
+hint.pcm.0.vol="50" (pcm Module加载时，音量默认为50）
+
+# kldload snd_driver    （加载所有声卡驱动自动匹配）
+# cat /dev/sndstat  (查看声卡驱动信息）
+# dmesg | grep hdac
+# cat filename > /dev/dsp   (测试声卡，filename为任意文件产生噪音说明正常工作）
+
+# dmesg | grep attached （列出没有被驱动的硬件） 
+# pciconf -lv       （更加详细）    /var/run/dmesg.boot
+
+# tzsetup   （时区设置 CST）
+# ntpdate cn.pool.ntp.org   （校准）
+
+# vi /etc/rc.conf
+ntpd_enable="YES"       （配置开机启动 ntpd）
+ntpd_sync_on_start="YES"
+:wq
+# /etc/rc.d/ntpd start
+
+# vi /etc/ntp.conf
+server 1.cn.pool.ntp.org
+server 1.asia.pool.ntp.org
+server 2.asia.pool.ntp.org  （配置time server）
+:wq
+# /etc/rc.d/ntpd restart
+
+
+：使用本地化语言
+方法一：Class Definitions
+# vim /etc/login.conf
+chinese:Chinese Users Account:\
+    :charset=UTF-8:\
+    :lang=zh_CN.UTF-8:\
+    :tc=default:
+# cap_mkdb /etc/login.conf  (rebuilds the database file /etc/login.conf.db)
+pw usermod jacky -L chinese (修改 jacky 的 语言环境)
+pw useradd jacky -L chinese (添加 jacky 并使用中文)
+
+方法二：User Definitions
+# vim ~/.login_conf
+me:\
+    :lang=zh_CN.UTF-8:\
+    :setenv=LC_CTYPE=zh_CN.UTF-8:\      (字符类型)
+    :setenv=LC_COLLATE=zh_CN.UTF-8:\    (字符对比规则)
+    :setenv=LC_TIME=zh_CN.UTF-8:\       (时间类型)
+    :setenv=LC_NUMERIC=zh_CN.UTF-8:\    (数字类型)
+    :setenv=LC_MONETARY=zh_CN.UTF-8:\   (货币类型)
+    :setenv=LC_MESSAGES=zh_CN.UTF-8:\   (消息/提示类型)
+    :setenv=LC_ALL=zh_CN.UTF-8:\
+    :charset=UTF-8:\
+    :xmodifiers="@im=SCIM": # set scim as the XIM  input server
+
+
+Axel / Aria2下载大文件利器 (MP3、影片、软件等)   wget
+
+# cd /usr/ports/ftp/axel && make install clean
+# axel -a -n 3 ftp://ftp.kernel.org/pub/linux/kernel/v2.4/linux-2.4.17.tar.bz2  (详情：man axel)
+
+# axel -S4 ftp://ftp.kernel.org/pub/linux/kernel/v2.4/linux-2.4.17.tar.bz2      (自动寻找 4 个最快mirror进行下载)
+
+通常我用 wget 下网站    (找到资料就下吧！说不准那天站点没了,还是弄下来方便！)
+# wget -r -np -p -k --level=2 http://tldp.org/HOWTO/Linux+IPv6-HOWTO/       (wget默认安装)
+
+Aria2 ：多链接下载，轻量，平均4-9MB内存使用量，BitTorrent下载速度2.8MiB/s时CPU占用约6%
+# cd /usr/ports/www/aria2 && make install clean
+
+(详情：man aria2c)
+# aria2c "http://example.org/mylinux.iso"       (直接下载)
+
+# aria2c "http://host/file.zip" "ftp://host2/file.zip"  (同时从 2 个不同源下载 某文件)
+
+# aria2c -x2 -k1M "http://host/file.zip"            (-x2：一个server只建立 2 个连接 -k1M：man很详细)
+
+# aria2c -s4 http://host/file.zip                   (-s：总共启用多少个连接)
+
+# aria2c http://example.org/mylinux.torrent     (BT 下载)
+
+# aria2c 'magnet:?xt=urn:btih:248D0A1CD08284299DE78D5C1ED359BB46717D8C'     (BT Magent URI)
+
+# aria2c http://example.org/mylinux.metalink        (Metalink)
+
+# aria2c -i files.txt -j2                           (Download URIs found in text file -j：同时进行任务数)
+
+Resuming Download：
+Usually, you can resume transfer by just issuing same command   (aria2c URI)
+ if the previous transfer is made by aria2.
+  If the previous transfer is made by a browser or wget like sequential download manager,
+   then use -c option to continue the transfer  (aria2c -c URI)
+
+   BitTorrent Download：
+
+   # aria2c --follow-torrent=mem "http://host/file.torrent" (download files from remote BT file)
+   # aria2c --max-upload-limit=40k file.torrent     (download using a local torrent file)
+
+   Using Proxy:
+   For HTTP
+   aria2c --http-proxy="http://proxy:8080" "http://host/file"
+   aria2c --http-proxy="http://proxy:8080" \
+   --no-proxy="localhost,127.0.0.1,192.168.0.0/16" "http://host/file"
+   For FTP
+   aria2c --ftp-proxy="http://proxy:8080" "ftp://host/file"
+   Proxy with Authorization
+   aria2c --http-proxy="http://username:password@proxy:8080" "http://host/file"
+   aria2c --http-proxy="http://proxy:8080" \
+   --http-proxy-user="username" --http-proxy-passwd="password" "http://host/file"
+
+   -------------------------------------------------------------------------------------------------------
+   也可以应用到ports下载中！(非必需，一般来说FreeBSD的 fetch够用了)
+   # vim /etc/make.conf
+   FETCH_CMD=/usr/local/bin/axel -a -S 4        (-a：显示每个线程状态信息  -n：连接数)
+   DISABLE_SIZE=yes     (开启 此功能！)
+   :wq
+
+   穿越模式：
+   FETCH_ENV=http_proxy=ur address
+   FETCH_ENV=ftp_proxy=ur address
+
+   或者 使用其他工具：  (proxychains / runsocks)
+   FETCH_CMD=proxychains axel
+   FETCH_CMD=runsocks axel
+
+   PS：wget  axel aria2 配置均一样！
+
+   FETCH_CMD=/usr/local/bin/wget -c -t 3        (-c：继续以前的下载  -t：默认tries =20)
+   DISABLE_SIZE=yes     (开启 此功能！)
+
+   FETCH_CMD=/usr/local/bin/aria2c -s 4             (-s：开启4 个连接)
+   DISABLE_SIZE=yes     (开启 此功能！)
+
+   (在Aria2速度不行的时候，我发现Axel速度确实可以！正常情况匹敌！)
+
+
+Qemu:
+# cd /usr/ports/emulators/qemu && make install clean (add kqemu option)
+# kldload kldload {kqemu,if_bridge,if_tap,aio}  (必备module)
+# kldstat
+
+Create a 10GB qcow2 image to install Windows XP
+# qemu-img create -f qcow2 winxp.img 20G
+
+Installing Windows XP ...
+# qemu -m 1024 -hda winxp.img -cdrom xp_sp3_vol_x86.iso -boot d -localtime
+
+Boot Windows XP ...
+# qemu-system-x86_64  -m 1500 -hda winxp.img -cdrom xp_sp3_vol_x86.iso \
+-localtime -M pc -smp 2 -soundhw es1370 -usb -enable-kqemu -kernel-kqemu  -name winxp
+
+PS: Windows XP 占用CPU 100％ 很无奈，所以还是模拟 Windows2000吧(这个速度是最快的！)
+或者 用 VirtualBox 安装 Windows XP ...
+
+Qemu 模拟 Win2000
+# qemu-img create -f qcow2 win2000.img 10G
+# qemu -m 1024 -hda win2000.img -cdrom win2000.iso -boot d -win2k-hack
+# qemu-system-x86_64  -m 1500 -hda win2000.img -cdrom win2000.iso \
+-localtime -M pc -smp 2 -soundhw es1370 -usb -enable-kqemu -kernel-kqemu  -name win2000
+
+Updating Base System 
+$ freebsd-update fetch install
+
+Updating Ports System 
+$ portsnap fetch extract
+
+Installing kqemu-kmod 
+$ pkg_add -r kqemu-kmod
+
+Intalling qemu 
+$ pkg_add -r qemu
+
+Loading kernel modules 
+$ kldload kqemu
+$ kldload aio
+
+Creating the image file 
+$ qemu-img create -f qcow2 kwinxp.img 5G
+
+Starting the vm 
+$ qemu -cdrom /dev/acd0 -hda kwinxp.img -m 512 -boot d -kernel-kqemu -localtime
+
+Troubleshooting 
+
+If you run into problems installing W2K or XP Os, run qemu without acpi and kqemu. 
+$ qemu -cdrom /dev/acd0 -hda kwinxp.img -m 512 -boot d -no-kqemu -no-acpi -localtime
+
+If you are running a server without X, access your VM through VNC 
+$ qemu -cdrom /dev/acd0 -hda kwinxp.img -m 512 -boot d -kernel-kqemu -vnc :0 -localtime
+
+;makes mplayer attach a 'NET_WM_FULLSCREEN" property to the window
+$ mplayer -fstype fullscreen -fs <my-video.avi>

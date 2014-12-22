@@ -1,0 +1,195 @@
+.挂载i386/installation/cdrom/boot.iso文件。将其中的netbsd文件复制到刚才的fat32分区根目录下并命名为nbinstall.gz
+
+.将刚才复制出的nbinstall.gz文件用gunzip解压缩，得到nbinstall文件
+.修改grub.conf，增加一项如下
+
+title nbinstall
+root (hd1,4) #这个是你的nbinstall文件在的分区
+kernel --type=netbsd /nbinstall #这个是你的nbinstall文件在的目录和这个文件的名称
+boot
+
+至格式化分区建立文件系统结束后会出现选择安装介质的界面。选择这一项
+
+f:unmounted fs
+
+然后在安装源选择界面中如下操作
+
+aevice wd1i #这就是你的安装源所在分区的设备名。设备名确定方法见下
+b.Filesystem msdos #这就是你的安装源所在分区的文件系统类型。fat32为msdos，ntfs还是ntfs，ext2/3为ext2fs，netbsd的为ffs。经作者本人试验，完全支持fat32和ntfs的文件系统的安装
+
+c:Base direc×y #这就是上面第一步中提到的i386所在目录。系统默认是release。如果i386是在根目录下的话就留空
+
+d:set /i386/binary/sets #这就是具体的安装源了。就是有一堆base.tgz.、comp.tgz之类文件的目录。如果你是下载的整个i386目录并且没有改变目录结构及其中文件的话就用系统默认的/i386/binary/sets就行
+
+如果你无法确定自己的安装源所在分区的话，如下操作
+
+a.按ctrl+z，让安装进程“sysinst”暂时挂起到后台
+
+b.运行“disklabel /dev/wd0”或“disklabel /dev/wd1”（其他设备依此类推），查找自己安装源所在的文件系统在netbsd里的命名方法并记下
+
+c.输入“fg”，让安装程序“sysinst”转入前台继续安装
+
+
+timeout=5
+console terminal
+Title NetBSD on disk 1 (chainloader)
+    root(hd1,0)
+    chainloader +1
+Title NetBSD install kernel
+    kernel --type=netbsd /NETBSD_INSTALL_LARGE.gz
+
+--------------------------------------------------------------------------------------
+# useradd -m -G wheel ko              (添加普通用户ko 并将其加入wheel组)
+PS: 非wheel组用户 将无法使用su命令！
+# passwd ko                           (修改用户密码)
+Changing password for ko.
+New Password:
+Retype New Password:
+
+时间调整 :
+# echo rtclocaltime=YES >> /etc/rc.conf
+
+# sh /etc/rc.d/rtclocaltime restart
+Setting RTC offset to -480.
+# sysctl kern.rtc_offset
+kern.rtc_offset = -480
+
+# ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+# date          (试试看是不是搞定了^_^)
+
+网络配置 DHCP :
+# vi /etc/rc.conf
+hostname=netbsd.kotzu.org
+dhclient=YES
+auto_ifconfig=YES
+sshd=YES
+:wq
+
+静态IP (单配置文件):
+# dmesg | grep -i ether                        (查看网卡信息)
+wm0 at pci0 dev 3 function 0:  Intel i82540EM 1000BASE-T Ethernet,  rev.  2
+wm0:  Ethernet address 08:00:27:b1:13:d3
+
+# ifconfig -a                                  (查看网卡详细信息)
+wm0:  flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+           capabilities=2bf80<TSO4,IP4CSUM_Rx,IP4CSUM_Tx,TCP4CSUM_Rx,TCP
+           4CSUM_Tx,UDP4CSUM_Rx,UDP4CSUM_Tx,TCP6CSUM_Tx,UDP6CSUM_Tx>
+           enabled=0
+           address:  08:00:27:b1:13:d3
+           media:  Ethernet autoselect  (1000baseT full-duplex)
+           status:  active
+
+# vi /etc/rc.conf
+hostname=netbsd.kotzu.org
+auto_ifconfig=YES
+defaultroute="192.168.1.1"
+ifconfig_wm0="inet 192.168.1.77 netmask 255.255.255.0"
+sshd=YES
+:wq
+
+静态IP (多配置文件):
+# echo 'route add default 192.168.1.1' > /etc/mygate                        (网关)
+# echo 'inet 192.168.1.77 netmask 255.255.255.0' > /etc/ifconfig_wm0        (静态IP)
+# echo 'netbsd.kotzu.org' > /etc/myname                                     (主机名)
+# echo 'auto_ifconfig=YES' >> /etc/rc.conf                                  (# config all avail. interfaces)
+# echo 'sshd=YES' >> /etc/rc.conf                                           (开机运行ssh服务)
+
+DNS :
+# vi /etc/resolv.conf
+nameserver 202.106.0.20
+nameserver 202.106.196.115
+:wq
+
+# reboot
+
+vi ~/.cshrc
+setenv PKG_PATH ftp://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/`uname -m`/5.1/All
+:wq!
+netbsd# source ~/.cshrc
+
+sh/ksh:
+netbsd# vi ~/.profile
+export PKG_PATH=ftp://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/$(uname -m)/5.1/All
+:wq!
+
+netbsd# wget ftp://ftp.netbsd.org/pub/pkgsrc/stable/pkgsrc.tar.bz2
+netbsd# cd /usr 
+netbsd# tar -jxpvf ~/pkgsrc.tar.bz2
+
+netbsd# vi /etc/mk.conf
+FETCH_CMD=/usr/pkg/bin/wget -c -t3 -T10
+FETCH_BEFORE_ARGS=--passive-ftp
+FETCH_RESUME_ARGS=-c
+FETCH_OUTPUT_ARGS=-o
+:wq
+
+netbsd# cd /usr/pkgsrc/shells/bash/ && make install clean   (安装bash)
+PS: 这里注意，设置了PKG_PATH就不能源码安装软件。。
+建议: 源码安装su root, 非源码直接sudo ^_^
+注意给普通用户.cshrc  .profile 设置PKG_PATH, root就不要设置了！
+
+netbsd# pkg_add -v pkgin                   (如同yum/aptitude一样,自动解决依赖！)
+=======================================================
+$NetBSD:  MESSAGE,v  1.3 2010/06/10  08:05:00 is Exp  $
+First steps before using pkin.
+.Modify  /usr/pkg/etc/pkgin/repositories.conf to suit your platform
+.Initialize the database :
+         # pkgin update
+         =======================================================
+         netbsd# vim /usr/pkg/etc/pkgin/repositories.conf
+         ftp://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/amd64/5.1/All
+         :wq
+         netbsd# rehash
+         netbsd# pkgin update
+         =======================================================
+         netbsd# pkgin update       (创建初始化packages数据库)
+         netbsd# pkgin install      (安装)
+         netbsd# pkgin remove       (删除)
+         netbsd# pkgin upgrade      (请 man pkgin)
+         netbsd# pkgin full-upgrade (全部更新)
+         netbsd# pkgin clean        (清除package遗留的缓存 /var/db/pkgin/cache/)
+         netbsd# pkgin search       (搜索package信息)
+         netbsd# pkgin avail | more (列出当前所有可用的package)
+         netbsd# pkg_info           (列出当前安装的package)
+         =======================================================
+         netbsd# pkgin install sudo
+         netbsd# rehash
+         netbsd# visudo
+         /wheel
+         ## Same thing without a password
+         %wheel ALL=(ALL) NOPASSWD: ALL
+         :wq
+
+
+netbsd# vim ~/.cshrc
+export LANG="zh_CN.UTF-8"
+export LC_CTYPE="zh_CN.UTF-8"           (字符类型)
+export LC_COLLATE="zh_CN.UTF-8"           (字符对比规则)
+export LC_TIME="zh_CN.UTF-8"           (时间类型)
+export LC_NUMERIC="zh_CN.UTF-8"           (数字类型)
+export LC_MONETARY="zh_CN.UTF-8"   (货币类型)
+export LC_MESSAGES="zh_CN.UTF-8"   (消息/提示类型)
+export LC_ALL="zh_CN.UTF-8"
+:wq!
+netbsd# vim ~/.profile
+export LANG="zh_CN.UTF-8"
+export LC_CTYPE="zh_CN.UTF-8"           (字符类型)
+export LC_COLLATE="zh_CN.UTF-8"           (字符对比规则)
+export LC_TIME="zh_CN.UTF-8"           (时间类型)
+export LC_NUMERIC="zh_CN.UTF-8"           (数字类型)
+export LC_MONETARY="zh_CN.UTF-8"   (货币类型)
+export LC_MESSAGES="zh_CN.UTF-8"   (消息/提示类型)
+export LC_ALL="zh_CN.UTF-8"
+:wq!
+
+netbsd# pkgin install ibus ibus-pinyin ibus-table-chinese
+netbsd# vim ~/.xinitrc
+export XMODIFIERS=@im=ibus
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+ibus-daemon -d -r -x
+:wq
+
+netbsd# pkgin install firefox
+
+

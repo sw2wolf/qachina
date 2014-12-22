@@ -1,0 +1,19 @@
+# 
+# /etc/fstab: static file system information
+#
+# <file system>        <dir>         <type>    <options>          <dump> <pass>
+none                   /dev/pts      devpts    defaults            0      0
+none                   /dev/shm      tmpfs     defaults            0      0
+#none /tmp tmpfs size=64M,nodev,nosuid,noexec 0 0
+
+#none         /proc/bus/usb    usbfs   devgid=1003,devmode=664    0   0
+#/dev/sdf1  /media/usbdisk vfat iocharset=utf8,users,noauto,umask=0000    0  0
+#
+/dev/cdrom /media/cdrom   auto    ro,user,noauto,unhide   0      0
+/dev/dvd /media/dvd   auto    ro,user,noauto,unhide   0      0
+UUID=1a6a6a47-74f2-4b35-af30-6a69303e4e73 swap swap defaults 0 0
+UUID=752ae3a4-d2ae-487a-8de5-a59a1ed2631f / reiserfs defaults 0 1
+
+/dev/sda6	/media/E	ext3	 defaults,errors=remount-ro		0	0
+/dev/sda7	/media/F	vfat	 rw,defaults,utf8,uid=1000,gid=1000,dmask=022,fmask=133		0	0
+/dev/sda8	/media/G	ext3	 defaults,errors=remount-ro		0	0
