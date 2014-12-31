@@ -109,11 +109,12 @@ win_ssq(Count, NoRed, NoBlue) ->
     %% put(random_seed, seed()),
 	random:seed(now()),
 	NoRedLst = str2ints(NoRed),
-	GRed = good_red(),
+	%% GRed = good_red(),
+	AllRed = lists:seq(1,33),
     pick_ssq_nums(
       Count,
-	  GRed -- [1,33],
-	  GRed -- NoRedLst,   %lists:seq(1,33) -- NoRedLst
+	  AllRed -- [1,33],
+	  AllRed -- NoRedLst,
       pick_num(Count, lists:seq(1,16)--str2ints(NoBlue), [])
     ),
     file:write_file(ssqNum(), get(result)).
@@ -138,22 +139,22 @@ pick_ssq_nums(Count, XRed, YesRed, OkBlue) ->
     end,
     pick_ssq_nums(Count-1, XRed, YesRed, OkBlue).
 
-good_red() ->
-    {ok,Bin} = file:read_file(ssqHitNum()),
-    NumLst = string:tokens(binary_to_list(Bin), "\n"),
-    T = ets:new(tmp, [public,ordered_set]),
-    lists:foreach(fun(I)-> ets:insert(T, {I,0}) end, lists:seq(1,33)),
-    lists:foreach(
-        fun(Num) ->
-            Ns =  str2ints(string:sub_string(Num,7)),
-            lists:foreach(
-                fun(N) ->
-                    [{_,Cnt}] = ets:lookup(T,N),
-                    ets:insert(T,{N,Cnt+1})
-                end, lists:sublist(Ns,6))
-        end, NumLst),
-    Tmp = lists:sublist(lists:keysort(2, ets:tab2list(T)), 13, 21),
-    lists:sort( lists:map(fun({K,_})->K end, Tmp) ).
+%% good_red() ->
+%%     {ok,Bin} = file:read_file(ssqHitNum()),
+%%     NumLst = string:tokens(binary_to_list(Bin), "\n"),
+%%     T = ets:new(tmp, [public,ordered_set]),
+%%     lists:foreach(fun(I)-> ets:insert(T, {I,0}) end, lists:seq(1,33)),
+%%     lists:foreach(
+%%         fun(Num) ->
+%%             Ns =  str2ints(string:sub_string(Num,7)),
+%%             lists:foreach(
+%%                 fun(N) ->
+%%                     [{_,Cnt}] = ets:lookup(T,N),
+%%                     ets:insert(T,{N,Cnt+1})
+%%                 end, lists:sublist(Ns,6))
+%%         end, NumLst),
+%%     Tmp = lists:sublist(lists:keysort(2, ets:tab2list(T)), 13, 21),
+%%     lists:sort( lists:map(fun({K,_})->K end, Tmp) ).
     
 %检查是否中奖
 %    HitNo:  中奖号
@@ -172,8 +173,8 @@ hit_ssq(NoStr,HitNo) ->
     HitRed = lists:sublist(HitNoLst, 6),
     HitBlue = lists:sublist(HitNoLst, 7, 1),
 
-    {GoodHit,_} = hit_check({good_red(), HitRed}, {[], HitBlue}),
-    io:format("Good Red Hit:~w~n",[GoodHit]),
+    %% {GoodHit,_} = hit_check({good_red(), HitRed}, {[], HitBlue}),
+    %% io:format("Good Red Hit:~w~n",[GoodHit]),
 
     {ok,Bin} = file:read_file(ssqNum()),
     NumLst = string:tokens(binary_to_list(Bin), "\n"),

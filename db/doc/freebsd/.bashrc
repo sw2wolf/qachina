@@ -14,5 +14,5 @@ export DBUS_SESSION_BUS_ADDRESS="foo:"
 # A righteous umask
 umask 22
 
-PATH=".:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:$HOME/bin:$HOME/ccl:$HOME/.cabal/bin:$HOME/maxima/bin"
+PATH=".:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:$HOME/bin:$HOME/ccl:$HOME/ghc/bin:$HOME/.cabal/bin:$HOME/maxima/bin:$HOME/erlang/bin:$HOME/sbcl/bin:$HOME/tcc/bin"
 export PATH
