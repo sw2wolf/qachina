@@ -1,11 +1,9 @@
 ;(add-to-list 'load-path "~/erlang/lib/erlang/lib/tools-2.6.15/emacs/")
 (add-to-list 'load-path "~/.emacs.d/erlang/")
-
 ;; (setq erlang-root-dir "~/erlang")
 ;; (setq exec-path (cons "~/erlang/bin" exec-path))
 
 (require 'erlang-start)
-
 ;(require 'erlang-flymake)
 
 ;;仅在存盘时进行检查

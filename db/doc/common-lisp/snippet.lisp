@@ -2110,6 +2110,10 @@ sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="ccl -n -Q -K utf-8"
 sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
 sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"
 
+;; cmucl
+(extensions:save-lisp file &key :purify :root-structures :init-function
+  :load-init-file :print-herald :site-init
+  :process-command-line :batch-mode :executable)
 ;
 ;emacs
 ;

@@ -19,7 +19,7 @@
 (set-foreground-color "White")
 
 (add-to-list 'load-path "~/.emacs.d/")
-;(setq default-directory "/media/E/www/qachina/db/doc/money")
+(setq default-directory "d:/Z")
 (setq bookmark-default-file "~/.emacs.d/.emacs.bmk")
 ;; 同步更新书签文件 ;; 或者退出时保存
 (setq bookmark-save-flag 1)
@@ -41,11 +41,16 @@
 (setq display-time-24hr-format t) 
 (setq display-time-day-and-date t)
 
+(set-language-environment 'UTF-8)
+(set-locale-environment "UTF-8")
+
+(set-default-font "Courier New-10")
 ;(set-default-font "Bitstream Vera Sans Mono-10")
-(set-default-font "courier new-10")
+
 ;; 设置中文字体
-(set-fontset-font "fontset-default"
-      'gb18030 '("WenQuanYi Bitmap Song" . "unicode-bmp"))
+(set-fontset-font "fontset-default" 'unicode '("WenQuanYi Zen Hei" . "unicode-ttf"))
+;(set-fontset-font "fontset-default" 'gb18030 '("WenQuanYi Bitmap Song" . "unicode-bmp"))
+
 ;; 设置 sentence-end 可以识别中文标点
 (setq sentence-end
       "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*")
@@ -147,21 +152,12 @@
    ("\\.cfm$" . html-mode)
    ("gnus" . emacs-lisp-mode)
    ("\\.clj$" . clojure-mode)
-   ("\\.rkt$" . geiser-mode)
    ("\\.py$" . python-mode)
    ("\\.idl$" . idl-mode)))
-
-;;默认链接网络浏览器打开
-(setq browse-url-generic-program (executable-find "opera"))
-(setq browse-url-browser-function 'browse-url-generic)
-(global-set-key "\C-c\C-g" 'browse-url-at-point)
 
 ;; (require 'grep)
 ;; (grep-apply-setting 'grep-command "grep -nH -R -e  ")
 
-;
-;
-;
 (defun good-colors ()
   (progn
 	 (set-background-color "Black")
@@ -173,18 +169,21 @@
 	 (set-face-background 'default "Black")
 	 (set-face-background 'region "DarkSlateGray")
 	 (set-face-background 'highlight "DarkSlateBlue")
-	 (set-face-background 'modeline "DarkSlateBlue") ;;; CornflowerBlue")
+	 ;(set-face-background 'modeline "DarkSlateBlue") ;;; CornflowerBlue")
 	 
 	 (set-face-foreground 'default "LightGray")
 	 (set-face-foreground 'region "Ivory")
 	 (set-face-foreground 'highlight "LightGray")  ;;; DimGray")
-	 (set-face-foreground 'modeline "LightGray")
+	 ;(set-face-foreground 'modeline "LightGray")
 	 ))
 (good-colors)
 
 (defun qachina ()
    (interactive)
    (async-shell-command "cd /media/D/qachina && ./start.bat" "*QA-China*"))
+
+(defun sudo-shell-command (command)
+  (shell-command (concat "echo " (read-passwd "Password: ") " | sudo -S " command)))
 
 ;;------------------------------------------------------------------------------  
 ;; add chinese wubi input   

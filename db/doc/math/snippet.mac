@@ -1,5 +1,36 @@
 
 /*****/
+I tried to calculate this:
+limit(x^5−6*x^4+14*x^3−20*x^2+24*x−16, x, 1.999993580023622);
+
+But I got 0. I think it happens because a loss of significance. What can I do to get more precise result?
+
+(1) use horner to rearrange the expression so that it can be evaluated more accurately.
+(%i1) display2d : false;
+(%o1) false
+(%i2) horner (x^5-6*x^4+14*x^3-20*x^2+24*x-16, x);
+(%o2) x*(x*(x*((x-6)*x+14)-20)+24)-16
+(%i3) subst (x=1.999993580023622, %);
+(%o3) -1.77635683940025E-15
+
+(2) use bigfloat (variable precision) arithmetic.
+(%i4) subst (x=1.999993580023622b0, x^5-6*x^4+14*x^3-20*x^2+24*x-16);
+(%o4) -1.332267629550188b-15
+(%i5) fpprec : 50 $
+(%i6) fpprintprec : 8 $
+(%i7) subst (x=1.999993580023622b0, x^5-6*x^4+14*x^3-20*x^2+24*x-16);
+(%o7) -1.5876314b-15
+
+(3) use rational arithmetic, which is exact.
+(%i2) rat (1.999993580023622);
+rat: replaced 1.999993580023622 by 38317775/19158949 = 1.999993580023622
+(%o2) 38317775/19158949
+(%i3) subst (x=38317775/19158949, x^5-6*x^4+14*x^3-20*x^2+24*x-16);
+(%o3) -4098340979864306910009/2581418432543842245350194942774769749
+(%i4) float (%);
+(%o4) -1.587631407677531E-15
+
+/*****/
 /* One could even make a subscripted function to capture all solutions: */
 
 foo (name, eqn) := block ([listconstvars:false, listdummyvars:false],
