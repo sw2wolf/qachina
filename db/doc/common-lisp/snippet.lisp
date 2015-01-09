@@ -2092,7 +2092,10 @@ clisp -K full -x "(load \"asdf.lisp\") (load \"stumpwm.asd\") (load \"/usr/share
 
 ;;  clisp
 ;./configure --with-threads=POSIX_THREADS ;--with-jitc=lightning 
+<<<<<<< HEAD
 ;./configure --with-threads=POSIX_THREADS --prefix=/home/sw2wolf/clisp
+=======
+>>>>>>> d793b5a536546fcfd71feb7a6d5cbd1cb7f1307d
 (setq custom:*default-file-encoding*
       (ext:make-encoding :charset 'charset:iso-8859-1
                          :line-terminator :unix))
@@ -2102,6 +2105,7 @@ clisp -K full -x "(load \"asdf.lisp\") (load \"stumpwm.asd\") (load \"/usr/share
 ;./configure CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib --prefix=/home/sw2wolf/ecl/
 
 ;;  sbcl
+<<<<<<< HEAD
 sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
       --eval '(quicklisp-quickstart:install :path "ql-test/")' \
       --eval '(ql:quickload "cl-ppcre")'
@@ -2114,6 +2118,16 @@ sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-
 (extensions:save-lisp file &key :purify :root-structures :init-function
   :load-init-file :print-herald :site-init
   :process-command-line :batch-mode :executable)
+=======
+$sbcl --no-userinit --no-sysinit --load quicklisp.lisp \
+      --eval '(quicklisp-quickstart:install :path "ql-test/")' \
+      --eval '(ql:quickload "cl-ppcre")'
+
+$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="ccl -n -Q -K utf-8"
+$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
+$sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"
+
+>>>>>>> d793b5a536546fcfd71feb7a6d5cbd1cb7f1307d
 ;
 ;emacs
 ;

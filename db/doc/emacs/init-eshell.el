@@ -10,16 +10,31 @@
 
 (defun eshell/eval ()
   (interactive) 
+<<<<<<< HEAD
   ;(insert "ccl.sh '(princ )'")
   (insert "sb.sh '(princ )'")
   (backward-char 2) ;(goto-char (- (point) 2))
+=======
+  ;(insert "clisp.sh '(m:)'")
+  ;(insert "sb.sh '(princ ())'")
+  (insert "ccl.sh \"(princ )\"")
+  (backward-char 3) ;(goto-char (- (point) 2))
+>>>>>>> d793b5a536546fcfd71feb7a6d5cbd1cb7f1307d
 )
 
 (defun eshell/other ()
   (interactive)
+<<<<<<< HEAD
   (insert "sb.sh '(m:)'")
   ;(insert "max.sh ':lisp (m:)'")
   ;(insert "erl.sh 'user_default:'")
+=======
+  ;(insert "max.sh ':lisp (m:)'")
+  ;(insert "pl.sh ''")
+  ;(insert "max.sh ''") 
+  ;(insert "ml ''")
+  (insert "ccl.sh '(m:)'")
+>>>>>>> d793b5a536546fcfd71feb7a6d5cbd1cb7f1307d
   (backward-char 2)
 )
 

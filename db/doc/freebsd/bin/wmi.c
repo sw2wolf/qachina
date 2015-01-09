@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #!/home/***/tcc/bin/tcc -run
+=======
+#!/home/sw2wolf/tcc/bin/tcc -run
+>>>>>>> d793b5a536546fcfd71feb7a6d5cbd1cb7f1307d
 #define __aligned(N) __attribute__ ((aligned (N)))
 #include <stdlib.h>
 #include <stdio.h>

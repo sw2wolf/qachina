@@ -38,15 +38,22 @@ case $1 in
 	clisp)
 		#export MPD=YES
 	    #/usr/local/etc/rc.d/musicpd onestart
+<<<<<<< HEAD
 		exec $HOME/bin/stumpwm-clisp
+=======
+		exec $HOME/bin/stumpwm-clisp-norc
+>>>>>>> d793b5a536546fcfd71feb7a6d5cbd1cb7f1307d
         ;;
     sbcl)
 		#sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
         exec $HOME/bin/stumpwm-sbcl
 		;;
+<<<<<<< HEAD
 	stumpwm)
 		exec $HOME/bin/stumpwm
 		;;
+=======
+>>>>>>> d793b5a536546fcfd71feb7a6d5cbd1cb7f1307d
     dwm)
         #xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex run
         xterm -e gdb --quiet -nx -x ~/script.gdb

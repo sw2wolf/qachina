@@ -1,5 +1,6 @@
 
 /*****/
+<<<<<<< HEAD
 I tried to calculate this:
 limit(x^5−6*x^4+14*x^3−20*x^2+24*x−16, x, 1.999993580023622);
 
@@ -31,6 +32,8 @@ rat: replaced 1.999993580023622 by 38317775/19158949 = 1.999993580023622
 (%o4) -1.587631407677531E-15
 
 /*****/
+=======
+>>>>>>> d793b5a536546fcfd71feb7a6d5cbd1cb7f1307d
 /* One could even make a subscripted function to capture all solutions: */
 
 foo (name, eqn) := block ([listconstvars:false, listdummyvars:false],

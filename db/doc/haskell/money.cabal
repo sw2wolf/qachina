@@ -8,12 +8,20 @@ synopsis:            used to make big money :)
 license:             BSD3
 license-file:        LICENSE
 author:              sw2wolf
+<<<<<<< HEAD
 maintainer:          xxx@xxx.com
+=======
+maintainer:          czsq888@163.com
+>>>>>>> d793b5a536546fcfd71feb7a6d5cbd1cb7f1307d
 -- copyright:           
 category:            Math
 build-type:          Simple
 -- extra-source-files:  
+<<<<<<< HEAD
 cabal-version:       >=1.18
+=======
+cabal-version:       >=1.10
+>>>>>>> d793b5a536546fcfd71feb7a6d5cbd1cb7f1307d
 
 library
   exposed-modules:     Money
