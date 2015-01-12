@@ -8,6 +8,12 @@
 
 (add-to-list 'load-path "~/.emacs.d/")
 
+(setq shell-file-name "c:/cygwin/bin/bash.exe")
+;(setq shell-file-name "d:/emacs-24.3/bin/cmdproxy.exe")
+
+(setq exec-path (append exec-path '("c:/Program Files/Mozilla Firefox/")))
+;(setq exec-path (append exec-path '("c:/app/opera/26.0.1656.60/")))
+
 ;disable logging to *Messages*
 ;(fset 'message 'ignore)
 (setq messages-buffer-max-lines nil)
@@ -30,7 +36,7 @@
 (load "init-dict")
 (load "init-erc")
 
-;(load "init-w3m") ;will slow down loading mew
+(load "init-w3m") ;will slow down loading mew
 (load "init-mew")
 
 ;(load "init-ac")
@@ -59,14 +65,11 @@
 
 ;(load "init-package")
 
-(setq shell-file-name "/usr/local/bin/bash")
-(setq exec-path (append exec-path '("c:/Program Files/Mozilla Firefox/")))
-
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
 ;;默认链接网络浏览器打开
-;(setq browse-url-generic-program (executable-find "dwb"))
+;(setq browse-url-generic-program (executable-find "opera"))
 (setq browse-url-generic-program (executable-find "firefox.exe"))
 (setq browse-url-browser-function 'browse-url-generic)
 (global-set-key "\C-c\C-g" 'browse-url-at-point)
@@ -78,7 +81,7 @@
      ;; ConsiderCamelCaseToBeCorrect
      (setq ispell-extra-args '("-C"))))
 
-(setq initial-frame-alist '((top . 450) (left . 0) (width . 1440) (height . 225)))
+(setq initial-frame-alist '((top . 357) (left . 0) (width . 175) (height . 32)))
 (add-hook 'after-init-hook '(lambda ()
 							  ;(server-start)
 							  (split-window-horizontally)
