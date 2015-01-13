@@ -22,6 +22,5 @@
     (message "searching for %s ..." (buffer-substring begin end))
     (tooltip-show 
      (shell-command-to-string 
-      (concat "sdcv -n " 
-              (buffer-substring begin end))))))
+      (concat "c:/app/sdcv/sdcv --utf8-output --data-dir c:/app/sdcv/stardict-stardict1.3-2.4.2/ -n "   (buffer-substring begin end))))))
 

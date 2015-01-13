@@ -8,8 +8,8 @@
 
 (add-to-list 'load-path "~/.emacs.d/")
 
-(setq shell-file-name "c:/cygwin/bin/bash.exe")
-;(setq shell-file-name "d:/emacs-24.3/bin/cmdproxy.exe")
+;(setq shell-file-name "c:/cygwin/bin/bash.exe")
+(setq shell-file-name "d:/emacs-24.3/bin/cmdproxy.exe")
 
 (setq exec-path (append exec-path '("c:/Program Files/Mozilla Firefox/")))
 ;(setq exec-path (append exec-path '("c:/app/opera/26.0.1656.60/")))
@@ -81,7 +81,7 @@
      ;; ConsiderCamelCaseToBeCorrect
      (setq ispell-extra-args '("-C"))))
 
-(setq initial-frame-alist '((top . 357) (left . 0) (width . 175) (height . 32)))
+(setq initial-frame-alist '((top . 357) (left . 0) (width . 199) (height . 30)))
 (add-hook 'after-init-hook '(lambda ()
 							  ;(server-start)
 							  (split-window-horizontally)

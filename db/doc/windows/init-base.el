@@ -44,8 +44,8 @@
 (set-language-environment 'UTF-8)
 (set-locale-environment "UTF-8")
 
-(set-default-font "Courier New-10")
-;(set-default-font "Bitstream Vera Sans Mono-10")
+;(set-default-font "Courier New-11")
+ (set-face-attribute 'default nil :family "Bitstream Vera Sans Mono" :height 110 :weight 'normal)
 
 ;; 设置中文字体
 (set-fontset-font "fontset-default" 'unicode '("WenQuanYi Zen Hei" . "unicode-ttf"))

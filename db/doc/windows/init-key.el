@@ -74,7 +74,7 @@
 
 (defun git-diff ()
   (interactive)
-  (insert "gitdiff.sh > tmp."))
+  (insert "gitdiff > tmp."))
 
 (defun jump-run-shell ()
   (interactive)
