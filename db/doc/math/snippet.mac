@@ -1,12 +1,32 @@
 
 /*****/
+/* Here are two handy functions for exploring general representation: */
+
+show_form_internal(ex) := block([inflag:true],show_form(ex))$
+show_form(ex) :=
+  if atom(ex)
+  then ex
+  else funmake(nounify(concat(" ", part(ex, 0))),
+               map(show_form, args(ex)))$
+
+then:
+
+show_form(a-b+c/d) => +( /(c, d),  -(b), a)
+show_form_internal(a-b+c/d) => +(a,  *(- 1, b),  *(c,  ^(d, - 1)))
+?print(a-b+c/d) => ((MPLUS SIMP) $A ((MTIMES SIMP) -1 $B) ((MTIMES SIMP) $C
+((MEXPT SIMP) $D -1)))
+
+show_form(2/3) == show_form_internal(2/3) => /(2,3)
+but ?print(2/3) => ((RAT SIMP) 2 3)
+
+/*****/
 <<<<<<< HEAD
 I tried to calculate this:
 limit(x^5−6*x^4+14*x^3−20*x^2+24*x−16, x, 1.999993580023622);
 
-But I got 0. I think it happens because a loss of significance. What can I do to get more precise result?
+/* But I got 0. I think it happens because a loss of significance. What can I do to get more precise result? */
 
-(1) use horner to rearrange the expression so that it can be evaluated more accurately.
+/* (1) use horner to rearrange the expression so that it can be evaluated more accurately. */
 (%i1) display2d : false;
 (%o1) false
 (%i2) horner (x^5-6*x^4+14*x^3-20*x^2+24*x-16, x);
@@ -14,7 +34,7 @@ But I got 0. I think it happens because a loss of significance. What can I do to
 (%i3) subst (x=1.999993580023622, %);
 (%o3) -1.77635683940025E-15
 
-(2) use bigfloat (variable precision) arithmetic.
+/* (2) use bigfloat (variable precision) arithmetic. */
 (%i4) subst (x=1.999993580023622b0, x^5-6*x^4+14*x^3-20*x^2+24*x-16);
 (%o4) -1.332267629550188b-15
 (%i5) fpprec : 50 $
@@ -22,7 +42,7 @@ But I got 0. I think it happens because a loss of significance. What can I do to
 (%i7) subst (x=1.999993580023622b0, x^5-6*x^4+14*x^3-20*x^2+24*x-16);
 (%o7) -1.5876314b-15
 
-(3) use rational arithmetic, which is exact.
+/* (3) use rational arithmetic, which is exact. */
 (%i2) rat (1.999993580023622);
 rat: replaced 1.999993580023622 by 38317775/19158949 = 1.999993580023622
 (%o2) 38317775/19158949
@@ -32,8 +52,6 @@ rat: replaced 1.999993580023622 by 38317775/19158949 = 1.999993580023622
 (%o4) -1.587631407677531E-15
 
 /*****/
-=======
->>>>>>> d793b5a536546fcfd71feb7a6d5cbd1cb7f1307d
 /* One could even make a subscripted function to capture all solutions: */
 
 foo (name, eqn) := block ([listconstvars:false, listdummyvars:false],
@@ -42,7 +60,7 @@ foo (name, eqn) := block ([listconstvars:false, listdummyvars:false],
       define (funmake (name[i], listofvars (expr)), expr)));
 
 solve (x^3-a*b*x^2-b*x^2-a*x^2/b-a*x^2+a*b^2*x+a^2*b*x+a^2*x/b+a^2*x+a*x-a^2*b-a^3, x);
-    => [x = a/b,x = a*b,x = b+a]
+=> [x = a/b,x = a*b,x = b+a]
 
 foo (F, %);
 arrayinfo (F);
@@ -86,17 +104,17 @@ at(diff(tan(x),x,7),[x=%pi/4]);
 
  １）可加性：declare(f,additive)        形如：f(z+y+x)＝f(z)+f(y)＋f(x) 
  ２）常数可移出性：declare (f, outative) 形如：f(a*x)＝a*f(x) 
- ３）线性：declare (f, linear)         形如：f(a*x+b*y)＝a*f(x)+b*f(y) 
- ４) 可乘性：declare(f, multiplicative)  形如：f(z*y*x)＝f(z)*f(y)*f(x) 
- ５）反对称性：declare(f,antisymmetric)    形如：f(x,z,y)＝-f(x,y,z) 
+ ３）线性：declare (f, linear)          形如：f(a*x+b*y)＝a*f(x)+b*f(y) 
+ ４) 可乘性：declare(f, multiplicative) 形如：f(z*y*x)＝f(z)*f(y)*f(x) 
+ ５）反对称性：declare(f,antisymmetric)  形如：f(x,z,y)＝-f(x,y,z) 
  ６）交换性：declare(f, commutative)     形如：f(x,z,y)＝f(x,y,z) 
-    对称性：declare(f, symmetric)     形如：f(x,z,y)＝f(x,y,z) 
-                注意所谓交换性和对称性是等价的。 
+     对称性：declare(f, symmetric)       形如：f(x,z,y)＝f(x,y,z) 
+     注意所谓交换性和对称性是等价的。 
  ７）左结合性：declare (f, lassociative)    形如：f(f(a,b),f(c,d))＝f(f(f(a,b),c),d) 
  ８）右结合性：declare (f, rassociative) 形如：f(f(a,b),f(c,d))＝f(a,f(b,f(c,d))) 
  ９）可连性：declare (f, nary)         形如：f(x,f(y,z))＝f(x,y,z) 
- １０）偶函数：declare (f, evenfun)         形如：f(-x)＝f(x) 
- １１）奇函数：declare (f, oddfun)         形如：f(-x)＝-f(x)
+ １０）偶函数：declare (f, evenfun)    形如：f(-x)＝f(x) 
+ １１）奇函数：declare (f, oddfun)     形如：f(-x)＝-f(x)
 
 /* 在默认用户目录下，寻找文件maxima-init.mac，如果没有则自行新建之. 在这个文件中可以进行一些个性化的初始化操作。  */
 maxima_userdir: "C:/Users/xyz/maxima/" $
@@ -170,19 +188,19 @@ z=r*cos(theta)], %);
 trigsimp(%);
 
 /*****/
-There is one complication: some functions have both "noun" and "verb" forms, thus:
+/* There is one complication: some functions have both "noun" and "verb" forms, thus: */
 
 integrate(f(x),x) => 'integrate(f(x),x)
 
-The first "integrate" is a verb, meaning "perform this integration". The second one is a noun, meaning "this is an integration". So:
+/* The first "integrate" is a verb, meaning "perform this integration". The second one is a noun, meaning "this is an integration". So: */
 
-     ex: integrate(f(x),x,0,1)$
-     f(x) := x^3$
-     ev(ex) => 'integrate(x^3,x,0,1)
+  ex: integrate(f(x),x,0,1)$
+  f(x) := x^3$
+  ev(ex) => 'integrate(x^3,x,0,1)
 
-The reason for this is that it is often useful to keep the formal calculation unevaluated. To force nouns back to verbs, use ev(...,nouns)
+/* The reason for this is that it is often useful to keep the formal calculation unevaluated. To force nouns back to verbs, use ev(...,nouns) */
 
-     ev(ex,nouns) => 1/4
+  ev(ex,nouns) => 1/4
 
 /*****/
 (%i1) f(x)(y);
@@ -925,4 +943,4 @@ assume(k>0);assume(n>0);sum(a^n,n,0,k),simpsum; => (a^(k+1)-1)/(a-1)
 /*****/
 ./configure --prefix=/home/sw2wolf/maxima/ --enable-ccl --with-ccl=/home/sw2wolf/ccl/fx86cl
 
-file_search_maxima:append(file_search_maxima,["/home/zy/maxima/###.{mac,mc}"]);
+file_search_maxima:append(file_search_maxima,["/home/***/maxima/###.{mac,mc}"]);
