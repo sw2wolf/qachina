@@ -1,6 +1,7 @@
 (require 'eshell)
 
 (setenv "EDITOR" "emacsclient")
+(setenv "LANG" "UTF-8")
 
 (defun eshell/clear ()
   "clear the eshell buffer."
@@ -69,6 +70,8 @@
   ;(local-set-key (kbd "C-c e") 'eshell/erlang)
 ))
 
+(add-hook 'comint-output-filter-functions 'comint-watch-for-password-promt)
+
 (defalias 'img
   (lambda(img)
 	(propertize "Image" (quote display)
@@ -80,12 +83,8 @@
 ;(defalias 'rr (lambda()(find-file (expand-file-name "qref.org" sand-box))))
 (defalias 'ss  'shell-command-to-string)
 
-(add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
-
 ;; (require 'em-alias)
 ;; (add-to-list 'eshell-command-aliases-list (list "ls" "ls -l"))
-
-;(add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
 
 ;
 ; misc.

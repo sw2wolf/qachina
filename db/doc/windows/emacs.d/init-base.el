@@ -14,7 +14,6 @@
 (cua-selection-mode 1)
 (delete-selection-mode +1)
 
-(set-language-environment "UTF-8")
 (set-background-color "Black") 
 (set-foreground-color "White")
 
@@ -41,14 +40,20 @@
 (setq display-time-24hr-format t) 
 (setq display-time-day-and-date t)
 
-(set-language-environment 'UTF-8)
-(set-locale-environment "UTF-8")
+;(set-language-environment 'UTF-8)
+;(set-locale-environment "UTF-8")
 
 ;(set-default-font "Courier New-11")
- (set-face-attribute 'default nil :family "Bitstream Vera Sans Mono" :height 110 :weight 'normal)
+ (set-face-attribute 'default nil :font "Courier New-11")
+; (set-face-attribute 'default nil :family "Bitstream Vera Sans Mono" :height 110 :weight 'normal)
 
 ;; 设置中文字体
-(set-fontset-font "fontset-default" 'unicode '("WenQuanYi Zen Hei" . "unicode-ttf"))
+;; (set-fontset-font (frame-parameter nil 'font)
+;; 				  'unicode
+;; 				  (font-spec :family "Microsoft Yahei" :size 12))
+(set-fontset-font "fontset-default" 'gb18030 '("Microsoft YaHei" . "unicode-bmp"))
+
+;(set-fontset-font "fontset-default" 'unicode '("WenQuanYi Zen Hei" . "unicode-ttf"))
 ;(set-fontset-font "fontset-default" 'gb18030 '("WenQuanYi Bitmap Song" . "unicode-bmp"))
 
 ;; 设置 sentence-end 可以识别中文标点

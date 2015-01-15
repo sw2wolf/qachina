@@ -1,6 +1,6 @@
-.挂载i386/installation/cdrom/boot.iso文件。将其中的netbsd文件复制到刚才的fat32分区根目录下并命名为nbinstall.gz
-
+.将netbsd文件复制到刚才的fat32分区根目录下并命名为nbinstall.gz
 .将刚才复制出的nbinstall.gz文件用gunzip解压缩，得到nbinstall文件
+
 .修改grub.conf，增加一项如下
 
 title nbinstall
@@ -38,7 +38,7 @@ Title NetBSD on disk 1 (chainloader)
 Title NetBSD install kernel
     kernel --type=netbsd /NETBSD_INSTALL_LARGE.gz
 
---------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
 # useradd -m -G wheel ko              (添加普通用户ko 并将其加入wheel组)
 PS: 非wheel组用户 将无法使用su命令！
 # passwd ko                           (修改用户密码)
