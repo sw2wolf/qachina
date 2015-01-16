@@ -1,0 +1,1473 @@
+file: netbsd-notes.txt
+desc: NetBSD OS notes
+date: 10-Oct-2010
+------------------------------------------------------------------------
+
+========================================================================
+ACPI:
+========================================================================
+http://www.thinkwiki.org/wiki/Installing_FreeBSD_7_(i386)_on_a_ThinkPad_T43
+notes for FreeBSD 7, DRI causes problems with suspend/resume.
+
+Added following to Device section in /etc/X11/xorg.conf on
+NetBSD 6.1.5_PATCH (201501090230Z) to longer have suspend/resume issues.
+It was hanging on resume after suspend:
+
+        Option      "DRI" "off"
+
+========================================================================
+BACKUPS:
+========================================================================
+dump(8) is the recommened tool for backups on NetBSD
+
+On NetBSD, /bin/pax, /bin/cpio, /bin/tar are the same binary.
+
+And...NONE of these work to list the archive (they should!)
+This was NetBSD 5.x
+$ cpio -itv < ./archive.cpio
+$ cpio -itvI ./archive.cpio
+$ cat ./archive | cpio -itv
+UPDATE: fixed in NetBSD 6.1.4
+
+cpio works to create archives just fine:
+$ cd somedir
+$ find . -depth -print | cpio -ocvO archive.cpio
+
+========================================================================
+BOOTING:
+========================================================================
+How to boot an alternate kernel or from different media
+(floppy, cdrom, or different hard drive partition):
+
+Press SPACE key to interrupt the boot loader then:
+Select option "Drop to boot prompt"
+At "> " prompt type one of following:
+
+      To boot a different kernel:
+      > boot /netbsd.old -s
+
+      To boot single user from hard disk:
+      When asked for name of shell, enter:  /rescue/sh
+      > boot -s
+
+      To boot from floppy:
+      boot fd0a:netbsd
+
+      To boot from cdrom:
+      boot cd0a:netbsd
+
+      To boot from first IDE disk:
+      boot hd0a:netbsd
+
+---
+How to change the default boot option to exclude ACPI and SMP?
+
+Edit /boot.cfg and change the "default" line.
+
+---
+Interact with kernel userconf, to disable a problem device that
+prevents booting.  See also: userconf(4)
+
+Example:
+IBM ThinkPad T23 when booting NetBSD 6.1.4 with ACPI enabled, hangs 
+with this message repeating indefinitely:
+
+        auich0: read_codec timeout
+
+The system must be hard powercycled to regain control.
+
+FIX: interrupt boot load, select option "5. Drop to a boot prompt"
+> boot -c
+uc> disable auich
+[146] auich* disabled
+uc> quit
+
+System now boots normally but with sound disabled.
+
+To make this change persist across reboots, add the following line
+to the end of /boot.cfg:
+
+userconf=disable auich*
+
+
+A permanent fix is to recompile the kernel and include the following
+options:
+TESTED Jan 2015 on NetBSD 6.1.5_PATCH (
+
+# Configure PCI using BIOS information  
+options         PCIBIOS                 # PCI BIOS support
+options         PCIBIOSVERBOSE          # PCI BIOS verbose info
+options         PCIBIOS_IRQS_HINT=0x0a00 # PCI interrupts hint. IRQ 9 or 11
+options         PCIBIOS_INTR_GUESS      # see pcibios(4)
+options         PCIINTR_DEBUG           # super-verbose PCI interrupt fixup
+options         PCI_ADDR_FIXUP          # fixup PCI I/O addresses
+options         PCI_BUS_FIXUP           # fixup PCI bus numbering
+options         PCI_INTR_FIXUP          # fixup PCI interrupt routing
+
+Install the new kernel and boot it.  Drop to a boot prompt and do:
+> boot -c
+uc> enable auich*
+uc> quit
+
+The sound card is then identified as:
+
+auich0 at pci0 dev 31 function 5: i82801CA (ICH3) AC-97 Audio
+auich0: interrupting at irq 11
+auich0: ac97: Crystal CS4299 codec; headphone, 20 bit DAC, 18 bit ADC, Crystal Semi 3D
+auich0: ac97: ext id 0x201<AMAP,VRA>
+
+If the sound card is successfully identified, this /boot.cfg entry can 
+be removed:   "userconf=disable auich*"
+
+---
+MBR recovery:
+
+NetBSD MBR partition ID 169 (0xa9)
+
+1. boot single user from install media (floppy or cdrom)
+2. select option "Drop to boot prompt"
+3. at "> " prompt type:
+> boot hd0a:netbsd -s
+
+Install MBR boot selector to first IDE disk (wd0);
+see also fdisk(8) -c option:
+# fdisk -i -c /usr/mdec/mbr_bootsel wd0
+
+---
+Interactively edit MBR and bootmenu on first IDE disk (wd0):
+# fdisk -B -u wd0
+
+---
+How to change the default startup disk, used by the fn: diskn menu.
+source:  http://www.ifrankie.com/?p=195
+
+On a default NetBSD installation with multiple partitions, fdisk acts
+as the bootloader unless there is a separate bootloader installed.
+When booting NetBSD you may see "fn: diskn" followed by a list of
+options.  This menu is part of fdisk.
+
+To change the default startup disk, use the following command:
+# fdisk -B wd0
+
+You will eventually be prompted for the `default boot option'.
+Simply specify which one should be the default.
+
+This is helpful if you have a multi-boot system and decide you would
+prefer NetBSD to boot up by default instead of Windows, etc.
+
+.................Sample run (wd0 is first IDE hard disk)................
+
+# fdisk -B wd0
+
+Installed bootfile doesn't support required options.
+Update the bootcode from /usr/mdec/mbr_bootsel? [n] y
+
+Boot selector configuration:
+Timeout value (0 to 3600 seconds, -1 => never): [-1..3600 default: 10]
+10
+Select the default boot option. Options are:
+
+0: The first active partition
+1: winxp
+2: netbsd
+3: Harddisk 0
+Default boot option: [0..3 default: 2] 1
+
+We haven't written the MBR back to disk yet.  This is your last chance.
+Should we write new partition table? [n] y
+
+# sync
+# reboot
+........................End sample run..................................
+
+See also fdisk(8), mbr(8)
+
+---
+Copy the standard (non-bootselect) MBR code to first IDE disk:
+# fdisk -c mbr wd0
+
+WinXP will boot from the NetBSD MBR code, but it may not like you
+changing the disk from being disk0 to disk1.
+
+---
+NetBSD equivalent of DOS "fdisk /mbr":
+# fdisk -i
+
+---
+How to blank out a disk that previously had data on it:
+
+Once NetBSD installer (sysinst) is running, ctrl-z to suspend the
+installer, then do one of the following:
+
+Delete the disklabel only (not the MBR partition table):
+# dd if=/dev/zero of=/dev/rwd0c bs=8k count=1
+
+To completely delete the disk, the whole device rwd0d must be used:
+# dd if=/dev/zero of=/dev/rwd0d bs=8k count=1
+
+where:
+	'r' for raw (char) device file
+	wd? for IDE disk ?, sd? for SCSI disk
+	'c' for NetBSD partition
+	'd' for whole disk
+
+Then reboot or return to the installer via "fg".
+
+========================================================================
+BUILDING from source:
+========================================================================
+File /etc/mk.conf sets various parameters used during a build.
+man 5 mk.conf
+
+/etc/release file is created on successful build
+
+Instructions on how to build from source using NetBSD's build.sh:
+http://www.netbsd.org/docs/guide/en/chap-updating.html
+http://www.netbsd.org/docs/updating.html
+
+Look at one of the security updates to understand which BRANCH to
+pull, eg:
+http://ftp.netbsd.org/pub/NetBSD/security/advisories/NetBSD-SA2011-002.txt.asc
+
+running NetBSD 5.1
+NetBSD host.domain.com 5.1 NetBSD 5.1 (GENERIC) #0:
+	Sun Nov  7 14:39:56 UTC 2010
+	builds@b6.netbsd.org:/home/builds/ab/netbsd-5-1-RELEASE/i386/
+	201011061943Z-obj/home/builds/ab/netbsd-5-1-RELEASE/src/sys/arch/i386
+	/compile/GENERIC i386
+
+The BRANCH name is "netbsd-5-1".
+To get latest security fixes for 5.1, as "build" user do:
+
+build$ cd /usr/src
+build$ cvs update -d -P -r netbsd-5-1
+
+Review security updates and apply as needed:
+http://ftp.netbsd.org/pub/NetBSD/security/advisories/
+
+Run the build process "make USETOOLS=no cleandir dependall" as 
+the "build" user.
+
+Run the install "make USETOOLS=no install" as root.
+
+NOTE: When you do the "install userland" step, it install *EVERYTHING*.
+A better idea is probably to do a "make release" or something similar
+and create an ISO then do a system upgrade via sysinst instead of just
+installing everything.  I need to figure out how to do this.
+
+---
+Notes on building NetBSD via build.sh:
+source:  http://www.mewburn.net/luke/talks/bsdcon-2003/index.html
+
+Target - end system
+Host - where toolchain runs
+Build-host - where toolchain is built
+
+Env vars:
+$TOOLDIR - path to host tools
+$DESTDIR - path to built system
+$RELEASEDIR - path to completed release
+
+---
+source:  https://bbs.archlinux.org/viewtopic.php?pid=647509
+
+Compiling on my ultra 60 is painfully slow.  I've run all the BSDs 
+on it; building a NetBSD release takes 8+ hours provided the build 
+doesn't fail.
+
+Instead, I cross build on a fast x86 machine: NetBSD has targets
+"build.sh -m sparc64 release" and "build.sh -m sparc64 iso-image" 
+that cross builds the entire base system and then creates a bootable 
+iso that can be used to install/upgrade the box.
+
+---
+To build NetBSD 5.1 from source, follow instructions here:
+http://www.netbsd.org/docs/guide/en/chap-updating.html
+http://www.netbsd.org/docs/updating.html (older but similar)
+
+copy source/sets/* to /tmp
+
+gnusrc.tgz
+sharesrc.tgz
+src.tgz
+syssrc.tgz
+xsrc.tgz	## only if you want X sources
+
+# mkdir /usr/src /usr/xsrc
+# chown build:wsrc /usr/src /usr/xsrc
+# su - build
+
+$ cd /
+$ for i in `ls /tmp/*.tgz`; do tar xzf $i; done
+
+$ cd /usr/src
+$ cvs update -dP
+
+# mkdir /usr/BUILD
+# chown build:wsrc /usr/BUILD
+# su - build
+
+$ mkdir /usr/BUILD/obj /usr/BUILD/tools
+$ cd /usr/src
+
+It takes 1.5 days to do a full OS build on Pentium 200 MMX, 256 MB
+PC100 ECC while it was running ipnat and squid+squirm acting as an
+Internet gateway.
+
+---
+Building a single command, without using build.sh:
+
+Example:  to build a static version of /bin/sh for root's login shell
+Assumes:  /usr/src is installed and up to date
+
+# cd /usr/src/bin/sh
+# cp -p Makefile Makefile.orig
+# vi Makefile
+
+add "-static" to end of LDADD+= line
+
+Now built it.  NOTE: must use "USETOOLS=no" otherwise build fails.
+
+# make USETOOLS=no
+# file ./sh
+./sh: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), statically linked, for NetBSD 6.1.5, not stripped
+
+# cp ./sh /sbin/sh
+# strip /sbin/sh
+# echo "/sbin/sh" >> /etc/shells
+# vipw 
+change root's shell from /bin/sh to /sbin/sh
+
+---
+PROBLEM:  You build something from source (e.g., nedit).
+When you go to run it, it complains about missing libraries:
+
+$ nedit
+Shared object "libXm.so.4" not found
+$ ldd /usr/local/bin/nedit
+/usr/local/bin/nedit:
+        -lm.0 => /usr/lib/libm.so.0
+        -lc.12 => /usr/lib/libc.so.12
+        -lXm.4 => not found
+        -lXpm.4 => not found
+        -lXext.6 => not found
+        -lXt.6 => not found
+        -lSM.6 => not found
+        -lICE.6 => not found
+        -lX11.6 => not found
+
+So the binary can't find the libraries, but the are all there:
+
+# find /usr -name libXm\*4
+/usr/pkg/lib/libXm.so.4
+# find /usr -name libXpm*4
+/usr/X11R7/lib/libXpm.so.4
+...and so on...
+
+Check default library search path:
+# /sbin/ldconfig -rv
+/var/run/ld.so.hints:
+        search directories:
+
+It is empty meaning only /usr/lib will be searched (thus why libc and
+libm are the only libraries found above).
+
+NetBSD has /usr/X11R6 (empty) and /usr/X11R7 (Xorg) on i386 port.
+Older releases used /usr/X11R6, newer use /usr/X11R7.
+Some pkgsrc packages are also installed under /usr/pkg.
+
+For ease of use, create /usr/X as a symlink and use that when building
+software from source.  The symlink can be adjusted as needed later
+if/when X is upgraded.
+
+# (cd /usr; ln -s X11R7 X)
+
+Back to the missing libraries...I tried running "ldconfig -m newpath"
+to add "newpath" to the list, but it had no effect.
+
+FIX: create /etc/ld.so.conf:
+
+# cat > /etc/ld.so.conf <<EOF
+# /etc/ld.so.conf
+# additional pathnames to search for libraries beyond /usr/lib.
+# created: 05-Jul-2012 jenkins
+#
+/usr/X/lib
+/usr/pkg/lib
+EOF
+
+Now the app works without library dependency issues.
+
+========================================================================
+CONSOLE/VIRTUAL TERMINALS:
+========================================================================
+Sun Ultra5 with NetBSD 5.1 sparc64 installed.
+system console is TERM=sun-ss5
+
+NetBSD 6.1.4 i386
+system console (/dev/console, aka /dev/ttyE0) is TERM=vt100
+other text virtual terminals are TERM=wsvt25
+See also: /etc/ttys
+
+---
+ctrl-alt-esc enters kernel debugger
+
+---
+console scroll back: alt+scroll lock then page up/page down.
+Only works if you haven't switched virtual consoles.
+
+Also left shift + pgup/pgdown work if following configured in
+kernel config file:
+
+....................cut here....................
+# console scrolling support.
+options         WSDISPLAY_SCROLLSUPPORT
+....................cut here....................
+
+---
+To switch virtual text terminals: left ctrl-alt + Fkey
+NOTE: only the left ctrl-alt keys work!
+
+The default setup is:
+
+Fn-key	VT##	TTY		TERM type
+------	----	---		---------
+F1	vt01	/dev/console	vt100
+F2	vt02	/dev/ttyE1	vt220
+F3	vt03	/dev/ttyE2 	vt220
+F4	vt04	/dev/ttyE3	vt220
+F5	vt05	/dev/ttyE4 - used by X11
+
+Related files:
+kernel: WSDISPLAY_DEFAULTSCREENS=n sets number of virtual terminals
+/dev/ttyE* - terminal devices
+/etc/ttys - enable/disable gettys on terminal lines, set TERM type
+/etc/wscons.conf - see "screen" entries
+/etc/wsmoused.conf - mouse configuration, needs to know where X runs
+/etc/X11/xdm/Xservers - sets vt where X runs
+
+---
+To change keyboard typematic rate (speed, delay)
+
+# vi /etc/wscons.conf
+# /etc/rc.d/wscons restart	## or reboot
+
+uncomment these values:
+
+....................cut here....................
+# Change keyboard repeat speed to faster settings.
+setvar	wskbd	repeat.del1	250
+setvar	wskbd	repeat.deln	30
+....................cut here....................
+
+---
+How to disable console beep:
+
+Display current volume setting
+# wsconsctl bell.volume
+
+Turn volume off
+# wsconsctl -w bell.volume=0
+
+NOTE: This may not work for all hardware systems.
+The solution is to set the the bell pitch to 0 Hz.
+The bell pitch defaults to 1500 Hz.
+# wsconsctl -w bell.pitch=0
+
+NOTE: On ThinkPad T23 bell.volume=0 did nothing; had to also set
+bell.pitch=0 to completely disable the console bell.
+
+To make these settings permanent:
+# vi /etc/wscons.conf
+# /etc/rc.d/wscons restart	## or reboot
+
+....................cut here....................
+# Disable console bell; 
+# NOTE: On ThinkPad T23, both volume and pitch must be set to 0.
+setvar  wskbd   bell.volume     0
+setvar  wskbd   bell.pitch      0
+....................cut here....................
+
+---
+Serial console:
+How to connect to serial console on NetBSD system (hostA) from another
+NetBSD system (hostB):
+
+Example:  assume hostB is a laptop running NetBSD; use COM1, the first
+serial port (/dev/dty00, dial out device) to connect to serial console
+on hostA.
+
+hostB$ cu -l /dev/dty00 -s 9600
+Connected.
+		<== press ENTER to get login prompt
+login:
+
+Use ~. to disconnect or ~? for help.
+
+========================================================================
+DEVICES:
+========================================================================
+CPU:
+List cpu status:
+# /usr/sbin/cpuctl list
+Num  HwId Unbound LWPs Interrupts Last change              #Intr
+---- ---- ------------ ---------- ------------------------ -----
+0    0    online       intr       Mon Jan 12 18:56:55 2015 18   
+
+Display information for cpu 0:
+# /usr/sbin/cpuctl identify 0
+
+cpu0: Intel Mobile Pentium III (686-class), 999.20 MHz, id 0x6b1
+cpu0: features  0x383f9ff<FPU,VME,DE,PSE,TSC,MSR,PAE,MCE,CX8,SEP,MTRR,PGE>
+cpu0: features  0x383f9ff<MCA,CMOV,PAT,PSE36,MMX,FXSR,SSE>
+cpu0: "Intel(R) Pentium(R) III Mobile CPU      1000MHz"
+cpu0: I-cache 16KB 32B/line 4-way, D-cache 16KB 32B/line 4-way
+cpu0: L2 cache 512KB 32B/line 8-way
+cpu0: ITLB 32 4KB entries 4-way, 2 4MB entries fully associative
+cpu0: DTLB 64 4KB entries 4-way, 8 4MB entries 4-way
+cpu0: Initial APIC ID 0
+cpu0: Cluster/Package ID 0
+cpu0: family 06 model 0b extfamily 00 extmodel 00 stepping 01
+cpu0: UCode version: ?
+
+DISKS:
+wd0	1st IDE disk
+wd1	2nd IDE disk
+sd0	1st SCSI disk or USB devices (eg. flash drive)
+sd1	2nd SCSI disk
+cd0	1st cdrom/dvd drive (whether IDE, SCSI, USB, FireWire, ...)
+fd0	1st floppy diskette
+
+SERIAL PORTS; see tty(4)
+/dev/dty00	COM1 dial-out device
+/dev/tty00	COM1 dial-in device
+/dev/wskbd	keyboard
+/dev/wsmouse	mouse
+
+USB; see "USB" section below
+
+========================================================================
+DISKS:
+========================================================================
+How to check the SMART status of a hard disk:
+# atactl wd0 smart status
+
+========================================================================
+FILESYSTEMS:
+========================================================================
+To repartition first hard disk, wd0:
+# disklabel -i -I wd0
+
+Enter letter of partition to edit.
+To delete a partition, answer as follows:
+
+Filesystem type [?] [4.2BSD]: unused
+Start offset ('x' to start after partition 'x'): 0
+Partition size ('$' for all remaining): 0
+
+Use 'W' to write and 'Q' to quit.
+
+commands:
+a-p	partition to edit
+P	print current disklabel
+W	write new disk label
+Q	quit
+?	help
+
+---
+Manually edit disklabel in vi:
+#disklabel -e wd0
+
+---
+How to create a new filesystem
+NOTE: use raw device, where 'X' is the slice letter
+# newfs /dev/rwd0X
+
+The installer uses something like this:
+NOTE:  arguments to -b and -f depend on filesystem size; see newfs(8).
+# newfs -V2 -O 1 -b 16384 -f 2048 /dev/rwd0e
+
+Update /etc/fstab then mount the new partition.
+
+---
+How to mount an ISO image via loopback aka "virtual node device":
+This makes a file accessible as a block device.
+vnd(4) driver provides a disk-like interface to a file
+See also:  vnd(4), vnconfig(8)
+
+# vnconfig vnd0 v7x86-0.8a.iso
+# mount -t cd9660 /dev/vnd0a /mnt
+# cd /mnt
+# ls
+COPYRIGHT        README           boot.cat         v7x86-0.8a.tar   version
+INSTALL          RELNOTES         boot.img         v7x86intro.pdf
+
+# umount /mnt
+# vnconfig -u vnd0
+
+========================================================================
+KERNEL:
+========================================================================
+How to build a custom NetBSD kernel:
+
+See also:
+http://www.netbsd.org/docs/guide/en/chap-kernel.html
+http://www.netbsd.org/docs/guide/en/chap-tuning.html#tuning-kernel
+man pages: config(1), config(4), options(4)
+
+Boot from GENERIC kernel and get a list of devices on the system.
+These will need to be included in your new kernel:
+# grep ' at ' /var/run/dmesg.boot
+
+Install kernel source:
+# cd /
+# gzip -dc /tmp/syssrc.tgz | tar -xpf -
+
+The kernel can be built as a non-root user, the "build" user here:
+# su - build
+
+Configure kernel and build:
+Pick a kernel config, copy and edit:
+build$ cd /usr/src/sys/arch/`uname -m`/conf
+build$ cp GENERIC CUSTOM
+build$ vi CUSTOM
+build$ config CUSTOM
+build$ cd ../compile/CUSTOM
+build$ make depend && make
+build$ <ctrl-d>
+
+Backup old kernel and install new one.  This must be done as root.
+There's no need to update any boot loaders or write new boot blocks,
+just replace the kernel file and reboot.
+# cp -p /netbsd /netbsd.old
+# cp /usr/src/sys/arch/`uname -m`/compile/CUSTOM/netbsd /netbsd
+# shutdown -r now
+
+If new kernel does not boot, interrupt boot process when prompted
+and type "boot netbsd.old" to boot from the previous kernel.
+
+---
+Troubleshooting:
+If when booting you get lines like this in dmesg output:
+
+OUI 0x1000e8 model 0x0000 rev1 at ex0 ...
+
+it means you are missing stuff in the kernel config.
+
+FIX:
+
+1. grep 0x1000e8 /usr/src/sys/dev/mii/miidevs
+
+oui xxNATSEMI           0x1000e8        National Semiconductor
+
+2. grep 0x0000 /usr/src/sys/dev/mii/miidevs
+
+returns a bunch of "model ..." lines.  Find the one with NATSEMI
+in it then grep that partial model number:
+
+...
+model xxNATSEMI DP83840         0x0000 DP83840 10/100 media interface
+...
+
+3. grep DP83840 /usr/src/sys/arch/i386/conf/ALL
+
+Add what it returns to your kernel conf file and try running
+"config MYKERNEL" again.
+
+---
+How to check kernel options:
+
+$ config -x | grep option_or_symbol_name
+
+---
+How to load a kernel module:
+
+NetBSD kernel modules are in /stand/i386/6.1/modules/
+ 
+/sbin/modload	- load a kernel module
+/sbin/modunload	- unload a kernel module
+/sbin/modstat   - display status of loaded kernel modules
+
+To load acpiverbose module, see acpi(4).
+NOTE: order matters!  must specify -b var=value BEFORE modulename
+# /sbin/modload -b dump=true acpiverbose
+
+========================================================================
+NTP:
+========================================================================
+PROBLEM: On NetBSD 5.1.2, "/usr/sbin/ntpq -pn" returns error:
+ntpq: write to localhost failed: Network is unreachable
+
+FIX: ntpq is trying to use IPv6; use "-4" flag to force IPv4 only
+
+$ /usr/sbin/ntpq -4pn
+     remote           refid      st t when poll reach   delay   offset  jitter
+==============================================================================
+*192.168.2.103   130.126.24.24    3 u   50   64  377    1.028   -7.281   1.383
+ 127.127.1.1     .LOCL.          10 l   45   64  377    0.000    0.000   0.015
+
+---
+PROBLEM: On NetBSD 6.1.4, "ntpq -pn" returns error:
+ntpq: write to ::1 failed: Network is unreachable
+
+FIX: again, ntpq is trying to use IPv6; use "-4" flag to force IPv4 only
+
+$ /usr/sbin/ntpq -4pn
+     remote           refid      st t when poll reach   delay   offset  jitter
+==============================================================================
+ 128.138.141.172 .ACTS.           1 u   28   64    7   51.820  3675.78   0.843
+ 208.90.144.52   208.90.144.73    2 u   29   64    7   13.084  3675.05   0.593
+ 173.255.227.205 200.98.196.212   2 u   29   64    7   15.365  3678.73   0.519
+*127.127.1.1     .LOCL.          10 l   28   64    7    0.000    0.000   0.002
+
+========================================================================
+NETWORKING:
+========================================================================
+NIC spits following error:
+> ex1:  transmit underrun (9000) @20
+
+This means the 3com chip couldn't get data fast enough from the PCI
+bus.  This is usually because another device (or possibly the CPU)
+holds the PCI bus for too long.  It's probably happening only once in 
+a while (no more than once every 256 packets) otherwise it would have
+bumped the TX threshold.
+
+---
+Link Aggregation:
+
+source: http://bsdsupport.org/q-how-do-i-configure-link-aggregation-in-netbsd/
+Posted on January 16, 2007 by jeff
+
+Q: How do I configure Link Aggregation in NetBSD?
+
+A: Link Aggregation (some vendors refer to this as connection
+   bonding) is simple to configure. NetBSD includes the agr driver which
+   supports the IEEE 802.3ad Link Aggregation Control Protocol.
+
+   To start, you will need to compile a kernel with the agr driver. Your
+   kernel config should include.
+
+	pseudo-device         agr
+
+   With the driver compiled into the kernel, you setup the interface
+   much like as you would any other. The following is an example
+   /etc/ifconfig.agr0
+
+	create
+	agrport sip0
+	agrport sip1
+	inet 10.0.0.50 netmask 0xffffff00
+
+   A few notes taken verbatim from the man page.
+
+     The agr driver uses the MAC address of the first-added physical
+     interface as the MAC address of the agr interface itself. Thus,
+     removing the physical interface and using it for another purpose
+     can result in non-unique MAC addresses.
+
+     Physical interfaces being added to the agr interface shouldn't
+     have any addresses except for link level address.  Otherwise, the
+     attempt will fail with EBUSY.
+
+---
+To set up link aggregation manually:
+
+ifconfig agr0 create
+ifconfig agr0 agrport fxp0
+ifconfig agr0 agrport iwi0
+
+Then put an IP on agr0 device:
+
+For static IP:
+# ifconfig agr0 inet 192.168.1.10 netmask 0xffffff00 up
+
+For DHCP:
+# /sbin/dhclient agr0
+
+To make permanent across reboots:
+
+For static IP:
+
+cat > /etc/ifconfig.agr0 <<EOF
+create
+agrport fxp0
+agrport iwi0
+inet 192.168.1.10 netmask 0xffffff00
+EOF
+
+No changes to /etc/rc.conf are needed.
+
+
+For DHCP:
+
+cat > /etc/ifconfig.agr0 <<EOF
+create
+agrport fxp0
+agrport iwi0
+EOF
+
+must also add to /etc/rc.conf:
+
+dhclient=YES
+dhclient_flags="agr0"
+
+reboot the system.
+
+---
+PROBLEM: Trying to remove the aggregation device (agr0) fails:
+# ifconfig agr0 destroy
+ifconfig: clone_command: Device busy
+ifconfig: exec_matches: Device busy
+
+FIX: first remove the nics that made up the aggregated device,
+then destroy it:
+# ifconfig agr0 -agrport iwi0
+# ifconfig agr0 -agrport fxp0
+# ifconfig agr0 destroy
+
+---
+How to change|spoof|fake a MAC address:
+
+NetBSD 5.0 supports changing the MAC address.
+
+Add a link-layer address to an Ethernet:
+# ifconfig sip0 link 00:11:22:33:44:55
+
+Add and activate a link-layer address:
+# ifconfig sip0 link 00:11:22:33:44:55 active
+
+This should give some idea:
+# ifconfig bridge0 create
+# ifconfig bridge0 up
+# ifconfig vr0 up
+# brconfig bridge0 add vr0
+# ifconfig tap0 create
+# sysctl -w net.link.tap.tap0=00:00:de:ad:be:ef
+# ifconfig tap0 up
+# brconfig bridge0 add tap0
+
+Now you can get an ip if from dhcp with the fake MAC:
+# /sbin/dhclient tap0
+
+========================================================================
+PCI Bus:
+========================================================================
+List PCI devices on device /dev/pci0; see also (ls -l /dev/pci*):
+# /usr/sbin/pcictl /dev/pci0 list
+
+000:00:0: VIA Technologies VT82C595 (Apollo VP2) Host-PCI Bridge (host bridge, r
+evision 0x06)
+000:12:0: 3Com 3c905-TX 10/100 Ethernet (ethernet network)
+000:13:0: 3Com 3c905-TX 10/100 Ethernet (ethernet network)
+000:14:0: S3 Trio32/64 (VGA display, revision 0x40)
+000:16:0: Compaq Deskpro 4000 5233MMX (miscellaneous network, revision 0x10)
+000:20:0: VIA Technologies VT82C586 PCI-ISA Bridge (ISA bridge, revision 0x41)
+000:20:1: VIA Technologies VT82C586A IDE Controller (IDE mass storage, interface
+ 0x8a, revision 0x06)
+000:20:2: VIA Technologies VT83C572 USB Controller (USB serial bus, revision 0x0
+2)
+000:20:3: VIA Technologies VT82C586 Power Management Controller (miscellaneous p
+rehistoric, revision 0x10)
+
+========================================================================
+POWER MANAGEMENT/APM/APCI:
+========================================================================
+NetBSD 5.1 i386 on ThinkPad T42 (2373-T64).
+Cold booted, about 20 minutes later the fan comes on and runs
+constantly.  Tried booting with ACPI and SMP disabled, no change.
+
+# /usr/sbin/pkg_add estd
+# cd /etc/powerd/scripts
+# mv lid_switch lid_switch.netbsd51
+# cp sleep_button sleep_button.netbsd51
+# ln -s sleep_button lid_switch
+# vi sleep_button
+
+/etc/rc.conf contains:
+
+....................cut here....................
+# power management stuff
+apmd=YES
+powerd=YES
+envsys=YES
+
+# Intel speedstep cpu frequency scaling
+# Maximize battery lifetime by limiting CPU-frequency to 600 MHz
+# and switching to lower speeds fast.
+estd=YES
+estd_flags="-d -C -E -b -M 600"
+....................cut here....................
+
+
+/etc/sysctl.conf contains:
+
+....................cut here....................
+# See also:  http://wiki-static.aydogan.net/CPU_frequency_scaling
+# Intel speedstep (requires ENHANCED_SPEEDSTEP in kernel)
+# set cpu speed to slowest speed to reduce heat and power consumption
+#machdep.est.frequency.available = 1700 1400 1200 1000 800 600
+machdep.est.frequency.target=600
+
+# Intel Speedstep (speedstep-ich, speedstep-smi)
+# values: 0 is low state, 1 is high state
+machdep.speedstep_state=0
+....................cut here....................
+
+========================================================================
+SETS/PACKAGES/pkgsrc:
+========================================================================
+NetBSD packages the base OS in "sets".  The installed sets are listed
+in /etc/mtree, named after the .tgz file.  "set.base" indicates that
+set "base.tgz" is installed.
+
+# ls /etc/mtree/
+NetBSD.dist  set.etc      set.misc     set.xbase    set.xfont
+set.base     set.games    set.tests    set.xcomp    set.xserver
+set.comp     set.man      set.text     set.xetc     special
+
+A minimal install consists of only these sets:
+
+	base.tgz
+	etc.tgz
+	kern-GENERIC.tgz
+
+To install additional sets:
+Download the other sets you want to add to /tmp.
+If you want to watch files being installed, add "-v" to tar options.
+
+	$ su -
+	# cd /
+	# tar -zxpf /tmp/man.tgz
+	# tar -zxpf /tmp/comp.tgz
+
+---
+Script to free up disk space by removing unwanted sets:
+
+....................cut here....................
+:
+# rm-sets.sh - Free up disk space by removing unwanted sets
+# os: NetBSD 5.1
+# source:  http://sdf.org/?tutorials/VPS_NetBSD
+#
+# To check which sets are installed:  ls /etc/mtree
+#
+# The following removes games and all X11 sets:
+for set in games xbase xcomp xetc xfont xserver ; do \
+        tar tzf /usr/INSTALL/$set.tgz | sed -e 's/^\.//' >> /tmp/purgelist ; \
+done
+cat /tmp/purgelist | xargs rm
+rm /tmp/purgelist
+....................cut here....................
+
+---
+To install (pre-built) binary packages from pkgsrc collection:
+
+Add following to /root/.profile:
+
+....................cut here....................
+# for pkgsrc
+PKG_PATH="http://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/`uname -m`/`uname -r`/All"
+export PKG_PATH
+....................cut here....................
+
+e.g. for NetBSD 5.0 on i386:
+PKG_PATH="http://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/i386/5.0/All"
+
+To preview pkgsrc install, shows dependencies:
+# pkg_add -n pkgname
+
+To verbosely install pkgsrc package and its dependencies:
+# pkg_add -v pkgname
+
+Show package dependencies:
+# pkg_info -N pkgname
+
+List files in package:
+# pkg_info -L pkgname
+
+Determine what package a file belongs to:
+Unfortunately this dumps out the full package information but
+at least you can get the package name. 
+# pkg_info -F /path/to/filename
+
+---
+Show which packages each package needs (depends upon):
+# pkg_info -n pkgname
+
+Ex:  This says imake needs (depends upon) tradcpp and xorg-cf-files.
+
+# pkg_info -n imake
+Information for imake-1.0.7:
+ 
+Requires:
+tradcpp-[0-9]*
+xorg-cf-files>=1.0.3
+
+---
+Show the packages that require pkgname:
+# pkg_info -R pkgname
+
+Ex:  This says tradcpp is required by imake.
+
+# pkg_info -R tradcpp
+Information for tradcpp-0.4:
+ 
+Required by:
+imake-1.0.7
+ 
+---
+pkgsrc make targets:
+
+# cd /usr/pkgsrc/category/pkgname
+
+make			build software only, do not install
+make install		build and install on local system
+make package		build binary package in /usr/pkgsrc/packages/All
+make clean		remove ./work directory
+make clean-depends	clean all dependent packages
+
+make fetch-list | sh	output and run shell commands to fetch necessary
+			files into /usr/pkgsrc/distfiles directory
+
+---
+Check for security updates:
+# pkg_admin fetch-pkg-vulnerabilities
+# pkg_admin audit
+
+---
+What tool to use to fetch distfiles for pkgsrc on NetBSD?
+source: email to tech-pkg@netbsd.org 13-Jan-2015
+
+NetBSD 6:	/usr/bin/ftp cannot fetch HTTPS; use curl instead
+NetBSD 7:	/usr/bin/ftp can fetch via HTTPS
+
+Other OSes:	in /etc/mk.conf, set FETCH_USING={fetch,ftp,curl,wget}; 
+		pick one, or set  _TOOLS_USE_PKGSRC.ftp=yes
+
+---
+source: email to tech-pkg@NetBSD.org 14-Jan-2015
+> How long should I wait for a reply from the package owner before
+> committing changes [to a package]or posting them somewhere for 
+> review ?
+
+If it's a simple update, a couple of days.
+If it's a major change, a week.
+If OWNER is set, a week at least, and ask again publicly before 
+committing.
+
+========================================================================
+SOUND:
+========================================================================
+See following man pages for tips on audio devices:
+
+     * audioctl(1) 
+     * mixerctl(1)
+     * audioplay(1)
+     * audiorecord(1)
+
+View current sound mixer settings:
+$ /usr/bin/mixerctl -a -v 
+
+If there's no sound, look at above output for any settings where 
+mute=on and set them to off:
+$ /usr/bin/mixerctl -w outputs.mono.mute=off
+outputs.mono.mute: on -> off
+
+Now try to play a sound:
+$ /usr/bin/audioplay communicator.wav	## sound heard 
+$ /usr/bin/audioplay spacemusic.au 	## sound heard
+
+
+Show supported audio encodings:
+NOTE: audioplay(1) does not play MP3 files; use audio/mpg123 in pkgsrc
+$ /usr/bin/audioctl encodings
+encodings=slinear_le:16,slinear_be:16*,ulinear_le:16*,ulinear_be:16*,mulaw:8*,alaw:8*
+
+Verify mic is not muted:
+$ /usr/bin/mixerctl -a -v | grep ".mic"
+outputs.mono.source=mixerout  [ mixerout mic ]
+inputs.mic=191 volume delta=8
+inputs.mic.mute=on  [ off on ]
+inputs.mic.preamp=off  [ off on ]
+inputs.mic.source=mic0  [ mic0 mic1 ]
+record.source=mic  [ mic cd video aux line mixerout mixeroutmono phone ]
+
+Unmute mic:
+$ /usr/bin/mixerctl -w inputs.mic.mute=off
+
+Make a 5 second recording using sampling rate=8000, volume=200:
+$ /usr/bin/audiorecord -F sun -s 8000 -t 5 -v 200 msg.au
+
+Play message back:
+$ /usr/bin/audioplay msg.au 
+
+Can't hear audio playback?  increase volume to 175 (default = 127)
+$ /usr/bin/mixerctl -w outputs.master=175
+
+========================================================================
+TELNET:
+========================================================================
+NetBSD's telnet(1) command attempts to autologin when you try to telnet
+to another host.  Use "-K" to disable it.
+
+Here's what happens if you don't use -K:
+
+netbsd# telnet otherhost
+Trying 192.0.2.10...
+Connected to otherhost.example.com.
+Escape character is '^]'.
+UX:in.login: ERROR: Access not allowed on /dev/pts021
+UX:in.login: ERROR: Login incorrect
+
+========================================================================
+USB:
+========================================================================
+USB devices; see usb(4), usbdevs(8)
+
+Show USB devices: 
+
+List attached USB devices:
+sample output from NetBSD 6.1.4 on ThinkPad T23 with two USB 1.1 ports
+
+# /usr/sbin/usbdevs -v
+Controller /dev/usb0:
+addr 1: full speed, self powered, config 1, UHCI root hub(0x0000), vendor 0x8086(0x8086), rev 1.00
+ port 1 powered
+ port 2 powered
+Controller /dev/usb1:
+addr 1: full speed, self powered, config 1, UHCI root hub(0x0000), vendor 0x8086(0x8086), rev 1.00
+ port 1 powered
+ port 2 powered
+Controller /dev/usb2:
+addr 1: full speed, self powered, config 1, UHCI root hub(0x0000), vendor 0x8086(0x8086), rev 1.00
+ port 1 powered
+ port 2 powered
+
+---
+USB Compact Flash adapter
+
+1. attach adapter to USB port
+2. run "dmesg" or "tail -f /var/log/messages" to see what address the
+   device shows up as; e.g. a 64 MB compact flash drive shows as:
+
+Aug  3 16:39:51 nbsd5 /netbsd: umass0 at uhub1 port 2 configuration 1 interface 0
+Aug  3 16:39:51 nbsd5 /netbsd:
+Aug  3 16:39:51 nbsd5 /netbsd: umass0: SanDisk Corporation ImageMate CompactFlash USB, rev 1.10/0.09, addr 2
+Aug  3 16:39:51 nbsd5 /netbsd: umass0: using SCSI over Bulk-Only
+Aug  3 16:39:51 nbsd5 /netbsd: scsibus0 at umass0: 2 targets, 1 lun per target
+Aug  3 16:39:51 nbsd5 /netbsd: sd0 at scsibus0 target 0 lun 0: <SanDisk, ImageMate II, 1.30> disk removable
+Aug  3 16:39:51 nbsd5 /netbsd: sd0: fabricating a geometry
+Aug  3 16:39:51 nbsd5 /netbsd: sd0: 62592 KB, 61 cyl, 64 head, 32 sec, 512 bytes/sect x 125185 sectors
+Aug  3 16:39:51 nbsd5 /netbsd: sd0: fabricating a geometry
+
+3. # fdisk sd0
+
+Disk: /dev/rsd0d
+NetBSD disklabel disk geometry:
+cylinders: 61, heads: 64, sectors/track: 32 (2048 sectors/cylinder)
+total sectors: 125185
+
+BIOS disk geometry:
+cylinders: 979, heads: 4, sectors/track: 32 (128 sectors/cylinder)
+total sectors: 125185
+
+Partition table:
+0: Primary 'big' DOS, 16-bit FAT (> 32MB) (sysid 6)
+    start 32, size 125024 (61 MB, Cyls 0-976), Active
+1: <UNUSED>
+2: <UNUSED>
+3: <UNUSED>
+First active partition: 0
+Drive serial number: 242655804 (0x0e76a23c)
+
+4. # disklabel sd0
+
+# /dev/rsd0d:
+type: SCSI
+disk: ImageMate II
+label: fictitious
+flags: removable
+bytes/sector: 512
+sectors/track: 32
+tracks/cylinder: 64
+sectors/cylinder: 2048
+cylinders: 61
+total sectors: 125185
+rpm: 3600
+interleave: 1
+trackskew: 0
+cylinderskew: 0
+headswitch: 0           # microseconds
+track-to-track seek: 0  # microseconds
+drivedata: 0
+
+5 partitions:
+#        size    offset     fstype [fsize bsize cpg/sgs]
+ d:    125185         0     unused      0     0        # (Cyl.      0 -     61*)
+ e:    125024        32      MSDOS                     # (Cyl.      0*-     61*)
+disklabel: boot block size 0
+disklabel: super block size 0
+
+5. # mount -t msdos /dev/sd0e /mnt
+
+---
+USB flash drive
+
+1. plug in USB flash drive
+2. check dmesg for messages drive was added
+
+umass0 at uhub1 port 1 configuration 1 interface 0
+umass0: PNY Technologies USB 2.0 FD, rev 2.00/11.00, addr 2
+umass0: using SCSI over Bulk-Only
+scsibus0 at umass0: 2 targets, 1 lun per target
+sd0 at scsibus0 target 0 lun 0: <PNY, USB 2.0 FD, 1100> disk removable
+sd0: 15334 MB, 1023 cyl, 255 head, 63 sec, 512 bytes/sect x 31405824 sectors
+
+3. disklabel sd0
+
+... (last part is what you're interested in)
+5 partitions:
+#        size    offset     fstype [fsize bsize cpg/sgs]
+ d:  31405824         0     unused      0     0        # (Cyl.      0 -   1954*)
+ e:  31390947        63      MSDOS                     # (Cyl.      0*-   1953)
+
+4. mkdir /uflash
+5. mount -t msdos -o rw,-u=0,-g=20,-m0770 /dev/sd0e /uflash
+
+or add /etc/fstab entry:
+
+/dev/sd0e	/uflash	msdos	rw,noauto,-u=0,-g=20,-m=0770	0	0
+
+========================================================================
+WIRELESS:
+========================================================================
+With pcmcia card inserted, boot, login as root then run:
+
+# /sbin/ifconfig wi0 up
+# /sbin/dhcpcd wi0
+
+It just works!
+
+---
+IBM ThinkPad T42 (2373-T64)
+Intel PRO/wireless 2100 802.11b mini-PCI
+See also:  http://damien.bergamini.free.fr/ipw/ipw-netbsd.html
+
+NIC is ipw0
+NetBSD 5.1 includes Intel firmware in /libdata/firmware/if_ipw/
+See also:  ipw(4), ipwctl(8), ifconfig(8), dhcpcd(8), dhclient(8)
+
+Must agree to Intel license by setting (or add to /etc/sysctl.conf)
+# /sbin/sysctl -w hw.ipw.accept_eula=1
+
+Bring wifi nic up:
+# /sbin/ifconfig ipw0 up
+
+Static IP config to join BSS network, no encryption:
+# /sbin/ifconfig ipw0 inet 192.168.0.20 netmask 0xffffff00 nwid my_net
+
+Static IP config to join BSS network, 40-bit WEP encryption:
+# /sbin/ifconfig ipw0 inet 192.168.0.20 netmask 0xffffff00 nwid my_net \
+	nwkey 0x1234567890
+
+DHCP config:
+# /sbin/dhclient ipw0
+
+Show wifi adapter statistics:
+# /usr/sbin/ipwctl -i ipw0
+
+Kill firmware and reset adapter:
+# /usr/sbin/ipwctl -i ipw0 -k
+
+Test if radio transmitter is enabled; if it shows off, see if
+the laptop has a physical or key switch to enable the wireless
+nic, then re-run this command.
+# /usr/sbin/ipwctl -i ipw0 -r
+Radio is ON
+
+---
+IBM ThinkPad T23 (2647-GGU)
+Intel PRO/wireless 2200BG 802.11b/g mini-PCI
+
+NIC is iwi0
+NetBSD 6.1.4 includes Intel firmware in /libdata/firmware/if_iwi
+See also:  iwi(4), iwictl(8), ifconfig(8), dhcpcd(8), dhclient(8)
+
+Must agree to Intel license by setting (or add to /etc/sysctl.conf)
+# /sbin/sysctl -w hw.iwi.accept_eula=1
+
+Bring wifi nic up:
+# /sbin/ifconfig iwi0 up
+
+DHCP client:
+NetBSD 6.1.4 ships with both dhclient and dhcpcd.  
+Both work but dhclient seems to work better on most networks.
+
+To control hostname, domain name, nameservers assigned:
+If using dhclient, create /etc/dhclient.conf
+If using dhcpcd, create /etc/dhcpcd.conf
+
+# /sbin/dhclient iwi0
+
+--OR--
+
+# /sbin/dhcpcd iwi0
+
+
+Add following to /etc/rc.conf:
+
+....................cut here....................
+# dhcp client - see also /etc/dhcpcd.conf
+# don't start on boot for faster booting
+# once booted, run "/etc/rc.d/dhcpcd onestart"
+dhcpcd=NO
+dhcpcd_flags="-b -n iwi0"
+....................cut here....................
+
+then to bring network up run:
+# /etc/rc.d/dhcpcd onestart
+
+
+Show wifi adapter statistics:
+# /usr/sbin/iwictl -i iwi0
+
+Display radio state:
+# /usr/sbin/iwictl -i iwi0 -r
+Radio is ON
+
+To scan wireless networks:
+a) wireless interface must be UP
+b) interface must not have an IP address
+c) dhcpcd or dhclient must not be running
+# /sbin/ifconfig iwi0 list scan
+
+output looks something like this:
+
+SSID                              BSSID              CHAN RATE  S:N     INT CAPS
+Hyatt                             00:c0:02:9e:52:d2    1   54M  35:0    100 ES
+optimumwifi                       18:9c:5d:8f:13:e0    1   54M  36:0    102 ES   WME
+Hyatt                             00:c0:02:9e:52:95    1   54M  51:0    100 ES
+CCDOM WPA                         18:33:9d:6d:d8:60    1   54M  30:0    102 EPS  RSN WME
+CCDOM WPA                         18:33:9d:8c:90:60    1   54M  28:0    102 EPS  RSN WME
+TWCWiFi                           18:9c:5d:8f:13:e2    1   54M  34:0    102 ES   WME
+CCDOM Guest Network               18:33:9d:6d:d8:61    1   54M  30:0    102 EPS  RSN WME
+xfinitywifi                       18:9c:5d:8f:13:e1    1   54M  34:0    102 ES   WME
+CableWiFi                         18:9c:5d:8f:13:e3    1   54M  36:0    102 ES   WME
+Hyatt                             00:c0:02:2e:83:f3    1   54M  30:0    100 ES
+Hyatt                             00:c0:02:2e:84:93    6   54M  57:0    100 ES
+Courtyard                         00:c0:02:4d:73:79    6   54M  34:0    100 ES
+optimumwifi                       b4:e9:b0:c7:66:60    6   54M  32:0    102 ES   WME
+TWCWiFi                           b4:e9:b0:c7:66:62    6   54M  34:0    102 ES   WME
+Hyatt                             00:c0:02:9e:52:9f    6   54M  32:0    100 ES
+optimumwifi                       18:9c:5d:8f:0b:80   11   54M  39:0    102 ES   WME
+Hyatt                             00:c0:02:2e:84:d7   11   54M  50:0    100 ES
+TWCWiFi                           18:9c:5d:8f:0b:82   11   54M  36:0    102 ES   WME
+
+Create /etc/wpa_supplicant.conf (sample follows):
+
+
+....................cut here....................
+# /etc/wpa_supplicant.conf 0640 root wheel
+
+# allow frontend (e.g., wpa_cli) to be used by all users in 'wheel' group
+ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=wheel
+
+network={
+	ssid="Hotel"
+	scan_ssid=1
+	key_mgmt=NONE
+	priority=9
+}
+
+# Traditional WEP with 104 bit key (26 hex digits).
+# Note the WEP key is not quoted!
+network={
+	ssid="user-group"
+	scan_ssid=1
+	key_mgmt=NONE
+	wep_tx_keyidx=0
+	wep_key0=2BABF20ABEC1A3D1E0F256B47F
+}
+
+network={
+	ssid="public_library"
+	scan_ssid=1
+	key_mgmt=NONE
+	priority=1
+}
+
+# starbucks
+network={
+	ssid="attwifi"
+	scan_ssid=1
+	key_mgmt=NONE
+}
+....................cut here....................
+
+
+Create /etc/dhcpcd.conf:
+Generally /etc/dhcpcd.conf is not necessary but in my case I always
+want to use a local caching only name server which forwards to fast,
+reliable DNS servers.  I also always want to use my hostname and
+domain name, not whatever the DHCP server throws at me.
+
+....................cut here....................
+# /etc/dhcpcd.conf 0644 root wheel
+# See dhcpcd.conf(5) for details.
+########################################################################
+
+# A ServerID is required by RFC2131.
+require dhcp_server_identifier
+
+# Requested options from DHCP server
+# NOTE: omit hostname and domain_name options to prevent
+# the DHCP server from changing this system's hostname
+# and domain value in /etc/resolv.conf.
+option subnet_mask broadcast_address routers
+
+# Respect the network MTU.
+option interface_mtu
+
+# request 3 hr lease
+leasetime 10800
+
+# set up static values:
+static host_name=host.example.com
+static domain_name=example.com
+static domain_name_servers=127.0.0.1 209.244.0.3 74.82.42.42
+....................cut here....................
+
+NetBSD 6.1.4 includes resolvconf(8) which complicates running your own 
+local caching only nameserver.
+
+========================================================================
+X11:
+========================================================================
+NetBSD 6.1.4 ships with X.org, installs under /usr/X11R7
+
+To create a new X11 config file (xorg.conf):
+# X -configure
+
+file is placed in /root/xorg.conf.new
+
+To test new config file:
+# X -config /root/xorg.conf.new
+
+---
+Troubleshooting:
+
+PROBLEM:
+Running "X -configure" produces error and X won't start:
+Number of created screens does not match number of detected devices.
+  Configuration failed.
+
+The generated config file includes following in "Device" section:
+        Identifier  "Card0"
+        Driver      "savage"
+        BusID       "PCI:1:0:0"
+
+FIX: The BusID line is the problem, comment it out or remove it and X 
+will now start.  
+
+---
