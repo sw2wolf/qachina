@@ -74,7 +74,7 @@
 
 (defun git-diff ()
   (interactive)
-  (insert "gitdiff > tmp."))
+  (insert "*git show 'HEAD@{1}..HEAD' > tmp."))
 
 (defun jump-run-shell ()
   (interactive)

@@ -9,6 +9,7 @@
 (tool-bar-mode -1) ;Emacs*toolBar: off
 (menu-bar-mode -1) ;Emacs*menuBar: off
 (scroll-bar-mode nil)
+(toggle-scroll-bar -1)
 
 (transient-mark-mode t)
 (cua-selection-mode 1)
@@ -40,8 +41,8 @@
 (setq display-time-24hr-format t) 
 (setq display-time-day-and-date t)
 
-;(set-language-environment 'UTF-8)
-;(set-locale-environment "UTF-8")
+(set-language-environment 'UTF-8)
+(set-locale-environment "UTF-8")
 
 ;(set-default-font "Courier New-11")
  (set-face-attribute 'default nil :font "Courier New-11")
@@ -174,12 +175,12 @@
 	 (set-face-background 'default "Black")
 	 (set-face-background 'region "DarkSlateGray")
 	 (set-face-background 'highlight "DarkSlateBlue")
-	 ;(set-face-background 'modeline "DarkSlateBlue") ;;; CornflowerBlue")
+	 (set-face-background 'mode-line "DarkSlateBlue") ;;; CornflowerBlue")
 	 
 	 (set-face-foreground 'default "LightGray")
 	 (set-face-foreground 'region "Ivory")
 	 (set-face-foreground 'highlight "LightGray")  ;;; DimGray")
-	 ;(set-face-foreground 'modeline "LightGray")
+	 (set-face-foreground 'mode-line "LightGray")
 	 ))
 (good-colors)
 
