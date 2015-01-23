@@ -70,7 +70,7 @@
   ;(local-set-key (kbd "C-c e") 'eshell/erlang)
 ))
 
-(add-hook 'comint-output-filter-functions 'comint-watch-for-password-promt)
+;(add-hook 'comint-output-filter-functions 'comint-watch-for-password-promt)
 
 (defalias 'img
   (lambda(img)

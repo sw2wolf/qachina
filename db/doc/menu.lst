@@ -1,0 +1,101 @@
+timeout   5
+default   0
+color light-blue/black light-cyan/blue
+
+title Windows XP Professional
+rootnoverify (hd0,0)
+chainloader /ntldr
+boot
+
+title OpenBSD 5.6
+chainloader (hd0,2)+1
+
+# title install OpenBSD 5.x
+# find --set-root /download/install56.iso
+# map --mem /download/install56.iso (hd32)
+# map --hook
+# chainloader (hd32)
+# boot
+
+# 如果你无法确定自己的安装源所在分区的话，如下操作
+# a. 按ctrl+z，让安装进程“sysinst”暂时挂起到后台
+# b. 运行“disklabel /dev/wd0”或“disklabel /dev/wd1”（其他设备依此类推），查找自己安装源所在的文件系统在netbsd里的命名方法并记下
+# c. 输入“fg”，让安装程序“sysinst”转入前台继续安装
+# title floppy
+# map (hd0,1)/netbsd/i386/installation/floppy/boot1.fs (fd0)
+# chainloader (hd0,1)/netbsd/i386/installation/floppy/boot1.fs
+# rootnoverify (fd0)
+# boot
+
+# device wd0e               # 不需要加/dev
+# file system msdos      # 不能用大写,曾经在这个地方犯了几次同样的错误
+# base directory netbsd  # 注意大小写.跟解压缩时的一样
+# set directory /i386/binary/sets
+# title nbinstall
+# root (hd0,1)
+# kernel --type=netbsd (hd0,1)/nbinstall
+# boot
+
+# title install netbsd 6.x
+# find --set-root /download/NetBSD-6.1.5-i386.iso
+# map --mem /download/NetBSD-6.1.5-i386.iso (hd32)
+# map --hook
+# chainloader (hd32)
+# boot
+
+#title netbsd 6.x
+#root (hd0,2)
+#chainloader + 1
+#boot
+
+#title install FreeBSD 9.0-mfs
+#find --set-root /mfsbsd-9.0-i386.iso
+#map --mem /mfsbsd-9.0-i386.iso (hd32)
+#map --hook
+#chainloader (hd32)
+#boot
+
+#title install FreeBSD 9.0-bootonly
+#find --set-root /FreeBSD-9.0-RELEASE-i386-bootonly.iso
+#map --mem /FreeBSD-9.0-RELEASE-i386-bootonly.iso (hd32)
+#map --hook
+#chainloader (hd32)
+#boot
+
+#title Install Ubuntu 9.10 beta
+#find --set-root /ubuntu-9.10-beta-desktop-i386.iso
+#kernel /vmlinuz boot=casper iso-scan/filename=/ubuntu-9.10-beta-desktop-i386.iso ro quiet splash locale=zh_CN.UTF-8
+#initrd /initrd.lz
+
+#title Arch Linux
+#root   (hd0,4)
+#kernel /boot/vmlinuz26 root=/dev/disk/by-uuid/752ae3a4-d2ae-487a-8de5-a59a1ed2631f ro
+#initrd /boot/kernel26.img
+
+#title Arch Linux Fallback
+#root   (hd0,4)
+#kernel /boot/vmlinuz26 root=/dev/disk/by-uuid/752ae3a4-d2ae-487a-8de5-a59a1ed2631f ro
+#initrd /boot/kernel26-fallback.img
+
+#title Windows XP ntldr
+#find --set-root /ntldr
+#chainloader /ntldr
+
+#title GreenGhost [Ghost v8.3/v11] (MAP-HOOK)
+#find --set-root /myudisk.txt
+#map --mem /boot/grub/gghost.img (fd0)
+#map --hook
+#chainloader (fd0)+1
+#rootnoverify (fd0)
+
+#title Boot from CDROM 
+#cdrom --init
+#map --hook
+#chainloader (cd0)
+#boot
+
+#title reboot
+#reboot
+
+#title halt
+#halt

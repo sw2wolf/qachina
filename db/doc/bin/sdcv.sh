@@ -4,7 +4,7 @@ word=`zenity --width 350 --entry --text "Please input a word"`
 
 if [ $? -eq 0 ]
 then
-    res=$(sdcv -n $word)
+    res=$(sdcv --utf8-output --data-dir ~/.stardict/ -n $word)
 	#res=$(wn $word -over)
     zenity --info --text="$res"
 fi

@@ -1,14 +1,15 @@
 ;; setup load-path and autoloads
-(add-to-list 'load-path "~/RnD/slime")
-(require 'slime-autoloads)
+;(add-to-list 'load-path "~/RnD/slime")
+;(require 'slime-autoloads)
+(load (expand-file-name "~/quicklisp/slime-helper.el"))
 
 ;; Set your lisp system and, optionally, some contribs
-(setq inferior-lisp-program "~/ccl/fx86cl -Q -K utf-8")
+(setq inferior-lisp-program "c:/app/ccl/wx86cl -Q -K utf-8")
 ;(setq inferior-lisp-program "~/clisp/bin/clisp -q -q -modern -ansi")
 ;(setq inferior-lisp-program "/usr/local/bin/sbcl")
 ;(setq inferior-lisp-program "~/ecl/bin/ecl")
 
-(setq slime-contribs '(slime-fancy))
+;(setq slime-contribs '(slime-fancy))
 
 ;;; --------------------------
 

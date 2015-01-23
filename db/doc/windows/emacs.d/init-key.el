@@ -57,11 +57,11 @@
 	  (condition-case e (slime-connect "127.0.0.1" 4005)
 		(file-error (slime))))))
 
-(defun jump-run-clisp ()
+(defun jump-run-ccl ()
    (interactive)
-   (if (get-buffer "*CLISP*")
-	  (switch-to-buffer-other-window "*CLISP*")
-	 (async-shell-command "~/bin/ccl" "*CLISP*")))
+   (if (get-buffer "*CCL*")
+	  (switch-to-buffer-other-window "*CCL*")
+	 (async-shell-command "c:/app/ccl/wx86cl -Q -K utf-8" "*CCL*")))
 
 ;(file-error (call-interactively 'run-lisp))))))
 ;(unless (slime-connected-p) (save-excursion (slime)))
@@ -119,7 +119,7 @@
 ;(global-set-key (kbd "<f8>") '(lambda () (interactive) (run-caml "ocaml")))
 
 ;(global-set-key (kbd "<f9>") 'imaxima)
-(global-set-key (kbd "<f9>") 'jump-run-clisp)
+(global-set-key (kbd "<f9>") 'jump-run-ccl)
 (global-set-key (kbd "<f10>") 'jump-run-lisp)
 
 ;; (global-set-key [f11] 'my-maximized) 
