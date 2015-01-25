@@ -10,8 +10,8 @@
 
 (defun project-setup ()
     (mapcar #'(lambda (path) (push path asdf:*central-registry*))
-        '(#p"/media/D/qachina/db/doc/money/"
-          #p"/media/D/qachina/")))
+        '(#p"/mnt/D/qachina/db/doc/money/"
+          #p"/mnt/D/qachina/")))
 
 (project-setup)
 (ql:quickload :money)

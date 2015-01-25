@@ -2122,7 +2122,6 @@ $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="ccl -n -Q -K utf-8"
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="clisp -norc -q -q -ansi -modern"
 $sh make.sh --prefix=/home/sw2wolf/sbcl/ --xc-host="sbcl --disable-debugger --no-sysinit --no-userinit"
 
->>>>>>> d793b5a536546fcfd71feb7a6d5cbd1cb7f1307d
 ;
 ;emacs
 ;
