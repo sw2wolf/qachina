@@ -1,0 +1,70 @@
+cd ~/test/
+git clone git://github.com/kazu-yamamoto/Mew.git
+cd Mew/
+ls
+mkdir ~/Mew
+./configure --prefix=/home/sw2wolf/Mew/
+make install
+ff ~/.emacs.d/init-mew.el 
+find-file ~/.emacs.d/init-mew.el 
+ls ~/Mew/
+cd ~
+ls .emacs.d/
+find-file .emacs.d/init-w3m.el 
+mkdir ~/w3m
+cd test/
+cat /etc/rc
+cat ~/.profile 
+echo $TERM
+echo $SHELL
+cat /etc/rc.conf.local
+echo $MD
+. /etc/profile 
+cp /mnt/D/qachina/db/doc/freebsd/bin/ntp ~/bin/
+xmodmap ~/.Xmodmap
+git clone https://github.com/doitian/emacs-w3m
+cd emacs-w3m/
+ls
+./install-sh 
+autoconf
+autoconf
+setenv AUTOCONF_VERSION 2.69
+setenv AUTOCONF_VERSION=2.69
+setenv AUTOCONF_VERSION 2.69
+setenv AUTOCONF_VERSION "2.69"
+autoconf
+./configure --prefix=/home/sw2wolf/w3m/
+make
+make install
+grep '<<<<<<<' ~/.emacs/*.el
+grep '<<<<<<<' ~/.emacs/*
+rm .emacs.d/init-base.el-windows
+rm .emacs.d/init-base.el
+cp /mnt/D/qachina/db/doc/emacs/init-base.el .emacs.d/
+ff .emacs.d/init-base.el 
+find-file .emacs.d/init-base.el 
+cd .emacs.d/
+*grep modeline *
+*grep "<<<<<<" *
+cd test/dwm/
+mount
+echo $MD
+echo $SHELL
+. /etc/.profile 
+ff config.h
+cat ~/bin/sdcv.sh 
+grep -i sdcv ~/pkglist.txt 
+ls /mnt/D/
+ls /mnt/D/DOWNLOAD/sdcv-0.5.0-beta2-Source.tar.bz2 
+tar -zxf /mnt/D/DOWNLOAD/sdcv-0.5.0-beta2-Source.tar.bz2 -C ~/test
+tar -jxf /mnt/D/DOWNLOAD/sdcv-0.5.0-beta2-Source.tar.bz2 -C ~/test
+whereis bzip
+whereis bzip
+tar -jxf /mnt/D/DOWNLOAD/sdcv-0.5.0-beta2-Source.tar.bz2 -C ~/test
+ls ..
+ls ../sdcv-0.5.0-beta2-Source/
+cp /mnt/D/qachina/db/doc/freebsd/bin/ccl* ~/bin/
+make clean
+make
+make
+*man strlcpy

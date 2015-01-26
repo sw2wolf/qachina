@@ -1,0 +1,13 @@
+69810aeb7e589d07.b none swap sw
+69810aeb7e589d07.a / ffs rw 1 1
+69810aeb7e589d07.m /home ffs rw,nodev,nosuid,noatime 1 2
+69810aeb7e589d07.d /tmp ffs rw,nodev,nosuid,noatime 1 2
+69810aeb7e589d07.f /usr ffs rw,nodev,noatime 1 2
+69810aeb7e589d07.g /usr/X11R6 ffs rw,nodev,noatime 1 2
+69810aeb7e589d07.h /usr/local ffs rw,nodev,noatime 1 2
+69810aeb7e589d07.l /usr/obj ffs rw,nodev,nosuid,noatime 1 2
+69810aeb7e589d07.k /usr/src ffs rw,nodev,nosuid,noatime 1 2
+69810aeb7e589d07.e /var ffs rw,nodev,nosuid,noatime 1 2
+69810aeb7e589d07.j /mnt/D msdos rw,nodev,nosuid,-u=sw2wolf,noatime 1 2
+#/dev/cd0a /mnt/cdrom cd9660 ro,nodev,nosuid,noauto 0 0
+#/dev/fd0a /mnt/floppy msdos rw,nodev,nosuid,noauto 0 0

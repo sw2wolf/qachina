@@ -1,0 +1,23 @@
+# Turn on sticky-group mode
+sticky yes
+
+# Autogroup definitions 窗口分组 C＋A＋n(数字) 显示／隐藏
+autogroup 3 "xmms"
+autogroup 1 "firefox"
+
+# Any entry here is shown in the application menu 鼠标右键菜单
+command firefox         firefox
+command emacs           emacs
+command gmrun           gmrun
+#command wallpaper       "feh -g 640x480 -d -S filename /home/wallpaper"
+
+gap 30 0 0 0  全屏时的范围四个数对应上下左右，为了不挡住时钟
+
+# Ignore programs by that name by not drawing borders around them. 切换窗口时忽略的窗口程序
+ignore xclock
+
+# Keybindings 键盘快捷 4＝win键
+#bind 4-q               quit
+bind 4-w                firefox
+bind 4-e                emacs
+bind 4-t                xterm
