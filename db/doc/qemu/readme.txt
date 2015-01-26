@@ -1,3 +1,46 @@
+
+;;;;;
+virtual floppy, like -fda vvfat:directory
+ftp 10.0.2.2 -u ***
+
+如果你遇到鼠标始终挂在右下角,请在启动QEMU前运行
+export SDL_VIDEO_X11_DGAMOUSE=0
+
+;;;;;
+$qemu-system-x86_64 -net nic,model=?
+qemu: Supported NIC models: ne2k_pci,i82551,i82557b,i82559er,rtl8139,e1000,pcnet,virtio
+
+在QEMU monitor中查看网络的信息如下：
+(qemu) info network
+
+ 为了使虚拟机能够与外界通信，Qemu需要为虚拟机提供网络设备。Qemu支持的常用网卡包括NE2000、rtl8139、pcnet32等。命令行上用-net nic为虚拟机创建虚拟机网卡。例如，qemu的命令行选项
+                            -net nic,model=pcnet
+表示为虚拟机添加一块pcnet型的以太网卡。如果省略model参数则qemu会默认选择一种网卡类型，目前采用的是Intel 82540EM（手册里说明的是e1000），可以在虚拟机启动后执行lspci命令查看。有了虚拟网络设备，下面的问题是如何用这些设备来联网。
+
+首先，虚拟机的网络设备连接在qemu虚拟的VLAN中。每个qemu的运行实例是宿主机中的一个进程，而每个这样的进程中可以虚拟一些VLAN，虚拟机网络设备接入这些VLAN中。当某个VLAN上连接的网络设备发送数据帧，与它在同一个VLAN中的其它网路设备都能接收到数据帧。上面的例子中对虚拟机的pcnet网卡没有指定其连接的VLAN号，那么qemu默认会将该网卡连入vlan0。下面这个例子更具一般性：
+      -net nic,model=pcnet -net nic,model=rtl8139,vlan=1, -net nic,model=ne2k_pci,vlan=1
+该命令为虚拟机创建了三块网卡，其中第一块网卡类型是pcnet，连入vlan0；第二块网卡类型是 rtl8139，第三块网卡类型是ne2k_pci，这两块都连入vlan1，所以第二块网卡与第三块网卡可以互相通信，但它们与第一块网卡不能直接通信。
+
+接下来，各个VLAN再通过qemu提供的4种通信方式与外界联网。
+
+    User mode stack：这种方式在qemu进程中实现一个协议栈，负责在虚拟机VLAN和外部网络之间转发数据。可以将该协议栈视为虚拟机与外部网络之间的一个NAT服务器，外部网络不能主动与虚拟机通信。虚拟机VLAN中的各个网络接口只能置于10.0.2.0子网中，所以这种方式只能与外部网络进行有限的通信。此外，可以用-redir选项为宿主机和虚拟机的两个TCP或UDP端口建立映射，实现宿主机和虚拟机在特殊要求下的通信（例如X-server或ssh）。User mode stack通信方式由-net user选项启用，如果不显式指定通信方式，则这种方式是qemu默认的通信方式。
+
+    socket：这种方式又分为TCP和UDP两种类型。
+    （1）TCP：为一个VLAN创建一个套接字，让该套接字在指定的TCP端口上监听，而其他VLAN连接到该套接字上，从而将多个VLAN连接起来。缺点在于如果监听套接字所在qemu进程崩溃，整个连接就无法工作。监听套接字所在VLAN通过-net socket,listen选项启用，其他VLAN通过-net socket,connect选项启用。
+    （2）UDP：所有VLAN连接到一个多播套接字上，从而使多个VLAN通过一个总线通信。所有VLAN都通过-net socket,mcast选项启用。
+
+    TAP：这种方式首先需要在宿主机中创建并配置一个TAP设备，qemu进程将该TAP设备连接到虚拟机VLAN中。其次，为了实现虚拟机与外部网络的通信，在宿主机中通常还要创建并配置一个网桥，并将宿主机的网络接口（通常是eth0）作为该网桥的一个接口。最后，只要将TAP设备作为网桥的另一个接口，虚拟机VLAN通过TAP设备就可以与外部网络完全通信了。这是因为，宿主机的eth0接口作为网桥的接口，与外部网络连接；TAP设备作为网桥的另一个接口，与虚拟机VLAN连接，这样两个网络就连通了。此时，网桥在这两个网络之间转发数据帧。
+    这里有两个问题需要注意：
+    （1）网桥的转发工作需要得到内核的支持，所以在编译宿主机内核时需要选择与桥接相关的配置选项。
+    （2）当宿主机eth0接口作为网桥接口时，不能为其配置IP地址，而要位将IP地址配置给网桥。
+    TAP方式由-net tap选项启用。
+    VDE：这种方式首先要启动一个VDE进程，该进程打开一个TAP设备，然后各个虚拟机VLAN与VDE进程连接，这样各个VLAN就可以通过TAP设备连接起来。VDE进程通过执行vde_switch命令启动，各个VLAN所在qemu进程通过执行veqe命令启动，这些VLAN就可以与VDE进程连接了。
+
+以上四种通信方式中，socket方式和VDE方式用于虚拟机VLAN之间的连接，而user mode stack方式与外部网路的通信比较有限，所以下面主要讨论TAP方式的配置。
+
+在没有做配置之前，首先需要对TAP设备有所认识。TUN/TAP是内核支持的网络虚拟设备，这种网络设备完全由的软件实现。与网络硬件设备不同，TUN/TAP负责在内核协议栈与用户进程之间传送协议数据单元。TUN与TAP的区别在于，TUN工作在网络层，而TAP则工作在数据链路层。具体在运行TCP/IP的以太网中，TUN与应用程序交换IP包，而TAP与应用程序交换以太帧。所以TUN通常涉及路由，而TAP则常用于网络桥接。TUN/TAP的典型应用包括：OpenVPN、OpenSSH 以及虚拟机网络。
+
+;;;;;
 ./configure --prefix=$HOME/qemu --target-list="i386-softmmu i386-bsd-user" --audio-drv-list="alsa oss" --enable-mixemu
 
 ;;;;;;
