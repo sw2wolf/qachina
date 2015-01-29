@@ -1,5 +1,110 @@
 
 #####
+openbsd 显示cpu、主板、硬盘温度及风扇速度的脚本：
+#/bin/sh
+typeset -i10 HDDCUR
+typeset -i10 HDDMAX
+typeset -i10 HDDMIN
+typeset -i10 CPU
+typeset -i10 MainBOARD
+typeset -i10 FAN
+RAWTEMP=`atactl /dev/sd0c readattr | grep Temperature | cut -f 5`
+HDDCUR=`echo $RAWTEMP | sed -e 's/0x.\{10\}/0x/'`
+HDDMAX=`echo $RAWTEMP | sed -e 's/0x.\{2\}/0x/' | sed -e 's/.\{8\}$//'`
+HDDMIN=`echo $RAWTEMP | sed -e 's/0x.\{6\}/0x/' | sed -e 's/.\{4\}$//'`
+CPU=`sysctl hw.sensors.acpitz0.temp0 | cut -d '=' -f2 | cut -c1-2 `
+MainBOARD=`sysctl hw.sensors.acpithinkpad0.temp1 | cut -d '=' -f2 | cut -c1-2 `
+FAN=`sysctl hw.sensors.acpithinkpad0.fan0 | cut -d '=' -f2 | cut -c1-4 `
+echo "Current HDD Temp $HDDCUR degC (Min/Max $HDDMIN/$HDDMAX)"
+echo "Current CPU Temp $CPU degC"
+echo "Current MainBOARD Temp $MainBOARD degC"
+echo "Current CPU FAN $FAN rpm"
+
+#####
+# gtf 1440 900 60      #指定目标分辨率和刷新率,注意空格
+
+结果会显示类似这样两行（不同的显示器数值不一样，不能照抄）：
+
+# 1440x900 @ 60.00 Hz (GTF) hsync: 55.92 kHz; pclk: 106.47 MHz
+Modeline "1440x900_60.00"  106.47  1440 1520 1672 1904  900 901 904 932  -HSync +Vsync
+
+要做的是手工填入 xorg.conf： 
+# ee /etc/X11/xorg.conf 
+
+1、把 “Modeline …… ”整行加到 Section "Monitor"； 
+2、把 “Modes 1440x900_60.00” 填入 Section "Screen"。  ???
+看清楚，两行都要加入，缺一不可！
+这样显示器就不需要依赖于任何桌面软件的设置就能正常工作了。
+
+ #####
+编辑/etc/rc.conf，找到ftpd_flags，修改为ftpd_flags="-DllUSA"。
+    ftpd_flags="-llUSA"
+
+The options used here are:
+
+    ll - detailed logging to syslog.
+    U - log users so who(1) and similar programs can see them.
+    S - log transfers to /var/log/ftpd.
+    A - permit only anonymous FTP transfers. 
+
+/etc/ftpwelcome
+当用户使用ftp客户端软件连接到服务器后，显示的欢迎信息。
+.message
+/home/ftp下面的任何目录里都可以有这个文件，用户进入这个目录后就会显示这个文件的内容。 
+
+网友们可能在使用ftp的dir或ls命令时查看文件列表，但是却无法看到，受到了限制，那么无法查看文件列表这就造成了我们许多的麻烦，那么要怎么的解决这个问题呢!现在我们一起来看看吧!
+
+　　在Win7系统的命令行模式下，使用ftp的dir或ls命令无法查看文件列表，但是使用IE却可以查看。查找相关资料后，大致归结为两种原因：
+
+　　权限有问题
+
+　　windows自带防火墙拦截
+
+　　实验后发现我的情况属于第二种，具体解决方法有以下几种：
+
+　　直接关闭Windows防火墙
+
+　　打开防火墙，但是设置入站规则允许ftp.exe程序接收信息
+
+　　使用netsh命令设置规则
+
+　　[plain]
+
+netsh firewall add rule name="FTP(non-SSL)" program="%systemroot%system32ftp.exe" action=allow protocol=TCP dir=in
+
+netsh set global StatefulFtp disable
+
+　　命令1的作用与第二种方法相同
+
+　　命令2主要用来禁止statefulFTP过滤，这条对我没有影响，但还是建议加上
+
+　　小插曲
+
+　　这里参考了两篇相关的文章(1,2)，分别使用两条相似，却不同的命令
+
+　　[plain]
+
+　　文章1
+
+　　netsh advfirewall firewall add rule name="FTP (non-SSL)" action=allow protocol=TCP dir=in localport=21
+
+　　netsh advfirewall set global StatefulFtp enable
+
+　　[plain]
+
+　　文章2
+
+　　netsh advfirewall firewall add rule name=”FTP Service” action=allow service=ftpsvc protocol=TCP dir=in
+
+　　netsh advfirewall set global StatefulFTP disable
+
+　　真是让人纠结，对于文章中的 localport=21 始终无法对应到windows自带的ftp.exe程序，后来使用tasklist命令查找ftp对应的PID编号，
+ftp的dir或ls命令无法查看文件列表怎么办 三联
+
+　　再通过命令 netstat 发现ftp.exe在自己电脑上原来端口就不是21。。
+
+　　而文章中的 service=ftpsvc 也没法允许ftp.exe的例外，后来help了以下netsh命令，发现了program参数，才人为添加程序路径。
+#####
 If you run the command "netstat -an | more", you'll be able to clearly see which ports are in a "listen" state. If you do this while in X, you'll see port 6000 (X Window server) in the output. Since there have been many X Window exploits in the past, you might want to close port 6000. Doing this will not kill X, but you won't be able to use X as a server (which for a typical user is no big deal).
 
 The simplest way to close port 6000 is to edit /usr/X11R6/bin/startx. Search for the line that says this:

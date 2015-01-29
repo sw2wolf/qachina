@@ -1,6 +1,6 @@
 
 ;;;;;
-virtual floppy, like -fda vvfat:directory
+?virtual floppy, like -fda vvfat:directory
 ftp 10.0.2.2 -u ***
 
 如果你遇到鼠标始终挂在右下角,请在启动QEMU前运行
