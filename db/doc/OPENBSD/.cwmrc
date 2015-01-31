@@ -21,3 +21,12 @@ ignore xclock
 bind 4-w                firefox
 bind 4-e                emacs
 bind 4-t                xterm
+
+# customize some bindings (C-control M-alt M1-button1)
+bind M-r        exec
+bind CM-r       reload
+bind CM-l       label
+bind CM-t       "xterm -e \"top -s 0.6\""
+bind CM-m       menusearch
+mousebind M-1   window_move
+mousebind CM-1  window_resize

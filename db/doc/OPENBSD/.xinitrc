@@ -46,8 +46,8 @@ case $1 in
 		#sbcl --eval '(require (quote stumpwm))' --eval '(stumpwm:stumpwm)'
         exec $HOME/bin/stumpwm-sbcl
 		;;
-	stumpwm)
-		exec $HOME/bin/stumpwm
+	cwm)
+		exec cwm
 		;;
     dwm)
         #xterm -e gdb --quiet -nx $HOME/test/dwm-dbg/dwm -ex run

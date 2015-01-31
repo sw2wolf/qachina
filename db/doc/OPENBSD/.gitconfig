@@ -1,0 +1,7 @@
+[push]
+	default = simple
+[user]
+	name = sw2wolf
+	email = czsq888@163.com
+[core]
+	pager = cat

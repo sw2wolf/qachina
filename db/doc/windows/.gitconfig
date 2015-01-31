@@ -3,3 +3,5 @@
 	name = sw2wolf
 [core]
 	autocrlf = false
+[push]
+	default = simple

@@ -5,6 +5,7 @@
 
 export MD=/mnt/D/qachina/db/doc
 export RD=/mnt/D/RnD
+export TERM=xterm
 #export ERL_HOME=$HOME/erlang
 #export PYTHONSTARTUP=/media/D/www/qachina/db/doc/python/python_ini.py
 

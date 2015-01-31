@@ -1,5 +1,42 @@
 
 #####
+echo 'Power Saver now on'
+sudo sysctl hw.setperf=0
+sudo sysctl hw.cpuspeed
+
+echo 'Performance Mode now on'
+sudo sysctl hw.setperf=100
+sudo sysctl hw.cpuspeed
+
+#####
+$cat /etc/hostname.iwn0 
+nwid AccessPoint
+wpakey password
+dhcp
+
+# sh /etc/netstart
+
+To scan available access points:
+# ifconfig if scan
+
+To associate with an access point AccessPoint manually and use DHCP to obtain IP address:
+# ifconfig if nwid AccessPoint wpakey password
+# dhclient if
+
+#####
+/etc/rc.conf.local
+apmd_flags="-C"
+apmd_flags="-A"        # auto management by default on this system
+
+First, your system needs to be able to control CPU speed ... sysctl hw.setperf must exist on it.
+The main difference between the "automatic" and "cool running" settings is external power and battery management. 
+
+ntpd_flags="-s"
+apmd_flags=""
+
+ou may want to start it with the -s flag to set the time immediately on the startup. It is also worth to mention that you may want to use -C or -A flags with the Advanced Power Management daemon. The former optimizes the system for low power use while the latter optimizes for performance when using AC power, however scales down when using battery.
+
+#####
 openbsd 显示cpu、主板、硬盘温度及风扇速度的脚本：
 #/bin/sh
 typeset -i10 HDDCUR
@@ -36,7 +73,29 @@ Modeline "1440x900_60.00"  106.47  1440 1520 1672 1904  900 901 904 932  -HSync 
 看清楚，两行都要加入，缺一不可！
 这样显示器就不需要依赖于任何桌面软件的设置就能正常工作了。
 
- #####
+1. sudo xvidtune，这个会给你一个警告提示说有可能损坏显示器或者显卡，如果你想继续下去点击OK
+
+2. 用left和right按钮调屏幕位置，再Apply按钮试一试看看实际的效果，不满意再用left和right按钮调整再进行测试显示情况。
+
+3. 显示效果满意之后，按show，在终端会输出 "1024x768" 94.50 1024 1093 1168 1376 768 769 772 808 +hsync +vsync 的出现。记下这行输出
+
+4. 先做个备份：sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf.bak
+
+#xvidtune                                                                     
+Vendor: (null), Model: (null)
+Num hsync: 1, Num vsync: 1
+hsync range 0:  24.00 -  83.00
+vsync range 0:  50.00 -  76.00
+"1440x900"    106.50   1440 1540 1692 1904    900  903  909  934 -hsync +vsync
+
+再编辑显示配置文件：sudo gedit /etc/X11/xorg.conf。然後找到Section "Monitor"中当前分辨率的那段，你应该会看到类似 Modeline "1024x768" 94.50 1024 1093 1168 1376 768 769 772 808 +hsync +vsync这样的语句（没有的话就将记下来的东西在开头加Modeline，将它添加到EndSection的前面），按照刚才记下来的东西修改其中的相应位置的数值，改完後保存文件为原来的xorg.conf，注销，然後重起即可（在显示登录界面的时候可能还有偏移，但是进入系统之后就正常显示了）。 
+
+Num hsync: 1, Num vsync: 1
+hsync range 0:  24.00 -  83.00
+vsync range 0:  50.00 -  76.00
+"1440x900"    106.50   1440 1536 1688 1904    900  903  909  934 -hsync +vsync
+
+#####
 编辑/etc/rc.conf，找到ftpd_flags，修改为ftpd_flags="-DllUSA"。
     ftpd_flags="-llUSA"
 
@@ -54,7 +113,7 @@ The options used here are:
 
 网友们可能在使用ftp的dir或ls命令时查看文件列表，但是却无法看到，受到了限制，那么无法查看文件列表这就造成了我们许多的麻烦，那么要怎么的解决这个问题呢!现在我们一起来看看吧!
 
-　　在Win7系统的命令行模式下，使用ftp的dir或ls命令无法查看文件列表，但是使用IE却可以查看。查找相关资料后，大致归结为两种原因：
+在Win7系统的命令行模式下，使用ftp的dir或ls命令无法查看文件列表，但是使用IE却可以查看。查找相关资料后，大致归结为两种原因：
 
 　　权限有问题
 
@@ -83,27 +142,21 @@ netsh set global StatefulFtp disable
 　　这里参考了两篇相关的文章(1,2)，分别使用两条相似，却不同的命令
 
 　　[plain]
-
-　　文章1
-
 　　netsh advfirewall firewall add rule name="FTP (non-SSL)" action=allow protocol=TCP dir=in localport=21
 
 　　netsh advfirewall set global StatefulFtp enable
 
 　　[plain]
-
-　　文章2
-
 　　netsh advfirewall firewall add rule name=”FTP Service” action=allow service=ftpsvc protocol=TCP dir=in
 
 　　netsh advfirewall set global StatefulFTP disable
 
-　　真是让人纠结，对于文章中的 localport=21 始终无法对应到windows自带的ftp.exe程序，后来使用tasklist命令查找ftp对应的PID编号，
-ftp的dir或ls命令无法查看文件列表怎么办 三联
+　　真是让人纠结，对于文章中的 localport=21 始终无法对应到windows自带的ftp.exe程序，后来使用tasklist命令查找ftp对应的PID编号，ftp的dir或ls命令无法查看文件列表怎么办 三联
 
 　　再通过命令 netstat 发现ftp.exe在自己电脑上原来端口就不是21。。
 
 　　而文章中的 service=ftpsvc 也没法允许ftp.exe的例外，后来help了以下netsh命令，发现了program参数，才人为添加程序路径。
+
 #####
 If you run the command "netstat -an | more", you'll be able to clearly see which ports are in a "listen" state. If you do this while in X, you'll see port 6000 (X Window server) in the output. Since there have been many X Window exploits in the past, you might want to close port 6000. Doing this will not kill X, but you won't be able to use X as a server (which for a typical user is no big deal).
 
@@ -118,30 +171,6 @@ and change it to say this:
 Next time you start X and run netstat, you should find that port 6000 is closed.
 
 #####
-1. sudo xvidtune，这个会给你一个警告提示说有可能损坏显示器或者显卡，如果你想继续下去点击OK
-
-2. 用left和right按钮调屏幕位置，再Apply按钮试一试看看实际的效果，不满意再用left和right按钮调整再进行测试显示情况。
-
-3. 显示效果满意之后，按show，在终端会输出 "1024x768" 94.50 1024 1093 1168 1376 768 769 772 808 +hsync +vsync 的出现。记下这行输出
-
-4. 先做个备份：sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf.bak
-
-#xvidtune                                                                     
-Vendor: (null), Model: (null)
-Num hsync: 1, Num vsync: 1
-hsync range 0:  24.00 -  83.00
-vsync range 0:  50.00 -  76.00
-"1440x900"    106.50   1440 1540 1692 1904    900  903  909  934 -hsync +vsync
-
-再编辑显示配置文件：sudo gedit /etc/X11/xorg.conf。然後找到Section "Monitor"中当前分辨率的那段，你应该会看到类似 Modeline "1024x768" 94.50 1024 1093 1168 1376 768 769 772 808 +hsync +vsync这样的语句（没有的话就将记下来的东西在开头加Modeline，将它添加到EndSection的前面），按照刚才记下来的东西修改其中的相应位置的数值，改完後保存文件为原来的xorg.conf，注销，然後重起即可（在显示登录界面的时候可能还有偏移，但是进入系统之后就正常显示了）。 
-
-#####
-kvm -vnc :15 -m 256 -name openbsd -pidfile /qemu/OpenBSD/OpenBSD.pid   
--k es -net nic,macaddr=52:54:00:12:34:84,model=virtio -net   
-tap,ifname=tap17 -drive   
-file=/dev/eliseos/qemu-004,cache=none,if=virtio -cdrom   
-/software/OpenBSD/5.5/i386/install55.iso -boot d -daemonize 
-
 #!/bin/sh 
  
 for kernel in /bsd /bsd.mp 
