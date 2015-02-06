@@ -30,3 +30,43 @@ bind CM-t       "xterm -e \"top -s 0.6\""
 bind CM-m       menusearch
 mousebind M-1   window_move
 mousebind CM-1  window_resize
+
+# CM-Return       Spawn a new terminal.
+#           CM-Delete       Lock the screen.
+#           M-Return        Hide current window.
+#           M-Down          Lower current window.
+#           M-Up            Raise current window.
+#           M-/             Search for windows.
+#           C-/             Search for applications.
+#           CM-n            Label current window.
+#           M-Tab           Cycle through currently visible windows.
+#           MS-Tab          Reverse cycle through currently visible windows.
+#           CM-x            Delete current window.
+#           CM-[n]          Select group n, where n is 1-9.
+#           CM-0            Select all groups.
+#           CM-g            Toggle group membership of current window.
+#           M-Right         Cycle through active groups.
+#           M-Left          Reverse cycle through active groups.
+#           CMS-f           Toggle freezing geometry of current window.
+#           CM-f            Toggle full-screen mode of current window.
+#           CM-m            Toggle maximization of current window.
+#           CM-=            Toggle vertical maximization of current window.
+#           CMS-=           Toggle horizontal maximization of current window.
+#           M-?             Spawn “exec program” dialog.
+#           M-.             Spawn “ssh to” dialog.  This parses
+#                           $HOME/.ssh/known_hosts to provide host auto-
+#                           completion.  ssh(1) will be executed via the
+#                           configured terminal emulator.
+#           CM-w            Spawn “exec WindowManager” dialog; allows you to
+#                           switch from openbsd-cwm to another window manager
+#                           without restarting the X server.
+#           CMS-r           Restart the running cwm(1).
+#           CMS-q           Quit openbsd-cwm.
+
+#     The default mouse bindings are:
+
+#           M-M1    Move current window.
+#           CM-M1   Toggle group membership of current window.
+#           M-M2    Resize current window
+#           M-M3    Lower current window.
+#           CMS-M3  Hide current window.

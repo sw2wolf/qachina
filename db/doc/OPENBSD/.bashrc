@@ -3,7 +3,7 @@
 #export CPPFLAGS=-I/usr/local/include
 #export GNUMAKE=gmake
 
-export MD=/mnt/D/qachina/db/doc
+#export MD=/mnt/D/qachina/db/doc
 export RD=/mnt/D/RnD
 export TERM=xterm
 #export ERL_HOME=$HOME/erlang
@@ -16,6 +16,6 @@ export DBUS_SESSION_BUS_ADDRESS="foo:"
 # A righteous umask
 umask 22
 
-PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:$HOME/maxima/bin.
+PATH=$PATH:$HOME/maxima/bin
 
 export PATH

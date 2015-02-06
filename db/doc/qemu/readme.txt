@@ -1,5 +1,17 @@
 
 ;;;;;
+Starting QEMU
+qemu-system-arm -machine versatilepb -nographic -monitor null -serial null
+-semihosting -kernel main.elf -gdb tcp::51234 -S &
+
+Starting GDB
+arm-none-eabi-gdb -ex "target remote localhost:51234" -ex "load"  main.elf
+
+Commands in the GDB session
+b main
+c
+
+;;;;;
 ?virtual floppy, like -fda vvfat:directory
 ftp 10.0.2.2 -u ***
 

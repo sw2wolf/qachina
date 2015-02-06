@@ -5,18 +5,19 @@ CVSROOT=anoncvs@anoncvs3.usa.openbsd.org:/cvs
 if [ "$USER" = root ]; then
 PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin
 #PS1="\`hostname -s\`:\`pwd\`# "
-PS1="\t (\j)(\W) :# "
+PS1="\t (\W) :# "
 else
-PATH=/bin:/usr/bin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games:.
-PS1="\t (\j)(\W) :$ "
+PATH=/bin:/usr/bin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:$HOME/bin:.
+PS1="\t (\W) :$ "
 fi
 
 export PATH PS1 CVSROOT PKG_PATH
 
-#alias pkg_list='lynx -dump $PKG_PATH/index.txt > pkglist.txt'
-alias pkg_list='ftp -m -V $PKG_PATH/index.txt && mv index.txt $HOME/pkglist.txt'
+alias pkg_list='lynx -dump $PKG_PATH/index.txt > pkglist.txt'
+#alias pkg_list='ftp -m -V $PKG_PATH/index.txt && mv index.txt $HOME/pkglist.txt'
 alias su='su -l'
 alias vi='vim'
+alias ls='ls -F'
 
 MD=/mnt/D/qachina/db/doc
 export MD
