@@ -1,5 +1,29 @@
 
 /*****/
+ptermp (e) := symbolp(e) or (numberp(e) and e > 0)
+  or ((op(e) = "+" or op(e) = "*") and every (ptermp, args(e)));
+matchdeclare (pterm, ptermp);
+matchdeclare (otherterm, all);
+defrule (r1, pterm + otherterm = 0, ratsimp (pterm/(-otherterm)) = 1);
+
+NOTE: the catch-all otherterm must be precede pterm alphabetically! This is a useful, but obscure, consequence of the simplification of "+" expressions and the pattern-matching process ... sorry for the obscurity.
+
+Examples:
+
+apply1 (a*x - b - c + d = 0, r1);
+
+                              a x + d
+                              ------- = 1
+                               c + b
+
+apply1 (a*x - (b + g) - 2*c + d*e*f = 0, r1);
+
+                            a x + d e f
+                            ----------- = 1
+                            g + 2 c + b
+
+
+/*****/
 /* Here are two handy functions for exploring general representation: */
 
 show_form_internal(ex) := block([inflag:true],show_form(ex))$

@@ -36,7 +36,7 @@
 ;(load "init-ac")
 
 ;(load "init-slime")
-;(load "init-maxima")
+(load "init-maxima")
 
 (load "init-scheme")
 ;(load "init-clojure")
@@ -44,7 +44,7 @@
 ;(load "init-erlang")
 (load "init-prolog")
 
-;(load "init-haskell")
+(load "init-haskell")
 ;(load "init-ocaml")
 
 ;(load "init-ruby")
@@ -77,7 +77,7 @@
      ;; ConsiderCamelCaseToBeCorrect
      (setq ispell-extra-args '("-C"))))
 
-;(setq initial-frame-alist '((top . 0) (left . 0) (width . 1024) (height . 768)))
+(setq initial-frame-alist '((top . 550) (left . 0) (width . 1024) (height . 768)))
 (add-hook 'after-init-hook '(lambda ()
 							  ;(server-start)
 							  (split-window-horizontally)

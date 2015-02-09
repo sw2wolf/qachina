@@ -1,4 +1,6 @@
-(add-to-list 'load-path "~/maxima/share/maxima/emacs/")
+(add-to-list 'load-path "/usr/local/share/maxima/5.29.1/emacs")
+;(add-to-list 'load-path "~/maxima/share/maxima/emacs/")
+
 (autoload 'maxima-mode "maxima" "Maxima mode" t)
 (autoload 'maxima "maxima" "Maxima interaction" t)
 (add-to-list 'auto-mode-alist '("\\.ma[cx]" . maxima-mode))

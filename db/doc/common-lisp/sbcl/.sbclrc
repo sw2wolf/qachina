@@ -5,8 +5,8 @@
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
 
-(pushnew #p"/media/D/qachina/" asdf:*central-registry*)
-(pushnew #p"/media/D/qachina/db/doc/money/" asdf:*central-registry*)
+(pushnew #p"/mnt/D/qachina/" asdf:*central-registry*)
+(pushnew #p"/mnt/D/qachina/db/doc/money/" asdf:*central-registry*)
 ;(ql:quickload :money)
 ;(in-package :money)
 

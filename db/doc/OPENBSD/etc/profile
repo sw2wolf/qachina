@@ -7,7 +7,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin
 #PS1="\`hostname -s\`:\`pwd\`# "
 PS1="\t (\W) :# "
 else
-PATH=/bin:/usr/bin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:$HOME/bin:.
+PATH=/bin:/usr/sbin:/usr/bin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:$HOME/bin:.
 PS1="\t (\W) :$ "
 fi
 

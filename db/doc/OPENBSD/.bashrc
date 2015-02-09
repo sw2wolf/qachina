@@ -15,7 +15,3 @@ export DBUS_SESSION_BUS_ADDRESS="foo:"
 
 # A righteous umask
 umask 22
-
-PATH=$PATH:$HOME/maxima/bin
-
-export PATH
