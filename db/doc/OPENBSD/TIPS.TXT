@@ -1,5 +1,162 @@
 
 #####
+OpenBSD as a File Server
+11/14/2000
+
+With Active Directory threatening the traditional SMB (Server Message Block) Windows file sharing and Appletalk/Chooser MacOS file sharing, open source Unix has an opening to become recognized as a file sharing platform that can cheaply and efficiently replace the more traditional operating systems. Although support for active directory is lacking, in the present interim where SMB, Chooser, and NFS (Network File System) still reign supreme, tools exist to make OpenBSD the perfect file server for cross-platform client networks and complex internetworks.
+
+As an example configuration for the various subsystems involved in this, let's look at my main OpenBSD server at work, which handles Appletalk, SMB, and NFS simultaneously and distributes files over a multi-platform internetwork. There are three repositories of data, which must all be accessible by Macintosh and Windows clients on the internal network:
+
+    /home/www (A local web-hosting directory on newboing, the server in question)
+    /deepthought (An NFS mount from deepthought, a remote server at a co-location facility)
+    /doca (An NFS mount from doc_a, a local NT server providing main internal file serving)
+
+Given this layout, there are three discernible steps involved in configuration.
+
+Step 1, configuring the mounts
+
+The NFS daemon on deepthought was configured to export only the /home directory and all its subsidiaries, and only to the correct IP address of newboing. This was done via an entry in /etc/exports reading:
+
+/home   202.56.38.123
+
+Then it was mounted on newboing via the following command:
+
+mount -t nfs deepthought.domain.com.au:/home /deepthought
+
+Since there are problems mounting SMB filesystems under OpenBSD (it is possible, but the new smbfs-based smbmount is heavily Linux oriented), I chose to run PC-NFS on doc_a. PC-NFS is a port of NFS to Windows NT and 2000. Without going into the details of PC-NFS configuration, the mount on newboing was performed using the command:
+
+mount -t nfs 192.168.0.40:/data1 /doca
+
+Step 2, exporting data via SMB
+
+The Samba suite, available within the OpenBSD ports tree, provides SMB interoperability for most UNIX platforms. I've used Samba within this instance to export all three data repositories over SMB, for the use of the internal Windows clients. Samba installation from the ports tree is a simple process:
+
+cd /usr/ports/net/samba
+make && make install
+
+Samba draws its configuration primarily from one file, /etc/smb.conf. This file is installed with a set of default options by the ports tree distribution. For the purposes of this example, the following implicit configuration was made in smb.conf:
+
+workgroup = documenta
+# This defines the workgroup, or in this case 
+# NT Domain, as 'documenta'
+
+server string = OpenBSD (newboing)
+# The NetBIOS description field, viewable when 
+# a windows client browses to this server.
+
+encrypt passwords = yes
+# By default, Windows 98 & NT use encrypted passwords, 
+# so in nearly every instance they should be enabled.
+
+smb passwd file = /etc/smbpasswd
+# Specifies the location of the encrypted password file.
+
+interfaces = 192.168.0.1/24
+# Specifies that only the interface spanning 192.168.0.1/24 
+# should be Samba-enabled (ie. not over the live interface).
+
+With this generic configuration complete, it's time to specify the shares. These are also entered into smb.conf, with the default example shares commented out using a ; (semi-colon):
+
+[www]
+   comment = www
+   path = /home/www
+   public = yes
+   writable = yes
+   create mask = 0777
+
+[deepthought]
+   comment = deepthought
+   path = /deepthought
+   public = yes
+   writable = yes
+   create mask = 0777
+
+
+[doca]
+   comment = doc_a
+   path = /doca
+   public = yes
+   writable = yes
+   create mask = 0777
+
+In each case, these shares are "public" -- meaning that anyone with a valid SMB logon on newboing can read, write, and delete (provided the relevant Unix permissions to the files permit it). As previously mentioned, Samba has its own user authentication mechanism, different than OpenBSD's native system authentication. To add a user to the Samba authentication system, perform the following commands:
+
+adduser joe
+smbpasswd -a joe
+
+The first command adds the user to the OpenBSD system, the second adds them to the Samba authentication system.
+
+In each instance of the commands above, you will be prompted for password details. For manageability purposes, it is recommended to keep these passwords in synch. This complete, it's time to start the Samba daemons and test your system. There are two daemons that must be started:
+
+nmbd &
+smbd &
+
+The first, nmbd, is the NetBIOS naming-scheme daemon, while smbd handles actual SMB file and print sharing. To ensure that the daemons start upon boot, a simple entry in /etc/rc.local is required:
+
+echo -n 'Starting Samba Daemons...'
+nmbd -D
+smbd -D
+
+Assuming we have added the user "joe" with password "password" and the internal IP address of the Samba server is 192.168.0.1, the following command would be used:
+
+smbclient -L 192.168.0.1 -U joe 
+
+This command attempts to list all SMB shares on the host 192.168.0.1 available to the user joe. You will then be prompted for a password to authenticate the user joe:
+
+added interface ip=192.168.0.1 bcast=192.168.0.255 nmask=255.255.255.0
+Password: password
+
+After successfully authenticating, a list of SMB shares will appear:
+
+Domain=[DOCUMENTA] OS=[Unix] Server=[Samba 2.0.6]
+
+ Sharename    Type   Comment
+ ---------    ----   -------
+ www          Disk   www
+ deepthought  Disk   deepthought
+ doca         Disk   doc_a
+ IPC$         IPC    IPC Service (OpenBSD (newboing))
+
+ Server         Comment
+ ---------      -------
+ DOC_A
+ NEWBOING       OpenBSD (newboing)
+
+ Workgroup      Master
+ ---------      -------
+ DOCUMENTA      DOC_A
+
+This complete, you're ready to set up Windows clients to use the shares.
+Step 3, exporting data via Appletalk
+
+The netatalk (pronounced "nedtalk") package is used to handle Appletalk interoperability. Given that Appletalk is a protocol independent of TCP/IP and that the GENERIC kernel does not contain support for it, the first step towards installation is to build a compatible kernel. Details of kernel configuration were discussed in the previous article in this series, "OpenBSD Kernel Compilation and Optimization," so I will not go into great detail here. A kernel should be built with the option in its configuration file:
+
+option NETATALK
+
+This will provide kernel-level support for Appletalk and its associated protocols. Once the system has been rebooted with this in place, netatalk installation is ready to take place from the ports tree, using the following commands:
+
+cd /usr/ports/net/netatalk
+make && make install
+
+In contrast to Samba, netatalk does use OpenBSD's system authentication, so in the case of this example it is not necessary to perform any user configuration, as the system users have already been added. Share definitions are handled by the file /etc/netatalk/AppleVolumes.default for users who have no implicit AppleVolumes file of their own. The file by default contains the single line:
+
+~
+
+This allows each user who logs in to access ~/ (their own home directories). Other shares available to all users should be added to the top of the file /etc/netatalk/AppleVolumes.system, which handles these share definitions as well as file extension descriptors. For this example, the following AppleVolumes.system configuration was required:
+
+#Share		  Comment
+/home/www     WWW
+/deepthought  deepthought
+/doca         doc_a
+
+Unlike other filesharing systems such as NFS and Samba, netatalk requires quite a number of daemons to be run simultaneously in order to achieve full functionality. This is controlled by the file /etc/netatalk/rc.atalk, which is installed by default from the ports tree distribution. To start netatalk simply execute the following commands:
+
+chmod +x /etc/netatalk/rc.atalk
+/etc/netatalk/rc.atalk
+
+The bottom command should also be added to /etc/rc.local in order to make netatalk start automatically upon boot. This complete, any Macintosh machines on a local network segment should be able to access these shares via Chooser.
+
+#####
 echo 'Power Saver now on'
 sudo sysctl hw.setperf=0
 sudo sysctl hw.cpuspeed

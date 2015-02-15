@@ -77,7 +77,7 @@
      ;; ConsiderCamelCaseToBeCorrect
      (setq ispell-extra-args '("-C"))))
 
-(setq initial-frame-alist '((top . 550) (left . 0) (width . 1024) (height . 768)))
+;(setq initial-frame-alist '((top . 550) (left . 0) (width . 1024) (height . 768)))
 (add-hook 'after-init-hook '(lambda ()
 							  ;(server-start)
 							  (split-window-horizontally)

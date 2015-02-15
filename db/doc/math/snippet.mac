@@ -967,6 +967,6 @@ assume(k>0);assume(n>0);sum(a^n,n,0,k),simpsum; => (a^(k+1)-1)/(a-1)
 /*****/
 .AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.14 ./bootstrap
 ./configure --prefix=/home/sw2wolf/maxima/ --enable-ccl --with-ccl=/home/sw2wolf/ccl/fx86cl
-./configure --prefix=/home/sw2wolf/maxima/ --enable-clisp --with-clisp=/usr/local/bin/clisp
+./configure --prefix=/home/sw2wolf/maxima/ --enable-sbcl --with-sbcl=/usr/local/bin/sbcl
 
 file_search_maxima:append(file_search_maxima,["/home/***/maxima/###.{mac,mc}"]);

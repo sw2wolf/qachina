@@ -64,9 +64,9 @@ xterm*printerCommand: cat > ~/xtermdump
 !        <BtnUp>: select-end(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
 !
         Ctrl <KeyPress> P: print() \n
-Emacs.geometry: 178x38+0+450
-Emacs*toolBar: off
-Emacs*menuBar: off
+Emacs.geometry: 178x38+0+550
+!Emacs*toolBar: off
+!Emacs*menuBar: off
 !Emacs*useXIM: false
 
-Firefox.geometry: 178x38+0+380
+!Firefox.geometry: 178x38+0+380
