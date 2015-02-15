@@ -1,0 +1,5 @@
+sshd_flags=NO
+smtpd_flags=NO
+inetd_flags=NO
+sndiod_flags=NO
+apmd_flags=""
