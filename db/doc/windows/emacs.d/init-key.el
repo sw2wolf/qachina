@@ -61,7 +61,7 @@
    (interactive)
    (if (get-buffer "*CCL*")
 	  (switch-to-buffer-other-window "*CCL*")
-	 (async-shell-command "c:/app/ccl/wx86cl -Q -K utf-8" "*CCL*")))
+	 (async-shell-command "~/bin/ccl.bat" "*CCL*")))
 
 ;(file-error (call-interactively 'run-lisp))))))
 ;(unless (slime-connected-p) (save-excursion (slime)))
