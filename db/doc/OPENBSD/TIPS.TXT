@@ -1,16 +1,5 @@
 
 #####
-XTerm*loginShell:true
-XTerm*background: black
-XTerm*foreground: white
-XTerm*scrollBar: false
-XTerm*locale: utf8
-XTerm*faceName: Liberation Mono:pixelsize=12:antialias=true:hinting=true
-XTerm*eightBitInput: true
-XTerm*pointerShape: left_ptr
-XTerm*termName: rxvt-256color
-
-#####
 OpenBSD as a File Server
 11/14/2000
 

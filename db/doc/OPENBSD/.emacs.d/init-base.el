@@ -6,8 +6,8 @@
 (setq inhibit-startup-message t)
 (setq gnus-inhibit-startup-message t)
 
-(tool-bar-mode -1) ;Emacs*toolBar: off
-(menu-bar-mode -1) ;Emacs*menuBar: off
+;(tool-bar-mode -1) ;Emacs*toolBar: off
+;(menu-bar-mode -1) ;Emacs*menuBar: off
 (scroll-bar-mode -1)
 
 (transient-mark-mode t)
@@ -41,10 +41,10 @@
 (setq display-time-24hr-format t) 
 (setq display-time-day-and-date t)
 
-(set-default-font "DejaVu Sans Mono-10")
+;(set-default-font "DejaVu Sans Mono-10")
 ;; 设置中文字体
-(set-fontset-font "fontset-default"
-      'gb18030 '("WenQuanYi Bitmap Song" . "unicode-bmp"))
+;(set-fontset-font "fontset-default"
+;      'gb18030 '("WenQuanYi Bitmap Song" . "unicode-bmp"))
 
 ;; 设置 sentence-end 可以识别中文标点
 (setq sentence-end

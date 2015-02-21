@@ -1,6 +1,6 @@
+/usr/local/bin/gmrun
 xterm -geometry 159x28+0+390
 firefox
-/usr/local/bin/gmrun
 -----------------------------------------------------------
 rdesktop -u sw2wolf -p 123 -g 1440x880 -D -K localhost:3389
 -----------------------------------------------------------

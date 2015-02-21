@@ -29,6 +29,8 @@ export LC_ALL=zh_CN.UTF-8
 export LANG=zh_CN.UTF-8
 
 xmodmap ~/.Xmodmap
+xrdb -merge ~/.Xresources
+
 #mixer vol 95 pcm 95
 #export XIM_PROGRAM=/usr/local/bin/fcitx
 #export XMODIFIERS=@im=fcitx
@@ -54,7 +56,11 @@ case $1 in
         xterm -e gdb --quiet -nx -x ~/script.gdb
 		;;
     *)
-		#exec $HOME/bin/stumpwm
+		# Set wallpaper
+		#feh --bg-scale ~/.xwallpaper-dwm.png
+
+		# Set WM name (for Java apps)
+		#wmname LG3D
 		exec $HOME/bin/dwm
 		;;
 esac

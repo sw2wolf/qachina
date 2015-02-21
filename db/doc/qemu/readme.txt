@@ -1,5 +1,13 @@
 
-;;;;;
+#####
+控制面板->鼠标（如果没有，请先切换到经典模式）->指针选项  
+
+把其中“提高指针精度”选项去掉即可。
+
+如此完成后，在刚通过VNC进入windows xp系统时，VNC中的鼠标和真实鼠标还是有一些偏移，只不过这个偏移的大小是不会乱变的。这是因为相对定位鼠标引起的，解决的方法也比较简单，在Qemu启动的时候，把所有的相对定位设备改为绝对定位设备，即在Qemu启动参数中加入以下参数即可：
+    -usbdevice tablet  
+
+#####
 Starting QEMU
 qemu-system-arm -machine versatilepb -nographic -monitor null -serial null
 -semihosting -kernel main.elf -gdb tcp::51234 -S &
@@ -11,14 +19,14 @@ Commands in the GDB session
 b main
 c
 
-;;;;;
+#####
 ?virtual floppy, like -fda vvfat:directory
 ftp 10.0.2.2 -u ***
 
 如果你遇到鼠标始终挂在右下角,请在启动QEMU前运行
 export SDL_VIDEO_X11_DGAMOUSE=0
 
-;;;;;
+#####
 $qemu-system-x86_64 -net nic,model=?
 qemu: Supported NIC models: ne2k_pci,i82551,i82557b,i82559er,rtl8139,e1000,pcnet,virtio
 
@@ -52,10 +60,10 @@ qemu: Supported NIC models: ne2k_pci,i82551,i82557b,i82559er,rtl8139,e1000,pcnet
 
 在没有做配置之前，首先需要对TAP设备有所认识。TUN/TAP是内核支持的网络虚拟设备，这种网络设备完全由的软件实现。与网络硬件设备不同，TUN/TAP负责在内核协议栈与用户进程之间传送协议数据单元。TUN与TAP的区别在于，TUN工作在网络层，而TAP则工作在数据链路层。具体在运行TCP/IP的以太网中，TUN与应用程序交换IP包，而TAP与应用程序交换以太帧。所以TUN通常涉及路由，而TAP则常用于网络桥接。TUN/TAP的典型应用包括：OpenVPN、OpenSSH 以及虚拟机网络。
 
-;;;;;
+#####
 ./configure --prefix=$HOME/qemu --target-list="i386-softmmu i386-bsd-user" --audio-drv-list="alsa oss" --enable-mixemu
 
-;;;;;;
+#####
 typical usage of OS under qemu in snapshot mode [to commit made changes hit left_CTRL+left_ALT+2 and type commit]:
 % qemu -hda ~/qemu/win2000.img -m 256 -localtime -snapshot
 
@@ -76,22 +84,14 @@ if disabled it will work, but terribly slow, You will be running at Pentium 75 s
 
 5. with -soundhw sb16 or -soundhw es1370 to emulate Sound Blaster 16, or Sound Blaster 128. You can also enable standart annoying BEEP with -soundhw pcspk. You can also enable all three of them like that: -soundhw sb16,es1370,pcspk, or just BEEP + one of them: -soundhw es1370,pcspk
 
-;;;;;;
-考虑是否加载 Kqemu
-
-这是一个内核模块，能够提高Qemu的效率，但是，放到内核中的问题是，会影响整个系统的稳定性，而当前代码的稳定性似乎与内核还有差距，我在用Qemu来运行一些代码的时候遇到过因为Kqemu而把整个系统崩溃的情况，所以，慎重考虑是否应该加载这个内核模块 
-操作虚拟机的硬盘
-
-使用 mdconfig(8) 把硬盘文件映射成 /dev/mdx 然后 通过mount /dev/mdxsy 来直接读写虚拟机的硬盘，不需要启动虚拟机，速度快。
-
-;;;;;;
+#####
 #/usr/local/etc/rc.d/kqemu onestart
 
 $qemu -hda winxp.qcow2 -m 192 -kernel-kqemu -enable-kqemu -localtime -net nic -net user -nographic -daemonize -redir tcp:3389::3389 -localtime
 
 $rdesktop -u *** -p 123 -g 1440x880 -D -K localhost:3389
 
-;;;;;;
+#####
 # kldload kqemu
 # kldload aio
 # cd /media/qemu
@@ -101,8 +101,6 @@ $rdesktop -u *** -p 123 -g 1440x880 -D -K localhost:3389
 为了确保 kqemu 模块可用，按住左边的 Ctrl + Alt + 2，键入 info kqemu，可见 kquemu support: enabled for user and kernel code。再按住左边的 Ctrl + Alt + 1 可退出。
 
 # qemu -hda winxp.img -m 1024 -kernel-kqemu -soundhw ac97 -localtime
-
-FreeBSD 里的设置，可参考 https://wiki.freebsd.org/qemu。包括，
 
 在 /etc/rc.conf 里添加
 devfs_system_ruleset="localrules"
@@ -118,7 +116,7 @@ kqemu_load="YES"
 net.link.tap.up_on_open=1
 net.link.tap.user_open=1
 
-;;;;;;
+#####
 Monitor
 # 有時候會遇到 vnc 無法開啟的情況，使用 screendump 輸出螢幕內容。
 # 再用 http://www.online-convert.com 轉成 jpeg 觀看。
