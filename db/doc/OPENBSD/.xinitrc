@@ -56,8 +56,9 @@ case $1 in
         xterm -e gdb --quiet -nx -x ~/script.gdb
 		;;
     *)
+		#xclock -geometry -0+0 &
 		# Set wallpaper
-		#feh --bg-scale ~/.xwallpaper-dwm.png
+		#feh --bg-scale ~/.xwallpaper-dwm.png &
 
 		# Set WM name (for Java apps)
 		#wmname LG3D
