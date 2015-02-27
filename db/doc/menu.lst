@@ -29,21 +29,22 @@ chainloader (hd0,2)+1
 # a. 按ctrl+z，让安装进程“sysinst”暂时挂起到后台
 # b. 运行“disklabel /dev/wd0”或“disklabel /dev/wd1”（其他设备依此类推），查找自己安装源所在的文件系统在netbsd里的命名方法并记下
 # c. 输入“fg”，让安装程序“sysinst”转入前台继续安装
-title install netbsd
-root (hd0,1)
-kernel --type=netbsd (hd0,1)/NETBSD-INSTALL
-boot
+# device: wd0j            # 不需要加/dev
+# file system: msdos      # 不能用大写,曾经在这个地方犯了几次同样的错误
+# base directory: /  # 注意大小写.跟解压缩时的一样
+# set directory: /I386/BINARY/SETS
 
-title install netbsd from ISO
-device wd0j            # 不需要加/dev
-file system msdos      # 不能用大写,曾经在这个地方犯了几次同样的错误
-base directory netbsd  # 注意大小写.跟解压缩时的一样
-set directory /I386/BINARY/SETS
-find --set-root NetBSD-6.1.5-i386.iso
-map --mem NetBSD-6.1.5-i386.iso (hd32)
-map --hook
-chainloader (hd32)
-boot
+# title install netbsd
+# root (hd0,1)
+# kernel --type=netbsd (hd0,1)/NETBSD-INSTALL
+# boot
+
+# title install netbsd from ISO
+# find --set-root NetBSD-6.1.5-i386.iso
+# map --mem NetBSD-6.1.5-i386.iso (hd32)
+# map --hook
+# chainloader (hd32)
+# boot
 
 # title install netbsd from floppy
 # map (hd0,1)/netbsd/I386/INSTALLATION/FLOPPY/BOOT1.FS (fd0)
@@ -51,10 +52,10 @@ boot
 # rootnoverify (fd0)
 # boot
 
-#title netbsd 6.x
-#root (hd0,2)
-#chainloader + 1
-#boot
+# title netbsd 6.x
+# root (hd0,2)
+# chainloader + 1
+# boot
 
 #title install FreeBSD 9.0-mfs
 #find --set-root /mfsbsd-9.0-i386.iso
