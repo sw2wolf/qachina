@@ -1,5 +1,16 @@
 
 /*****/
+maxima-init.mac:
+
+/* Every session of Maxima uses its own names for the two files. */
+load("draw")$
+set_random_state(make_random_state(true))$
+draw_file_name : string(random(999999))$
+set_draw_defaults(
+    data_file_name =3D sconcat("data_",draw_file_name),
+    gnuplot_file_name =3D sconcat("gp_",draw_file_name)) $
+
+/*****/
 ptermp (e) := symbolp(e) or (numberp(e) and e > 0)
   or ((op(e) = "+" or op(e) = "*") and every (ptermp, args(e)));
 matchdeclare (pterm, ptermp);

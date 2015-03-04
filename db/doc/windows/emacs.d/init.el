@@ -8,8 +8,8 @@
 
 (add-to-list 'load-path "~/.emacs.d/")
 
-(setq shell-file-name "c:/cygwin/bin/bash.exe")
-;(setq shell-file-name "d:/emacs-24.3/bin/cmdproxy.exe")
+;(setq shell-file-name "c:/cygwin/bin/bash.exe")
+(setq shell-file-name "d:/emacs-24.3/bin/cmdproxy.exe")
 
 (setq exec-path (append exec-path '("c:/Program Files/Mozilla Firefox/")))
 ;(setq exec-path (append exec-path '("c:/app/opera/26.0.1656.60/")))
@@ -106,16 +106,17 @@
 ;(desktop-load-default) 
 ;(desktop-read)
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(safe-local-variable-values (quote ((Syntax . Common-Lisp) (eval add-hook (quote write-file-hooks) (quote time-stamp)))))
- '(scheme-program-name "guile -q -l /media/D/qachina/db/doc/scheme/money-guile.scm"))
+ '(scheme-program-name "guile -q -l /D/qachina/db/doc/scheme/money-guile.scm")
+ '(send-mail-function (quote smtpmail-send-it)))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(erc-command-indicator-face ((t (:foreground "red"))))
  '(vertical-border ((nil (:background "black" :foreground "black")))))

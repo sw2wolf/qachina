@@ -1,5 +1,15 @@
 
 #####
+fstab:
+sd0a / ffs ro,noatime,softdep 1 1
+sd0d /mfs ffs ro,noatime,softdep 1 2
+sd0e /home ffs ro,noatime,softdep 1 2
+swap /root mfs rw,nosuid,-P=/mfs/root,-s=20M 0 0
+swap /var mfs rw,nosuid,-P=/mfs/var,-s=30M 0 0
+swap /dev mfs rw,nosuid,-P=/mfs/dev,-s=30M,-i=256 0 0
+swap /etc mfs rw,nosuid,-P=/mfs/etc,-s=20M 0 0
+
+#####
 OpenBSD as a File Server
 11/14/2000
 
