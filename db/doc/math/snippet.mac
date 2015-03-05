@@ -1,5 +1,29 @@
 
 /*****/
+/* sum is in the noun form (see a leading % in the lisp expression) */
+(%i76) expr: sum(x[i], i, 1, n);
+                                    n
+                                   ====
+                                   \
+(%o76)                              >    x
+                                   /      i
+                                   ====
+                                   i = 1
+(%i77) :lisp $expr
+
+((%SUM SIMP) (($X SIMP ARRAY) $I) $I 1 $N)
+
+/* You need to tell ev to evaluate nouns */
+
+(%i77) ev(expr, n = 2, x[1] = 5, x[2] = 3, nouns);
+(%o77)                              x  + x
+                                     2    1
+
+/* and request an extra post-evaluation */
+(%i78) ev(expr, n = 2, x[1] = 5, x[2] = 3, nouns, eval);
+(%o78)                                 8
+
+/*****/
 maxima-init.mac:
 
 /* Every session of Maxima uses its own names for the two files. */
@@ -354,8 +378,7 @@ plot2d([discrete, makelist([x,sin(x)],x,-5,5,0.25)], [style, linespoints])$
 plot2d([sin(x)], [x,-5,5], [style, linespoints], [adapt_depth, 1], [nticks, 5])$
 plot2d([sin(x),[discrete, [[%pi,0]]]],[x,0,2*%pi],[style,lines,points],[point_type,plus],[color,blue,black],[legend,false]);
 plot2d(sin(x),[x,0,10],[ps_file,"ps_test.ps"]);
-
-/* For one function: */
+plot2d([1,2,3,4,5],[x,0,6],[ylabel, "Käviät"]);
 
 f(x,A,w) := A*sin(w*x)$
 parametersList: [ [p1=1, p2=2], [p1=3, p2=4] ]$
@@ -977,6 +1000,6 @@ assume(k>0);assume(n>0);sum(a^n,n,0,k),simpsum; => (a^(k+1)-1)/(a-1)
 
 /*****/
 .AUTOCONF_VERSION=2.69 AUTOMAKE_VERSION=1.14 ./bootstrap
-./configure --prefix=/home/sw2wolf/maxima/ --enable-sbcl --with-sbcl=/usr/local/bin/sbcl --libdir=/home/sw2wolf/maxima/...
+./configure --prefix=/home/sw2wolf/maxima/ --enable-sbcl --with-sbcl=/usr/local/bin/sbcl
 
 file_search_maxima:append(file_search_maxima,["/home/***/maxima/###.{mac,mc}"]);
