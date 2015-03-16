@@ -1,3 +1,18 @@
+
+#####
+在“命令提示符”里输入“netsh wlan set hostednetwork mode=allow ssid=pcpop key=12345678”，回车，系统会自动虚拟出一个wifi热点。ssid是网络名称，可以自己随意设定；key是加入网络的密码，是明码输入，8位以上，随意输入。
+
+此时，打开网络和共享中心，点击左侧的“更改适配器设置”，如下图所示，就会看到多出一个网卡来。这就是刚才键入命令行之后，虚拟出来的无线网卡——“Micro virtual wifi miniport adapter”虚拟无线热点。
+
+下面需要做的工作，与之前的一样，将本地连接设置成“Internet连接共享”，指定“无线网络连接2（虚拟热点）”为信号出入源。
+
+设置好之后，在命令提示符里输入命令行，“netsh wlan start hostednetwork”，回车，就会打开WiFi热点。
+
+最后我们在检查一下，无线临时网络是否已经连接，看到上图这个状态时，证明笔记本的WiFi热点已经建立成功。而手机、iPad、笔记本……只要能连接WiFi的设备都能搜索到这个信号，可以共享上网。
+
+那么，关闭我们刚才创建虚拟热点，只要我们在命令行中输入“netsh wlan stop hostednetwork”，即可。
+
+#####
 1. HD light twinkle
 .HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\CdRom\Autorun from 1 to 0.
 

@@ -14,6 +14,28 @@
 # echo "/dev/da0s1a / ufs ro,noatime 1 1" > /mnt/etc/fstab 
 # umount /mnt
 
+------
+fetch http://mfsbsd.vx.sk/iso/mfsbsd-9.0-i386.iso
+ll
+mdconfig -a -t vnode -f mfsbsd-9.0-i386.iso
+mount_cd9660 /dev/md0 /cdrom
+
+dd if=/dev/zero of=mfsbsd-9.0-i386.img bs=1m count=28
+mdconfig -a -t vnode -f mfsbsd-9.0-i386.img
+fdisk -B -I /dev/md1
+bsdlabel -B -w /dev/md1
+newfs -m0 /dev/md1a
+mount /dev/md1a /mnt
+
+rsync -aogt /cdrom/ /mnt/
+df -h
+
+umount /mnt
+umount /cdrom
+mdconfig -d -u 1
+mdconfig -d -u 0
+rm *.iso 
+
 ######
 # freebsd-update fetch
 # freebsd-update install

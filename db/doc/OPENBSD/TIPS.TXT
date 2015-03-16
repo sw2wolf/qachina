@@ -1,5 +1,16 @@
 
 #####
+After boot, PF operation can be managed using the pfctl(8) program. Some example commands are:
+
+     # pfctl -f /etc/pf.conf     Load the pf.conf file
+     # pfctl -nf /etc/pf.conf    Parse the file, but don't load it
+
+     # pfctl -sr                 Show the current ruleset
+     # pfctl -ss                 Show the current state table
+     # pfctl -si                 Show filter stats and counters
+     # pfctl -sa                 Show EVERYTHING it can show
+
+#####
 cvs -qd anoncvs@anoncvs.ca.openbsd.org:/cvs get -P src
 
 #####

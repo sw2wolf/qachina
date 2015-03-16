@@ -13,11 +13,5 @@ fi
 
 export PATH PS1 CVSROOT PKG_PATH
 
-alias pkg_list='lynx -dump $PKG_PATH/index.txt > pkglist.txt'
-#alias pkg_list='ftp -m -V $PKG_PATH/index.txt && mv index.txt $HOME/pkglist.txt'
-alias su='su -l'
-alias vi='vim'
-alias ls='ls -F'
-
 MD=/mnt/D/qachina/db/doc
 export MD

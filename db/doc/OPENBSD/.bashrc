@@ -17,3 +17,7 @@ export DBUS_SESSION_BUS_ADDRESS="foo:"
 umask 22
 
 export PATH=$PATH:$HOME/Mew/bin
+
+alias pkg_list='lynx -dump $PKG_PATH/index.txt > pkglist.txt'
+alias vi='vim'
+alias ls='ls -F'
