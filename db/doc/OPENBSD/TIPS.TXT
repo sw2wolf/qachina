@@ -1,5 +1,135 @@
 
 #####
+/etc/pf.conf
+　　　### 变量 ###
+
+　　　Ext = "tun0"            # 与外界相连的设备名
+　　　Int = "<internes_device>;"   # 与局域网相连的设备名
+　　　IntNet = "192.168.1.0/24"   # 局域网的网段
+　　　RouterIP = "192.168.1.1"    # 路由器的IP地址
+　　　Loop = "lo0"            # Loopback 本地环回设备名
+
+　　　# 不被路由的地址
+　　　NoRoute = "{ 127.0.0.1/8, 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8, 255.255.255.255/32 }"
+
+　　　# 将被打开的端口
+　　　InServicesTCP = "{ ssh, ftp, auth }"
+
+
+　　　### 选项 ###
+
+　　　# DSL连接的统计数据（pfctl -s info）
+　　　set loginterface $Ext
+
+　　　# 快速断开非活动状态的连接 - 减少内存消耗
+　　　set optimization aggressive
+
+　　　# IP碎片重组
+　　　scrub in on $Ext all fragment reassemble
+
+
+　　　### NAT 和转发 ###
+
+　　　# 激活NAT 
+　　　nat on $Ext from $IntNet to any ->; $Ext
+
+　　　# 激活 FTP - 转发到我们的 ftp-proxy 代理上
+　　　rdr on $Int proto tcp from !$RouterIP to !$IntNet port 21 ->; 127.0.0.1 port 8081
+
+
+　　　### 过滤规则 ###
+
+　　　# 只是用来调试用.... 
+　　　#pass in quick all             # 测试一下允许所有进入的包
+　　　#pass out quick all            # 和发出的包
+
+　　　# 先是总的原则：挡住所有进出的数据包
+　　　block out on $Ext all
+　　　block in on $Ext all
+　　　
+　　　# 我们宁愿一声不吭装聋作哑，；）
+　　　block return-rst out log on $Ext proto tcp all
+　　　block return-rst in log on $Ext proto tcp all
+　　　block return-icmp out log on $Ext proto udp all
+　　　block return-icmp in log on $Ext proto udp all
+
+　　　# 不需要 IPv6.0 
+　　　block in quick inet6 all
+　　　block out quick inet6 all
+
+　　　# 本地环回允许通过
+　　　pass in quick on $Loop all
+　　　pass out quick on $Loop all
+
+　　　# 给nmap等扫描器来点难度
+　　　block in log quick on $Ext inet proto tcp from any to any flags FUP/FUP
+　　　block in log quick on $Ext inet proto tcp from any to any flags SF/SFRA
+　　　block in log quick on $Ext inet proto tcp from any to any flags /SFRA
+
+　　　# 防止IP欺骗 
+　　　block in log quick on $Ext inet from $NoRoute to any
+　　　block in log quick on $Ext inet from any to $NoRoute
+
+　　　# 允许 FTP 主动模式
+　　　pass in quick on $Ext inet proto tcp from any to any port >; 49151 user proxy flags S/SAFR keep state
+
+　　　# 允许被ping（禁止其实也没多大意义）
+　　　pass in quick on $Ext inet proto icmp all icmp-type 8 code 0 keep state
+
+　　　# 对外界开放的端口
+　　　pass in quick on $Ext inet proto tcp from any to any port $InServicesTCP flags S/SAFR keep state
+
+　　　# 允许通过由内向外的包
+　　　pass out quick on $Ext all keep state 
+
+定制好的规则可以用命令
+
+# /sbin/pfctl -e -F all -f /etc/pf.conf
+导入
+
+#####
+1.安装fcitx和中文字体(我这里选的是文泉驿正黑)：
+
+# pkg_add scim
+
+# pkg_add scim-fcitx
+
+# pkg_add wqy-zenhei-ttf    
+
+
+2. 在~/.profile 中加入如下内容：
+
+    export LC_CTYPE=en_US.UTF-8
+    export LANG=en_US.UTF-8
+    export LANGUAGE="en_US.UTF-8:zh:en_US:en"
+    export LC_ALL=en_US.UTF-8
+    export XMODIFIERS="@im=SCIM"
+    export XIM=scim
+    export XIM_PROGRAM=scim
+    export GTK_IM_MODULE=scim
+
+3. 在~/.xinitrc 中加入如下内容：
+
+    export XMODIFIERS="@im=SCIM"
+    export XIM=scim
+    export XIM_PROGRAM=scim
+    export GTK_IM_MODULE=scim
+    export QT_IM_MODULE=scim
+
+#####
+$ sudo route add -mpath default 64.4.4.4 -priority 1
+$ sudo route add -mpath default 129.2.2.2 -priority 15
+$ sudo netstat -rn | grep default
+~
+# default     64.4.4.4      UGS        3     3308     -     1 em0
+# default     129.2.2.2     UGS        0        0     -    15 em1
+
+静态路由
+A:方法是加到/etc/rc.local里面。
+  route add -net 204.12.16.0 -netmask 255.255.255.0  172.20.8.252
+  这是把204.12.16.0/24的网段都路由到172.20.8.252上面。
+
+#####
 After boot, PF operation can be managed using the pfctl(8) program. Some example commands are:
 
      # pfctl -f /etc/pf.conf     Load the pf.conf file
@@ -10,8 +140,12 @@ After boot, PF operation can be managed using the pfctl(8) program. Some example
      # pfctl -si                 Show filter stats and counters
      # pfctl -sa                 Show EVERYTHING it can show
 
-#####
-cvs -qd anoncvs@anoncvs.ca.openbsd.org:/cvs get -P src
+######
+# cvs -qd anoncvs@anoncvs.ca.openbsd.org:/cvs get -P src
+
+# fdisk -i sd0 to initalize a MBR
+# disklabel -e sd0 to create a root partition labelled 'a' and swap labelled 'b'
+# newfs /dev/rsd0a to format partition 'a'
 
 #####
 /etc/pf.conf
@@ -102,6 +236,7 @@ machdep.allowaperture=2         # See xf86(4)
 #kern.emul.aout=1               # enable running dynamic OpenBSD a.out bins
 #kern.emul.linux=1              # enable running Linux binaries
 #
+
 #####
 fstab:
 sd0a / ffs ro,noatime,softdep 1 1
@@ -304,7 +439,7 @@ The main difference between the "automatic" and "cool running" settings is exter
 ntpd_flags="-s"
 apmd_flags=""
 
-ou may want to start it with the -s flag to set the time immediately on the startup. It is also worth to mention that you may want to use -C or -A flags with the Advanced Power Management daemon. The former optimizes the system for low power use while the latter optimizes for performance when using AC power, however scales down when using battery.
+You may want to start it with the -s flag to set the time immediately on the startup. It is also worth to mention that you may want to use -C or -A flags with the Advanced Power Management daemon. The former optimizes the system for low power use while the latter optimizes for performance when using AC power, however scales down when using battery.
 
 #####
 openbsd 显示cpu、主板、硬盘温度及风扇速度的脚本：

@@ -1,5 +1,12 @@
 
 /*****/
+(%i167) '(for i : lo thru hi step skip while pred do xxx)$
+(%i168) ?print(%);
+((MDO SIMP) $I $LO $SKIP NIL $HI ((MNOT SIMP) $PRED) $XXX)
+
+(%o168) for i from lo step skip thru hi while pred do xxx
+    
+/*****/
 /* sum is in the noun form (see a leading % in the lisp expression) */
 (%i76) expr: sum(x[i], i, 1, n);
                                     n
@@ -33,6 +40,20 @@ draw_file_name : string(random(999999))$
 set_draw_defaults(
     data_file_name =3D sconcat("data_",draw_file_name),
     gnuplot_file_name =3D sconcat("gp_",draw_file_name)) $
+
+load("draw");
+draw(
+    gr2d(
+        color=red,
+        grid=true,key="Curve_1",
+        explicit(sin(x),x,1,10)
+    ),
+    gr2d(
+        color=green,
+        key="Curve_2",
+        explicit(.1*cos(x),x,1,10)
+    )
+);
 
 /*****/
 ptermp (e) := symbolp(e) or (numberp(e) and e > 0)
@@ -79,7 +100,6 @@ show_form(2/3) == show_form_internal(2/3) => /(2,3)
 but ?print(2/3) => ((RAT SIMP) 2 3)
 
 /*****/
-<<<<<<< HEAD
 I tried to calculate this:
 limit(x^5−6*x^4+14*x^3−20*x^2+24*x−16, x, 1.999993580023622);
 
@@ -1003,3 +1023,5 @@ assume(k>0);assume(n>0);sum(a^n,n,0,k),simpsum; => (a^(k+1)-1)/(a-1)
 ./configure --prefix=/home/sw2wolf/maxima/ --enable-sbcl --with-sbcl=/usr/local/bin/sbcl
 
 file_search_maxima:append(file_search_maxima,["/home/***/maxima/###.{mac,mc}"]);
+
+git --no-pager grep --full-name -n --no-color -i -e foobar
