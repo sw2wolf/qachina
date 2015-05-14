@@ -1,6 +1,177 @@
--------------------------------------------------
 
--------------------------------------------------
+#####
+我的Debian  8.0 （jessie）配置文档
+1，添加软件源  su到root用户
+vi  /etc/apt/sources.list      也可用gedit  /etc/apt/sources.list   （gnome下用，如果kde下则用 kdesudo kate /etc/apt/sources.list  在非root用户下用才能打开。）
+deb http://mirrors.163.com/debian jessie main non-free contrib
+deb http://mirrors.163.com/debian jessie-proposed-updates main contrib non-free
+deb http://mirrors.163.com/debian-security jessie/updates main contrib non-free   #deb-src http://mirrors.163.com/debian jessie main non-free contrib
+#deb-src http://mirrors.163.com/debian jessie-proposed-updates main contrib non-free
+#deb-src http://mirrors.163.com/debian-security jessie/updates main contrib non-free  
+#deb http://http.us.debian.org/debian jessie main contrib non-free
+#deb http://non-us.debian.org/debian-non-US jessie/non-US main contrib non-free
+deb http://security.debian.org jessie/updates main contrib non-free
+ 想用 testing或者Sid/experimental 的用户添加以下软件源。
+deb http://mirrors.163.com/debian sid main contrib non-free
+deb-src http://mirrors.163.com/debian sid main contrib non-free
+deb http://mirrors.163.com/debian experimental main contrib non-free
+ 想用搜狐的用户把163改成sohu。
+2，更新系统
+$ sudo aptitude update
+$ sudo aptitude upgrade
+$ sudo aptitude dist-upgrade
+会提示没有安装sudo，那就不用sudo，直接在root#下输入sudo后面的就行了。
+3，安装sudo 使普通用户有系统管理的权利
+root# aptitude install sudo
+root# chmod +w /etc/sudoers       授予sudoers 写的权限，否则为只读。
+Root# vi etc/sudoers  或者gedit /etc/sudoers         编辑  etc/sudoers
+找到root 行并在下行输入你的账户，在账户后面把root后面的复制下来就行了。然后保存。vi编译器输入：wq
+root# chmod 0440 /etc/sudoers     去掉sudoers 写的权限改为只读。
+root# exit  退到普通账户。
+4, 安装字体和新立得软件管理器。dvd版安装的已经安装好新立得软件管理器。
+$ sudo aptitude install ttf-wqy-zenhei ttf-wqy-microhei synaptic
+ 5,安装Adobe Flash
+$ sudo aptitude purge gnash
+$ sudo aptitude install flashplugin-nonfree
+6,kde下安装kate 文档编译器
+$ sudo aptitude install kate kate-plugin
+7,安装fcitx输入法
+$ sudo aptitude install fcitx fcitx-table-wubi-large fcitx-ui-classic fcitx-ui-light fcitx-frontend-gtk3 fcitx-config-gtk   。搜狗输入法可以去linuxdeepin源里找fcitx-sogoupinyin_0.0.1-2_amd64.deb安装。
+8,安装Nvidia显卡驱动
+# sudo aptitude install make gcc
+# sudo aptitude install build-essential linux-headers-$(uname -r)
+# sudo aptitude install nvidia-kernel-dkms nvidia-glx nvidia-settings nvidia-xconfig
+  最后不要忘了在root# nvidia-xconfig
+9,安装ati显卡驱动
+$  sudo aptitude install make gcc
+$ sudo aptitude install build-essential
+$ sudo aptitude install linux-headers-$(uname -r)   
+$ sudo aptitude install fglrx-driver fglrx-atieventsd fglrx-control fglrx-modules-dkms glx-alternative-fglrx amd-opencl-icd
+  最后不要忘了在root#  aticonfig –initial
+在ati控制中心把电源管理哪项中使用电池的哪项也调到最大。
+10,安装常用软件
+$ sudo aptitude install xchm uget openfetion BleachBit qBitTorrent   zhcn
+11,安装tlp相当于jupiter的笔记本省电软件。
+编辑软件源添加以下软件源。或者直接去下列软件源下载 tlp tlp-rdw两个软件包安装。
+deb http://ppa.launchpad.net/linrunner/tlp/ubuntu raring main  
+$ sudo aptitude update
+导入密钥：
+$ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 02D65EFF  
+$ sudo apt-key adv --keyserver pool.sks-keyservers.net --recv-keys 02D65EFF  
+会提示直接按回车键。
+$ sudo aptitude update
+$ sudo aptitude install tlp tlp-rdw  
+$ sudo aptitude install tp-smapi-dkms acpica-tools  acpi acpid acpi-support
+12,安装笔记本省电软件
+$ sudo aptitude install  cpufreqd  powertop apmd cpufrequtils powerman powerstat asused
+13，火狐浏览器iceweasel 配置
+ 安装火狐多媒体插件
+$ sudo aptitude install gecko-mediaplayer  xine-plugin totem-plugins totem-mozilla
+在附件组件里安装greasemonkey 插件。在greasemonkey 插件中获取Flash2MPlayer脚本安装至。就可以用totem观看搜狐，优酷，土豆的视频了。
+
+最后提醒安装了tlp 后不能安装chrome ，chromium 浏览器，否则会闪退。傲游浏览器能用但不能安装插件因为它基于chromium。
+
+发个fcitx 搜狐拼音输入法下载地址：http://mirrors.oschina.net/deepin/pool/non-free/f/fcitx-sogoupinyin-release/
+
+#####
+.Add "contrib" and "non-free" components to /etc/apt/sources.list, for example:
+
+# Debian 8 "Jessie"
+deb http://http.debian.net/debian/ jessie main contrib non-free
+
+.Update the list of available packages. Install the appropriate linux-headers and kernel module packages:
+
+# aptitude update
+# aptitude -r install linux-headers-$(uname -r|sed 's,[^-]*-[^-]*-,,') nvidia-legacy-304xx-kernel-dkms
+
+This will also install the recommended nvidia-legacy-304xx-driver package. DKMS will build the nvidia module for your system.
+
+.Create an Xorg server configuration file.
+Automatic
+
+Install the nvidia-xconfig package, then run it with sudo. It will automatically generate a Xorg configuration file at /etc/X11/xorg.conf.
+
+Manual
+
+For example:
+
+/etc/X11/xorg.conf.d/20-nvidia.conf
+
+    Section "Device"
+            Identifier "My GPU"
+            Driver "nvidia"
+    EndSection
+
+The configuration file above can be created using these commands:
+
+    # mkdir /etc/X11/xorg.conf.d
+    # echo -e 'Section "Device"\n\tIdentifier "My GPU"\n\tDriver "nvidia"\nEndSection' > /etc/X11/xorg.conf.d/20-nvidia.conf
+
+.Restart your system to enable the nouveau blacklist. 
+
+#####
+    sudo sed -i '/^exit 0/ i iwlist scan' /etc/rc.local
+
+It will insert the line "iwlist scan" just above the last line which should always be "exit 0".
+
+You will have to reboot to see the effect. If it doesn't help, it won't harm anything either, but you can remove the line with -
+
+    sudo sed -i '/iwlist/ d' /etc/rc.local
+
+
+..and let us know it didn't work.
+
+In case it didn't help, please post the outputs of -
+
+    lspci -nnk | grep -iA2 net
+    sudo iwlist scan
+
+#####
+Then look in /usr/share/fonts/X11/misc
+# aptitude install xfonts-wqy
+
+$ fc-list | grep WenQuanYi
+$ su -c 'fc-cache -fv'
+
+sudo nano /etc/default/grub
+
+Find out this line:
+
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+
+Change it to:
+
+GRUB_CMDLINE_LINUX_DEFAULT="text"
+
+Update Grub:
+
+sudo update-grub
+
+For systems that use systemd
+This is an additional step for systemd releases, eg: Ubuntu 15.04, the steps above for grub are still necessary.
+
+You need to tell systemd to not load the graphical login manager:
+
+sudo systemctl enable multi-user.target --force
+sudo systemctl set-default multi-user.target
+
+You will still be able to use X by typing startx after you logged in.
+
+
+
+Look in /etc/rc2.d/. There are probably links to /etc/init.d/xdm and /etc/init.d/kdm which you haven't removed yet.
+
+You can also edit the file /etc/X11/default-display-manager, which includes the full path to the default display manager Debian is using. If you replace the content of that file with /bin/true, you are probably disabling the start of any login-manager as well.
+
+The TTYs are spawned anyways. If no login-manager is launched, TTY1 will remain the active TTY and you can just log in using the command line.
+
+#####
+#If you configured /boot/grub/custom.cfg, there is no need to run update-grub; the file will be automatically loaded by /boot/grub/grub.conf at boot. 
+
+/boot/grub/custom.cfg
+set color_normal=light-gray/black
+
+#####
 .debian下安装opera浏览器
 
 debian安装了桌面，官方软件库包含了iceweasel，这个是firefox内核的，不过内存占用有点大。换了chrome，这个内存占用更猛，最后试了opera，相对来说还好点。桌面运行opera的时候内存占用200多m，buyvm 年付15刀的vps也能应付了。

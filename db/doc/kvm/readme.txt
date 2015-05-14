@@ -1,5 +1,5 @@
 
-;;;;;;
+#####
 #apt-get install gcc libsdl1.2-dev zlib1g-dev libasound2-dev linux-kernel-headers pkg-config libgnutls-dev
 ./configure --prefix=$HOME/qemu --target-list="i386-softmmu" --audio-drv-list="alsa oss" --enable-mixemu
 
@@ -10,7 +10,7 @@ sudo modprobe kvm
 sudo modprobe kvm-intel  //如果你的是INTEL处理器就用这个
 sudo modprobe kvm-amd  //如果你的是AMD处理器就用这个
 
-;;;;;;
+#####
 #First let’s create the bridge:
 sudo ifconfig bridge0 create
 
@@ -159,14 +159,14 @@ Id Refs Address Size Name
 6 1 0xc64ef000 8000 aio.ko 
 7 1 0xc64fa000 21000 kqemu.ko
 
-;;;;;;
+#####
 #Create the RAM disk whose size is 64M. 
 $ dd if=/dev/zero of=disk.img bs=4096 count=16384
 
 #Partition the disk. 
 $ /sbin/fdisk -C 16065 -H 255 -S 63 disk.img
 
-;;;;;;
+#####
 I created a startup script for the first vm 
 #!/bin/sh
 sudo ifconfig tap0 create
@@ -184,7 +184,7 @@ sudo /sbin/ifconfig tap1 0.0.0.0 promisc up
 sudo ifconfig bridge0 addm tap1
 sudo qemu -k de -boot c -hda test.img -m 512 -localtime -monitor stdio -usb -usbdevice tablet -net nic,macaddr=52:54:00:12:34:57 -net tap,ifname=tap1,script=no
 
-;;;;;;
+#####
 How to convert VirtualBox VDI image to Qemu-KVM .QCOW image
 $VBoxManage clonehd "image.vdi" "image.img" --format RAW
 
@@ -217,7 +217,7 @@ Options
   you'll have to pass -enable-kqemu (or -kernel-kqemu as with the previous
   versions) if you want to use it.
 
-;;;;;;
+#####
 #!/bin/bash
 if [ `pidof qemu-system-x86_64` ]; then
     echo "KVM is already running..."

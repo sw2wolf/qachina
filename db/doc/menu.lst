@@ -7,23 +7,8 @@ rootnoverify (hd0,0)
 chainloader /ntldr
 boot
 
-title OpenBSD 5.6
+title debian 8.0
 chainloader (hd0,2)+1
-
-#http://ftp.jp.debian.org/debian/dists/Debian7.8/
-#http://cdimage.debian.org/debian-cd/7.8.0/i386/iso-cd/
-#touch debianboot
-# title install debian
-# find --set-root --ignore-floppies --ignore-cd /debianboot
-# kernel /linux boot=casper noacpi iso-scan/filename=debian-7.8.0-i386-CD-1.iso ro quiet splash 
-# initrd initrd.gz
-
-# title install OpenBSD 5.x
-# find --set-root /download/install56.iso
-# map --mem /download/install56.iso (hd32)
-# map --hook
-# chainloader (hd32)
-# boot
 
 # 如果你无法确定自己的安装源所在分区的话，如下操作
 # a. 按ctrl+z，让安装进程“sysinst”暂时挂起到后台
@@ -33,29 +18,20 @@ chainloader (hd0,2)+1
 # file system: msdos      # 不能用大写,曾经在这个地方犯了几次同样的错误
 # base directory: /  # 注意大小写.跟解压缩时的一样
 # set directory: /I386/BINARY/SETS
-
-# title install netbsd
-# root (hd0,1)
-# kernel --type=netbsd (hd0,1)/NETBSD-INSTALL
-# boot
-
-# title install netbsd from ISO
-# find --set-root NetBSD-6.1.5-i386.iso
-# map --mem NetBSD-6.1.5-i386.iso (hd32)
+# title install NetBSD
+# find --set-root /NetBSD-6.1.5.iso
+# map --mem /NetBSD-6.1.5.iso (hd32)
 # map --hook
 # chainloader (hd32)
 # boot
 
-# title install netbsd from floppy
-# map (hd0,1)/netbsd/I386/INSTALLATION/FLOPPY/BOOT1.FS (fd0)
-# chainloader (hd0,1)/netbsd/I386/INSTALLATION/FLOPPY/BOOT1.FS
-# rootnoverify (fd0)
-# boot
-
-# title netbsd 6.x
-# root (hd0,2)
-# chainloader + 1
-# boot
+#http://ftp.jp.debian.org/debian/
+#http://cdimage.debian.org/debian-cd/
+#touch debianboot
+# title install debian
+# find --set-root --ignore-floppies --ignore-cd /debianboot
+# kernel /linux boot=casper noacpi iso-scan/filename=debian-8.0.0-i386-netinst.iso ro quiet splash
+# initrd /initrd.gz
 
 #title install FreeBSD 9.0-mfs
 #find --set-root /mfsbsd-9.0-i386.iso

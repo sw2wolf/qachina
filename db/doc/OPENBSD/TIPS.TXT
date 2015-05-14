@@ -1,5 +1,30 @@
 
 #####
+Apply by doing:
+    cd /usr/src
+    signify -Vep /etc/signify/openbsd-57-base.pub -x 006_elf.patch.sig -m - | \
+        patch -p0
+
+Then build and install a new kernel:
+
+    cd /usr/src/sys/arch/`machine`/conf
+    KK=`sysctl -n kern.osversion | cut -d# -f1`
+    config $KK
+    cd ../compile/$KK
+    make
+    make install
+
+#####
+$ sudo fstat -f /
+USER     CMD          PID   FD MOUNT        INUM MODE       R/W    SZ|DV
+_syslogd syslogd    26174   14 /          390155 -rw-------   w     4524
+
+Next, i searched for a file with this INUM:
+
+$ sudo find / -inum 390155 
+/etc/cron/log
+
+#####
 /etc/pf.conf
 　　　### 变量 ###
 

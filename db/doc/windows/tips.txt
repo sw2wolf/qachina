@@ -1,5 +1,17 @@
 
 #####
+net stop w32time
+w23tm /unregister
+shutdown /r /t 0
+w32tm /register
+w32tm /config /manualpeerlist:”0.uk.pool.ntp.org,1.uk.pool.ntp.org,2.uk.pool.ntp.org,3.uk.pool.ntp.org” /syncfromflags:manual /reliable:yes /update
+w32tm /config /update
+net start w32time
+reg QUERY HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Config /v AnnounceFlags
+
+w32tm /resync
+
+#####
 在“命令提示符”里输入“netsh wlan set hostednetwork mode=allow ssid=pcpop key=12345678”，回车，系统会自动虚拟出一个wifi热点。ssid是网络名称，可以自己随意设定；key是加入网络的密码，是明码输入，8位以上，随意输入。
 
 此时，打开网络和共享中心，点击左侧的“更改适配器设置”，如下图所示，就会看到多出一个网卡来。这就是刚才键入命令行之后，虚拟出来的无线网卡——“Micro virtual wifi miniport adapter”虚拟无线热点。

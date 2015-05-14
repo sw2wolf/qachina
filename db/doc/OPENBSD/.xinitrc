@@ -32,11 +32,14 @@ xmodmap ~/.Xmodmap
 xrdb -merge ~/.Xresources
 
 #mixer vol 95 pcm 95
-#export XIM_PROGRAM=/usr/local/bin/fcitx
-#export XMODIFIERS=@im=fcitx
-#export GTK_IM_MODULE=fcitx
-#export QT_IM_MODULE=fcitx
-#fcitx &
+
+export XIM_PROGRAM=/usr/local/bin/scim
+export XMODIFIERS="@im=SCIM"
+export XIM=scim
+export GTK_IM_MODULE=scim
+export QT_IM_MODULE=scim
+
+scim -d
 
 case $1 in
 	clisp)
